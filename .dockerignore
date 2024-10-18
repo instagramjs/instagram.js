@@ -1,0 +1,9 @@
+node_modules
+.git
+.next
+.vscode
+.turbo
+.env
+terraform/
+
+dist

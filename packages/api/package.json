@@ -1,0 +1,46 @@
+{
+  "name": "@igjs/api",
+  "version": "0.0.1",
+  "private": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "dev": "pnpm build --watch",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean --no-splitting"
+  },
+  "devDependencies": {
+    "@igjs/eslint-config": "workspace:*",
+    "@igjs/prettier-config": "workspace:*",
+    "@igjs/tsconfig": "workspace:*",
+    "@swc/core": "catalog:",
+    "@types/chance": "1.1.6",
+    "@types/eslint": "catalog:",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:"
+  },
+  "dependencies": {
+    "axios": "1.7.7",
+    "axios-cookiejar-support": "5.0.3",
+    "chance": "1.1.12",
+    "eventemitter3": "5.0.1",
+    "qs": "6.13.0",
+    "tough-cookie": "5.0.0",
+    "tsx": "catalog:",
+    "zod": "catalog:"
+  },
+  "prettier": "@igjs/prettier-config"
+}

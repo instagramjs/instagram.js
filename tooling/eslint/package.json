@@ -1,0 +1,27 @@
+{
+  "name": "@igjs/eslint-config",
+  "private": true,
+  "version": "0.3.0",
+  "type": "module",
+  "main": "eslint.config.js",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@eslint/compat": "1.1.1",
+    "@eslint/js": "catalog:",
+    "@igjs/prettier-config": "workspace:*",
+    "@igjs/tsconfig": "workspace:*",
+    "@types/eslint": "catalog:",
+    "@types/eslint__js": "catalog:",
+    "eslint": "catalog:",
+    "eslint-plugin-simple-import-sort": "12.1.1",
+    "eslint-plugin-turbo": "2.1.2",
+    "prettier": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:"
+  },
+  "prettier": "@igjs/prettier-config"
+}

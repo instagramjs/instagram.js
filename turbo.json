@@ -1,0 +1,57 @@
+{
+    "$schema": "https://turborepo.org/schema.json",
+    "tasks": {
+        "topo": {
+            "dependsOn": [
+                "^topo"
+            ]
+        },
+        "build": {
+            "dependsOn": [
+                "^build"
+            ],
+            "outputs": [
+                "node_modules/.cache/tsbuildinfo.json",
+                "dist/**"
+            ]
+        },
+        "dev": {
+            "cache": false,
+            "persistent": false
+        },
+        "format": {
+            "outputs": [
+                "node_modules/.cache/.prettiercache"
+            ],
+            "outputLogs": "new-only"
+        },
+        "lint": {
+            "dependsOn": [
+                "^topo",
+                "^build"
+            ],
+            "outputs": [
+                "node_modules/.cache/.eslintcache"
+            ]
+        },
+        "typecheck": {
+            "dependsOn": [
+                "^topo",
+                "^build"
+            ],
+            "outputs": [
+                "node_modules/.cache/tsbuildinfo.json"
+            ]
+        },
+        "clean": {
+            "cache": false
+        },
+        "//#clean": {
+            "cache": false
+        },
+        "push": {
+            "cache": false,
+            "interactive": true
+        }
+    }
+}

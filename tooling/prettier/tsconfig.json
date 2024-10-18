@@ -1,0 +1,14 @@
+{
+  "extends": "@igjs/tsconfig/base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+    "module": "esnext",
+    "target": "esnext",
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false
+  },
+  "include": ["."],
+  "exclude": ["node_modules", "dist"]
+}
