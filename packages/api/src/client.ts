@@ -95,7 +95,7 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
   account = new AccountApi(this);
   direct = new DirectApi(this);
 
-  generateDevice(seed: string): DeviceState {
+  generateDevice(seed: string) {
     const chance = new Chance(seed);
     const newDeviceState = {
       deviceString: chance.pickone(DEVICES),
@@ -108,6 +108,7 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
         length: 16,
       })}`,
     };
+    this.deviceState = newDeviceState;
     return newDeviceState;
   }
 

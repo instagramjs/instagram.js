@@ -3,7 +3,7 @@ import { type ApiClient } from "./client";
 export abstract class Paginator<R = unknown, I = unknown> {
   constructor(public client: ApiClient) {}
 
-  async [Symbol.asyncIterator]() {
+  [Symbol.asyncIterator]() {
     return {
       next: async () => {
         const items = await this.items();
