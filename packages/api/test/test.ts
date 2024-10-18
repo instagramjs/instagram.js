@@ -1,5 +1,3 @@
-import path from "path";
-
 import { ApiClient } from "../src";
 import { env } from "./env";
 import { setupPersistentState } from "./setup";
@@ -7,10 +5,7 @@ import { setupPersistentState } from "./setup";
 const client = new ApiClient();
 
 async function main() {
-  await setupPersistentState(
-    client,
-    path.join(import.meta.dirname, "state.json"),
-  );
+  await setupPersistentState(client);
   if (!client.authState) {
     client.generateDevice(env.USERNAME);
     await client.qe.syncLoginExperiments();

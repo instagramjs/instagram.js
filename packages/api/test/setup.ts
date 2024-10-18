@@ -1,22 +1,22 @@
 import fs from "fs/promises";
+import path from "path";
 
 import { type ApiClient } from "../src";
 
-export async function setupPersistentState(
-  client: ApiClient,
-  stateFile: string,
-) {
+const STATE_FILE = path.join(import.meta.dirname, "state.json");
+
+export async function setupPersistentState(client: ApiClient) {
   let stateData;
   try {
-    await fs.stat(stateFile);
-    stateData = await fs.readFile(stateFile, "utf-8");
+    await fs.stat(STATE_FILE);
+    stateData = await fs.readFile(STATE_FILE, "utf-8");
   } catch {
     void 0;
   }
 
   client.on("response", () => {
     const state = client.exportState();
-    void fs.writeFile(stateFile, JSON.stringify(state, null, 2));
+    void fs.writeFile(STATE_FILE, JSON.stringify(state, null, 2));
   });
 
   if (stateData) {
