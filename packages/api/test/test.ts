@@ -6,7 +6,7 @@ const client = new ApiClient();
 
 async function main() {
   await setupPersistentState(client);
-  if (!client.authState) {
+  if (!client.isAuthenticated()) {
     client.generateDevice(env.USERNAME);
     await client.qe.syncLoginExperiments();
     await client.account.login(env.USERNAME, env.PASSWORD);

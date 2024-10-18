@@ -28,11 +28,11 @@ export class QeApi {
   }
 
   async sync(experiments: string) {
-    if (!this.client.deviceState.uuid) {
+    if (!this.client.state.device.uuid) {
       throw new Error("Cannot sync experiments without UUID");
     }
     let formData: Record<string, string> = {
-      id: this.client.deviceState.uuid,
+      id: this.client.state.device.uuid,
     };
 
     const uuid = this.client.getUserId();
@@ -50,7 +50,7 @@ export class QeApi {
       method: "POST",
       url: "/api/v1/qe/sync/",
       headers: {
-        "X-DEVICE-ID": this.client.deviceState.uuid,
+        "X-DEVICE-ID": this.client.state.device.uuid,
       },
       form: this.client.signFormData({ ...formData, experiments }),
     });

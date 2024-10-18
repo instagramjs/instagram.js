@@ -41,10 +41,10 @@ export class AccountApi {
   constructor(public client: ApiClient) {}
 
   async login(username: string, password: string) {
-    if (!this.client.passwordEncryptionConfig) {
+    if (!this.client.state.passwordEncryption) {
       throw new Error("Can't login without password encryption config");
     }
-    if (!this.client.deviceState) {
+    if (!this.client.state.device) {
       throw new Error("Can't create Jazoest without device state");
     }
 
@@ -56,17 +56,17 @@ export class AccountApi {
       form: this.client.signFormData({
         username,
         enc_password: `#PWD_INSTAGRAM:4:${time}:${encrypted}`,
-        guid: this.client.deviceState.uuid,
-        phone_id: this.client.deviceState.phoneId,
+        guid: this.client.state.device.uuid,
+        phone_id: this.client.state.device.phoneId,
         _csrftoken: csrfToken,
-        device_id: this.client.deviceState.deviceId,
-        adid: this.client.deviceState.adId,
+        device_id: this.client.state.device.deviceId,
+        adid: this.client.state.device.adId,
         google_tokens: "[]",
         login_attempt_count: 0,
         country_codes: JSON.stringify([
           { country_code: "1", source: "default" },
         ]),
-        jazoest: createJazoest(this.client.deviceState.phoneId),
+        jazoest: createJazoest(this.client.state.device.phoneId),
       }),
     });
 
@@ -74,7 +74,7 @@ export class AccountApi {
   }
 
   #encryptPassword(password: string) {
-    if (!this.client.passwordEncryptionConfig) {
+    if (!this.client.state.passwordEncryption) {
       throw new Error("Can't login without password encryption config");
     }
 
@@ -83,7 +83,7 @@ export class AccountApi {
     const rsaEncrypted = crypto.publicEncrypt(
       {
         key: Buffer.from(
-          this.client.passwordEncryptionConfig.pubKey,
+          this.client.state.passwordEncryption.pubKey,
           "base64",
         ).toString(),
         padding: crypto.constants.RSA_PKCS1_PADDING,
@@ -104,7 +104,7 @@ export class AccountApi {
     return {
       time,
       encrypted: Buffer.concat([
-        Buffer.from([1, Number(this.client.passwordEncryptionConfig.keyId)]),
+        Buffer.from([1, Number(this.client.state.passwordEncryption.keyId)]),
         iv,
         sizeBuffer,
         rsaEncrypted,

@@ -5,7 +5,6 @@ import { createHmac, randomInt, randomUUID } from "crypto";
 import EventEmitter from "eventemitter3";
 import { type ParsedUrlQueryInput, stringify } from "querystring";
 import { CookieJar, type SerializedCookieJar } from "tough-cookie";
-import { z } from "zod";
 
 import { AccountApi } from "./api/account";
 import { DirectApi } from "./api/direct/api";
@@ -26,63 +25,25 @@ import {
   SIGNATURE_KEY,
   SIGNATURE_VERSION,
 } from "./constants";
-
-const igState = z.object({
-  wwwClaim: z.string().nullable(),
-  mid: z.string().nullable(),
-  directRegionalHint: z.string().nullable(),
-});
-export type IgState = z.infer<typeof igState>;
-
-const authStateSchema = z.object({
-  token: z.string(),
-  userId: z.string(),
-  sessionId: z.string(),
-  shouldUserHeaderOverCookie: z.string().optional(),
-});
-export type AuthState = z.infer<typeof authStateSchema>;
-
-const deviceStateSchema = z.object({
-  deviceString: z.string(),
-  uuid: z.string(),
-  phoneId: z.string(),
-  adId: z.string(),
-  build: z.string(),
-  deviceId: z.string(),
-});
-export type DeviceState = z.infer<typeof deviceStateSchema>;
-
-const passwordEncryptionConfigSchema = z.object({
-  pubKey: z.string(),
-  keyId: z.string(),
-});
-export type PasswordEncryptionConfig = z.infer<
-  typeof passwordEncryptionConfigSchema
->;
-
-const stateSchema = z.object({
-  igState: igState,
-  authState: authStateSchema.nullable(),
-  passwordEncryptionConfig: passwordEncryptionConfigSchema.nullable(),
-  deviceState: deviceStateSchema,
-  cookieJar: z.unknown(),
-});
-export type State = z.infer<typeof stateSchema>;
+import {
+  type ApiState,
+  type ExportedApiState,
+  serializedApiStateSchema,
+} from "./state";
 
 export type ApiClientEvents = {
   response: (response: AxiosResponse) => void;
 };
 
 export class ApiClient extends EventEmitter<ApiClientEvents> {
-  igState: IgState = {
+  state: ApiState = {
     wwwClaim: null,
     mid: null,
     directRegionalHint: null,
+    auth: null,
+    passwordEncryption: null,
+    device: this.generateDevice(randomUUID()),
   };
-  authState: AuthState | null = null;
-  passwordEncryptionConfig: PasswordEncryptionConfig | null = null;
-  deviceState: DeviceState = this.generateDevice(randomUUID());
-
   cookieJar = new CookieJar();
   axiosClient = axiosCookieJar.wrapper(
     axios.create({
@@ -108,13 +69,13 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
         length: 16,
       })}`,
     };
-    this.deviceState = newDeviceState;
+    this.state.device = newDeviceState;
     return newDeviceState;
   }
 
   #generateTemporaryGuid(seed: string, lifetimeMs: number) {
     return new Chance(
-      `${seed}${this.deviceState.deviceId}${Math.round(Date.now() / lifetimeMs)}`,
+      `${seed}${this.state.device.deviceId}${Math.round(Date.now() / lifetimeMs)}`,
     ).guid();
   }
 
@@ -132,6 +93,10 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
     );
   }
 
+  isAuthenticated() {
+    return !!this.state.auth;
+  }
+
   extractCookie(key: string) {
     return this.cookieJar.getCookiesSync(API_URL).find((c) => c.key === key);
   }
@@ -142,9 +107,7 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
   }
 
   getUserId() {
-    return (
-      this.extractCookieValue("ds_user_id") ?? this.authState?.userId ?? null
-    );
+    return this.state.auth?.userId ?? this.extractCookieValue("ds_user_id");
   }
 
   getCsrfToken() {
@@ -152,7 +115,7 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
   }
 
   getUserAgent() {
-    return `Instagram ${APP_VERSION} Android (${this.deviceState.deviceString}; ${LANGUAGE}; ${APP_VERSION_CODE})`;
+    return `Instagram ${APP_VERSION} Android (${this.state.device.deviceString}; ${LANGUAGE}; ${APP_VERSION_CODE})`;
   }
 
   signFormData(data: Record<string, unknown> | string) {
@@ -166,24 +129,16 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
     };
   }
 
-  exportState(): State {
+  exportState(): ExportedApiState {
     return {
-      igState: { ...this.igState },
-      authState: this.authState ? { ...this.authState } : null,
-      passwordEncryptionConfig: this.passwordEncryptionConfig
-        ? { ...this.passwordEncryptionConfig }
-        : null,
-      deviceState: { ...this.deviceState },
+      ...this.state,
       cookieJar: this.cookieJar.toJSON(),
     };
   }
 
-  importState(state: State) {
-    const parsedState = stateSchema.parse(state);
-    this.igState = parsedState.igState;
-    this.authState = parsedState.authState;
-    this.passwordEncryptionConfig = parsedState.passwordEncryptionConfig;
-    this.deviceState = parsedState.deviceState;
+  importState(state: ExportedApiState) {
+    const parsedState = serializedApiStateSchema.parse(state);
+    this.state = parsedState;
     this.cookieJar = CookieJar.fromJSON(
       parsedState.cookieJar as SerializedCookieJar,
     );
@@ -212,17 +167,17 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
       "X-IG-EU-DC-ENABLED": "0",
       // 'X-IG-Extended-CDN-Thumbnail-Cache-Busting-Value': this.client.state.thumbnailCacheBustingValue.toString(),
       "X-Bloks-Version-Id": BLOKS_VERSION_ID,
-      "X-MID": this.igState.mid ?? "",
-      "X-IG-WWW-Claim": this.igState.wwwClaim ?? "",
+      "X-MID": this.state.mid ?? "",
+      "X-IG-WWW-Claim": this.state.wwwClaim ?? "",
       "X-Bloks-Is-Layout-RTL": "false",
       "X-IG-Connection-Type": CONNECTION_TYPE_HEADER,
       "X-IG-Capabilities": CAPABILITIES_HEADER,
       "X-IG-App-ID": FB_ANALYTICS_APPLICATION_ID,
-      "X-IG-Device-ID": this.deviceState.uuid,
-      "X-IG-Android-ID": this.deviceState.deviceId,
+      "X-IG-Device-ID": this.state.device.uuid,
+      "X-IG-Android-ID": this.state.device.deviceId,
       "Accept-Language": LANGUAGE.replace("_", "-"),
       "X-FB-HTTP-Engine": "Liger",
-      Authorization: this.authState?.token,
+      Authorization: this.state.auth?.token,
       Host: "i.instagram.com",
       "Accept-Encoding": "gzip",
       Connection: "close",
@@ -240,19 +195,19 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
     } = response.headers;
 
     if (typeof wwwClaim === "string") {
-      this.igState.wwwClaim = wwwClaim || null;
+      this.state.wwwClaim = wwwClaim || null;
     }
     if (typeof mid === "string") {
-      this.igState.mid = mid || null;
+      this.state.mid = mid || null;
     }
     if (typeof directRegionalHint === "string") {
-      this.igState.directRegionalHint = directRegionalHint || null;
+      this.state.directRegionalHint = directRegionalHint || null;
     }
     if (typeof authToken === "string") {
       if (authToken) {
         try {
           const parsedAuth = parseAuthToken(authToken);
-          this.authState = {
+          this.state.auth = {
             token: authToken,
             userId: parsedAuth.ds_user_id,
             sessionId: parsedAuth.sessionid,
@@ -263,17 +218,17 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
           throw new Error(`Failed to parse auth token: ${authToken}`);
         }
       } else {
-        this.authState = null;
+        this.state.auth = null;
       }
     }
     if (typeof pwKeyId === "string" && typeof pwPubKey === "string") {
       if (pwKeyId && pwPubKey) {
-        this.passwordEncryptionConfig = {
+        this.state.passwordEncryption = {
           pubKey: pwPubKey,
           keyId: pwKeyId,
         };
       } else {
-        this.passwordEncryptionConfig = null;
+        this.state.passwordEncryption = null;
       }
     }
   }

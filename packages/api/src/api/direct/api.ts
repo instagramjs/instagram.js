@@ -52,7 +52,7 @@ export class DirectApi {
 
   #getBaseFormData() {
     return {
-      _uuid: this.client.deviceState.uuid,
+      _uuid: this.client.state.device.uuid,
       _uid: this.client.getUserId(),
       _csrftoken: this.client.getCsrfToken() ?? undefined,
     };
@@ -221,7 +221,7 @@ export class DirectApi {
       ),
       action: "send_item",
       client_context: mutationToken,
-      device_id: this.client.deviceState.deviceId,
+      device_id: this.client.state.device.deviceId,
       ...opts.form,
     };
     return this.client.makeRequest<DirectSendResponseDto>({
