@@ -1,7 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 
-import { type ApiClient } from "../src";
+import { type ApiClient } from "~/index";
 
 const STATE_FILE = path.join(import.meta.dirname, "state.json");
 

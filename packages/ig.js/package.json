@@ -28,6 +28,7 @@
     "@types/node": "catalog:",
     "dotenv": "catalog:",
     "eslint": "catalog:",
+    "pino": "9.5.0",
     "prettier": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:",

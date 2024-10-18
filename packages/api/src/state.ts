@@ -29,7 +29,7 @@ export const apiStateSchema = z.object({
 });
 export type ApiState = z.infer<typeof apiStateSchema>;
 
-export const serializedApiStateSchema = apiStateSchema.extend({
+export const exportedApiStateSchema = apiStateSchema.extend({
   cookieJar: z.unknown(),
 });
-export type ExportedApiState = z.infer<typeof serializedApiStateSchema>;
+export type ExportedApiState = z.infer<typeof exportedApiStateSchema>;

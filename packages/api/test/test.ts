@@ -1,4 +1,5 @@
-import { ApiClient } from "../src";
+import { ApiClient } from "~/index";
+
 import { env } from "./env";
 import { setupPersistentState } from "./setup";
 

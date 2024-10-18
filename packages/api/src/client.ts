@@ -28,7 +28,7 @@ import {
 import {
   type ApiState,
   type ExportedApiState,
-  serializedApiStateSchema,
+  exportedApiStateSchema,
 } from "./state";
 
 export type ApiClientEvents = {
@@ -42,7 +42,7 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
     directRegionalHint: null,
     auth: null,
     passwordEncryption: null,
-    device: this.generateDevice(randomUUID()),
+    device: generateDeviceState(randomUUID()),
   };
   cookieJar = new CookieJar();
   axiosClient = axiosCookieJar.wrapper(
@@ -55,23 +55,6 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
   qe = new QeApi(this);
   account = new AccountApi(this);
   direct = new DirectApi(this);
-
-  generateDevice(seed: string) {
-    const chance = new Chance(seed);
-    const newDeviceState = {
-      deviceString: chance.pickone(DEVICES),
-      uuid: chance.guid(),
-      phoneId: chance.guid(),
-      adId: chance.guid(),
-      build: chance.pickone(BUILDS),
-      deviceId: `android-${chance.string({
-        pool: "abcdef0123456789",
-        length: 16,
-      })}`,
-    };
-    this.state.device = newDeviceState;
-    return newDeviceState;
-  }
 
   #generateTemporaryGuid(seed: string, lifetimeMs: number) {
     return new Chance(
@@ -137,7 +120,7 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
   }
 
   importState(state: ExportedApiState) {
-    const parsedState = serializedApiStateSchema.parse(state);
+    const parsedState = exportedApiStateSchema.parse(state);
     this.state = parsedState;
     this.cookieJar = CookieJar.fromJSON(
       parsedState.cookieJar as SerializedCookieJar,
@@ -252,6 +235,22 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
 
     return response.data;
   }
+}
+
+export function generateDeviceState(seed: string) {
+  const chance = new Chance(seed);
+  const newDeviceState = {
+    deviceString: chance.pickone(DEVICES),
+    uuid: chance.guid(),
+    phoneId: chance.guid(),
+    adId: chance.guid(),
+    build: chance.pickone(BUILDS),
+    deviceId: `android-${chance.string({
+      pool: "abcdef0123456789",
+      length: 16,
+    })}`,
+  };
+  return newDeviceState;
 }
 
 function parseAuthToken(token: string) {
