@@ -27,6 +27,13 @@ import {
   SIGNATURE_VERSION,
 } from "./constants";
 
+const igState = z.object({
+  wwwClaim: z.string().nullable(),
+  mid: z.string().nullable(),
+  directRegionalHint: z.string().nullable(),
+});
+export type IgState = z.infer<typeof igState>;
+
 const authStateSchema = z.object({
   token: z.string(),
   userId: z.string(),
@@ -54,6 +61,7 @@ export type PasswordEncryptionConfig = z.infer<
 >;
 
 const stateSchema = z.object({
+  igState: igState,
   authState: authStateSchema.nullable(),
   passwordEncryptionConfig: passwordEncryptionConfigSchema.nullable(),
   deviceState: deviceStateSchema,
@@ -62,12 +70,15 @@ const stateSchema = z.object({
 export type State = z.infer<typeof stateSchema>;
 
 export type ApiClientEvents = {
-  requestEnd: () => void;
+  response: (response: AxiosResponse) => void;
 };
 
 export class ApiClient extends EventEmitter<ApiClientEvents> {
-  #igWWWClaim: string | null = null;
-
+  igState: IgState = {
+    wwwClaim: null,
+    mid: null,
+    directRegionalHint: null,
+  };
   authState: AuthState | null = null;
   passwordEncryptionConfig: PasswordEncryptionConfig | null = null;
   deviceState: DeviceState = this.generateDevice(randomUUID());
@@ -156,21 +167,23 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
 
   exportState(): State {
     return {
+      igState: { ...this.igState },
       authState: this.authState ? { ...this.authState } : null,
       passwordEncryptionConfig: this.passwordEncryptionConfig
         ? { ...this.passwordEncryptionConfig }
         : null,
       deviceState: { ...this.deviceState },
-      cookieJar: this.cookieJar.serializeSync(),
+      cookieJar: this.cookieJar.toJSON(),
     };
   }
 
   importState(state: State) {
     const parsedState = stateSchema.parse(state);
+    this.igState = parsedState.igState;
     this.authState = parsedState.authState;
     this.passwordEncryptionConfig = parsedState.passwordEncryptionConfig;
     this.deviceState = parsedState.deviceState;
-    this.cookieJar = CookieJar.deserializeSync(
+    this.cookieJar = CookieJar.fromJSON(
       parsedState.cookieJar as SerializedCookieJar,
     );
     this.axiosClient = axiosCookieJar.wrapper(
@@ -198,8 +211,8 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
       "X-IG-EU-DC-ENABLED": "0",
       // 'X-IG-Extended-CDN-Thumbnail-Cache-Busting-Value': this.client.state.thumbnailCacheBustingValue.toString(),
       "X-Bloks-Version-Id": BLOKS_VERSION_ID,
-      "X-MID": this.extractCookieValue("mid") ?? "",
-      "X-IG-WWW-Claim": this.#igWWWClaim ?? ")",
+      "X-MID": this.igState.mid ?? "",
+      "X-IG-WWW-Claim": this.igState.wwwClaim ?? "",
       "X-Bloks-Is-Layout-RTL": "false",
       "X-IG-Connection-Type": CONNECTION_TYPE_HEADER,
       "X-IG-Capabilities": CAPABILITIES_HEADER,
@@ -218,32 +231,49 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
   #updateAuthState(response: AxiosResponse) {
     const {
       "x-ig-set-www-claim": wwwClaim,
+      "ig-set-x-mid": mid,
+      "ig-set-ig-u-ig-direct-region-hint": directRegionalHint,
       "ig-set-authorization": authToken,
       "ig-set-password-encryption-key-id": pwKeyId,
       "ig-set-password-encryption-pub-key": pwPubKey,
     } = response.headers;
 
     if (typeof wwwClaim === "string") {
-      this.#igWWWClaim = wwwClaim;
+      this.igState.wwwClaim = wwwClaim || null;
+    }
+    if (typeof mid === "string") {
+      this.igState.mid = mid || null;
+    }
+    if (typeof directRegionalHint === "string") {
+      this.igState.directRegionalHint = directRegionalHint || null;
     }
     if (typeof authToken === "string") {
-      try {
-        const parsedAuth = parseAuthToken(authToken);
-        this.authState = {
-          token: authToken,
-          userId: parsedAuth.ds_user_id,
-          sessionId: parsedAuth.sessionid,
-          shouldUserHeaderOverCookie: parsedAuth.should_user_header_over_cookie,
-        };
-      } catch {
-        throw new Error(`Failed to parse auth token: ${authToken}`);
+      if (authToken) {
+        try {
+          const parsedAuth = parseAuthToken(authToken);
+          this.authState = {
+            token: authToken,
+            userId: parsedAuth.ds_user_id,
+            sessionId: parsedAuth.sessionid,
+            shouldUserHeaderOverCookie:
+              parsedAuth.should_user_header_over_cookie,
+          };
+        } catch {
+          throw new Error(`Failed to parse auth token: ${authToken}`);
+        }
+      } else {
+        this.authState = null;
       }
     }
     if (typeof pwKeyId === "string" && typeof pwPubKey === "string") {
-      this.passwordEncryptionConfig = {
-        keyId: pwKeyId,
-        pubKey: pwPubKey,
-      };
+      if (pwKeyId && pwPubKey) {
+        this.passwordEncryptionConfig = {
+          pubKey: pwPubKey,
+          keyId: pwKeyId,
+        };
+      } else {
+        this.passwordEncryptionConfig = null;
+      }
     }
   }
 
@@ -262,7 +292,7 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
       data: opts?.form ? stringify(opts.form) : (opts?.data as unknown),
     });
     this.#updateAuthState(response);
-    this.emit("requestEnd");
+    this.emit("response", response);
 
     return response.data;
   }
