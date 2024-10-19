@@ -35,6 +35,7 @@ export default tseslint.config(
           },
         },
       ],
+      "@typescript-eslint/only-throw-error": "off",
       "simple-import-sort/imports": "error",
       "simple-import-sort/exports": "error",
     },

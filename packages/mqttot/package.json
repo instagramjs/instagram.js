@@ -1,0 +1,55 @@
+{
+  "name": "@igjs/mqttot",
+  "version": "0.0.1",
+  "private": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "prepare": "pnpm gen:thrift",
+    "clean": "rm -rf .turbo node_modules",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
+    "gen:thrift": "tsx scripts/thrift-codegen.ts",
+    "typecheck": "tsc --noEmit",
+    "dev": "pnpm build --watch",
+    "prebuild": "pnpm gen:thrift",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean --no-splitting"
+  },
+  "devDependencies": {
+    "@creditkarma/thrift-typescript": "3.7.6",
+    "@igjs/eslint-config": "workspace:*",
+    "@igjs/prettier-config": "workspace:*",
+    "@igjs/tsconfig": "workspace:*",
+    "@swc/core": "catalog:",
+    "@t3-oss/env-core": "catalog:",
+    "@types/eslint": "catalog:",
+    "@types/node": "catalog:",
+    "@types/node-int64": "0.4.32",
+    "@types/thrift": "0.10.17",
+    "dotenv": "catalog:",
+    "eslint": "catalog:",
+    "glob": "11.0.0",
+    "pino": "9.5.0",
+    "prettier": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:"
+  },
+  "dependencies": {
+    "@igjs/api": "workspace:*",
+    "axios": "1.7.7",
+    "eventemitter3": "5.0.1",
+    "mqtts": "1.5.0",
+    "node-int64": "0.4.0",
+    "thrift": "0.21.0",
+    "tsx": "catalog:",
+    "zod": "catalog:"
+  },
+  "prettier": "@igjs/prettier-config"
+}
