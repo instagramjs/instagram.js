@@ -1,4 +1,11 @@
-import { ApiClient, generateDeviceState } from "@igjs/api";
+import {
+  ApiClient,
+  APP_VERSION,
+  CAPABILITIES_HEADER,
+  generateDeviceState,
+  LANGUAGE,
+} from "@igjs/api";
+import { IgRealtimeClient } from "@igjs/mqttot";
 import EventEmitter from "eventemitter3";
 import { type Logger } from "pino";
 
@@ -19,6 +26,7 @@ export class IgClient extends EventEmitter<IgClientEvents> {
   opts: IgClientOpts;
 
   api = new ApiClient();
+  realtime = new IgRealtimeClient();
 
   constructor(opts?: IgClientOpts) {
     super();
@@ -47,6 +55,20 @@ export class IgClient extends EventEmitter<IgClientEvents> {
     }
 
     await this.api.qe.syncExperiments();
+
+    const sessionId = this.api.state.auth?.sessionId ?? "";
+    const inbox = await this.api.direct.getInbox().request();
+    await this.realtime.connect({
+      appVersion: APP_VERSION,
+      capabilitiesHeader: CAPABILITIES_HEADER,
+      language: LANGUAGE.replace("_", "-"),
+      userAgent: this.api.getUserAgent(),
+      deviceId: this.api.state.device.phoneId,
+      sessionId: sessionId,
+      userId: this.api.state.auth?.userId ?? "",
+      irisData: inbox,
+      autoReconnect: true,
+    });
 
     this.emit("ready");
   }

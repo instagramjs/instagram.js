@@ -1,9 +1,10 @@
-import thrift, { Int64 } from "thrift";
+import thrift from "thrift";
+
+import { bigintToInt64, int64ToBigint } from "~/util";
 
 export enum MqttotFieldType {
   STOP = 0x00,
-  TRUE = 0x01,
-  FALSE = 0x02,
+  BOOLEAN = 0x02,
   BYTE = 0x03,
   INT_16 = 0x04,
   INT_32 = 0x05,
@@ -14,12 +15,6 @@ export enum MqttotFieldType {
   SET = 0x0a,
   MAP = 0x0b,
   STRUCT = 0x0c,
-  LIST_INT_16 = (0x04 << 8) | 0x09,
-  LIST_INT_32 = (0x05 << 8) | 0x09,
-  LIST_INT_64 = (0x06 << 8) | 0x09,
-  LIST_BINARY = (0x08 << 8) | 0x09,
-  MAP_BINARY_BINARY = (0x88 << 8) | 0x0b,
-  BOOLEAN = 0xa1,
   UNSUPPORTED = 0xff,
 }
 
@@ -49,8 +44,6 @@ function unsafeThriftTypeToMqttotType(
 
 const THRIFT_TYPE_MAP: Partial<Record<MqttotFieldType, thrift.Thrift.Type>> = {
   [MqttotFieldType.STOP]: thrift.Thrift.Type.STOP,
-  [MqttotFieldType.TRUE]: thrift.Thrift.Type.BOOL,
-  [MqttotFieldType.FALSE]: thrift.Thrift.Type.BOOL,
   [MqttotFieldType.BOOLEAN]: thrift.Thrift.Type.BOOL,
   [MqttotFieldType.BYTE]: thrift.Thrift.Type.BYTE,
   [MqttotFieldType.INT_16]: thrift.Thrift.Type.I16,
@@ -81,13 +74,15 @@ export class MqttotThriftWriteProtocol implements thrift.TProtocol {
     return this._buffer.length;
   }
 
+  #lastField = 0;
   #field = 0;
-  #stack: number[] = [];
+  #type = thrift.Thrift.Type.STOP;
+  #stack: [number, number, thrift.Thrift.Type][] = [];
 
   constructor(private _buffer: Buffer) {}
 
   #pushStack() {
-    this.#stack.push(this.#field);
+    this.#stack.push([this.#lastField, this.#field, this.#type]);
     this.#field = 0;
   }
 
@@ -95,7 +90,7 @@ export class MqttotThriftWriteProtocol implements thrift.TProtocol {
     if (this.#stack.length === 0) {
       throw new Error("stack underflow");
     }
-    this.#field = this.#stack.pop()!;
+    [this.#lastField, this.#field, this.#type] = this.#stack.pop()!;
   }
 
   #writeByte(x: number) {
@@ -165,7 +160,9 @@ export class MqttotThriftWriteProtocol implements thrift.TProtocol {
 
   writeFieldBegin(_name: string, type: thrift.Thrift.Type, field: number) {
     this.#writeMqttotFieldBegin(field, unsafeThriftTypeToMqttotType(type));
+    this.#lastField = this.#field;
     this.#field = field;
+    this.#type = type;
   }
 
   writeFieldEnd() {
@@ -199,23 +196,22 @@ export class MqttotThriftWriteProtocol implements thrift.TProtocol {
     if (typeof x === "number") {
       bigint = BigInt(x);
     } else {
-      bigint = BigInt(x.toString());
+      bigint = int64ToBigint(x);
     }
     this.#writeBigInt(bigintToZigZag(bigint));
   }
 
   writeBool(x: boolean): void {
-    this.#writeByte(x ? MqttotFieldType.TRUE : MqttotFieldType.FALSE);
+    this.#writeByte(x ? 1 : 0);
   }
 
   writeListBegin(type: thrift.Thrift.Type, size: number) {
     const mqttotType = unsafeThriftTypeToMqttotType(type);
-    this.#writeMqttotFieldBegin(this.#field, MqttotFieldType.LIST);
     if (size < 0x0f) {
       this.#writeByte((size << 4) | mqttotType);
     } else {
       this.#writeByte(0xf0 | mqttotType);
-      this.#writeByte(size);
+      this.#writeVarInt(size);
     }
   }
 
@@ -448,7 +444,7 @@ export class MqttotThriftReadProtocol implements thrift.TProtocol {
     const size = this.#readVarInt();
     const kvByte = size ? this.#readByte() : 0;
     const keyType = unsafeMqttotTypeToThriftType((kvByte & 0x0f) >> 4);
-    const valueType = unsafeMqttotTypeToThriftType(kvByte & 0xf0);
+    const valueType = unsafeMqttotTypeToThriftType(kvByte & 0xf);
     return {
       ktype: keyType,
       vtype: valueType,
@@ -486,8 +482,7 @@ export class MqttotThriftReadProtocol implements thrift.TProtocol {
   }
 
   readBool(): boolean {
-    const type = this.#mqttotType & 0x0f;
-    return type === (MqttotFieldType.TRUE as number);
+    return this.#readByte() !== 0;
   }
 
   readByte(): number {
@@ -503,7 +498,7 @@ export class MqttotThriftReadProtocol implements thrift.TProtocol {
   }
 
   readI64(): thrift.Int64 {
-    return new Int64(this.#readBigint().toString());
+    return bigintToInt64(this.#readBigint());
   }
 
   readDouble(): number {

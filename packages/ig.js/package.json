@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@igjs/api": "workspace:*",
+    "@igjs/mqttot": "workspace:*",
     "axios": "1.7.7",
     "eventemitter3": "5.0.1",
     "tsx": "catalog:",

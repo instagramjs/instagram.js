@@ -44,6 +44,7 @@
   "dependencies": {
     "@igjs/api": "workspace:*",
     "axios": "1.7.7",
+    "bigint-conversion": "^2.4.3",
     "eventemitter3": "5.0.1",
     "mqtts": "1.5.0",
     "node-int64": "0.4.0",

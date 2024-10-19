@@ -115,16 +115,20 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
   exportState(): ExportedApiState {
     return {
       ...this.state,
-      cookieJar: this.cookieJar.toJSON(),
+      cookieJar: this.cookieJar.serializeSync(),
     };
   }
 
   importState(state: ExportedApiState) {
     const parsedState = exportedApiStateSchema.parse(state);
     this.state = parsedState;
-    this.cookieJar = CookieJar.fromJSON(
-      parsedState.cookieJar as SerializedCookieJar,
-    );
+    try {
+      this.cookieJar = CookieJar.deserializeSync(
+        parsedState.cookieJar as SerializedCookieJar,
+      );
+    } catch {
+      this.cookieJar = new CookieJar();
+    }
     this.axiosClient = axiosCookieJar.wrapper(
       axios.create({
         jar: this.cookieJar,

@@ -31,7 +31,7 @@ type MqttotClientWriteMap = Omit<
 };
 
 export type MqttotClientOpts = {
-  urL: string;
+  url: string;
   connectPayloadProvider: () => Promise<Buffer> | Buffer;
   connectPayloadRequired?: boolean;
   autoReconnect?: boolean;
@@ -55,7 +55,7 @@ export class MqttotClient extends MqttClient<
         [PacketType.Connect]: writeMqttotConnectPacket,
       },
       transport: new TlsTransport({
-        host: opts.urL,
+        host: opts.url,
         port: 443,
       }),
     });
