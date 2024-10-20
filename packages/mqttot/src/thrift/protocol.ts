@@ -4,7 +4,8 @@ import { bigintToInt64, int64ToBigint } from "~/util";
 
 export enum MqttotFieldType {
   STOP = 0x00,
-  BOOLEAN = 0x02,
+  TRUE = 0x01,
+  FALSE = 0x02,
   BYTE = 0x03,
   INT_16 = 0x04,
   INT_32 = 0x05,
@@ -16,6 +17,7 @@ export enum MqttotFieldType {
   MAP = 0x0b,
   STRUCT = 0x0c,
   UNSUPPORTED = 0xff,
+  BOOLEAN = 0xa1,
 }
 
 const MQTTOT_TYPE_MAP: Partial<Record<thrift.Thrift.Type, MqttotFieldType>> = {
@@ -66,6 +68,12 @@ function unsafeMqttotTypeToThriftType(
   throw new Error(`Unsupported Mqttot type: ${type}`);
 }
 
+type WriteState = {
+  field: number;
+  boolField: number;
+  writingList: boolean;
+};
+
 export class MqttotThriftWriteProtocol implements thrift.TProtocol {
   get buffer(): Buffer {
     return this._buffer;
@@ -74,23 +82,29 @@ export class MqttotThriftWriteProtocol implements thrift.TProtocol {
     return this._buffer.length;
   }
 
-  #lastField = 0;
-  #field = 0;
-  #type = thrift.Thrift.Type.STOP;
-  #stack: [number, number, thrift.Thrift.Type][] = [];
+  #state: WriteState = {
+    field: 0,
+    boolField: 0,
+    writingList: false,
+  };
+  #stack: WriteState[] = [];
 
   constructor(private _buffer: Buffer) {}
 
   #pushStack() {
-    this.#stack.push([this.#lastField, this.#field, this.#type]);
-    this.#field = 0;
+    this.#stack.push(this.#state);
+    this.#state = {
+      field: 0,
+      boolField: 0,
+      writingList: false,
+    };
   }
 
   #popStack() {
     if (this.#stack.length === 0) {
       throw new Error("stack underflow");
     }
-    [this.#lastField, this.#field, this.#type] = this.#stack.pop()!;
+    this.#state = this.#stack.pop()!;
   }
 
   #writeByte(x: number) {
@@ -140,14 +154,14 @@ export class MqttotThriftWriteProtocol implements thrift.TProtocol {
   }
 
   #writeMqttotFieldBegin(field: number, type: MqttotFieldType) {
-    const delta = field - this.#field;
+    const delta = field - this.#state.field;
     if (delta > 0 && delta <= 15) {
       this.#writeByte((delta << 4) | type);
     } else {
       this.#writeByte(type);
       this.#writeWord(delta);
     }
-    this.#field = field;
+    this.#state.field = field;
   }
 
   writeStructBegin() {
@@ -159,10 +173,11 @@ export class MqttotThriftWriteProtocol implements thrift.TProtocol {
   }
 
   writeFieldBegin(_name: string, type: thrift.Thrift.Type, field: number) {
-    this.#writeMqttotFieldBegin(field, unsafeThriftTypeToMqttotType(type));
-    this.#lastField = this.#field;
-    this.#field = field;
-    this.#type = type;
+    if (type !== thrift.Thrift.Type.BOOL) {
+      this.#writeMqttotFieldBegin(field, unsafeThriftTypeToMqttotType(type));
+    } else {
+      this.#state.boolField = field;
+    }
   }
 
   writeFieldEnd() {
@@ -202,7 +217,14 @@ export class MqttotThriftWriteProtocol implements thrift.TProtocol {
   }
 
   writeBool(x: boolean): void {
-    this.#writeByte(x ? 1 : 0);
+    if (this.#state.writingList) {
+      this.#writeByte(x ? MqttotFieldType.TRUE : MqttotFieldType.FALSE);
+    } else {
+      this.#writeMqttotFieldBegin(
+        this.#state.boolField,
+        x ? MqttotFieldType.TRUE : MqttotFieldType.FALSE,
+      );
+    }
   }
 
   writeListBegin(type: thrift.Thrift.Type, size: number) {
@@ -213,10 +235,11 @@ export class MqttotThriftWriteProtocol implements thrift.TProtocol {
       this.#writeByte(0xf0 | mqttotType);
       this.#writeVarInt(size);
     }
+    this.#state.writingList = true;
   }
 
   writeListEnd() {
-    return;
+    this.#state.writingList = false;
   }
 
   writeMapBegin(
@@ -328,11 +351,21 @@ export class MqttotThriftWriteProtocol implements thrift.TProtocol {
   }
 }
 
+type ReadState = {
+  field: number;
+  boolValue: boolean;
+  readingList: boolean;
+};
+
 export class MqttotThriftReadProtocol implements thrift.TProtocol {
   #position = 0;
-  #field = 0;
-  #mqttotType = 0;
-  #stack: number[] = [];
+
+  #state: ReadState = {
+    field: 0,
+    boolValue: false,
+    readingList: false,
+  };
+  #stack: ReadState[] = [];
 
   constructor(private _buffer: Buffer) {}
 
@@ -345,15 +378,19 @@ export class MqttotThriftReadProtocol implements thrift.TProtocol {
   }
 
   #pushStack() {
-    this.#stack.push(this.#field);
-    this.#field = 0;
+    this.#stack.push(this.#state);
+    this.#state = {
+      field: 0,
+      boolValue: false,
+      readingList: false,
+    };
   }
 
   #popStack() {
     if (this.#stack.length === 0) {
       throw new Error("stack underflow");
     }
-    this.#field = this.#stack.pop()!;
+    this.#state = this.#stack.pop()!;
   }
 
   #readByte() {
@@ -424,15 +461,29 @@ export class MqttotThriftReadProtocol implements thrift.TProtocol {
     }
     const delta = (byte & 0xf0) >> 4;
     if (delta === 0) {
-      this.#field = this.#readSmallInt();
+      this.#state.field = this.#readSmallInt();
     } else {
-      this.#field += delta;
+      this.#state.field += delta;
     }
-    this.#mqttotType = byte & 0x0f;
+    const mqttotType = byte & 0x0f;
+    if (
+      [
+        MqttotFieldType.BOOLEAN,
+        MqttotFieldType.TRUE,
+        MqttotFieldType.FALSE,
+      ].includes(mqttotType)
+    ) {
+      this.#state.boolValue = mqttotType === (MqttotFieldType.TRUE as number);
+      return {
+        fname: "",
+        ftype: thrift.Thrift.Type.BOOL,
+        fid: this.#state.field,
+      };
+    }
     return {
       fname: "",
-      ftype: unsafeMqttotTypeToThriftType(this.#mqttotType),
-      fid: this.#field,
+      ftype: unsafeMqttotTypeToThriftType(mqttotType),
+      fid: this.#state.field,
     };
   }
 
@@ -463,6 +514,7 @@ export class MqttotThriftReadProtocol implements thrift.TProtocol {
     if (size === 0x0f) {
       size = this.#readVarInt();
     }
+    this.#state.readingList = true;
     return {
       etype: listType,
       size,
@@ -470,7 +522,7 @@ export class MqttotThriftReadProtocol implements thrift.TProtocol {
   }
 
   readListEnd(): void {
-    return;
+    this.#state.readingList = false;
   }
 
   readSetBegin(): thrift.TSet {
@@ -482,7 +534,11 @@ export class MqttotThriftReadProtocol implements thrift.TProtocol {
   }
 
   readBool(): boolean {
-    return this.#readByte() !== 0;
+    if (this.#state.readingList) {
+      return this.#readByte() === (MqttotFieldType.TRUE as number);
+    } else {
+      return this.#state.boolValue;
+    }
   }
 
   readByte(): number {

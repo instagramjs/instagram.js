@@ -8,7 +8,7 @@ import {
   MqttotClientInfo,
   MqttotConnectionPacket,
 } from "./thrift/structs/mqttot-connection";
-import { deserializeThrift, serializeThrift } from "./thrift/util";
+import { serializeThrift } from "./thrift/util";
 import {
   BackgroundStateTopic,
   ForegroundStateTopic,
@@ -48,7 +48,7 @@ export type IgRealtimeClientEvents = {
   warning: (error: Error) => void;
 };
 
-const RealtimeTopics = [
+const realtimeTopics = [
   GraphqlTopic,
   PubSubTopic,
   SendMessageResponseTopic,
@@ -107,9 +107,6 @@ export class IgRealtimeClient extends EventEmitter {
         auth_cache_enabled: "0",
       }),
     });
-    const result = serializeThrift(struct);
-    console.log(result);
-    console.log(deserializeThrift(MqttotConnectionPacket, result));
     return deflateAsync(serializeThrift(struct));
   }
 
@@ -127,7 +124,6 @@ export class IgRealtimeClient extends EventEmitter {
 
     return new Promise<void>((resolve, reject) => {
       this.#mqttot!.on("connect", async () => {
-        console.log("connected");
         await Promise.all([
           opts.graphqlSubscriptions?.length &&
             this.graphqlSubscribe(opts.graphqlSubscriptions),
@@ -135,10 +131,8 @@ export class IgRealtimeClient extends EventEmitter {
             this.skywalkerSubscribe(opts.skywalkerSubscriptions),
           opts.irisData && this.irisSubscribe(opts.irisData),
         ]);
-        console.log("subscribed");
         resolve(void 0);
       });
-      console.log("connecting");
       this.#mqttot!.connect({
         keepAlive: 20,
         protocolLevel: 3,
@@ -150,17 +144,15 @@ export class IgRealtimeClient extends EventEmitter {
 
   #handleMqttotError = (error: Error) => {
     this.emit("error", error);
-    console.error(error);
   };
 
   #handleMqttotWarning = (error: Error) => {
     this.emit("warning", error);
-    console.warn(error);
   };
 
   #handleMqttotMessage = async (message: MqttMessage) => {
     const unzipped = await safeUnzipAsync(message.payload);
-    const topic = RealtimeTopics.find((t) => t.id === message.topic);
+    const topic = realtimeTopics.find((t) => t.id === message.topic);
 
     if (topic?.parser) {
       const parsedMessages = topic.parser?.parseMessage(topic, unzipped);
@@ -182,7 +174,7 @@ export class IgRealtimeClient extends EventEmitter {
   ) {
     if (!this.#mqttot) {
       throw new Error(
-        "Can't public to topic before MqTToT client is initialized",
+        "Can't publish to topic before MqTToT client is initialized",
       );
     }
     return this.#mqttot.publish({
