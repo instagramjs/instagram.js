@@ -6,6 +6,9 @@ settings:
 
 catalogs:
   default:
+    '@creditkarma/thrift-typescript':
+      specifier: 3.7.6
+      version: 3.7.6
     '@eslint/js':
       specifier: 9.11.1
       version: 9.11.1
@@ -24,15 +27,39 @@ catalogs:
     '@types/node':
       specifier: 22.6.1
       version: 22.6.1
+    '@types/node-int64':
+      specifier: 0.4.32
+      version: 0.4.32
+    '@types/thrift':
+      specifier: 0.10.17
+      version: 0.10.17
     dotenv:
       specifier: 16.4.5
       version: 16.4.5
     eslint:
       specifier: 9.11.1
       version: 9.11.1
+    eventemitter3:
+      specifier: 5.0.1
+      version: 5.0.1
+    glob:
+      specifier: 11.0.0
+      version: 11.0.0
+    mqtts:
+      specifier: 1.5.0
+      version: 1.5.0
+    node-int64:
+      specifier: 0.4.0
+      version: 0.4.0
+    pino:
+      specifier: 9.5.0
+      version: 9.5.0
     prettier:
       specifier: 3.3.3
       version: 3.3.3
+    thrift:
+      specifier: 0.21.0
+      version: 0.21.0
     tsup:
       specifier: 8.3.0
       version: 8.3.0
@@ -144,14 +171,14 @@ importers:
       '@igjs/api':
         specifier: workspace:*
         version: link:../api
-      '@igjs/mqttot':
+      '@igjs/realtime':
         specifier: workspace:*
-        version: link:../mqttot
+        version: link:../realtime
       axios:
         specifier: 1.7.7
         version: 1.7.7
       eventemitter3:
-        specifier: 5.0.1
+        specifier: 'catalog:'
         version: 5.0.1
       tsx:
         specifier: 'catalog:'
@@ -188,7 +215,7 @@ importers:
         specifier: 'catalog:'
         version: 9.11.1
       pino:
-        specifier: 9.5.0
+        specifier: 'catalog:'
         version: 9.5.0
       prettier:
         specifier: 'catalog:'
@@ -205,26 +232,93 @@ importers:
 
   packages/mqttot:
     dependencies:
-      '@igjs/api':
-        specifier: workspace:*
-        version: link:../api
-      axios:
-        specifier: 1.7.7
-        version: 1.7.7
       bigint-conversion:
-        specifier: ^2.4.3
+        specifier: 2.4.3
         version: 2.4.3
       eventemitter3:
-        specifier: 5.0.1
+        specifier: 'catalog:'
         version: 5.0.1
       mqtts:
-        specifier: 1.5.0
+        specifier: 'catalog:'
         version: 1.5.0
       node-int64:
-        specifier: 0.4.0
+        specifier: 'catalog:'
         version: 0.4.0
       thrift:
-        specifier: 0.21.0
+        specifier: 'catalog:'
+        version: 0.21.0
+      tsx:
+        specifier: 'catalog:'
+        version: 4.19.1
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
+    devDependencies:
+      '@igjs/eslint-config':
+        specifier: workspace:*
+        version: link:../../tooling/eslint
+      '@igjs/prettier-config':
+        specifier: workspace:*
+        version: link:../../tooling/prettier
+      '@igjs/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/tsconfig
+      '@swc/core':
+        specifier: 'catalog:'
+        version: 1.7.26
+      '@t3-oss/env-core':
+        specifier: 'catalog:'
+        version: 0.10.1(typescript@5.5.4)(zod@3.23.8)
+      '@types/eslint':
+        specifier: 'catalog:'
+        version: 9.6.1
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.6.1
+      '@types/node-int64':
+        specifier: 'catalog:'
+        version: 0.4.32
+      '@types/thrift':
+        specifier: 'catalog:'
+        version: 0.10.17
+      dotenv:
+        specifier: 'catalog:'
+        version: 16.4.5
+      eslint:
+        specifier: 'catalog:'
+        version: 9.11.1
+      glob:
+        specifier: 'catalog:'
+        version: 11.0.0
+      pino:
+        specifier: 'catalog:'
+        version: 9.5.0
+      prettier:
+        specifier: 'catalog:'
+        version: 3.3.3
+      tsup:
+        specifier: 'catalog:'
+        version: 8.3.0(@swc/core@1.7.26)(tsx@4.19.1)(typescript@5.5.4)(yaml@2.6.0)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.5.4
+      typescript-eslint:
+        specifier: 'catalog:'
+        version: 8.7.0(eslint@9.11.1)(typescript@5.5.4)
+
+  packages/realtime:
+    dependencies:
+      '@igjs/mqttot':
+        specifier: workspace:*
+        version: link:../mqttot
+      eventemitter3:
+        specifier: 'catalog:'
+        version: 5.0.1
+      node-int64:
+        specifier: 'catalog:'
+        version: 0.4.0
+      thrift:
+        specifier: 'catalog:'
         version: 0.21.0
       tsx:
         specifier: 'catalog:'
@@ -234,7 +328,7 @@ importers:
         version: 3.23.8
     devDependencies:
       '@creditkarma/thrift-typescript':
-        specifier: 3.7.6
+        specifier: 'catalog:'
         version: 3.7.6
       '@igjs/eslint-config':
         specifier: workspace:*
@@ -258,10 +352,10 @@ importers:
         specifier: 'catalog:'
         version: 22.6.1
       '@types/node-int64':
-        specifier: 0.4.32
+        specifier: 'catalog:'
         version: 0.4.32
       '@types/thrift':
-        specifier: 0.10.17
+        specifier: 'catalog:'
         version: 0.10.17
       dotenv:
         specifier: 'catalog:'
@@ -270,10 +364,13 @@ importers:
         specifier: 'catalog:'
         version: 9.11.1
       glob:
-        specifier: 11.0.0
+        specifier: 'catalog:'
         version: 11.0.0
+      mqtts:
+        specifier: 'catalog:'
+        version: 1.5.0
       pino:
-        specifier: 9.5.0
+        specifier: 'catalog:'
         version: 9.5.0
       prettier:
         specifier: 'catalog:'

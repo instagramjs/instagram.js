@@ -28,7 +28,7 @@
     "@types/node": "catalog:",
     "dotenv": "catalog:",
     "eslint": "catalog:",
-    "pino": "9.5.0",
+    "pino": "catalog:",
     "prettier": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:",
@@ -36,9 +36,9 @@
   },
   "dependencies": {
     "@igjs/api": "workspace:*",
-    "@igjs/mqttot": "workspace:*",
+    "@igjs/realtime": "workspace:*",
     "axios": "1.7.7",
-    "eventemitter3": "5.0.1",
+    "eventemitter3": "catalog:",
     "tsx": "catalog:",
     "zod": "catalog:"
   },

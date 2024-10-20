@@ -1,33 +1,34 @@
+import {
+  bigintToInt64,
+  deflateAsync,
+  MqttotClient,
+  objectToMap,
+  safeUnzipAsync,
+  serializeThrift,
+} from "@igjs/mqttot";
 import EventEmitter from "eventemitter3";
 import { type MqttMessage } from "mqtts";
 import Int64 from "node-int64";
 
 import { IG_REALTIME_HOST } from "./constants";
-import { MqttotClient } from "./mqttot/client";
+import {
+  defaultRealtimeTopicHandlers,
+  GraphqlTopicHandler,
+  IrisSubTopicHandler,
+  type RealtimeTopicHandler,
+  SkywalkerTopicHandler,
+} from "./handlers";
 import {
   MqttotClientInfo,
   MqttotConnectionPacket,
-} from "./thrift/structs/mqttot-connection";
-import { serializeThrift } from "./thrift/util";
-import {
-  BackgroundStateTopic,
-  ForegroundStateTopic,
-  GraphqlTopic,
-  IrisSubResponseTopic,
-  IrisSubTopic,
-  MessageSyncTopic,
-  PubSubTopic,
-  RealtimeSubTopic,
-  RegionHintTopic,
-  SendMessageResponseTopic,
-  type Topic,
-} from "./topics";
-import {
-  bigintToInt64,
-  deflateAsync,
-  objectToMap,
-  safeUnzipAsync,
-} from "./util";
+} from "./thrift/mqttot-connection";
+
+export type IgRealtimeClientOpts = {
+  topicHandlers?: RealtimeTopicHandler[];
+};
+export const defaultIgRealtimeClientOpts: IgRealtimeClientOpts = {
+  topicHandlers: defaultRealtimeTopicHandlers,
+};
 
 export type IgRealtimeClientConnectOpts = {
   appVersion: string;
@@ -44,26 +45,17 @@ export type IgRealtimeClientConnectOpts = {
 };
 
 export type IgRealtimeClientEvents = {
-  error: (error: Error) => void;
   warning: (error: Error) => void;
+  error: (error: Error) => void;
 };
-
-const realtimeTopics = [
-  GraphqlTopic,
-  PubSubTopic,
-  SendMessageResponseTopic,
-  IrisSubTopic,
-  IrisSubResponseTopic,
-  MessageSyncTopic,
-  RealtimeSubTopic,
-  RegionHintTopic,
-  ForegroundStateTopic,
-  BackgroundStateTopic,
-] satisfies Topic[];
 
 export class IgRealtimeClient extends EventEmitter {
   #mqttot: MqttotClient | null = null;
   #connectOpts: IgRealtimeClientConnectOpts | null = null;
+
+  constructor(public opts: IgRealtimeClientOpts = defaultIgRealtimeClientOpts) {
+    super();
+  }
 
   #getConnectionPayload(opts: IgRealtimeClientConnectOpts) {
     const struct = new MqttotConnectionPacket({
@@ -120,7 +112,15 @@ export class IgRealtimeClient extends EventEmitter {
     });
     this.#mqttot.on("error", this.#handleMqttotError);
     this.#mqttot.on("warning", this.#handleMqttotWarning);
-    this.#mqttot.on("message", this.#handleMqttotMessage);
+
+    if (this.opts.topicHandlers) {
+      for (const handler of this.opts.topicHandlers) {
+        this.#mqttot.listen(handler.topic, async (message: MqttMessage) => {
+          const unzipped = await safeUnzipAsync(message.payload);
+          await handler.handle(this, unzipped);
+        });
+      }
+    }
 
     return new Promise<void>((resolve, reject) => {
       this.#mqttot!.on("connect", async () => {
@@ -150,23 +150,6 @@ export class IgRealtimeClient extends EventEmitter {
     this.emit("warning", error);
   };
 
-  #handleMqttotMessage = async (message: MqttMessage) => {
-    const unzipped = await safeUnzipAsync(message.payload);
-    const topic = realtimeTopics.find((t) => t.id === message.topic);
-
-    if (topic?.parser) {
-      const parsedMessages = topic.parser?.parseMessage(topic, unzipped);
-      const messages = Array.isArray(parsedMessages)
-        ? parsedMessages
-        : [parsedMessages];
-      for (const m of messages) {
-        console.log(topic.path, m);
-      }
-    } else {
-      console.log(message.topic, unzipped);
-    }
-  };
-
   async #publishToTopic(
     topic: string,
     compressedData: string | Buffer,
@@ -188,7 +171,7 @@ export class IgRealtimeClient extends EventEmitter {
   }
 
   async updateSubscriptions(
-    topic: Topic,
+    topic: string,
     data:
       | {
           subscribe?: string[];
@@ -197,22 +180,26 @@ export class IgRealtimeClient extends EventEmitter {
       | Record<string, unknown>,
   ) {
     return this.#publishToTopic(
-      topic.id,
+      topic,
       await deflateAsync(JSON.stringify(data)),
       1,
     );
   }
 
   graphqlSubscribe(subscriptions: string[]) {
-    return this.updateSubscriptions(GraphqlTopic, { subscribe: subscriptions });
+    return this.updateSubscriptions(GraphqlTopicHandler.topic, {
+      subscribe: subscriptions,
+    });
   }
 
   skywalkerSubscribe(subscriptions: string[]) {
-    return this.updateSubscriptions(PubSubTopic, { subscribe: subscriptions });
+    return this.updateSubscriptions(SkywalkerTopicHandler.topic, {
+      subscribe: subscriptions,
+    });
   }
 
   irisSubscribe(data: { seq_id: number; snapshot_at_ms: number }) {
-    return this.updateSubscriptions(IrisSubTopic, {
+    return this.updateSubscriptions(IrisSubTopicHandler.topic, {
       seq_id: data.seq_id,
       snapshot_at_ms: data.snapshot_at_ms,
       snapshot_app_version: this.#connectOpts?.appVersion,

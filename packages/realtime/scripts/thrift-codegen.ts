@@ -5,7 +5,7 @@ import path from "path";
 import * as prettier from "prettier";
 
 const THRIFT_DIR = path.join(import.meta.dirname, "../thrift");
-const OUT_DIR = path.join(import.meta.dirname, "../src/thrift/structs");
+const OUT_DIR = path.join(import.meta.dirname, "../src/thrift");
 
 const HEADER = `/* eslint-disable */
 import thrift from "thrift";

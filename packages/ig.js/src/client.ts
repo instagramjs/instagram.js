@@ -5,7 +5,7 @@ import {
   generateDeviceState,
   LANGUAGE,
 } from "@igjs/api";
-import { IgRealtimeClient } from "@igjs/mqttot";
+import { IgRealtimeClient } from "@igjs/realtime";
 import EventEmitter from "eventemitter3";
 import { type Logger } from "pino";
 

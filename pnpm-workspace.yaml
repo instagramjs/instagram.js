@@ -12,12 +12,18 @@ catalog:
   tsup: 8.3.0
   tsx: 4.19.1
   dotenv: 16.4.5
+  eventemitter3: 5.0.1
+  mqtts: 1.5.0
+  thrift: 0.21.0
+  pino: 9.5.0
+  glob: 11.0.0
+  node-int64: 0.4.0
   "@eslint/js": 9.11.1
   "@swc/core": 1.7.26
   "@types/node": 22.6.1
   "@types/eslint": 9.6.1
   "@types/eslint__js": 8.42.3
-  "@trpc/client": 11.0.0-rc.528
-  "@trpc/server": 11.0.0-rc.528
-  "@trpc/react-query": 11.0.0-rc.528
+  "@types/thrift": 0.10.17
+  "@types/node-int64": 0.4.32
   "@t3-oss/env-core": 0.10.1
+  "@creditkarma/thrift-typescript": 3.7.6
