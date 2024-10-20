@@ -1,4 +1,4 @@
-import { type ImageVersions2Dto, type VideoVersionDto } from "../common/dto";
+import { type ImageVersions2Dto, type VideoVersionDto } from "./common";
 
 export type DirectSendResponseDto = {
   action: string;

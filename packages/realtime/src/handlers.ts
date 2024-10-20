@@ -1,3 +1,4 @@
+import { type DirectItemDto } from "@igjs/api-types";
 import { bufferIsJson, deserializeThrift } from "@igjs/mqttot";
 
 import { type IgRealtimeClient } from "./client";
@@ -20,24 +21,23 @@ function parseGraphqlMessage(
   return deserializeThrift(MqttotGraphqlMessagePacket, payload);
 }
 
-export type GraphqlMessage = {
-  data: string | MqttotGraphqlMessagePacket;
-};
+export type GraphqlMessage = string | MqttotGraphqlMessagePacket;
 export const GraphqlTopicHandler: RealtimeTopicHandler = {
   topic: "9",
   path: "/graphql",
   handle: (client, payload) => {
     const data = parseGraphqlMessage(payload);
-    console.log("graphql", data);
+    client.emit("graphqlMessage", data);
   },
 };
 
+export type SkywalkerMessage = MqttotSkywalkerMessagePacket;
 export const SkywalkerTopicHandler: RealtimeTopicHandler = {
   topic: "88",
   path: "/pubsub",
   handle: (client, payload) => {
     const data = deserializeThrift(MqttotSkywalkerMessagePacket, payload);
-    console.log("pubsub", data);
+    client.emit("skywalkerMessage", data);
   },
 };
 
@@ -46,7 +46,7 @@ export const SendMessageResponseTopicHandler: RealtimeTopicHandler = {
   path: "/ig_send_message_response",
   handle: (client, payload) => {
     const data = JSON.parse(payload.toString("utf8")) as unknown;
-    console.log("ig_send_message_response", data);
+    client.emit("sendMessageResponse", data);
   },
 };
 
@@ -59,18 +59,30 @@ export const IrisSubTopicHandler: RealtimeTopicHandler = {
   },
 };
 
+export type IrisSubResponseMessage = {
+  succeeded: boolean;
+  seq_id: number;
+  error_type: string | null;
+  error_message: string | null;
+  subscribed_at_ms: number;
+  latest_seq_id: number;
+};
 export const IrisSubResponseTopicHandler: RealtimeTopicHandler = {
   topic: "135",
   path: "/ig_sub_iris_response",
   handle: (client, payload) => {
-    const data = JSON.parse(payload.toString("utf8")) as unknown;
-    console.log("ig_sub_iris_response", data);
+    const data = JSON.parse(payload.toString("utf8")) as IrisSubResponseMessage;
+    client.emit("irisSubResponse", data);
   },
 };
 
-export type MessageSyncMessage = {
+type RawMessageSyncMessage = {
   event: string;
-  data?: unknown[];
+  data?: {
+    op: string;
+    path: string;
+    value: string;
+  }[];
   message_type: number;
   seq_id: number;
   mutation_token: null | string;
@@ -79,14 +91,31 @@ export type MessageSyncMessage = {
   path?: string;
   sampled?: boolean;
 };
+export type MessageSyncData = {
+  op: string;
+  path: string;
+  value: DirectItemDto;
+};
+export type MessageSyncMessage = RawMessageSyncMessage & {
+  data?: MessageSyncData[];
+};
 export const MessageSyncTopicHandler: RealtimeTopicHandler = {
   topic: "146",
   path: "/ig_message_sync",
   handle: (client, payload) => {
-    const messages = JSON.parse(
+    const rawMessages = JSON.parse(
       payload.toString("utf8"),
-    ) as MessageSyncMessage[];
-    console.log("ig_message_sync", messages);
+    ) as RawMessageSyncMessage[];
+    const messages = rawMessages.map((m) => ({
+      ...m,
+      data: m.data
+        ? m.data.map((d) => ({
+            ...d,
+            value: JSON.parse(d.value) as unknown,
+          }))
+        : undefined,
+    })) as MessageSyncMessage[];
+    client.emit("messageSync", messages);
   },
 };
 
@@ -99,12 +128,13 @@ export const RealtimeSubTopicHandler: RealtimeTopicHandler = {
   },
 };
 
+export type RegionHintMessage = MqttotRegionHintPacket;
 export const RegionHintTopicHandler: RealtimeTopicHandler = {
   topic: "150",
   path: "/t_region_hint",
   handle: (client, payload) => {
     const data = deserializeThrift(MqttotRegionHintPacket, payload);
-    console.log("t_region_hint", data);
+    client.emit("regionHint", data);
   },
 };
 

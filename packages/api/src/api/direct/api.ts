@@ -1,14 +1,14 @@
+import {
+  type DirectAddUserResponseDto,
+  type DirectSendResponseDto,
+  type DirectUpdateTitleResponseDto,
+} from "@igjs/api-types";
 import { Chance } from "chance";
 import { type ParsedUrlQueryInput } from "querystring";
 
 import { type ApiClient } from "~/client";
 import { type XOR } from "~/util";
 
-import {
-  type DirectAddUserResponseDto,
-  type DirectSendResponseDto,
-  type DirectUpdateTitleResponseDto,
-} from "./dto";
 import { DirectInboxPaginator } from "./inbox-paginator";
 import { DirectPendingPaginator } from "./pending-paginator";
 

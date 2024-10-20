@@ -98,6 +98,9 @@ importers:
 
   packages/api:
     dependencies:
+      '@igjs/api-types':
+        specifier: workspace:*
+        version: link:../api-types
       axios:
         specifier: 1.7.7
         version: 1.7.7
@@ -150,6 +153,42 @@ importers:
       dotenv:
         specifier: 'catalog:'
         version: 16.4.5
+      eslint:
+        specifier: 'catalog:'
+        version: 9.11.1
+      prettier:
+        specifier: 'catalog:'
+        version: 3.3.3
+      tsup:
+        specifier: 'catalog:'
+        version: 8.3.0(@swc/core@1.7.26)(tsx@4.19.1)(typescript@5.5.4)(yaml@2.6.0)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.5.4
+      typescript-eslint:
+        specifier: 'catalog:'
+        version: 8.7.0(eslint@9.11.1)(typescript@5.5.4)
+
+  packages/api-types:
+    devDependencies:
+      '@igjs/eslint-config':
+        specifier: workspace:*
+        version: link:../../tooling/eslint
+      '@igjs/prettier-config':
+        specifier: workspace:*
+        version: link:../../tooling/prettier
+      '@igjs/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/tsconfig
+      '@swc/core':
+        specifier: 'catalog:'
+        version: 1.7.26
+      '@types/eslint':
+        specifier: 'catalog:'
+        version: 9.6.1
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.6.1
       eslint:
         specifier: 'catalog:'
         version: 9.11.1
@@ -308,6 +347,9 @@ importers:
 
   packages/realtime:
     dependencies:
+      '@igjs/api-types':
+        specifier: workspace:*
+        version: link:../api-types
       '@igjs/mqttot':
         specifier: workspace:*
         version: link:../mqttot

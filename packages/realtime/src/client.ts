@@ -13,15 +13,22 @@ import Int64 from "node-int64";
 import { IG_REALTIME_HOST } from "./constants";
 import {
   defaultRealtimeTopicHandlers,
+  type GraphqlMessage,
   GraphqlTopicHandler,
+  type IrisSubResponseMessage,
   IrisSubTopicHandler,
+  type MessageSyncMessage,
   type RealtimeTopicHandler,
+  type RegionHintMessage,
+  type SkywalkerMessage,
   SkywalkerTopicHandler,
 } from "./handlers";
 import {
   MqttotClientInfo,
   MqttotConnectionPacket,
 } from "./thrift/mqttot-connection";
+
+export type IrisData = { seq_id: number; snapshot_at_ms: number };
 
 export type IgRealtimeClientOpts = {
   topicHandlers?: RealtimeTopicHandler[];
@@ -47,9 +54,15 @@ export type IgRealtimeClientConnectOpts = {
 export type IgRealtimeClientEvents = {
   warning: (error: Error) => void;
   error: (error: Error) => void;
+  graphqlMessage: (message: GraphqlMessage) => void;
+  skywalkerMessage: (message: SkywalkerMessage) => void;
+  sendMessageResponse: (message: unknown) => void;
+  irisSubResponse: (message: IrisSubResponseMessage) => void;
+  messageSync: (message: MessageSyncMessage[]) => void;
+  regionHint: (message: RegionHintMessage) => void;
 };
 
-export class IgRealtimeClient extends EventEmitter {
+export class IgRealtimeClient extends EventEmitter<IgRealtimeClientEvents> {
   #mqttot: MqttotClient | null = null;
   #connectOpts: IgRealtimeClientConnectOpts | null = null;
 
@@ -198,7 +211,7 @@ export class IgRealtimeClient extends EventEmitter {
     });
   }
 
-  irisSubscribe(data: { seq_id: number; snapshot_at_ms: number }) {
+  irisSubscribe(data: IrisData) {
     return this.updateSubscriptions(IrisSubTopicHandler.topic, {
       seq_id: data.seq_id,
       snapshot_at_ms: data.snapshot_at_ms,

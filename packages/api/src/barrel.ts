@@ -1,7 +1,5 @@
 export * from "./api/account";
-export * from "./api/common/dto";
 export * from "./api/direct/api";
-export * from "./api/direct/dto";
 export * from "./api/direct/inbox-paginator";
 export * from "./api/direct/pending-paginator";
 export * from "./api/qe";

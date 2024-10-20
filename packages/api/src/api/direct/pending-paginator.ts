@@ -1,6 +1,9 @@
-import { Paginator } from "~/paginator";
+import {
+  type DirectInboxResponseDto,
+  type DirectThreadDto,
+} from "@igjs/api-types";
 
-import { type DirectInboxResponseDto, type DirectThreadDto } from "./dto";
+import { Paginator } from "~/paginator";
 
 export class DirectPendingPaginator extends Paginator<
   DirectInboxResponseDto,

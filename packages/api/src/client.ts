@@ -113,10 +113,10 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
   }
 
   exportState(): ExportedApiState {
-    return {
-      ...this.state,
+    return exportedApiStateSchema.parse({
+      ...structuredClone(this.state),
       cookieJar: this.cookieJar.serializeSync(),
-    };
+    });
   }
 
   importState(state: ExportedApiState) {
