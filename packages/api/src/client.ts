@@ -31,6 +31,7 @@ import {
   type ExportedApiState,
   exportedApiStateSchema,
 } from "./state";
+import { type XOR } from "./util";
 
 export type ApiClientOpts = {
   appVersion?: string;
@@ -108,7 +109,7 @@ export class ApiClient extends EventEmitter<{
       `Instagram ${appVersion} ` +
       `Android (${device.androidVersion}/${device.androidRelease}; ` +
       `${device.dpi}; ${device.resolution}; ${device.manufacturer}; ` +
-      `${device.model}; ${device.deviceName}; ${device.cpu}; ` +
+      `${device.deviceName}; ${device.model}; ${device.cpu}; ` +
       `${language}; ${appVersionCode})`
     );
   }
@@ -211,9 +212,11 @@ export class ApiClient extends EventEmitter<{
       "X-IG-SALT-IDS": randomInt(1061162222, 1061262222).toString(),
     };
 
-    const userId = this.state.auth?.userId;
-    if (userId) {
+    const auth = this.state.auth;
+    if (auth) {
+      const { token, userId } = auth;
       const nextYear = Date.now() + 1000 * 60 * 60 * 24 * 365;
+      headers.Authorization = token;
       headers["IG-U-DS-USER-ID"] = userId;
       headers["IG-INTENDED-USER-ID"] = userId;
       headers["IG-U-IG-DIRECT-REGION-HINT"] =
@@ -291,9 +294,11 @@ export class ApiClient extends EventEmitter<{
   }
 
   async makeRequest<R = unknown>(
-    opts?: AxiosRequestConfig & {
-      form?: ParsedUrlQueryInput;
-    },
+    opts?: Omit<AxiosRequestConfig, "data"> &
+      XOR<
+        { form?: ParsedUrlQueryInput },
+        { data?: AxiosRequestConfig["data"] }
+      >,
   ) {
     const baseHeaders = this.#getBaseHeaders();
     const response = await this.axiosClient.request<R>({

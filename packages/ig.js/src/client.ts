@@ -48,8 +48,14 @@ export class Client extends EventEmitter<{
     super();
     this.logger = opts?.logger ?? makeSilentLogger();
     this.stateAdapter = opts?.stateAdapter;
-    this.api = new ApiClient(opts?.api);
-    this.realtime = new RealtimeClient(opts?.realtime);
+    this.api = new ApiClient({
+      ...opts?.api,
+      logger: this.logger.child({ module: "api" }),
+    });
+    this.realtime = new RealtimeClient({
+      ...opts?.realtime,
+      logger: this.logger.child({ module: "realtime" }),
+    });
   }
 
   async #saveState() {
