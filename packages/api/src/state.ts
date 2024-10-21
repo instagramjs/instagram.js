@@ -30,6 +30,6 @@ export const apiStateSchema = z.object({
 export type ApiState = z.infer<typeof apiStateSchema>;
 
 export const exportedApiStateSchema = apiStateSchema.extend({
-  cookieJar: z.unknown(),
+  cookieJar: z.record(z.string(), z.any()).optional(),
 });
 export type ExportedApiState = z.infer<typeof exportedApiStateSchema>;

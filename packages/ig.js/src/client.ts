@@ -3,10 +3,11 @@ import {
   ApiClient,
   APP_VERSION,
   CAPABILITIES_HEADER,
+  type ExportedApiState,
   generateDeviceState,
   LANGUAGE,
 } from "@igjs/api";
-import { type DirectThreadDto } from "@igjs/api-types";
+import { type DirectItemDto, type DirectThreadDto } from "@igjs/api-types";
 import {
   IgRealtimeClient,
   type IrisData,
@@ -15,16 +16,26 @@ import {
 import EventEmitter from "eventemitter3";
 import { type Logger } from "pino";
 
-import { type StateAdapter } from "./barrel";
-import { exportedClientStateSchema } from "./state/exported";
-import { Message } from "./structures/message";
-import { Thread } from "./structures/thread";
+import { type StorageAdapter } from "./storage";
+import { Message, type MessageAsJSON } from "./structures/message";
+import { Thread, type ThreadAsJSON } from "./structures/thread";
 
 export type ClientOpts = {
   logger?: Logger;
-  stateAdapter?: StateAdapter;
+  storageAdapter?: StorageAdapter;
 };
 export const defaultClientOpts: ClientOpts = {};
+
+enum StorageTable {
+  STATE = "state",
+  THREADS = "threads",
+  MESSAGES = "messages",
+}
+
+enum StorageStateKey {
+  API_STATE = "api-state",
+  IRIS_DATA = "iris-data",
+}
 
 export class Client extends EventEmitter<{
   ready: () => void;
@@ -39,67 +50,133 @@ export class Client extends EventEmitter<{
   realtime = new IgRealtimeClient();
 
   threads = new Collection<string, Thread>();
-  pendingThreads = new Collection<string, Thread>();
+  messages = new Collection<string, Message>();
 
   constructor(opts?: ClientOpts) {
     super();
     this.opts = { ...structuredClone(defaultClientOpts), ...opts };
   }
 
-  async #saveState() {
-    if (this.opts.stateAdapter) {
-      await this.opts.stateAdapter.saveState(
-        exportedClientStateSchema.parse({
-          ...this.api.exportState(),
-          irisData: structuredClone(this.#irisData),
-        }),
+  async #saveApiState() {
+    await this.opts.storageAdapter?.set(
+      StorageTable.STATE,
+      StorageStateKey.API_STATE,
+      this.api.exportState(),
+    );
+  }
+
+  async #saveIrisData() {
+    if (this.#irisData) {
+      await this.opts.storageAdapter?.set(
+        StorageTable.STATE,
+        StorageStateKey.IRIS_DATA,
+        this.#irisData,
       );
     }
   }
 
-  async #loadState() {
-    const { stateAdapter } = this.opts;
-    if (stateAdapter) {
-      const unparsed = await stateAdapter.loadState();
-      if (unparsed) {
-        const state = exportedClientStateSchema.parse(unparsed);
-        this.api.importState(state);
-        this.#irisData = structuredClone(state.irisData);
-      }
+  async #loadStorage() {
+    const adapter = this.opts.storageAdapter;
+    if (!adapter) {
+      return;
+    }
+
+    const state = await adapter.get(
+      StorageTable.STATE,
+      StorageStateKey.API_STATE,
+    );
+    if (state) {
+      this.api.importState(state as ExportedApiState);
+    }
+
+    const irisData = await adapter.get(
+      StorageTable.STATE,
+      StorageStateKey.IRIS_DATA,
+    );
+    if (irisData) {
+      this.#irisData = irisData as IrisData;
+    }
+
+    const threads = (await adapter.getAll(StorageTable.THREADS)) as Map<
+      string,
+      ThreadAsJSON
+    >;
+    for (const [id, data] of threads) {
+      this.threads.set(id, Thread.fromJSON(this, data));
+    }
+
+    const messages = (await adapter.getAll(StorageTable.MESSAGES)) as Map<
+      string,
+      MessageAsJSON
+    >;
+    for (const [id, data] of messages) {
+      this.messages.set(id, Message.fromJSON(this, data));
     }
   }
 
-  #patchThreads(
-    threads: DirectThreadDto[],
-    collection: Collection<string, Thread>,
+  async #patchThread(data: DirectThreadDto) {
+    let thread = this.threads.get(data.thread_id);
+    if (thread) {
+      thread.patch(data);
+    } else {
+      thread = new Thread(this, data.thread_id, data);
+      this.threads.set(data.thread_id, thread);
+    }
+
+    const adapter = this.opts.storageAdapter;
+    if (adapter) {
+      await adapter.set(StorageTable.THREADS, data.thread_id, {
+        ...thread.toJSON(),
+        messages: [],
+      });
+    }
+  }
+
+  async #patchMessage(
+    threadId: string,
+    data: DirectItemDto,
+    emitOnCreate = false,
   ) {
-    for (const thread of threads) {
-      const existing = collection.get(thread.thread_id);
-      if (existing) {
-        existing.patch(thread);
-      } else {
-        collection.set(
-          thread.thread_id,
-          new Thread(this, thread.thread_id, thread),
-        );
+    let message = this.messages.get(data.item_id);
+    if (message) {
+      message.patch(data);
+    } else {
+      message = new Message(this, data.item_id, threadId, data);
+      this.messages.set(data.item_id, message);
+      if (emitOnCreate) {
+        this.emit("messageCreate", message);
       }
+    }
+
+    const adapter = this.opts.storageAdapter;
+    if (adapter) {
+      await adapter.set(StorageTable.MESSAGES, data.item_id, message.toJSON());
     }
   }
 
-  async #getInbox() {
+  async #patchThreads(data: DirectThreadDto[]) {
+    await Promise.all(data.map((t) => this.#patchThread(t)));
+    await Promise.all(
+      data.map((t) =>
+        t.items.map((i) => this.#patchMessage(t.thread_id, i, true)).flat(),
+      ),
+    );
+  }
+
+  async #fetchInbox() {
     const inbox = await this.api.direct.getInbox().request();
-    this.#patchThreads(inbox.inbox.threads, this.threads);
+    await this.#patchThreads(inbox.inbox.threads);
     return inbox;
   }
 
-  async #getPendingInbox() {
+  async #fetchPendingInbox() {
     const inbox = await this.api.direct.getPendingInbox().request();
-    this.#patchThreads(inbox.inbox.threads, this.pendingThreads);
+    await this.#patchThreads(inbox.inbox.threads);
     return inbox;
   }
 
-  async #getIrisData(): Promise<IrisData> {
-    const inbox = await this.#getInbox();
+  async #fetchIrisData(): Promise<IrisData> {
+    const inbox = await this.#fetchInbox();
     return {
       seq_id: inbox.seq_id,
       snapshot_at_ms: inbox.snapshot_at_ms,
@@ -107,10 +184,10 @@ export class Client extends EventEmitter<{
   }
 
   async login(username: string, password: string) {
-    await this.#loadState();
+    await this.#loadStorage();
 
     this.api.on("response", () => {
-      void this.#saveState();
+      void this.#saveApiState();
     });
 
     if (!this.api.isAuthenticated()) {
@@ -126,7 +203,8 @@ export class Client extends EventEmitter<{
     });
 
     if (!this.#irisData) {
-      this.#irisData = await this.#getIrisData();
+      this.#irisData = await this.#fetchIrisData();
+      await this.#saveIrisData();
     }
     await this.realtime.connect({
       appVersion: APP_VERSION,
@@ -140,7 +218,7 @@ export class Client extends EventEmitter<{
       autoReconnect: true,
     });
 
-    await this.#getPendingInbox();
+    await this.#fetchPendingInbox();
 
     this.emit("ready");
   }
@@ -160,29 +238,16 @@ export class Client extends EventEmitter<{
           if (!threadId) {
             continue;
           }
-
           if (!this.threads.has(threadId) && !gotInbox) {
-            await this.#getInbox();
+            await this.#fetchInbox();
             gotInbox = true;
           }
-
-          const thread = this.threads.get(threadId);
-          const item = data.value;
-          if (thread) {
-            const message = thread.messages.get(item.item_id);
-            if (message) {
-              message.patch(item);
-            } else {
-              const newMessage = new Message(thread, item.item_id, item);
-              thread.messages.set(item.item_id, newMessage);
-              this.emit("messageCreate", newMessage);
-            }
-          }
+          await this.#patchMessage(threadId, data.value, true);
         }
       }
     }
 
-    await this.#saveState();
+    await this.#saveIrisData();
   }
 }
 

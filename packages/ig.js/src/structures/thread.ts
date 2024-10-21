@@ -5,21 +5,23 @@ import { type Client } from "~/client";
 
 import { Message, type MessageAsJSON } from "./message";
 
-export type ThreadAsJSON = {
-  id: string;
-  name: string | null;
-  isMuted: boolean;
-  isVoiceMuted: boolean;
-  isPinned: boolean;
-  isNamed: boolean;
-  isPending: boolean;
-  isGroup: boolean;
-  isSpam: boolean;
-  isCalling: boolean;
-  approvalIsRequiredForNewMembers: boolean;
-  adminUserIds: string[];
-  pendingUserIds: string[];
-  lastActivityAt: number;
+export type ThreadAsJSON = Pick<
+  Thread,
+  | "id"
+  | "name"
+  | "isMuted"
+  | "isVoiceMuted"
+  | "isPinned"
+  | "isNamed"
+  | "isPending"
+  | "isGroup"
+  | "isSpam"
+  | "isCalling"
+  | "approvalIsRequiredForNewMembers"
+  | "adminUserIds"
+  | "pendingUserIds"
+> & {
+  lastActivityAt: string;
   messages: MessageAsJSON[];
 };
 
@@ -104,7 +106,7 @@ export class Thread {
         } else {
           this.messages.set(
             item.message_id,
-            new Message(this, item.item_id, item),
+            new Message(this.client, item.item_id, this.id, item),
           );
         }
       }
@@ -127,7 +129,7 @@ export class Thread {
       approvalIsRequiredForNewMembers: this.approvalIsRequiredForNewMembers,
       adminUserIds: this.adminUserIds,
       pendingUserIds: this.pendingUserIds,
-      lastActivityAt: this.lastActivityAt.getTime(),
+      lastActivityAt: this.lastActivityAt.toString(),
       messages: this.messages.map((m) => m.toJSON()),
     };
   }
@@ -148,7 +150,7 @@ export class Thread {
     this.pendingUserIds = data.pendingUserIds;
     this.lastActivityAt = new Date(data.lastActivityAt);
     for (const message of data.messages) {
-      this.messages.set(message.id, Message.fromJSON(this, message));
+      this.messages.set(message.id, Message.fromJSON(this.client, message));
     }
     this.#sortMessages();
   }

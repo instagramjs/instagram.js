@@ -1,12 +1,13 @@
 import path from "path";
 
-import { Client, FileStateAdapter } from "~/index";
+import { Client } from "~/index";
+import { FileStorageAdapater } from "~/storage";
 
 import { env } from "./env";
 
 const client = new Client({
-  stateAdapter: new FileStateAdapter(
-    path.join(import.meta.dirname, "state.json"),
+  storageAdapter: new FileStorageAdapater(
+    path.join(import.meta.dirname, "storage"),
   ),
 });
 

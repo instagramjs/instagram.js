@@ -7,11 +7,14 @@ import {
   type DirectItemXmaProfileShareDto,
 } from "@igjs/api-types";
 
+import { type Client } from "~/client";
+
 import { type Thread } from "./thread";
 
 export type MessageAsJSON = Pick<
   Message,
   | "id"
+  | "threadId"
   | "type"
   | "mid"
   | "authorId"
@@ -24,7 +27,7 @@ export type MessageAsJSON = Pick<
   | "placeholder"
   | "text"
 > & {
-  createdAt: number;
+  createdAt: string;
 };
 
 export class Message {
@@ -43,13 +46,18 @@ export class Message {
   createdAt = new Date();
 
   constructor(
-    public thread: Thread,
+    public client: Client,
     public id: string,
+    public threadId: string,
     data?: DirectItemDto,
   ) {
     if (data) {
       this.patch(data);
     }
+  }
+
+  get thread(): Thread {
+    return this.client.threads.get(this.threadId)!;
   }
 
   patch(data: DirectItemDto) {
@@ -92,6 +100,7 @@ export class Message {
   toJSON(): MessageAsJSON {
     return {
       id: this.id,
+      threadId: this.thread.id,
       type: this.type,
       mid: this.mid,
       authorId: this.authorId,
@@ -103,12 +112,13 @@ export class Message {
       xmaProfile: this.xmaProfile,
       placeholder: this.placeholder,
       text: this.text,
-      createdAt: this.createdAt.getTime(),
+      createdAt: this.createdAt.toString(),
     };
   }
 
   fromJSON(data: MessageAsJSON) {
     this.id = data.id;
+    this.threadId = data.threadId;
     this.type = data.type;
     this.mid = data.mid;
     this.authorId = data.authorId;
@@ -123,8 +133,8 @@ export class Message {
     this.createdAt = new Date(data.createdAt);
   }
 
-  static fromJSON(thread: Thread, data: MessageAsJSON) {
-    const message = new Message(thread, data.id);
+  static fromJSON(client: Client, data: MessageAsJSON) {
+    const message = new Message(client, data.id, data.threadId);
     message.fromJSON(data);
     return message;
   }
