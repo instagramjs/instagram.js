@@ -17,6 +17,7 @@
         "typecheck": "turbo run typecheck"
     },
     "devDependencies": {
+        "@changesets/cli": "^2.27.9",
         "@igjs/prettier-config": "workspace:*",
         "prettier": "catalog:",
         "sherif": "1.0.0",
