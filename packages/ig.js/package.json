@@ -28,7 +28,6 @@
     "@types/node": "catalog:",
     "dotenv": "catalog:",
     "eslint": "catalog:",
-    "pino": "catalog:",
     "prettier": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:",
@@ -41,6 +40,7 @@
     "@igjs/realtime": "workspace:*",
     "axios": "1.7.7",
     "eventemitter3": "catalog:",
+    "pino": "catalog:",
     "tsx": "catalog:",
     "zod": "catalog:"
   },

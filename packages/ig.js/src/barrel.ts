@@ -6,3 +6,8 @@ export * from "./structures/message";
 export * from "./structures/thread";
 export * from "./structures/user";
 export * from "./util";
+export {
+  type ApiClientOpts,
+  type DeviceConfig,
+  generateDeviceConfig,
+} from "@igjs/api";

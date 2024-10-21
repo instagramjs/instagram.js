@@ -1,19 +1,14 @@
 import { Collection } from "@discordjs/collection";
-import {
-  ApiClient,
-  APP_VERSION,
-  CAPABILITIES_HEADER,
-  generateDeviceState,
-  LANGUAGE,
-} from "@igjs/api";
+import { ApiClient, type ApiClientOpts, CAPABILITIES_HEADER } from "@igjs/api";
 import { type DirectItemDto, type DirectThreadDto } from "@igjs/api-types";
 import {
-  IgRealtimeClient,
   type IrisData,
   type MessageSyncMessage,
+  RealtimeClient,
+  type RealtimeClientOpts,
 } from "@igjs/realtime";
 import EventEmitter from "eventemitter3";
-import { type Logger } from "pino";
+import pino, { type Logger } from "pino";
 
 import { type StateAdapter } from "./state/adapters";
 import { exportedClientStateSchema } from "./state/exported";
@@ -23,8 +18,9 @@ import { Thread } from "./structures/thread";
 export type ClientOpts = {
   logger?: Logger;
   stateAdapter?: StateAdapter;
+  api?: ApiClientOpts;
+  realtime?: RealtimeClientOpts;
 };
-export const defaultClientOpts: ClientOpts = {};
 
 export class Client extends EventEmitter<{
   ready: () => void;
@@ -37,23 +33,27 @@ export class Client extends EventEmitter<{
   messageCreate: (message: Message) => void;
   messageDelete: (message: Message) => void;
 }> {
-  opts: ClientOpts;
+  logger: Logger;
+  stateAdapter?: StateAdapter;
 
-  #irisData?: IrisData;
-
-  api = new ApiClient();
-  realtime = new IgRealtimeClient();
+  api: ApiClient;
+  realtime: RealtimeClient;
 
   threads = new Collection<string, Thread>();
   messages = new Collection<string, Message>();
 
+  #irisData?: IrisData;
+
   constructor(opts?: ClientOpts) {
     super();
-    this.opts = { ...structuredClone(defaultClientOpts), ...opts };
+    this.logger = opts?.logger ?? makeSilentLogger();
+    this.stateAdapter = opts?.stateAdapter;
+    this.api = new ApiClient(opts?.api);
+    this.realtime = new RealtimeClient(opts?.realtime);
   }
 
   async #saveState() {
-    const adapter = this.opts.stateAdapter;
+    const adapter = this.stateAdapter;
     if (adapter) {
       await adapter.saveState(
         exportedClientStateSchema.parse({
@@ -65,7 +65,7 @@ export class Client extends EventEmitter<{
   }
 
   async #loadState() {
-    const adapter = this.opts.stateAdapter;
+    const adapter = this.stateAdapter;
     if (adapter) {
       const unparsedState = await adapter.loadState();
       if (unparsedState) {
@@ -84,12 +84,9 @@ export class Client extends EventEmitter<{
     });
 
     if (!this.api.isAuthenticated()) {
-      this.api.state.device = generateDeviceState(username);
       await this.api.qe.syncLoginExperiments();
       await this.api.account.login(username, password);
     }
-
-    await this.api.qe.syncExperiments();
 
     this.realtime.on("messageSync", (messages) => {
       void this.#handleMessageSync(messages);
@@ -104,11 +101,11 @@ export class Client extends EventEmitter<{
       await this.#saveState();
     }
     await this.realtime.connect({
-      appVersion: APP_VERSION,
+      appVersion: this.api.appVersion,
       capabilitiesHeader: CAPABILITIES_HEADER,
-      language: LANGUAGE.replace("_", "-"),
-      userAgent: this.api.getUserAgent(),
-      deviceId: this.api.state.device.phoneId,
+      language: this.api.language.replace("_", "-"),
+      userAgent: this.api.generateUserAgent(),
+      deviceId: this.api.device.phoneId,
       sessionId: this.api.state.auth?.sessionId ?? "",
       userId: this.api.state.auth?.userId ?? "",
       irisData: this.#irisData,
@@ -244,4 +241,10 @@ function matchMessagePath(path: string): [string, string] | null {
 
 function matchThreadPath(path: string) {
   return /\/direct_v2\/inbox\/threads\/(\d+)/.exec(path)?.[1] ?? null;
+}
+
+function makeSilentLogger() {
+  return pino({
+    level: "silent",
+  });
 }

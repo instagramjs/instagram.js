@@ -1,4 +1,4 @@
-import { ApiClient, generateDeviceState } from "~/index";
+import { ApiClient } from "~/index";
 
 import { env } from "./env";
 import { setupPersistentState } from "./setup";
@@ -8,7 +8,6 @@ const client = new ApiClient();
 async function main() {
   await setupPersistentState(client);
   if (!client.isAuthenticated()) {
-    client.state.device = generateDeviceState(env.USERNAME);
     await client.qe.syncLoginExperiments();
     await client.account.login(env.USERNAME, env.PASSWORD);
   }

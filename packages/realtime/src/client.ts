@@ -9,6 +9,7 @@ import {
 import EventEmitter from "eventemitter3";
 import { type MqttMessage } from "mqtts";
 import Int64 from "node-int64";
+import pino, { type Logger } from "pino";
 
 import { IG_REALTIME_HOST } from "./constants";
 import {
@@ -30,14 +31,12 @@ import {
 
 export type IrisData = { seq_id: number; snapshot_at_ms: number };
 
-export type IgRealtimeClientOpts = {
+export type RealtimeClientOpts = {
+  logger?: Logger;
   topicHandlers?: RealtimeTopicHandler[];
 };
-export const defaultIgRealtimeClientOpts: IgRealtimeClientOpts = {
-  topicHandlers: defaultRealtimeTopicHandlers,
-};
 
-export type IgRealtimeClientConnectOpts = {
+export type RealtimeClientConnectOpts = {
   appVersion: string;
   capabilitiesHeader: string;
   language: string;
@@ -51,7 +50,7 @@ export type IgRealtimeClientConnectOpts = {
   autoReconnect?: boolean;
 };
 
-export class IgRealtimeClient extends EventEmitter<{
+export class RealtimeClient extends EventEmitter<{
   warning: (error: Error) => void;
   error: (error: Error) => void;
   connect: () => void;
@@ -63,14 +62,19 @@ export class IgRealtimeClient extends EventEmitter<{
   messageSync: (message: MessageSyncMessage[]) => void;
   regionHint: (message: RegionHintMessage) => void;
 }> {
-  #mqttot: MqttotClient | null = null;
-  #connectOpts: IgRealtimeClientConnectOpts | null = null;
+  logger: Logger;
+  topicHandlers: RealtimeTopicHandler[];
 
-  constructor(public opts: IgRealtimeClientOpts = defaultIgRealtimeClientOpts) {
+  #mqttot: MqttotClient | null = null;
+  #connectOpts: RealtimeClientConnectOpts | null = null;
+
+  constructor(opts?: RealtimeClientOpts) {
     super();
+    this.logger = opts?.logger ?? makeSilentLogger();
+    this.topicHandlers = opts?.topicHandlers ?? defaultRealtimeTopicHandlers;
   }
 
-  #getConnectionPayload(opts: IgRealtimeClientConnectOpts) {
+  #getConnectionPayload(opts: RealtimeClientConnectOpts) {
     const struct = new MqttotConnectionPacket({
       clientIdentifier: opts.deviceId.substring(0, 20),
       clientInfo: new MqttotClientInfo({
@@ -115,7 +119,7 @@ export class IgRealtimeClient extends EventEmitter<{
     return deflateAsync(serializeThrift(struct));
   }
 
-  async connect(opts: IgRealtimeClientConnectOpts) {
+  async connect(opts: RealtimeClientConnectOpts) {
     if (this.#mqttot) {
       throw new Error("Client already connected");
     }
@@ -132,8 +136,8 @@ export class IgRealtimeClient extends EventEmitter<{
     this.#mqttot.on("connect", this.#handleConnect);
     this.#mqttot.on("disconnect", this.#handleDisconnect);
 
-    if (this.opts.topicHandlers) {
-      for (const handler of this.opts.topicHandlers) {
+    if (this.topicHandlers) {
+      for (const handler of this.topicHandlers) {
         this.#mqttot.listen(handler.topic, async (message: MqttMessage) => {
           const unzipped = await safeUnzipAsync(message.payload);
           await handler.handle(this, unzipped);
@@ -242,4 +246,10 @@ export class IgRealtimeClient extends EventEmitter<{
       snapshot_app_version: this.#connectOpts?.appVersion,
     });
   }
+}
+
+function makeSilentLogger() {
+  return pino({
+    level: "silent",
+  });
 }

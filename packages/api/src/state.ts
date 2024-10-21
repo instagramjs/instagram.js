@@ -3,7 +3,10 @@ import { z } from "zod";
 export const apiStateSchema = z.object({
   wwwClaim: z.string().nullable(),
   mid: z.string().nullable(),
-  directRegionalHint: z.string().nullable(),
+  directRegionHint: z.string().nullable(),
+  shbid: z.string().nullable(),
+  shbts: z.string().nullable(),
+  rur: z.string().nullable(),
   auth: z
     .object({
       token: z.string(),
@@ -12,20 +15,8 @@ export const apiStateSchema = z.object({
       shouldUserHeaderOverCookie: z.string().optional(),
     })
     .nullable(),
-  passwordEncryption: z
-    .object({
-      pubKey: z.string(),
-      keyId: z.string(),
-    })
-    .nullable(),
-  device: z.object({
-    deviceString: z.string(),
-    uuid: z.string(),
-    phoneId: z.string(),
-    adId: z.string(),
-    build: z.string(),
-    deviceId: z.string(),
-  }),
+  passwordEncryptionPubKey: z.string().nullable(),
+  passwordEncryptionKeyId: z.string().nullable(),
 });
 export type ApiState = z.infer<typeof apiStateSchema>;
 

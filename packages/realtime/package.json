@@ -36,7 +36,6 @@
     "eslint": "catalog:",
     "glob": "catalog:",
     "mqtts": "catalog:",
-    "pino": "catalog:",
     "prettier": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:",
@@ -47,6 +46,7 @@
     "@igjs/mqttot": "workspace:*",
     "eventemitter3": "catalog:",
     "node-int64": "catalog:",
+    "pino": "catalog:",
     "thrift": "catalog:",
     "tsx": "catalog:",
     "zod": "catalog:"

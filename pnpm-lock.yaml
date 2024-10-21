@@ -113,6 +113,9 @@ importers:
       eventemitter3:
         specifier: 5.0.1
         version: 5.0.1
+      pino:
+        specifier: 'catalog:'
+        version: 9.5.0
       qs:
         specifier: 6.13.0
         version: 6.13.0
@@ -225,6 +228,9 @@ importers:
       eventemitter3:
         specifier: 'catalog:'
         version: 5.0.1
+      pino:
+        specifier: 'catalog:'
+        version: 9.5.0
       tsx:
         specifier: 'catalog:'
         version: 4.19.1
@@ -259,9 +265,6 @@ importers:
       eslint:
         specifier: 'catalog:'
         version: 9.11.1
-      pino:
-        specifier: 'catalog:'
-        version: 9.5.0
       prettier:
         specifier: 'catalog:'
         version: 3.3.3
@@ -365,6 +368,9 @@ importers:
       node-int64:
         specifier: 'catalog:'
         version: 0.4.0
+      pino:
+        specifier: 'catalog:'
+        version: 9.5.0
       thrift:
         specifier: 'catalog:'
         version: 0.21.0
@@ -417,9 +423,6 @@ importers:
       mqtts:
         specifier: 'catalog:'
         version: 1.5.0
-      pino:
-        specifier: 'catalog:'
-        version: 9.5.0
       prettier:
         specifier: 'catalog:'
         version: 3.3.3

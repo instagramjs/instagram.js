@@ -3,6 +3,7 @@ import axiosCookieJar from "axios-cookiejar-support";
 import { Chance } from "chance";
 import { createHmac, randomInt, randomUUID } from "crypto";
 import EventEmitter from "eventemitter3";
+import pino, { type Logger } from "pino";
 import { type ParsedUrlQueryInput, stringify } from "querystring";
 import { CookieJar, type SerializedCookieJar } from "tough-cookie";
 
@@ -10,39 +11,57 @@ import { AccountApi } from "./api/account";
 import { DirectApi } from "./api/direct/api";
 import { QeApi } from "./api/qe";
 import {
+  API_HOST,
   API_URL,
-  APP_VERSION,
-  APP_VERSION_CODE,
   BLOKS_VERSION_ID,
-  BUILDS,
   CAPABILITIES_HEADER,
-  CLIENT_SESSION_ID_LIFETIME,
   CONNECTION_TYPE_HEADER,
-  DEVICES,
+  DEFAULT_APP_VERSION,
+  DEFAULT_APP_VERSION_CODE,
+  DEFAULT_COUNTRY_CODE,
+  DEFAULT_LOCALE,
   FB_ANALYTICS_APPLICATION_ID,
-  LANGUAGE,
   PIGEON_SESSION_ID_LIFETIME,
   SIGNATURE_KEY,
   SIGNATURE_VERSION,
 } from "./constants";
+import { type DeviceConfig, generateDeviceConfig } from "./device";
 import {
   type ApiState,
   type ExportedApiState,
   exportedApiStateSchema,
 } from "./state";
 
-export type ApiClientEvents = {
-  response: (response: AxiosResponse) => void;
+export type ApiClientOpts = {
+  appVersion?: string;
+  appVersionCode?: string;
+  language?: string;
+  countryCode?: string;
+  device?: DeviceConfig;
+  logger?: Logger;
 };
 
-export class ApiClient extends EventEmitter<ApiClientEvents> {
+export class ApiClient extends EventEmitter<{
+  response: (response: AxiosResponse) => void;
+}> {
+  logger: Logger;
+
+  appVersion: string;
+  appVersionCode: string;
+  language: string;
+  countryCode: string;
+  device: DeviceConfig;
+
   state: ApiState = {
     wwwClaim: null,
     mid: null,
-    directRegionalHint: null,
+    directRegionHint: null,
+    shbid: null,
+    shbts: null,
+    rur: null,
     auth: null,
-    passwordEncryption: null,
-    device: generateDeviceState(randomUUID()),
+    passwordEncryptionPubKey: null,
+    passwordEncryptionKeyId: null,
   };
   cookieJar = new CookieJar();
   axiosClient = axiosCookieJar.wrapper(
@@ -56,23 +75,41 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
   account = new AccountApi(this);
   direct = new DirectApi(this);
 
+  constructor(opts?: ApiClientOpts) {
+    super();
+    this.logger = opts?.logger ?? createSilentLogger();
+    this.appVersion = opts?.appVersion ?? DEFAULT_APP_VERSION;
+    this.appVersionCode = opts?.appVersionCode ?? DEFAULT_APP_VERSION_CODE;
+    this.language = opts?.language ?? DEFAULT_LOCALE;
+    this.countryCode = opts?.countryCode ?? DEFAULT_COUNTRY_CODE;
+    this.device = opts?.device ?? generateDeviceConfig(randomUUID());
+  }
+
   #generateTemporaryGuid(seed: string, lifetimeMs: number) {
     return new Chance(
-      `${seed}${this.state.device.deviceId}${Math.round(Date.now() / lifetimeMs)}`,
+      `${seed}${this.device.deviceId}${Math.round(Date.now() / lifetimeMs)}`,
     ).guid();
   }
 
-  getClientSessionId() {
-    return this.#generateTemporaryGuid(
-      "client-session-id",
-      CLIENT_SESSION_ID_LIFETIME,
+  #generatePigeonSessionId() {
+    return (
+      "UFS-" +
+      this.#generateTemporaryGuid(
+        "pigeon-session-id",
+        PIGEON_SESSION_ID_LIFETIME,
+      ) +
+      "-1"
     );
   }
 
-  getPigeonSessionId() {
-    return this.#generateTemporaryGuid(
-      "pigeon-session-id",
-      PIGEON_SESSION_ID_LIFETIME,
+  generateUserAgent() {
+    const { appVersion, appVersionCode, device, language } = this;
+    return (
+      `Instagram ${appVersion} ` +
+      `Android (${device.androidVersion}/${device.androidRelease}; ` +
+      `${device.dpi}; ${device.resolution}; ${device.manufacturer}; ` +
+      `${device.model}; ${device.deviceName}; ${device.cpu}; ` +
+      `${language}; ${appVersionCode})`
     );
   }
 
@@ -95,10 +132,6 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
 
   getCsrfToken() {
     return this.extractCookieValue("csrftoken");
-  }
-
-  getUserAgent() {
-    return `Instagram ${APP_VERSION} Android (${this.state.device.deviceString}; ${LANGUAGE}; ${APP_VERSION_CODE})`;
   }
 
   signFormData(data: Record<string, unknown> | string) {
@@ -138,37 +171,66 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
   }
 
   #getBaseHeaders() {
-    return {
-      "User-Agent": this.getUserAgent(),
-      "X-Ads-Opt-Out": "0",
-      "X-CM-Bandwidth-KBPS": "-1.000",
-      "X-CM-Latency": "-1.000",
-      "X-IG-App-Locale": LANGUAGE,
-      "X-IG-Device-Locale": LANGUAGE,
-      "X-Pigeon-Session-Id": this.getPigeonSessionId(),
-      "X-Pigeon-Rawclienttime": (Date.now() / 1000).toFixed(3),
-      "X-IG-Connection-Speed": `${randomInt(1000, 3700)}kbps`,
-      "X-IG-Bandwidth-Speed-KBPS": "-1.000",
-      "X-IG-Bandwidth-TotalBytes-B": "0",
-      "X-IG-Bandwidth-TotalTime-MS": "0",
-      "X-IG-EU-DC-ENABLED": "0",
-      // 'X-IG-Extended-CDN-Thumbnail-Cache-Busting-Value': this.client.state.thumbnailCacheBustingValue.toString(),
+    const { countryCode, language, device } = this;
+    const headers: Record<string, string> = {
+      "X-IG-App-Locale": language,
+      "X-IG-Device-Locale": language,
+      "X-IG-Mapped-Locale": language,
+      "X-Pigeon-Session-Id": this.#generatePigeonSessionId(),
+      "X-Pigeon-Rawclienttime": (Date.now() / 1000).toString(),
+      "X-IG-Bandwidth-Speed-KBPS": (
+        randomInt(2500000, 3000000) / 1000
+      ).toString(),
+      "X-IG-Bandwidth-TotalBytes-B": randomInt(5000000, 90000000).toString(),
+      "X-IG-Bandwidth-TotalTime-MS": randomInt(2000, 9000).toString(),
+      "X-IG-App-Startup-Country": countryCode.toUpperCase(),
       "X-Bloks-Version-Id": BLOKS_VERSION_ID,
-      "X-MID": this.state.mid ?? "",
-      "X-IG-WWW-Claim": this.state.wwwClaim ?? "",
+      "X-IG-WWW-Claim": "0",
       "X-Bloks-Is-Layout-RTL": "false",
+      "X-Bloks-Is-Panorama-Enabled": "true",
+      "X-IG-Device-ID": device.uuid,
+      "X-IG-Family-Device-ID": device.phoneId,
+      // "X-IG-Android-ID": device.androidDeviceId,
+      // "X-IG-Timezone-Offset": str(self.timezone_offset),
       "X-IG-Connection-Type": CONNECTION_TYPE_HEADER,
       "X-IG-Capabilities": CAPABILITIES_HEADER,
       "X-IG-App-ID": FB_ANALYTICS_APPLICATION_ID,
-      "X-IG-Device-ID": this.state.device.uuid,
-      "X-IG-Android-ID": this.state.device.deviceId,
-      "Accept-Language": LANGUAGE.replace("_", "-"),
+      Priority: "u=3",
+      "User-Agent": this.generateUserAgent(),
+      "Accept-Language": language,
+      "X-MID": this.state.mid ?? "",
+      "Accept-Encoding": "gzip, deflate",
+      Host: API_HOST,
       "X-FB-HTTP-Engine": "Liger",
-      Authorization: this.state.auth?.token,
-      Host: "i.instagram.com",
-      "Accept-Encoding": "gzip",
-      Connection: "close",
+      Connection: "keep-alive",
+      "X-FB-Client-IP": "True",
+      "X-FB-Server-Cluster": "True",
+      "IG-INTENDED-USER-ID": "0",
+      "X-IG-Nav-Chain":
+        "9MV:self_profile:2,ProfileMediaTabFragment:self_profile:3,9Xf:self_following:4",
+      "X-IG-SALT-IDS": randomInt(1061162222, 1061262222).toString(),
     };
+
+    const userId = this.state.auth?.userId;
+    if (userId) {
+      const nextYear = Date.now() + 1000 * 60 * 60 * 24 * 365;
+      headers["IG-U-DS-USER-ID"] = userId;
+      headers["IG-INTENDED-USER-ID"] = userId;
+      headers["IG-U-IG-DIRECT-REGION-HINT"] =
+        this.state.directRegionHint ??
+        `LLA,${userId},${nextYear}:01f7bae7d8b131877d8e0ae1493252280d72f6d0d554447cb1dc9049b6b2c507c08605b7`;
+      headers["IG-U-SHBID"] =
+        this.state.shbid ??
+        `12695,${userId},${nextYear}:01f778d9c9f7546cf3722578fbf9b85143cd6e5132723e5c93f40f55ca0459c8ef8a0d9f`;
+      headers["IG-U-SHBTS"] =
+        this.state.shbts ??
+        `${Date.now() / 1000},${userId},${nextYear}:01f778d9c9f7546cf3722578fbf9b85143cd6e5132723e5c93f40f55ca0459c8ef8a0d9f`;
+      headers["IG-U-RUR"] =
+        this.state.rur ??
+        `RVA,${userId},${nextYear}:01f7f627f9ae4ce2874b2e04463efdb184340968b1b006fa88cb4cc69a942a04201e544c`;
+    }
+
+    return headers;
   }
 
   #updateAuthState(response: AxiosResponse) {
@@ -176,6 +238,9 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
       "x-ig-set-www-claim": wwwClaim,
       "ig-set-x-mid": mid,
       "ig-set-ig-u-ig-direct-region-hint": directRegionalHint,
+      "ig-set-ig-u-shbid": shbid,
+      "ig-set-ig-u-shbts": shbts,
+      "ig-set-ig-u-rur": rur,
       "ig-set-authorization": authToken,
       "ig-set-password-encryption-key-id": pwKeyId,
       "ig-set-password-encryption-pub-key": pwPubKey,
@@ -188,7 +253,16 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
       this.state.mid = mid || null;
     }
     if (typeof directRegionalHint === "string") {
-      this.state.directRegionalHint = directRegionalHint || null;
+      this.state.directRegionHint = directRegionalHint || null;
+    }
+    if (typeof shbid === "string") {
+      this.state.shbid = shbid || null;
+    }
+    if (typeof shbts === "string") {
+      this.state.shbts = shbts || null;
+    }
+    if (typeof rur === "string") {
+      this.state.rur = rur || null;
     }
     if (typeof authToken === "string") {
       if (authToken) {
@@ -208,15 +282,11 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
         this.state.auth = null;
       }
     }
-    if (typeof pwKeyId === "string" && typeof pwPubKey === "string") {
-      if (pwKeyId && pwPubKey) {
-        this.state.passwordEncryption = {
-          pubKey: pwPubKey,
-          keyId: pwKeyId,
-        };
-      } else {
-        this.state.passwordEncryption = null;
-      }
+    if (typeof pwPubKey === "string") {
+      this.state.passwordEncryptionPubKey = pwPubKey || null;
+    }
+    if (typeof pwKeyId === "string") {
+      this.state.passwordEncryptionKeyId = pwKeyId || null;
     }
   }
 
@@ -241,22 +311,6 @@ export class ApiClient extends EventEmitter<ApiClientEvents> {
   }
 }
 
-export function generateDeviceState(seed: string) {
-  const chance = new Chance(seed);
-  const newDeviceState = {
-    deviceString: chance.pickone(DEVICES),
-    uuid: chance.guid(),
-    phoneId: chance.guid(),
-    adId: chance.guid(),
-    build: chance.pickone(BUILDS),
-    deviceId: `android-${chance.string({
-      pool: "abcdef0123456789",
-      length: 16,
-    })}`,
-  };
-  return newDeviceState;
-}
-
 function parseAuthToken(token: string) {
   return JSON.parse(
     Buffer.from(token.substring("Bearer IGT:2:".length), "base64").toString(),
@@ -265,4 +319,10 @@ function parseAuthToken(token: string) {
     sessionid: string;
     should_user_header_over_cookie: string;
   };
+}
+
+function createSilentLogger() {
+  return pino({
+    level: "silent",
+  });
 }

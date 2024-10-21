@@ -41,13 +41,6 @@ export class AccountApi {
   constructor(public client: ApiClient) {}
 
   async login(username: string, password: string) {
-    if (!this.client.state.passwordEncryption) {
-      throw new Error("Can't login without password encryption config");
-    }
-    if (!this.client.state.device) {
-      throw new Error("Can't create Jazoest without device state");
-    }
-
     const { encrypted, time } = this.#encryptPassword(password);
     const csrfToken = this.client.getCsrfToken();
     const response = await this.client.makeRequest<AccountLoginResponseDto>({
@@ -56,17 +49,17 @@ export class AccountApi {
       form: this.client.signFormData({
         username,
         enc_password: `#PWD_INSTAGRAM:4:${time}:${encrypted}`,
-        guid: this.client.state.device.uuid,
-        phone_id: this.client.state.device.phoneId,
+        guid: this.client.device.uuid,
+        phone_id: this.client.device.phoneId,
         _csrftoken: csrfToken,
-        device_id: this.client.state.device.deviceId,
-        adid: this.client.state.device.adId,
+        device_id: this.client.device.deviceId,
+        adid: this.client.device.adId,
         google_tokens: "[]",
         login_attempt_count: 0,
         country_codes: JSON.stringify([
           { country_code: "1", source: "default" },
         ]),
-        jazoest: createJazoest(this.client.state.device.phoneId),
+        jazoest: createJazoest(this.client.device.phoneId),
       }),
     });
 
@@ -74,8 +67,11 @@ export class AccountApi {
   }
 
   #encryptPassword(password: string) {
-    if (!this.client.state.passwordEncryption) {
-      throw new Error("Can't login without password encryption config");
+    if (!this.client.state.passwordEncryptionPubKey) {
+      throw new Error("Can't login without password encryption public key");
+    }
+    if (!this.client.state.passwordEncryptionKeyId) {
+      throw new Error("Can't login without password encryption key ID");
     }
 
     const randKey = crypto.randomBytes(32);
@@ -83,7 +79,7 @@ export class AccountApi {
     const rsaEncrypted = crypto.publicEncrypt(
       {
         key: Buffer.from(
-          this.client.state.passwordEncryption.pubKey,
+          this.client.state.passwordEncryptionPubKey,
           "base64",
         ).toString(),
         padding: crypto.constants.RSA_PKCS1_PADDING,
@@ -104,7 +100,7 @@ export class AccountApi {
     return {
       time,
       encrypted: Buffer.concat([
-        Buffer.from([1, Number(this.client.state.passwordEncryption.keyId)]),
+        Buffer.from([1, Number(this.client.state.passwordEncryptionKeyId)]),
         iv,
         sizeBuffer,
         rsaEncrypted,

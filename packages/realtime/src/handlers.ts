@@ -1,6 +1,6 @@
 import { bufferIsJson, deserializeThrift } from "@igjs/mqttot";
 
-import { type IgRealtimeClient } from "./client";
+import { type RealtimeClient } from "./client";
 import { MqttotGraphqlMessagePacket } from "./thrift/graphql-message";
 import { MqttotRegionHintPacket } from "./thrift/region-hint-message";
 import { MqttotSkywalkerMessagePacket } from "./thrift/skywalker-message";
@@ -8,7 +8,7 @@ import { MqttotSkywalkerMessagePacket } from "./thrift/skywalker-message";
 export type RealtimeTopicHandler = {
   topic: string;
   path: string;
-  handle: (client: IgRealtimeClient, payload: Buffer) => Promise<void> | void;
+  handle: (client: RealtimeClient, payload: Buffer) => Promise<void> | void;
 };
 
 function parseGraphqlMessage(

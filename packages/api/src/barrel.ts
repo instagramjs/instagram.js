@@ -5,6 +5,7 @@ export * from "./api/direct/pending-paginator";
 export * from "./api/qe";
 export * from "./client";
 export * from "./constants";
+export * from "./device";
 export * from "./paginator";
 export * from "./state";
 export * from "./util";
