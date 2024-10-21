@@ -1,3 +1,4 @@
+import { Collection } from "@discordjs/collection";
 import {
   ApiClient,
   APP_VERSION,
@@ -5,35 +6,44 @@ import {
   generateDeviceState,
   LANGUAGE,
 } from "@igjs/api";
-import { IgRealtimeClient, type IrisData } from "@igjs/realtime";
+import { type DirectThreadDto } from "@igjs/api-types";
+import {
+  IgRealtimeClient,
+  type IrisData,
+  type MessageSyncMessage,
+} from "@igjs/realtime";
 import EventEmitter from "eventemitter3";
 import { type Logger } from "pino";
 
 import { type StateAdapter } from "./barrel";
 import { exportedClientStateSchema } from "./state/exported";
+import { Message } from "./structures/message";
+import { Thread } from "./structures/thread";
 
-export type IgClientEvents = {
-  ready: () => void;
-  error: (error: Error) => void;
-};
-
-export type IgClientOpts = {
+export type ClientOpts = {
   logger?: Logger;
   stateAdapter?: StateAdapter;
 };
-export const defaultIgClientOpts: IgClientOpts = {};
+export const defaultClientOpts: ClientOpts = {};
 
-export class IgClient extends EventEmitter<IgClientEvents> {
-  opts: IgClientOpts;
+export class Client extends EventEmitter<{
+  ready: () => void;
+  error: (error: Error) => void;
+  messageCreate: (message: Message) => void;
+}> {
+  opts: ClientOpts;
 
   #irisData?: IrisData;
 
   api = new ApiClient();
   realtime = new IgRealtimeClient();
 
-  constructor(opts?: IgClientOpts) {
+  threads = new Collection<string, Thread>();
+  pendingThreads = new Collection<string, Thread>();
+
+  constructor(opts?: ClientOpts) {
     super();
-    this.opts = { ...structuredClone(defaultIgClientOpts), ...opts };
+    this.opts = { ...structuredClone(defaultClientOpts), ...opts };
   }
 
   async #saveState() {
@@ -50,14 +60,50 @@ export class IgClient extends EventEmitter<IgClientEvents> {
   async #loadState() {
     const { stateAdapter } = this.opts;
     if (stateAdapter) {
-      const state = exportedClientStateSchema.parse(
-        await stateAdapter.loadState(),
-      );
-      if (state) {
+      const unparsed = await stateAdapter.loadState();
+      if (unparsed) {
+        const state = exportedClientStateSchema.parse(unparsed);
         this.api.importState(state);
         this.#irisData = structuredClone(state.irisData);
       }
     }
+  }
+
+  #patchThreads(
+    threads: DirectThreadDto[],
+    collection: Collection<string, Thread>,
+  ) {
+    for (const thread of threads) {
+      const existing = collection.get(thread.thread_id);
+      if (existing) {
+        existing.patch(thread);
+      } else {
+        collection.set(
+          thread.thread_id,
+          new Thread(this, thread.thread_id, thread),
+        );
+      }
+    }
+  }
+
+  async #getInbox() {
+    const inbox = await this.api.direct.getInbox().request();
+    this.#patchThreads(inbox.inbox.threads, this.threads);
+    return inbox;
+  }
+
+  async #getPendingInbox() {
+    const inbox = await this.api.direct.getPendingInbox().request();
+    this.#patchThreads(inbox.inbox.threads, this.pendingThreads);
+    return inbox;
+  }
+
+  async #getIrisData(): Promise<IrisData> {
+    const inbox = await this.#getInbox();
+    return {
+      seq_id: inbox.seq_id,
+      snapshot_at_ms: inbox.snapshot_at_ms,
+    };
   }
 
   async login(username: string, password: string) {
@@ -75,17 +121,12 @@ export class IgClient extends EventEmitter<IgClientEvents> {
 
     await this.api.qe.syncExperiments();
 
-    this.realtime.on("irisSubResponse", (message) => {
-      console.log(JSON.stringify(message, null, 2));
-    });
     this.realtime.on("messageSync", (messages) => {
-      console.log(JSON.stringify(messages, null, 2));
+      void this.#handleMessageSync(messages);
     });
 
-    let shouldUpdateIrisData = true;
     if (!this.#irisData) {
-      this.#irisData = await this.api.direct.getInbox().request();
-      shouldUpdateIrisData = false;
+      this.#irisData = await this.#getIrisData();
     }
     await this.realtime.connect({
       appVersion: APP_VERSION,
@@ -99,11 +140,53 @@ export class IgClient extends EventEmitter<IgClientEvents> {
       autoReconnect: true,
     });
 
-    if (shouldUpdateIrisData) {
-      this.#irisData = await this.api.direct.getInbox().request();
-    }
-    await this.#saveState();
+    await this.#getPendingInbox();
 
     this.emit("ready");
   }
+
+  async #handleMessageSync(messages: MessageSyncMessage[]) {
+    let gotInbox = false;
+
+    for (const message of messages) {
+      this.#irisData = {
+        seq_id: message.seq_id,
+        snapshot_at_ms: Date.now(),
+      };
+
+      if (message.data) {
+        for (const data of message.data) {
+          const threadId = getThreadIdFromSyncPath(data.path);
+          if (!threadId) {
+            continue;
+          }
+
+          if (!this.threads.has(threadId) && !gotInbox) {
+            await this.#getInbox();
+            gotInbox = true;
+          }
+
+          const thread = this.threads.get(threadId);
+          const item = data.value;
+          if (thread) {
+            const message = thread.messages.get(item.item_id);
+            if (message) {
+              message.patch(item);
+            } else {
+              const newMessage = new Message(thread, item.item_id, item);
+              thread.messages.set(item.item_id, newMessage);
+              this.emit("messageCreate", newMessage);
+            }
+          }
+        }
+      }
+    }
+
+    await this.#saveState();
+  }
+}
+
+function getThreadIdFromSyncPath(path: string) {
+  const match = /\/direct_v2\/threads\/(\d+)\//.exec(path);
+  return match ? match[1] : null;
 }

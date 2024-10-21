@@ -1,10 +1,10 @@
 import path from "path";
 
-import { FileStateAdapter, IgClient } from "~/index";
+import { Client, FileStateAdapter } from "~/index";
 
 import { env } from "./env";
 
-const client = new IgClient({
+const client = new Client({
   stateAdapter: new FileStateAdapter(
     path.join(import.meta.dirname, "state.json"),
   ),
@@ -12,6 +12,13 @@ const client = new IgClient({
 
 client.on("ready", () => {
   console.log("ready");
+});
+
+client.on("messageCreate", async (message) => {
+  console.log(message);
+  if (message.text === "hi") {
+    // await message.thread.send
+  }
 });
 
 async function main() {

@@ -96,7 +96,7 @@ export type MessageSyncData = {
   path: string;
   value: DirectItemDto;
 };
-export type MessageSyncMessage = RawMessageSyncMessage & {
+export type MessageSyncMessage = Omit<RawMessageSyncMessage, "data"> & {
   data?: MessageSyncData[];
 };
 export const MessageSyncTopicHandler: RealtimeTopicHandler = {

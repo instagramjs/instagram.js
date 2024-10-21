@@ -207,9 +207,15 @@ importers:
 
   packages/ig.js:
     dependencies:
+      '@discordjs/collection':
+        specifier: ^2.1.1
+        version: 2.1.1
       '@igjs/api':
         specifier: workspace:*
         version: link:../api
+      '@igjs/api-types':
+        specifier: workspace:*
+        version: link:../api-types
       '@igjs/realtime':
         specifier: workspace:*
         version: link:../realtime
@@ -492,6 +498,10 @@ packages:
   '@creditkarma/thrift-typescript@3.7.6':
     resolution: {integrity: sha512-v/9Bi3YqExw8bOHA1F/087zru14qExO1e4rdV/+hjYOnUk0HX3zmi6giu/QR9c9QK+5bxekZd4pUxgX7HWwvwQ==}
     hasBin: true
+
+  '@discordjs/collection@2.1.1':
+    resolution: {integrity: sha512-LiSusze9Tc7qF03sLCujF5iZp7K+vRNEDBZ86FT9aQAv3vxMLihUvKvpsCWiQ2DJq1tVckopKm1rxomgNUc9hg==}
+    engines: {node: '>=18'}
 
   '@esbuild/aix-ppc64@0.23.1':
     resolution: {integrity: sha512-6VhYk1diRqrhBAqpJEdjASR/+WVRtfjpqKuNw11cLiaWpAT/Uu+nokB+UJnevzy/P9C/ty6AOe0dwueMrGh/iQ==}
@@ -2155,6 +2165,8 @@ snapshots:
       fs-extra: 8.1.0
       glob: 7.2.3
       typescript: 3.5.3
+
+  '@discordjs/collection@2.1.1': {}
 
   '@esbuild/aix-ppc64@0.23.1':
     optional: true

@@ -35,7 +35,9 @@
     "typescript-eslint": "catalog:"
   },
   "dependencies": {
+    "@discordjs/collection": "^2.1.1",
     "@igjs/api": "workspace:*",
+    "@igjs/api-types": "workspace:*",
     "@igjs/realtime": "workspace:*",
     "axios": "1.7.7",
     "eventemitter3": "catalog:",

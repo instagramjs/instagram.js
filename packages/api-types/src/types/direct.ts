@@ -81,15 +81,11 @@ export type DirectThreadDto = {
   oldest_cursor: string;
   newest_cursor: string;
   last_permanent_item: DirectItemDto | null;
-  ig_thread_capabilities: {
-    capabilities_0: number;
-    capabilities_1: number;
-  };
   thread_title: string;
   thread_label: number;
-  is_group: boolean;
-  is_spam: boolean;
-  spam: boolean;
+  is_group?: boolean;
+  is_spam?: boolean;
+  spam?: boolean;
   last_activity_at: number;
   last_non_sender_item_at: number;
   marked_as_unread: boolean;
@@ -114,11 +110,12 @@ export type DirectThreadDto = {
   read_state: number;
   folder: number;
   mentions_muted: boolean;
-  named: boolean;
+  named?: boolean;
   is_close_friend_thread: boolean;
   uq_seq_id: number;
-  video_call_id: unknown;
+  video_call_id?: unknown;
   is_stale: boolean;
+  is_pin?: boolean;
 };
 
 export type DirectThreadUserDto = {

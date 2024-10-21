@@ -51,18 +51,18 @@ export type IgRealtimeClientConnectOpts = {
   autoReconnect?: boolean;
 };
 
-export type IgRealtimeClientEvents = {
+export class IgRealtimeClient extends EventEmitter<{
   warning: (error: Error) => void;
   error: (error: Error) => void;
+  connect: () => void;
+  disconnect: (event?: { reason?: string | Error; reconnect: boolean }) => void;
   graphqlMessage: (message: GraphqlMessage) => void;
   skywalkerMessage: (message: SkywalkerMessage) => void;
   sendMessageResponse: (message: unknown) => void;
   irisSubResponse: (message: IrisSubResponseMessage) => void;
   messageSync: (message: MessageSyncMessage[]) => void;
   regionHint: (message: RegionHintMessage) => void;
-};
-
-export class IgRealtimeClient extends EventEmitter<IgRealtimeClientEvents> {
+}> {
   #mqttot: MqttotClient | null = null;
   #connectOpts: IgRealtimeClientConnectOpts | null = null;
 
@@ -116,6 +116,10 @@ export class IgRealtimeClient extends EventEmitter<IgRealtimeClientEvents> {
   }
 
   async connect(opts: IgRealtimeClientConnectOpts) {
+    if (this.#mqttot) {
+      throw new Error("Client already connected");
+    }
+
     this.#connectOpts = opts;
     this.#mqttot = new MqttotClient({
       url: IG_REALTIME_HOST,
@@ -123,8 +127,10 @@ export class IgRealtimeClient extends EventEmitter<IgRealtimeClientEvents> {
       connectPayloadRequired: false,
       connectPayloadProvider: () => this.#getConnectionPayload(opts),
     });
-    this.#mqttot.on("error", this.#handleMqttotError);
-    this.#mqttot.on("warning", this.#handleMqttotWarning);
+    this.#mqttot.on("error", this.#handleError);
+    this.#mqttot.on("warning", this.#handleWarning);
+    this.#mqttot.on("connect", this.#handleConnect);
+    this.#mqttot.on("disconnect", this.#handleDisconnect);
 
     if (this.opts.topicHandlers) {
       for (const handler of this.opts.topicHandlers) {
@@ -155,12 +161,30 @@ export class IgRealtimeClient extends EventEmitter<IgRealtimeClientEvents> {
     });
   }
 
-  #handleMqttotError = (error: Error) => {
+  async disconnect() {
+    if (this.#mqttot) {
+      await this.#mqttot.disconnect();
+      this.#mqttot = null;
+    }
+  }
+
+  #handleError = (error: Error) => {
     this.emit("error", error);
   };
 
-  #handleMqttotWarning = (error: Error) => {
+  #handleWarning = (error: Error) => {
     this.emit("warning", error);
+  };
+
+  #handleConnect = () => {
+    this.emit("connect");
+  };
+
+  #handleDisconnect = (event?: {
+    reason?: string | Error;
+    reconnect: boolean;
+  }) => {
+    this.emit("disconnect", event);
   };
 
   async #publishToTopic(
