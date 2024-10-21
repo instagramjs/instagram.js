@@ -116,26 +116,7 @@ export class Message {
     };
   }
 
-  fromJSON(data: MessageAsJSON) {
-    this.id = data.id;
-    this.threadId = data.threadId;
-    this.type = data.type;
-    this.mid = data.mid;
-    this.authorId = data.authorId;
-    this.clientContext = data.clientContext;
-    this.sendAttribution = data.sendAttribution;
-    this.clip = data.clip;
-    this.mediaShare = data.mediaShare;
-    this.storyShare = data.storyShare;
-    this.xmaProfile = data.xmaProfile;
-    this.placeholder = data.placeholder;
-    this.text = data.text;
-    this.createdAt = new Date(data.createdAt);
-  }
-
-  static fromJSON(client: Client, data: MessageAsJSON) {
-    const message = new Message(client, data.id, data.threadId);
-    message.fromJSON(data);
-    return message;
+  async markSeen() {
+    return this.client.api.direct.markItemSeen(this.threadId, this.id);
   }
 }

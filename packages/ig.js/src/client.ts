@@ -3,7 +3,6 @@ import {
   ApiClient,
   APP_VERSION,
   CAPABILITIES_HEADER,
-  type ExportedApiState,
   generateDeviceState,
   LANGUAGE,
 } from "@igjs/api";
@@ -16,31 +15,27 @@ import {
 import EventEmitter from "eventemitter3";
 import { type Logger } from "pino";
 
-import { type StorageAdapter } from "./storage";
-import { Message, type MessageAsJSON } from "./structures/message";
-import { Thread, type ThreadAsJSON } from "./structures/thread";
+import { type StateAdapter } from "./state/adapters";
+import { exportedClientStateSchema } from "./state/exported";
+import { Message } from "./structures/message";
+import { Thread } from "./structures/thread";
 
 export type ClientOpts = {
   logger?: Logger;
-  storageAdapter?: StorageAdapter;
+  stateAdapter?: StateAdapter;
 };
 export const defaultClientOpts: ClientOpts = {};
-
-enum StorageTable {
-  STATE = "state",
-  THREADS = "threads",
-  MESSAGES = "messages",
-}
-
-enum StorageStateKey {
-  API_STATE = "api-state",
-  IRIS_DATA = "iris-data",
-}
 
 export class Client extends EventEmitter<{
   ready: () => void;
   error: (error: Error) => void;
+  threadNameUpdate: (
+    thread: Thread,
+    oldName: string | null,
+    newName: string | null,
+  ) => void;
   messageCreate: (message: Message) => void;
+  messageDelete: (message: Message) => void;
 }> {
   opts: ClientOpts;
 
@@ -57,137 +52,35 @@ export class Client extends EventEmitter<{
     this.opts = { ...structuredClone(defaultClientOpts), ...opts };
   }
 
-  async #saveApiState() {
-    await this.opts.storageAdapter?.set(
-      StorageTable.STATE,
-      StorageStateKey.API_STATE,
-      this.api.exportState(),
-    );
-  }
-
-  async #saveIrisData() {
-    if (this.#irisData) {
-      await this.opts.storageAdapter?.set(
-        StorageTable.STATE,
-        StorageStateKey.IRIS_DATA,
-        this.#irisData,
+  async #saveState() {
+    const adapter = this.opts.stateAdapter;
+    if (adapter) {
+      await adapter.saveState(
+        exportedClientStateSchema.parse({
+          ...this.api.exportState(),
+          irisData: structuredClone(this.#irisData),
+        }),
       );
     }
   }
 
-  async #loadStorage() {
-    const adapter = this.opts.storageAdapter;
-    if (!adapter) {
-      return;
-    }
-
-    const state = await adapter.get(
-      StorageTable.STATE,
-      StorageStateKey.API_STATE,
-    );
-    if (state) {
-      this.api.importState(state as ExportedApiState);
-    }
-
-    const irisData = await adapter.get(
-      StorageTable.STATE,
-      StorageStateKey.IRIS_DATA,
-    );
-    if (irisData) {
-      this.#irisData = irisData as IrisData;
-    }
-
-    const threads = (await adapter.getAll(StorageTable.THREADS)) as Map<
-      string,
-      ThreadAsJSON
-    >;
-    for (const [id, data] of threads) {
-      this.threads.set(id, Thread.fromJSON(this, data));
-    }
-
-    const messages = (await adapter.getAll(StorageTable.MESSAGES)) as Map<
-      string,
-      MessageAsJSON
-    >;
-    for (const [id, data] of messages) {
-      this.messages.set(id, Message.fromJSON(this, data));
-    }
-  }
-
-  async #patchThread(data: DirectThreadDto) {
-    let thread = this.threads.get(data.thread_id);
-    if (thread) {
-      thread.patch(data);
-    } else {
-      thread = new Thread(this, data.thread_id, data);
-      this.threads.set(data.thread_id, thread);
-    }
-
-    const adapter = this.opts.storageAdapter;
+  async #loadState() {
+    const adapter = this.opts.stateAdapter;
     if (adapter) {
-      await adapter.set(StorageTable.THREADS, data.thread_id, {
-        ...thread.toJSON(),
-        messages: [],
-      });
-    }
-  }
-
-  async #patchMessage(
-    threadId: string,
-    data: DirectItemDto,
-    emitOnCreate = false,
-  ) {
-    let message = this.messages.get(data.item_id);
-    if (message) {
-      message.patch(data);
-    } else {
-      message = new Message(this, data.item_id, threadId, data);
-      this.messages.set(data.item_id, message);
-      if (emitOnCreate) {
-        this.emit("messageCreate", message);
+      const unparsedState = await adapter.loadState();
+      if (unparsedState) {
+        const state = exportedClientStateSchema.parse(unparsedState);
+        this.api.importState(state);
+        this.#irisData = state.irisData;
       }
     }
-
-    const adapter = this.opts.storageAdapter;
-    if (adapter) {
-      await adapter.set(StorageTable.MESSAGES, data.item_id, message.toJSON());
-    }
-  }
-
-  async #patchThreads(data: DirectThreadDto[]) {
-    await Promise.all(data.map((t) => this.#patchThread(t)));
-    await Promise.all(
-      data.map((t) =>
-        t.items.map((i) => this.#patchMessage(t.thread_id, i, true)).flat(),
-      ),
-    );
-  }
-
-  async #fetchInbox() {
-    const inbox = await this.api.direct.getInbox().request();
-    await this.#patchThreads(inbox.inbox.threads);
-    return inbox;
-  }
-
-  async #fetchPendingInbox() {
-    const inbox = await this.api.direct.getPendingInbox().request();
-    await this.#patchThreads(inbox.inbox.threads);
-    return inbox;
-  }
-
-  async #fetchIrisData(): Promise<IrisData> {
-    const inbox = await this.#fetchInbox();
-    return {
-      seq_id: inbox.seq_id,
-      snapshot_at_ms: inbox.snapshot_at_ms,
-    };
   }
 
   async login(username: string, password: string) {
-    await this.#loadStorage();
+    await this.#loadState();
 
     this.api.on("response", () => {
-      void this.#saveApiState();
+      void this.#saveState();
     });
 
     if (!this.api.isAuthenticated()) {
@@ -202,9 +95,13 @@ export class Client extends EventEmitter<{
       void this.#handleMessageSync(messages);
     });
 
+    const inbox = await this.api.direct.getInbox().request();
     if (!this.#irisData) {
-      this.#irisData = await this.#fetchIrisData();
-      await this.#saveIrisData();
+      this.#irisData = {
+        seq_id: inbox.seq_id,
+        snapshot_at_ms: inbox.snapshot_at_ms,
+      };
+      await this.#saveState();
     }
     await this.realtime.connect({
       appVersion: APP_VERSION,
@@ -218,13 +115,32 @@ export class Client extends EventEmitter<{
       autoReconnect: true,
     });
 
-    await this.#fetchPendingInbox();
+    const pendingInbox = await this.api.direct.getPendingInbox().request();
+    const threads = [...inbox.inbox.threads, ...pendingInbox.inbox.threads];
+    for (const thread of threads) {
+      this.threads.set(
+        thread.thread_id,
+        new Thread(this, thread.thread_id, thread),
+      );
+    }
 
     this.emit("ready");
   }
 
+  async #fetchThread(threadId: string) {
+    const thread = this.threads.get(threadId);
+    if (thread) {
+      return thread;
+    }
+
+    const data = await this.api.direct.getById(threadId).request();
+    const newThread = new Thread(this, threadId, data.thread);
+    this.threads.set(threadId, newThread);
+    return newThread;
+  }
+
   async #handleMessageSync(messages: MessageSyncMessage[]) {
-    let gotInbox = false;
+    console.log(JSON.stringify(messages, null, 2));
 
     for (const message of messages) {
       this.#irisData = {
@@ -232,26 +148,100 @@ export class Client extends EventEmitter<{
         snapshot_at_ms: Date.now(),
       };
 
-      if (message.data) {
-        for (const data of message.data) {
-          const threadId = getThreadIdFromSyncPath(data.path);
-          if (!threadId) {
-            continue;
+      if (!message.data) {
+        continue;
+      }
+      for (const data of message.data) {
+        switch (data.op) {
+          case "replace": {
+            const threadId = matchThreadPath(data.path);
+            if (threadId) {
+              const value = data.value as DirectThreadDto;
+              const thread = await this.#fetchThread(threadId);
+              if (thread) {
+                const oldName = thread.name;
+                thread.patch(value);
+
+                if (oldName !== thread.name) {
+                  this.emit("threadNameUpdate", thread, oldName, thread.name);
+                }
+              } else {
+                const newThread = new Thread(this, threadId, value);
+                this.threads.set(threadId, newThread);
+              }
+            }
+
+            break;
           }
-          if (!this.threads.has(threadId) && !gotInbox) {
-            await this.#fetchInbox();
-            gotInbox = true;
+
+          case "add": {
+            const matchedMessagePath = matchMessagePath(data.path);
+            if (matchedMessagePath) {
+              const value = data.value as DirectItemDto;
+              if (
+                value.item_type === "action_log" ||
+                value.item_type === "video_call_event"
+              ) {
+                break;
+              }
+
+              const [threadId] = matchedMessagePath;
+              const thread = await this.#fetchThread(threadId);
+              if (thread) {
+                const message = new Message(
+                  this,
+                  value.item_id,
+                  threadId,
+                  value,
+                );
+                this.messages.set(value.item_id, message);
+                this.emit("messageCreate", message);
+              }
+            }
+
+            break;
           }
-          await this.#patchMessage(threadId, data.value, true);
+
+          case "remove": {
+            const matchedMessagePath = matchMessagePath(data.path);
+            if (matchedMessagePath) {
+              const [, itemId] = matchedMessagePath;
+              const message = this.messages.get(itemId);
+              if (message) {
+                message.thread.messages.delete(itemId);
+                this.messages.delete(itemId);
+                this.emit("messageDelete", message);
+              }
+            }
+
+            break;
+          }
         }
       }
     }
 
-    await this.#saveIrisData();
+    await this.#saveState();
   }
 }
 
-function getThreadIdFromSyncPath(path: string) {
-  const match = /\/direct_v2\/threads\/(\d+)\//.exec(path);
-  return match ? match[1] : null;
+// function matchAdminPath(path: string): [string, string] | null {
+//   const matched = /\/direct_v2\/threads\/(\d+)\/admin_user_ids\/(\d+)/.exec(
+//     path,
+//   );
+//   if (matched) {
+//     return [matched[1]!, matched[2]!];
+//   }
+//   return null;
+// }
+
+function matchMessagePath(path: string): [string, string] | null {
+  const matched = /\/direct_v2\/threads\/(\d+)\/items\/(\d+)/.exec(path);
+  if (matched) {
+    return [matched[1]!, matched[2]!];
+  }
+  return null;
+}
+
+function matchThreadPath(path: string) {
+  return /\/direct_v2\/inbox\/threads\/(\d+)/.exec(path)?.[1] ?? null;
 }

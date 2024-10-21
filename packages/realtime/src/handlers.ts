@@ -1,4 +1,3 @@
-import { type DirectItemDto } from "@igjs/api-types";
 import { bufferIsJson, deserializeThrift } from "@igjs/mqttot";
 
 import { type IgRealtimeClient } from "./client";
@@ -81,7 +80,7 @@ type RawMessageSyncMessage = {
   data?: {
     op: string;
     path: string;
-    value: string;
+    value?: string;
   }[];
   message_type: number;
   seq_id: number;
@@ -94,7 +93,7 @@ type RawMessageSyncMessage = {
 export type MessageSyncData = {
   op: string;
   path: string;
-  value: DirectItemDto;
+  value?: unknown;
 };
 export type MessageSyncMessage = Omit<RawMessageSyncMessage, "data"> & {
   data?: MessageSyncData[];
@@ -111,7 +110,7 @@ export const MessageSyncTopicHandler: RealtimeTopicHandler = {
       data: m.data
         ? m.data.map((d) => ({
             ...d,
-            value: JSON.parse(d.value) as unknown,
+            value: d.value ? (JSON.parse(d.value) as unknown) : undefined,
           }))
         : undefined,
     })) as MessageSyncMessage[];

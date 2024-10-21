@@ -19,6 +19,11 @@ export type DirectSendResponseDto = {
   status: string;
 };
 
+export type DirectThreadResponseDto = {
+  thread: DirectThreadDto;
+  status: string;
+};
+
 export type DirectUpdateTitleResponseDto = {
   status: string;
   thread: unknown;

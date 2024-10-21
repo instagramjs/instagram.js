@@ -11,6 +11,7 @@ import { type XOR } from "~/util";
 
 import { DirectInboxPaginator } from "./inbox-paginator";
 import { DirectPendingPaginator } from "./pending-paginator";
+import { DirectThreadPaginator } from "./thread-paginator";
 
 export type DirectSendRecipientOpts = XOR<
   { threadIds: string[] },
@@ -122,6 +123,10 @@ export class DirectApi {
     });
   }
 
+  getById(threadId: string) {
+    return new DirectThreadPaginator(this.client, threadId);
+  }
+
   async getByParticipants(userIds: string[]) {
     return this.client.makeRequest<{ status: string }>({
       url: `/api/v1/direct_v2/threads/get_by_participants/`,
@@ -197,7 +202,7 @@ export class DirectApi {
   }
 
   async markItemSeen(threadId: string, itemId: string) {
-    return this.client.makeRequest<DirectUpdateTitleResponseDto>({
+    return this.client.makeRequest<{ status: string }>({
       url: `/api/v1/direct_v2/threads/${threadId}/items/${itemId}/seen/`,
       method: "POST",
       form: {

@@ -134,30 +134,20 @@ export class Thread {
     };
   }
 
-  fromJSON(data: ThreadAsJSON) {
-    this.id = data.id;
-    this.name = data.name;
-    this.isMuted = data.isMuted;
-    this.isVoiceMuted = data.isVoiceMuted;
-    this.isPinned = data.isPinned;
-    this.isNamed = data.isNamed;
-    this.isPending = data.isPending;
-    this.isGroup = data.isGroup;
-    this.isSpam = data.isSpam;
-    this.isCalling = data.isCalling;
-    this.approvalIsRequiredForNewMembers = data.approvalIsRequiredForNewMembers;
-    this.adminUserIds = data.adminUserIds;
-    this.pendingUserIds = data.pendingUserIds;
-    this.lastActivityAt = new Date(data.lastActivityAt);
-    for (const message of data.messages) {
-      this.messages.set(message.id, Message.fromJSON(this.client, message));
-    }
-    this.#sortMessages();
+  async fetch() {
+    const data = await this.client.api.direct.getById(this.id).request();
+    this.patch(data.thread);
   }
 
-  static fromJSON(client: Client, data: ThreadAsJSON) {
-    const thread = new Thread(client, data.id);
-    thread.fromJSON(data);
-    return thread;
+  async approve() {
+    await this.client.api.direct.approve(this.id);
+    this.isPending = false;
+  }
+
+  async sendMessage(text: string) {
+    return this.client.api.direct.sendText({
+      text,
+      threadIds: [this.id],
+    });
   }
 }
