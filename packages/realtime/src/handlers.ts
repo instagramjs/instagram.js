@@ -54,7 +54,7 @@ export const IrisSubTopicHandler: RealtimeTopicHandler = {
   path: "/ig_sub_iris",
   handle: (client, payload) => {
     const data = payload.toString("utf8");
-    console.log("ig_sub_iris", data);
+    // console.log("ig_sub_iris", data);
   },
 };
 
@@ -123,7 +123,7 @@ export const RealtimeSubTopicHandler: RealtimeTopicHandler = {
   path: "/ig_realtime_sub",
   handle: (client, payload) => {
     const data = parseGraphqlMessage(payload);
-    console.log("ig_realtime_sub", data);
+    // console.log("ig_realtime_sub", data);
   },
 };
 
@@ -142,7 +142,7 @@ export const ForegroundStateTopicHandler: RealtimeTopicHandler = {
   path: "/t_foreground_state",
   handle: (client, payload) => {
     const data = JSON.parse(payload.toString("utf8")) as unknown;
-    console.log("t_foreground_state", data);
+    // console.log("t_foreground_state", data);
   },
 };
 
@@ -151,7 +151,7 @@ export const BackgroundStateTopicHandler: RealtimeTopicHandler = {
   path: "/t_background_state",
   handle: (client, payload) => {
     const data = JSON.parse(payload.toString("utf8")) as unknown;
-    console.log("t_background_state", data);
+    // console.log("t_background_state", data);
   },
 };
 

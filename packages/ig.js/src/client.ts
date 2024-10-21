@@ -143,8 +143,6 @@ export class Client extends EventEmitter<{
   }
 
   async #handleMessageSync(messages: MessageSyncMessage[]) {
-    console.log(JSON.stringify(messages, null, 2));
-
     for (const message of messages) {
       this.#irisData = {
         seq_id: message.seq_id,
