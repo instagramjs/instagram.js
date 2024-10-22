@@ -1,5 +1,11 @@
 # @igjs/realtime
 
+## 0.1.0
+
+### Minor Changes
+
+- 80f46e7: Added support for typing status
+
 ## 0.0.4
 
 ### Patch Changes
