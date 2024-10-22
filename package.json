@@ -14,7 +14,8 @@
         "lint": "turbo run lint --continue -- --cache --cache-location node_modules/.cache/.eslintcache",
         "lint:workspace": "pnpm sherif",
         "postinstall": "pnpm lint:workspace",
-        "typecheck": "turbo run typecheck"
+        "typecheck": "turbo run typecheck",
+        "release": "pnpm build && pnpm changeset publish"
     },
     "devDependencies": {
         "@changesets/cli": "^2.27.9",
