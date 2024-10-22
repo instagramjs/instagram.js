@@ -1,5 +1,13 @@
 # @igjs/api
 
+## 0.1.1
+
+### Patch Changes
+
+- 8cff235: Test changesets PR
+- Updated dependencies [8cff235]
+  - @igjs/api-types@0.0.3
+
 ## 0.1.0
 
 ### Minor Changes

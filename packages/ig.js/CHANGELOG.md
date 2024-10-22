@@ -1,5 +1,15 @@
 # ig.js
 
+## 0.1.1
+
+### Patch Changes
+
+- 8cff235: Test changesets PR
+- Updated dependencies [8cff235]
+  - @igjs/api@0.1.1
+  - @igjs/api-types@0.0.3
+  - @igjs/realtime@0.0.4
+
 ## 0.1.0
 
 ### Minor Changes
