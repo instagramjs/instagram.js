@@ -45,10 +45,7 @@ export class QeApi {
     const response = await this.client.makeRequest<QeSyncResponseDto>({
       method: "POST",
       url: "/api/v1/qe/sync/",
-      headers: {
-        "X-DEVICE-ID": this.client.device.uuid,
-      },
-      form: this.client.signFormData({ ...formData, experiments }),
+      form: { ...formData, experiments },
     });
     return response;
   }

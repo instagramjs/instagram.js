@@ -135,8 +135,8 @@ export class Thread {
   }
 
   async fetch() {
-    const data = await this.client.api.direct.getById(this.id).request();
-    this.patch(data.thread);
+    const data = await this.client.api.direct.getById(this.id);
+    this.patch(data);
   }
 
   async approve() {
@@ -144,10 +144,10 @@ export class Thread {
     this.isPending = false;
   }
 
-  async sendMessage(text: string) {
-    return this.client.api.direct.sendText({
-      text,
+  async send(text: string) {
+    return this.client.api.direct.send({
       threadIds: [this.id],
+      text,
     });
   }
 }

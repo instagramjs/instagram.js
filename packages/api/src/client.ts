@@ -4,7 +4,7 @@ import { Chance } from "chance";
 import { createHmac, randomInt, randomUUID } from "crypto";
 import EventEmitter from "eventemitter3";
 import pino, { type Logger } from "pino";
-import { type ParsedUrlQueryInput, stringify } from "querystring";
+import qs, { type ParsedUrlQueryInput } from "querystring";
 import { CookieJar, type SerializedCookieJar } from "tough-cookie";
 
 import { AccountApi } from "./api/account";
@@ -31,7 +31,6 @@ import {
   type ExportedApiState,
   exportedApiStateSchema,
 } from "./state";
-import { type XOR } from "./util";
 
 export type ApiClientOpts = {
   appVersion?: string;
@@ -86,16 +85,20 @@ export class ApiClient extends EventEmitter<{
     this.device = opts?.device ?? generateDeviceConfig(randomUUID());
   }
 
-  #generateTemporaryGuid(seed: string, lifetimeMs: number) {
+  generateTemporaryGuid(seed: string, lifetimeMs: number) {
     return new Chance(
       `${seed}${this.device.deviceId}${Math.round(Date.now() / lifetimeMs)}`,
     ).guid();
   }
 
+  generateMutationToken() {
+    return new Chance().guid();
+  }
+
   #generatePigeonSessionId() {
     return (
       "UFS-" +
-      this.#generateTemporaryGuid(
+      this.generateTemporaryGuid(
         "pigeon-session-id",
         PIGEON_SESSION_ID_LIFETIME,
       ) +
@@ -294,12 +297,15 @@ export class ApiClient extends EventEmitter<{
   }
 
   async makeRequest<R = unknown>(
-    opts?: Omit<AxiosRequestConfig, "data"> &
-      XOR<
-        { form?: ParsedUrlQueryInput },
-        { data?: AxiosRequestConfig["data"] }
-      >,
+    opts?: Omit<AxiosRequestConfig, "data"> & {
+      form?: ParsedUrlQueryInput;
+      signForm?: boolean;
+    },
   ) {
+    let form = opts?.form;
+    if (form && opts?.signForm) {
+      form = this.signFormData(form);
+    }
     const baseHeaders = this.#getBaseHeaders();
     const response = await this.axiosClient.request<R>({
       ...opts,
@@ -307,7 +313,7 @@ export class ApiClient extends EventEmitter<{
         ...baseHeaders,
         ...opts?.headers,
       },
-      data: opts?.form ? stringify(opts.form) : (opts?.data as unknown),
+      data: form ? qs.stringify(form) : undefined,
     });
     this.#updateAuthState(response);
     this.emit("response", response);

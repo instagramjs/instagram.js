@@ -27,9 +27,9 @@ const client = new Client({
 });
 
 async function handleMessage(message: Message) {
-  if (message.text?.toLowerCase() === "hi") {
+  if (message.text?.startsWith(`@${env.USERNAME}`)) {
     await message.markSeen();
-    await message.thread.sendMessage("hello");
+    await message.reply("hello");
   }
 }
 

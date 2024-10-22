@@ -6,7 +6,7 @@ import {
 import { type ApiClient } from "~/client";
 import { Paginator } from "~/paginator";
 
-export class DirectThreadPaginator extends Paginator<
+export class DirectThreadItemsPaginator extends Paginator<
   DirectThreadResponseDto,
   DirectItemDto
 > {
@@ -15,14 +15,14 @@ export class DirectThreadPaginator extends Paginator<
 
   constructor(
     client: ApiClient,
-    public id: string,
+    public threadId: string,
   ) {
     super(client);
   }
 
   async request() {
     const response = await this.client.makeRequest<DirectThreadResponseDto>({
-      url: `/api/v1/direct_v2/threads/${this.id}/`,
+      url: `/api/v1/direct_v2/threads/${this.threadId}/`,
       method: "GET",
       params: {
         visual_message_return_type: "unseen",

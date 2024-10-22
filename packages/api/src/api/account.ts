@@ -1,6 +1,7 @@
 import * as crypto from "crypto";
 
 import { type ApiClient } from "~/client";
+import { SIGNATURE_VERSION } from "~/constants";
 
 export type AccountLoginResponseDto = {
   logged_in_user: AccountLoggedInUserDto;
@@ -41,26 +42,25 @@ export class AccountApi {
   constructor(public client: ApiClient) {}
 
   async login(username: string, password: string) {
-    const { encrypted, time } = this.#encryptPassword(password);
-    const csrfToken = this.client.getCsrfToken();
+    const { countryCode, device } = this.client;
+    const encrypted = this.#encryptPassword(password);
     const response = await this.client.makeRequest<AccountLoginResponseDto>({
       method: "POST",
       url: "/api/v1/accounts/login/",
-      form: this.client.signFormData({
-        username,
-        enc_password: `#PWD_INSTAGRAM:4:${time}:${encrypted}`,
-        guid: this.client.device.uuid,
-        phone_id: this.client.device.phoneId,
-        _csrftoken: csrfToken,
-        device_id: this.client.device.deviceId,
-        adid: this.client.device.adId,
-        google_tokens: "[]",
-        login_attempt_count: 0,
+      form: {
+        jazoest: createJazoest(device.phoneId),
         country_codes: JSON.stringify([
-          { country_code: "1", source: "default" },
+          { country_code: countryCode, source: ["instagram"] },
         ]),
-        jazoest: createJazoest(this.client.device.phoneId),
-      }),
+        phone_id: device.phoneId,
+        enc_password: encrypted,
+        username,
+        adid: device.adId,
+        guid: device.uuid,
+        device_id: device.deviceId,
+        google_tokens: JSON.stringify([]),
+        login_attempt_count: 0,
+      },
     });
 
     return response.logged_in_user;
@@ -96,18 +96,15 @@ export class AccountApi {
     const sizeBuffer = Buffer.alloc(2, 0);
     sizeBuffer.writeInt16LE(rsaEncrypted.byteLength, 0);
     const authTag = cipher.getAuthTag();
-
-    return {
-      time,
-      encrypted: Buffer.concat([
-        Buffer.from([1, Number(this.client.state.passwordEncryptionKeyId)]),
-        iv,
-        sizeBuffer,
-        rsaEncrypted,
-        authTag,
-        aesEncrypted,
-      ]).toString("base64"),
-    };
+    const encrypted = Buffer.concat([
+      Buffer.from([1, Number(this.client.state.passwordEncryptionKeyId)]),
+      iv,
+      sizeBuffer,
+      rsaEncrypted,
+      authTag,
+      aesEncrypted,
+    ]).toString("base64");
+    return `#PWD_INSTAGRAM:${SIGNATURE_VERSION}:${time}:${encrypted}`;
   }
 }
 

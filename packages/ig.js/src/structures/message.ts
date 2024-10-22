@@ -119,4 +119,15 @@ export class Message {
   async markSeen() {
     return this.client.api.direct.markItemSeen(this.threadId, this.id);
   }
+
+  async reply(text: string) {
+    return this.client.api.direct.send({
+      threadIds: [this.threadId],
+      text,
+      replyTo: {
+        itemId: this.id,
+        clientContext: this.clientContext ?? undefined,
+      },
+    });
+  }
 }

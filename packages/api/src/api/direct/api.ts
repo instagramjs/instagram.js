@@ -1,71 +1,34 @@
 import {
   type DirectAddUserResponseDto,
   type DirectSendResponseDto,
+  type DirectThreadResponseDto,
   type DirectUpdateTitleResponseDto,
 } from "@igjs/api-types";
-import { Chance } from "chance";
-import { type ParsedUrlQueryInput } from "querystring";
+import { type ParsedUrlQuery } from "querystring";
 
 import { type ApiClient } from "~/client";
 import { type XOR } from "~/util";
 
 import { DirectInboxPaginator } from "./inbox-paginator";
 import { DirectPendingPaginator } from "./pending-paginator";
-import { DirectThreadPaginator } from "./thread-paginator";
+import { DirectThreadItemsPaginator } from "./thread-item-paginator";
 
-export type DirectSendRecipientOpts = XOR<
-  { threadIds: string[] },
-  { userIds: string[] }
->;
 export type DirectSendOpts = {
-  item: string;
-  form?: Record<string, unknown>;
-  signForm?: boolean;
-  params?: Record<string, string>;
-} & DirectSendRecipientOpts;
-
-export type DirectSendTextOpts = {
   text: string;
-} & DirectSendRecipientOpts;
-export type DirectSendStoryOpts = {
-  mediaId: string;
-  reelId?: string;
-  text?: string;
-  mediaType?: "photo" | "video";
-} & DirectSendRecipientOpts;
-export type DirectSendProfileShareOpts = {
-  userId: string;
-} & DirectSendRecipientOpts;
-export type DirectSendLinkOpts = {
-  text: string;
-  urls: string[];
-} & DirectSendRecipientOpts;
-export type DirectSendPostOpts = {
-  mediaId: string;
-} & DirectSendRecipientOpts;
-export type GetDirectInboxOpts = {
-  cursor: string;
-  sequenceId: number;
-};
+  sendAttribution?: string;
+  replyTo?: {
+    itemId: string;
+    clientContext?: string;
+  };
+} & XOR<{ threadIds: string[] }, { userIds: string[] }>;
 
 export class DirectApi {
   constructor(public client: ApiClient) {}
-
-  #getBaseFormData() {
-    return {
-      _uuid: this.client.device.uuid,
-      _uid: this.client.getUserId(),
-      _csrftoken: this.client.getCsrfToken() ?? undefined,
-    };
-  }
 
   async approve(threadId: string) {
     return this.client.makeRequest<{ status: string }>({
       url: `/api/v1/direct_v2/threads/${threadId}/approve/`,
       method: "POST",
-      form: {
-        ...this.#getBaseFormData(),
-      },
     });
   }
 
@@ -74,9 +37,9 @@ export class DirectApi {
       url: `/api/v1/direct_v2/threads/approve_multiple/`,
       method: "POST",
       form: {
-        ...this.#getBaseFormData(),
         thread_ids: JSON.stringify(threadIds),
       },
+      signForm: false,
     });
   }
 
@@ -84,9 +47,6 @@ export class DirectApi {
     return this.client.makeRequest<{ status: string }>({
       url: `/api/v1/direct_v2/threads/${threadId}/decline/`,
       method: "POST",
-      form: {
-        ...this.#getBaseFormData(),
-      },
     });
   }
 
@@ -95,9 +55,9 @@ export class DirectApi {
       url: `/api/v1/direct_v2/threads/decline_multiple/`,
       method: "POST",
       form: {
-        ...this.#getBaseFormData(),
         thread_ids: JSON.stringify(threadIds),
       },
+      signForm: false,
     });
   }
 
@@ -105,9 +65,6 @@ export class DirectApi {
     return this.client.makeRequest<{ status: string }>({
       url: `/api/v1/direct_v2/threads/decline_all/`,
       method: "POST",
-      form: {
-        ...this.#getBaseFormData(),
-      },
     });
   }
 
@@ -116,15 +73,23 @@ export class DirectApi {
       url: `/api/v1/direct_v2/threads/${threadId}/approve_participant_requests/`,
       method: "POST",
       form: {
-        ...this.#getBaseFormData(),
         user_ids: JSON.stringify(userIds),
         share_join_chat_story: true,
       },
+      signForm: false,
     });
   }
 
-  getById(threadId: string) {
-    return new DirectThreadPaginator(this.client, threadId);
+  async getById(threadId: string) {
+    const response = await this.client.makeRequest<DirectThreadResponseDto>({
+      url: `/api/v1/direct_v2/threads/${threadId}/`,
+      method: "GET",
+      params: {
+        visual_message_return_type: "unseen",
+        direction: "older",
+      },
+    });
+    return response.thread;
   }
 
   async getByParticipants(userIds: string[]) {
@@ -132,9 +97,9 @@ export class DirectApi {
       url: `/api/v1/direct_v2/threads/get_by_participants/`,
       method: "GET",
       params: {
-        ...this.#getBaseFormData(),
         recipient_users: JSON.stringify(userIds),
       },
+      signForm: false,
     });
   }
 
@@ -143,9 +108,9 @@ export class DirectApi {
       url: `/api/v1/direct_v2/threads/${threadId}/update_title/`,
       method: "POST",
       form: {
-        ...this.#getBaseFormData(),
         title: newTitle,
       },
+      signForm: false,
     });
   }
 
@@ -153,9 +118,6 @@ export class DirectApi {
     return this.client.makeRequest<{ status: string }>({
       url: `/api/v1/direct_v2/threads/${threadId}/mute/`,
       method: "POST",
-      form: {
-        ...this.#getBaseFormData(),
-      },
     });
   }
 
@@ -163,9 +125,6 @@ export class DirectApi {
     return this.client.makeRequest<{ status: string }>({
       url: `/api/v1/direct_v2/threads/${threadId}/unmute/`,
       method: "POST",
-      form: {
-        ...this.#getBaseFormData(),
-      },
     });
   }
 
@@ -174,9 +133,9 @@ export class DirectApi {
       url: `/api/v1/direct_v2/threads/${threadId}/add_user/`,
       method: "POST",
       form: {
-        ...this.#getBaseFormData(),
         user_ids: JSON.stringify(userIds),
       },
+      signForm: false,
     });
   }
 
@@ -184,9 +143,6 @@ export class DirectApi {
     return this.client.makeRequest<{ status: string }>({
       url: `/api/v1/direct_v2/threads/${threadId}/leave/`,
       method: "POST",
-      form: {
-        ...this.#getBaseFormData(),
-      },
     });
   }
 
@@ -195,118 +151,79 @@ export class DirectApi {
       url: `/api/v1/direct_v2/threads/${threadId}/hide/`,
       method: "POST",
       form: {
-        ...this.#getBaseFormData(),
         use_unified_inbox: true,
       },
+      signForm: false,
     });
   }
 
   async markItemSeen(threadId: string, itemId: string) {
+    const { device } = this.client;
+    const mutationToken = this.client.generateMutationToken();
+
     return this.client.makeRequest<{ status: string }>({
       url: `/api/v1/direct_v2/threads/${threadId}/items/${itemId}/seen/`,
       method: "POST",
       form: {
-        ...this.#getBaseFormData(),
-        use_unified_inbox: true,
         action: "mark_seen",
         thread_id: threadId,
-        item_id: itemId,
+        _uuid: device.uuid,
+        client_context: mutationToken,
+        offline_threading_id: mutationToken,
       },
+      signForm: false,
     });
   }
 
   async send(opts: DirectSendOpts) {
-    const mutationToken = new Chance().guid();
-    const recipientsType = opts.threadIds ? "thread_ids" : "recipient_users";
+    const { device } = this.client;
+    const mutationToken = this.client.generateMutationToken();
 
-    const form: ParsedUrlQueryInput = {
-      ...this.#getBaseFormData(),
-      [recipientsType]: JSON.stringify(
-        recipientsType === "thread_ids" ? opts.threadIds : [opts.userIds],
-      ),
+    const form: ParsedUrlQuery = {
       action: "send_item",
+      is_x_transport_forward: "false",
+      send_silenty: "false",
+      is_shh_mode: "0",
+      send_attribution: opts.sendAttribution ?? "message_button",
       client_context: mutationToken,
-      device_id: this.client.device.deviceId,
-      ...opts.form,
+      device_id: device.deviceId,
+      mutation_token: mutationToken,
+      _uuid: device.uuid,
+      btt_dual_send: "false",
+      nav_chain:
+        "1qT:feed_timeline:1,1qT:feed_timeline:2,1qT:feed_timeline:3," +
+        "7Az:direct_inbox:4,7Az:direct_inbox:5,5rG:direct_thread:7",
+      is_ae_dual_send: "false",
+      offline_threading_id: mutationToken,
     };
+
+    let method;
+    if (opts.text?.includes("http")) {
+      method = "link";
+      form.link_text = opts.text;
+      form.link_urls = JSON.stringify(extractUrls(opts.text));
+    } else {
+      method = "text";
+      form.text = opts.text;
+    }
+
+    if (opts.threadIds) {
+      form.thread_ids = JSON.stringify(opts.threadIds);
+    } else {
+      form.recipient_users = JSON.stringify(opts.userIds);
+    }
+
+    if (opts.replyTo) {
+      form.replied_to_action_source = "swipe";
+      form.replied_to_item_id = opts.replyTo.itemId;
+      form.replied_to_client_context = opts.replyTo.clientContext;
+    }
+
     return this.client.makeRequest<DirectSendResponseDto>({
-      url: `/api/v1/direct_v2/threads/broadcast/${opts.item}/`,
+      url: `/api/v1/direct_v2/threads/broadcast/${method}/`,
       method: "POST",
-      params: opts.params,
-      form: opts.signForm ? this.client.signFormData(form) : form,
-    });
-  }
-
-  async sendText(opts: DirectSendTextOpts) {
-    return this.send({
-      item: "text",
-      form: { text: opts.text },
-      ...opts,
-    });
-  }
-
-  async sendStoryReply(opts: DirectSendStoryOpts) {
-    return this.send({
-      item: "reel_share",
-      form: {
-        media_id: opts.mediaId,
-        reel_id: opts.reelId ?? opts.mediaId.split("_")[1],
-        text: opts.text,
-        entry: "reel",
-      },
-      params: {
-        media_type: opts.mediaType ?? "photo",
-      },
-      ...opts,
-    });
-  }
-
-  async sendStoryShare(opts: DirectSendStoryOpts) {
-    return this.send({
-      item: "story_share",
-      form: {
-        story_media_id: opts.mediaId,
-        reel_id: opts.reelId ?? opts.mediaId.split("_")[1],
-        text: opts.text,
-      },
-      params: {
-        media_type: opts.mediaType ?? "photo",
-      },
-      ...opts,
-    });
-  }
-
-  async sendProfileShare(opts: DirectSendProfileShareOpts) {
-    return this.send({
-      item: "profile",
-      form: {
-        profile_user_id: opts.userId,
-      },
-      ...opts,
-    });
-  }
-
-  async sendLink(opts: DirectSendLinkOpts) {
-    return this.send({
-      item: "link",
-      form: {
-        link_urls: JSON.stringify(opts.urls),
-        link_text: opts.text,
-      },
-      ...opts,
-    });
-  }
-
-  async sendPost(opts: DirectSendPostOpts) {
-    return this.send({
-      item: "media_share",
-      form: {
-        media_id: opts.mediaId,
-        carousel_share_child_media_id: opts.mediaId,
-        send_attribution: "feed_contextual_profile",
-        unified_broadcast_format: 1,
-      },
-      ...opts,
+      form,
+      signForm: false,
     });
   }
 
@@ -317,4 +234,14 @@ export class DirectApi {
   getPendingInbox() {
     return new DirectPendingPaginator(this.client);
   }
+
+  getItems(threadId: string) {
+    return new DirectThreadItemsPaginator(this.client, threadId);
+  }
+}
+
+function extractUrls(text: string): string[] {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const urls = text.match(urlRegex);
+  return urls ? urls : [];
 }

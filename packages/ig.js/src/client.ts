@@ -136,8 +136,8 @@ export class Client extends EventEmitter<{
       return thread;
     }
 
-    const data = await this.api.direct.getById(threadId).request();
-    const newThread = new Thread(this, threadId, data.thread);
+    const data = await this.api.direct.getById(threadId);
+    const newThread = new Thread(this, threadId, data);
     this.threads.set(threadId, newThread);
     return newThread;
   }
