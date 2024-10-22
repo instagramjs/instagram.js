@@ -1,6 +1,6 @@
 import { Collection } from "@discordjs/collection";
-import { type DirectSendOpts } from "@igjs/api";
-import { type DirectThreadDto } from "@igjs/api-types";
+import { type DirectSendOpts } from "@instagramjs/api";
+import { type DirectThreadDto } from "@instagramjs/api-types";
 
 import { type Client } from "~/client";
 

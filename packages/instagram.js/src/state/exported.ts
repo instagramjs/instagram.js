@@ -1,4 +1,4 @@
-import { exportedApiStateSchema } from "@igjs/api";
+import { exportedApiStateSchema } from "@instagramjs/api";
 import { z } from "zod";
 
 export const exportedClientStateSchema = exportedApiStateSchema.extend({

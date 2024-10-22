@@ -1,4 +1,4 @@
-import { deflateAsync } from "@igjs/mqttot";
+import { deflateAsync } from "@instagramjs/mqttot";
 import { randomUUID } from "crypto";
 
 import { type RealtimeClient } from "./client";

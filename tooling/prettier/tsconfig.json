@@ -1,5 +1,5 @@
 {
-  "extends": "@igjs/tsconfig/base.json",
+  "extends": "@instagramjs/tsconfig/base.json",
   "compilerOptions": {
     "baseUrl": ".",
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",

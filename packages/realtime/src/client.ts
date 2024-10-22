@@ -5,7 +5,7 @@ import {
   objectToMap,
   safeUnzipAsync,
   serializeThrift,
-} from "@igjs/mqttot";
+} from "@instagramjs/mqttot";
 import EventEmitter from "eventemitter3";
 import { type MqttMessage } from "mqtts";
 import Int64 from "node-int64";

@@ -10,4 +10,4 @@ export {
   type ApiClientOpts,
   type DeviceConfig,
   generateDeviceConfig,
-} from "@igjs/api";
+} from "@instagramjs/api";

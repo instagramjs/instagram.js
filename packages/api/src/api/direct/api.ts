@@ -3,7 +3,7 @@ import {
   type DirectSendResponseDto,
   type DirectThreadResponseDto,
   type DirectUpdateTitleResponseDto,
-} from "@igjs/api-types";
+} from "@instagramjs/api-types";
 import { type ParsedUrlQuery } from "querystring";
 
 import { type ApiClient } from "~/client";

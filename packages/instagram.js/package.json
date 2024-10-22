@@ -1,6 +1,6 @@
 {
-  "name": "@igjs/ig.js",
-  "version": "0.2.0",
+  "name": "@instagramjs/instagram.js",
+  "version": "0.0.0",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -22,9 +22,9 @@
     "build": "tsup src/index.ts --format cjs,esm --dts --clean --no-splitting"
   },
   "devDependencies": {
-    "@igjs/eslint-config": "workspace:*",
-    "@igjs/prettier-config": "workspace:*",
-    "@igjs/tsconfig": "workspace:*",
+    "@instagramjs/eslint-config": "workspace:*",
+    "@instagramjs/prettier-config": "workspace:*",
+    "@instagramjs/tsconfig": "workspace:*",
     "@swc/core": "catalog:",
     "@t3-oss/env-core": "catalog:",
     "@types/eslint": "catalog:",
@@ -38,14 +38,14 @@
   },
   "dependencies": {
     "@discordjs/collection": "^2.1.1",
-    "@igjs/api": "workspace:*",
-    "@igjs/api-types": "workspace:*",
-    "@igjs/realtime": "workspace:*",
+    "@instagramjs/api": "workspace:*",
+    "@instagramjs/api-types": "workspace:*",
+    "@instagramjs/realtime": "workspace:*",
     "axios": "1.7.7",
     "eventemitter3": "catalog:",
     "pino": "catalog:",
     "tsx": "catalog:",
     "zod": "catalog:"
   },
-  "prettier": "@igjs/prettier-config"
+  "prettier": "@instagramjs/prettier-config"
 }

@@ -1,7 +1,7 @@
 import {
   type DirectItemDto,
   type DirectThreadResponseDto,
-} from "@igjs/api-types";
+} from "@instagramjs/api-types";
 
 import { type ApiClient } from "~/client";
 import { Paginator } from "~/paginator";

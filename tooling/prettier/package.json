@@ -1,5 +1,5 @@
 {
-  "name": "@igjs/prettier-config",
+  "name": "@instagramjs/prettier-config",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -12,10 +12,10 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@igjs/tsconfig": "workspace:*",
+    "@instagramjs/tsconfig": "workspace:*",
     "prettier": "catalog:",
     "prettier-plugin-tailwindcss": "0.6.6",
     "typescript": "catalog:"
   },
-  "prettier": "@igjs/prettier-config"
+  "prettier": "@instagramjs/prettier-config"
 }

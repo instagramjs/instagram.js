@@ -1,5 +1,5 @@
 {
-  "name": "@igjs/eslint-config",
+  "name": "@instagramjs/eslint-config",
   "private": true,
   "version": "0.3.0",
   "type": "module",
@@ -12,8 +12,8 @@
   "devDependencies": {
     "@eslint/compat": "1.1.1",
     "@eslint/js": "catalog:",
-    "@igjs/prettier-config": "workspace:*",
-    "@igjs/tsconfig": "workspace:*",
+    "@instagramjs/prettier-config": "workspace:*",
+    "@instagramjs/tsconfig": "workspace:*",
     "@types/eslint": "catalog:",
     "@types/eslint__js": "catalog:",
     "eslint": "catalog:",
@@ -23,5 +23,5 @@
     "typescript": "catalog:",
     "typescript-eslint": "catalog:"
   },
-  "prettier": "@igjs/prettier-config"
+  "prettier": "@instagramjs/prettier-config"
 }

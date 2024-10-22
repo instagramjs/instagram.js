@@ -5,7 +5,7 @@ import {
   type DirectItemPlaceholderDto,
   type DirectItemStoryShareDto,
   type DirectItemXmaProfileShareDto,
-} from "@igjs/api-types";
+} from "@instagramjs/api-types";
 
 import { type Client } from "~/client";
 

@@ -1,4 +1,4 @@
-import { bufferIsJson, deserializeThrift } from "@igjs/mqttot";
+import { bufferIsJson, deserializeThrift } from "@instagramjs/mqttot";
 
 import { type RealtimeClient } from "./client";
 import { MqttotGraphqlMessagePacket } from "./thrift/graphql-message";

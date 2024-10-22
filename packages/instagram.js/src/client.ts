@@ -1,12 +1,19 @@
 import { Collection } from "@discordjs/collection";
-import { ApiClient, type ApiClientOpts, CAPABILITIES_HEADER } from "@igjs/api";
-import { type DirectItemDto, type DirectThreadDto } from "@igjs/api-types";
+import {
+  ApiClient,
+  type ApiClientOpts,
+  CAPABILITIES_HEADER,
+} from "@instagramjs/api";
+import {
+  type DirectItemDto,
+  type DirectThreadDto,
+} from "@instagramjs/api-types";
 import {
   type IrisData,
   type MessageSyncMessage,
   RealtimeClient,
   type RealtimeClientOpts,
-} from "@igjs/realtime";
+} from "@instagramjs/realtime";
 import EventEmitter from "eventemitter3";
 import pino, { type Logger } from "pino";
 

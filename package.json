@@ -1,5 +1,5 @@
 {
-    "name": "igjs",
+    "name": "instagram.js",
     "private": true,
     "engines": {
         "node": ">=20.17.0"
@@ -19,11 +19,11 @@
     },
     "devDependencies": {
         "@changesets/cli": "^2.27.9",
-        "@igjs/prettier-config": "workspace:*",
+        "@instagramjs/prettier-config": "workspace:*",
         "prettier": "catalog:",
         "sherif": "1.0.0",
         "turbo": "2.1.2",
         "typescript": "catalog:"
     },
-    "prettier": "@igjs/prettier-config"
+    "prettier": "@instagramjs/prettier-config"
 }

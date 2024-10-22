@@ -1,6 +1,6 @@
 {
-  "name": "@igjs/api",
-  "version": "0.1.1",
+  "name": "@instagramjs/api",
+  "version": "0.0.0",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -22,9 +22,9 @@
     "build": "tsup src/index.ts --format cjs,esm --dts --clean --no-splitting"
   },
   "devDependencies": {
-    "@igjs/eslint-config": "workspace:*",
-    "@igjs/prettier-config": "workspace:*",
-    "@igjs/tsconfig": "workspace:*",
+    "@instagramjs/eslint-config": "workspace:*",
+    "@instagramjs/prettier-config": "workspace:*",
+    "@instagramjs/tsconfig": "workspace:*",
     "@swc/core": "catalog:",
     "@t3-oss/env-core": "catalog:",
     "@types/chance": "1.1.6",
@@ -38,7 +38,7 @@
     "typescript-eslint": "catalog:"
   },
   "dependencies": {
-    "@igjs/api-types": "workspace:*",
+    "@instagramjs/api-types": "workspace:*",
     "axios": "1.7.7",
     "axios-cookiejar-support": "5.0.3",
     "chance": "1.1.12",
@@ -49,5 +49,5 @@
     "tsx": "catalog:",
     "zod": "catalog:"
   },
-  "prettier": "@igjs/prettier-config"
+  "prettier": "@instagramjs/prettier-config"
 }

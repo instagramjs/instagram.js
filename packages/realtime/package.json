@@ -1,6 +1,6 @@
 {
-  "name": "@igjs/realtime",
-  "version": "0.1.0",
+  "name": "@instagramjs/realtime",
+  "version": "0.0.0",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -26,9 +26,9 @@
   },
   "devDependencies": {
     "@creditkarma/thrift-typescript": "catalog:",
-    "@igjs/eslint-config": "workspace:*",
-    "@igjs/prettier-config": "workspace:*",
-    "@igjs/tsconfig": "workspace:*",
+    "@instagramjs/eslint-config": "workspace:*",
+    "@instagramjs/prettier-config": "workspace:*",
+    "@instagramjs/tsconfig": "workspace:*",
     "@swc/core": "catalog:",
     "@t3-oss/env-core": "catalog:",
     "@types/eslint": "catalog:",
@@ -45,8 +45,8 @@
     "typescript-eslint": "catalog:"
   },
   "dependencies": {
-    "@igjs/api-types": "workspace:*",
-    "@igjs/mqttot": "workspace:*",
+    "@instagramjs/api-types": "workspace:*",
+    "@instagramjs/mqttot": "workspace:*",
     "eventemitter3": "catalog:",
     "node-int64": "catalog:",
     "pino": "catalog:",
@@ -54,5 +54,5 @@
     "tsx": "catalog:",
     "zod": "catalog:"
   },
-  "prettier": "@igjs/prettier-config"
+  "prettier": "@instagramjs/prettier-config"
 }
