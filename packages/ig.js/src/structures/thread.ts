@@ -1,4 +1,5 @@
 import { Collection } from "@discordjs/collection";
+import { type DirectSendOpts } from "@igjs/api";
 import { type DirectThreadDto } from "@igjs/api-types";
 
 import { type Client } from "~/client";
@@ -25,6 +26,8 @@ export type ThreadAsJSON = Pick<
   messages: MessageAsJSON[];
 };
 
+export type StartTypingOpts = { duration?: number; disableOnSend?: boolean };
+
 export class Thread {
   name: string | null = null;
   isMuted = false;
@@ -40,6 +43,10 @@ export class Thread {
   pendingUserIds: string[] = [];
   lastActivityAt = new Date();
   messages = new Collection<string, Message>();
+
+  isTyping = false;
+  #disableTypingOnSend: boolean | null = null;
+  #keepTypingAliveInterval: NodeJS.Timeout | null = null;
 
   constructor(
     public client: Client,
@@ -144,10 +151,68 @@ export class Thread {
     this.isPending = false;
   }
 
-  async send(text: string) {
-    return this.client.api.direct.send({
+  async send(text: string, replyTo?: Message) {
+    const opts: DirectSendOpts = {
       threadIds: [this.id],
       text,
+    };
+    if (replyTo) {
+      opts.replyTo = {
+        itemId: replyTo.id,
+        clientContext: replyTo.clientContext ?? undefined,
+      };
+    }
+
+    const response = this.client.api.direct.send(opts);
+    if (this.#disableTypingOnSend) {
+      void this.stopTyping();
+    }
+    return response;
+  }
+
+  async #keepTypingAlive() {
+    if (this.isTyping) {
+      await this.client.realtime.commands.indicateActivity({
+        threadId: this.id,
+        isActive: true,
+      });
+    } else if (this.#keepTypingAliveInterval) {
+      clearInterval(this.#keepTypingAliveInterval);
+      this.#keepTypingAliveInterval = null;
+    }
+  }
+
+  async startTyping({ duration, disableOnSend }: StartTypingOpts = {}) {
+    this.isTyping = true;
+
+    await this.client.realtime.commands.indicateActivity({
+      threadId: this.id,
+      isActive: true,
+    });
+
+    this.#disableTypingOnSend = disableOnSend ?? true;
+    this.#keepTypingAliveInterval = setInterval(
+      this.#keepTypingAlive.bind(this),
+      9000,
+    );
+    setTimeout(this.stopTyping.bind(this), duration ?? 10000);
+  }
+
+  async stopTyping() {
+    if (!this.isTyping) {
+      return;
+    }
+
+    if (this.#keepTypingAliveInterval) {
+      clearTimeout(this.#keepTypingAliveInterval);
+      this.#keepTypingAliveInterval = null;
+    }
+    this.isTyping = false;
+    this.#disableTypingOnSend = null;
+
+    await this.client.realtime.commands.indicateActivity({
+      threadId: this.id,
+      isActive: false,
     });
   }
 }

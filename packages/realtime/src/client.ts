@@ -11,23 +11,22 @@ import { type MqttMessage } from "mqtts";
 import Int64 from "node-int64";
 import pino, { type Logger } from "pino";
 
+import { RealtimeCommands } from "./commands";
 import { IG_REALTIME_HOST } from "./constants";
 import {
   defaultRealtimeTopicHandlers,
   type GraphqlMessage,
-  GraphqlTopicHandler,
   type IrisSubResponseMessage,
-  IrisSubTopicHandler,
   type MessageSyncMessage,
   type RealtimeTopicHandler,
   type RegionHintMessage,
   type SkywalkerMessage,
-  SkywalkerTopicHandler,
 } from "./handlers";
 import {
   MqttotClientInfo,
   MqttotConnectionPacket,
 } from "./thrift/mqttot-connection";
+import { RealtimeTopicId } from "./topics";
 
 export type IrisData = { seq_id: number; snapshot_at_ms: number };
 
@@ -64,6 +63,8 @@ export class RealtimeClient extends EventEmitter<{
 }> {
   logger: Logger;
   topicHandlers: RealtimeTopicHandler[];
+
+  commands = new RealtimeCommands(this);
 
   #mqttot: MqttotClient | null = null;
   #connectOpts: RealtimeClientConnectOpts | null = null;
@@ -191,11 +192,7 @@ export class RealtimeClient extends EventEmitter<{
     this.emit("disconnect", event);
   };
 
-  async #publishToTopic(
-    topic: string,
-    compressedData: string | Buffer,
-    qosLevel: 0 | 1,
-  ) {
+  async publishToTopic(topic: string, data: string | Buffer, qosLevel: 0 | 1) {
     if (!this.#mqttot) {
       throw new Error(
         "Can't publish to topic before MqTToT client is initialized",
@@ -203,10 +200,7 @@ export class RealtimeClient extends EventEmitter<{
     }
     return this.#mqttot.publish({
       topic,
-      payload:
-        typeof compressedData === "string"
-          ? Buffer.from(compressedData)
-          : compressedData,
+      payload: typeof data === "string" ? Buffer.from(data) : data,
       qosLevel,
     });
   }
@@ -220,7 +214,7 @@ export class RealtimeClient extends EventEmitter<{
         }
       | Record<string, unknown>,
   ) {
-    return this.#publishToTopic(
+    return this.publishToTopic(
       topic,
       await deflateAsync(JSON.stringify(data)),
       1,
@@ -228,19 +222,19 @@ export class RealtimeClient extends EventEmitter<{
   }
 
   graphqlSubscribe(subscriptions: string[]) {
-    return this.updateSubscriptions(GraphqlTopicHandler.topic, {
+    return this.updateSubscriptions(RealtimeTopicId.GRAPHQL, {
       subscribe: subscriptions,
     });
   }
 
   skywalkerSubscribe(subscriptions: string[]) {
-    return this.updateSubscriptions(SkywalkerTopicHandler.topic, {
+    return this.updateSubscriptions(RealtimeTopicId.SKYWALKER, {
       subscribe: subscriptions,
     });
   }
 
   irisSubscribe(data: IrisData) {
-    return this.updateSubscriptions(IrisSubTopicHandler.topic, {
+    return this.updateSubscriptions(RealtimeTopicId.IRIS_SUB, {
       seq_id: data.seq_id,
       snapshot_at_ms: data.snapshot_at_ms,
       snapshot_app_version: this.#connectOpts?.appVersion,

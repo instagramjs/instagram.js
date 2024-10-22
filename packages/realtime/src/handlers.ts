@@ -4,6 +4,7 @@ import { type RealtimeClient } from "./client";
 import { MqttotGraphqlMessagePacket } from "./thrift/graphql-message";
 import { MqttotRegionHintPacket } from "./thrift/region-hint-message";
 import { MqttotSkywalkerMessagePacket } from "./thrift/skywalker-message";
+import { RealtimeTopicId } from "./topics";
 
 export type RealtimeTopicHandler = {
   topic: string;
@@ -22,7 +23,7 @@ function parseGraphqlMessage(
 
 export type GraphqlMessage = string | MqttotGraphqlMessagePacket;
 export const GraphqlTopicHandler: RealtimeTopicHandler = {
-  topic: "9",
+  topic: RealtimeTopicId.GRAPHQL,
   path: "/graphql",
   handle: (client, payload) => {
     const data = parseGraphqlMessage(payload);
@@ -32,7 +33,7 @@ export const GraphqlTopicHandler: RealtimeTopicHandler = {
 
 export type SkywalkerMessage = MqttotSkywalkerMessagePacket;
 export const SkywalkerTopicHandler: RealtimeTopicHandler = {
-  topic: "88",
+  topic: RealtimeTopicId.SKYWALKER,
   path: "/pubsub",
   handle: (client, payload) => {
     const data = deserializeThrift(MqttotSkywalkerMessagePacket, payload);
@@ -41,20 +42,11 @@ export const SkywalkerTopicHandler: RealtimeTopicHandler = {
 };
 
 export const SendMessageResponseTopicHandler: RealtimeTopicHandler = {
-  topic: "133",
+  topic: RealtimeTopicId.SEND_MESSAGE_RESPONSE,
   path: "/ig_send_message_response",
   handle: (client, payload) => {
     const data = JSON.parse(payload.toString("utf8")) as unknown;
     client.emit("sendMessageResponse", data);
-  },
-};
-
-export const IrisSubTopicHandler: RealtimeTopicHandler = {
-  topic: "134",
-  path: "/ig_sub_iris",
-  handle: (client, payload) => {
-    const data = payload.toString("utf8");
-    // console.log("ig_sub_iris", data);
   },
 };
 
@@ -67,7 +59,7 @@ export type IrisSubResponseMessage = {
   latest_seq_id: number;
 };
 export const IrisSubResponseTopicHandler: RealtimeTopicHandler = {
-  topic: "135",
+  topic: RealtimeTopicId.IRIS_SUB_RESPONSE,
   path: "/ig_sub_iris_response",
   handle: (client, payload) => {
     const data = JSON.parse(payload.toString("utf8")) as IrisSubResponseMessage;
@@ -99,7 +91,7 @@ export type MessageSyncMessage = Omit<RawMessageSyncMessage, "data"> & {
   data?: MessageSyncData[];
 };
 export const MessageSyncTopicHandler: RealtimeTopicHandler = {
-  topic: "146",
+  topic: RealtimeTopicId.MESSAGE_SYNC,
   path: "/ig_message_sync",
   handle: (client, payload) => {
     const rawMessages = JSON.parse(
@@ -118,18 +110,9 @@ export const MessageSyncTopicHandler: RealtimeTopicHandler = {
   },
 };
 
-export const RealtimeSubTopicHandler: RealtimeTopicHandler = {
-  topic: "149",
-  path: "/ig_realtime_sub",
-  handle: (client, payload) => {
-    const data = parseGraphqlMessage(payload);
-    // console.log("ig_realtime_sub", data);
-  },
-};
-
 export type RegionHintMessage = MqttotRegionHintPacket;
 export const RegionHintTopicHandler: RealtimeTopicHandler = {
-  topic: "150",
+  topic: RealtimeTopicId.REGION_HINT,
   path: "/t_region_hint",
   handle: (client, payload) => {
     const data = deserializeThrift(MqttotRegionHintPacket, payload);
@@ -137,33 +120,11 @@ export const RegionHintTopicHandler: RealtimeTopicHandler = {
   },
 };
 
-export const ForegroundStateTopicHandler: RealtimeTopicHandler = {
-  topic: "151",
-  path: "/t_foreground_state",
-  handle: (client, payload) => {
-    const data = JSON.parse(payload.toString("utf8")) as unknown;
-    // console.log("t_foreground_state", data);
-  },
-};
-
-export const BackgroundStateTopicHandler: RealtimeTopicHandler = {
-  topic: "152",
-  path: "/t_background_state",
-  handle: (client, payload) => {
-    const data = JSON.parse(payload.toString("utf8")) as unknown;
-    // console.log("t_background_state", data);
-  },
-};
-
 export const defaultRealtimeTopicHandlers = [
   GraphqlTopicHandler,
   SkywalkerTopicHandler,
   SendMessageResponseTopicHandler,
-  IrisSubTopicHandler,
   IrisSubResponseTopicHandler,
   MessageSyncTopicHandler,
-  RealtimeSubTopicHandler,
   RegionHintTopicHandler,
-  ForegroundStateTopicHandler,
-  BackgroundStateTopicHandler,
 ] satisfies RealtimeTopicHandler[];

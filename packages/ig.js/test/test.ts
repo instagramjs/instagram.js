@@ -29,6 +29,8 @@ const client = new Client({
 async function handleMessage(message: Message) {
   if (message.text?.startsWith(`@${env.USERNAME}`)) {
     await message.markSeen();
+    await message.thread.startTyping();
+    await wait(3_000);
     await message.reply("hello");
   }
 }

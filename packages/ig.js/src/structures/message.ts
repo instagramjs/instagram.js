@@ -121,13 +121,6 @@ export class Message {
   }
 
   async reply(text: string) {
-    return this.client.api.direct.send({
-      threadIds: [this.threadId],
-      text,
-      replyTo: {
-        itemId: this.id,
-        clientContext: this.clientContext ?? undefined,
-      },
-    });
+    return this.thread.send(text, this);
   }
 }

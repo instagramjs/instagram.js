@@ -1,4 +1,5 @@
 export * from "./client";
+export * from "./commands";
 export * from "./constants";
 export * from "./handlers";
 export * from "./thrift/foreground-state-config";
