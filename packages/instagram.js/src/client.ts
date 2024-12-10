@@ -220,6 +220,7 @@ export class Client extends EventEmitter<{
                   value,
                 );
                 this.messages.set(value.item_id, message);
+                thread.messages.set(value.item_id, message);
                 this.emit("messageCreate", message);
               }
             }
