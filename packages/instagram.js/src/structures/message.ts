@@ -10,6 +10,7 @@ import {
 import { type Client } from "~/client";
 
 import { type Thread } from "./thread";
+import { type User } from "./user";
 
 export type MessageAsJSON = Pick<
   Message,
@@ -58,6 +59,10 @@ export class Message {
 
   get thread(): Thread {
     return this.client.threads.get(this.threadId)!;
+  }
+
+  get author(): User {
+    return this.client.users.get(this.authorId)!;
   }
 
   patch(data: DirectItemDto) {

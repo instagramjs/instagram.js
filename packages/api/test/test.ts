@@ -12,8 +12,8 @@ async function main() {
     await client.account.login(env.USERNAME, env.PASSWORD);
   }
 
-  const threads = await client.direct.getInbox().items();
-  console.log(JSON.stringify(threads[0]?.last_permanent_item, null, 2));
+  const user = await client.user.getUser("39691585368");
+  console.log(JSON.stringify(user, null, 2));
 }
 
 void main();

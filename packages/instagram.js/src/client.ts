@@ -17,6 +17,7 @@ import {
 import EventEmitter from "eventemitter3";
 import pino, { type Logger } from "pino";
 
+import { User } from "./barrel";
 import { type StateAdapter } from "./state/adapters";
 import { exportedClientStateSchema } from "./state/exported";
 import { Message } from "./structures/message";
@@ -48,6 +49,7 @@ export class Client extends EventEmitter<{
 
   threads = new Collection<string, Thread>();
   messages = new Collection<string, Message>();
+  users = new Collection<string, User>();
 
   #irisData?: IrisData;
 
@@ -149,6 +151,18 @@ export class Client extends EventEmitter<{
     return newThread;
   }
 
+  async #fetchUser(userId: string) {
+    const user = this.users.get(userId);
+    if (user) {
+      return user;
+    }
+
+    const data = await this.api.user.getUser(userId);
+    const newUser = new User(this, data);
+    this.users.set(userId, newUser);
+    return newUser;
+  }
+
   async #handleMessageSync(messages: MessageSyncMessage[]) {
     for (const message of messages) {
       this.#irisData = {
@@ -196,6 +210,9 @@ export class Client extends EventEmitter<{
               const [threadId] = matchedMessagePath;
               const thread = await this.#fetchThread(threadId);
               if (thread) {
+                if ("user_id" in value) {
+                  await this.#fetchUser(value.user_id.toString());
+                }
                 const message = new Message(
                   this,
                   value.item_id,

@@ -3,6 +3,7 @@ import axiosCookieJar from "axios-cookiejar-support";
 import { Chance } from "chance";
 import { createHmac, randomInt, randomUUID } from "crypto";
 import EventEmitter from "eventemitter3";
+import pThrottle from "p-throttle";
 import pino, { type Logger } from "pino";
 import qs, { type ParsedUrlQueryInput } from "querystring";
 import { CookieJar, type SerializedCookieJar } from "tough-cookie";
@@ -10,6 +11,7 @@ import { CookieJar, type SerializedCookieJar } from "tough-cookie";
 import { AccountApi } from "./api/account";
 import { DirectApi } from "./api/direct/api";
 import { QeApi } from "./api/qe";
+import { UserApi } from "./barrel";
 import {
   API_HOST,
   API_URL,
@@ -20,6 +22,8 @@ import {
   DEFAULT_APP_VERSION_CODE,
   DEFAULT_COUNTRY_CODE,
   DEFAULT_LOCALE,
+  DEFAULT_THROTTLE_INTERVAL,
+  DEFAULT_THROTTLE_LIMIT,
   FB_ANALYTICS_APPLICATION_ID,
   PIGEON_SESSION_ID_LIFETIME,
   SIGNATURE_KEY,
@@ -39,6 +43,8 @@ export type ApiClientOpts = {
   countryCode?: string;
   device?: DeviceConfig;
   logger?: Logger;
+  throttleLimit?: number;
+  throttleInterval?: number;
 };
 
 export class ApiClient extends EventEmitter<{
@@ -63,6 +69,7 @@ export class ApiClient extends EventEmitter<{
     passwordEncryptionPubKey: null,
     passwordEncryptionKeyId: null,
   };
+
   cookieJar = new CookieJar();
   axiosClient = axiosCookieJar.wrapper(
     axios.create({
@@ -70,10 +77,12 @@ export class ApiClient extends EventEmitter<{
       baseURL: API_URL,
     }),
   );
+  #throttledRequest: typeof this.axiosClient.request;
 
   qe = new QeApi(this);
   account = new AccountApi(this);
   direct = new DirectApi(this);
+  user = new UserApi(this);
 
   constructor(opts?: ApiClientOpts) {
     super();
@@ -83,6 +92,14 @@ export class ApiClient extends EventEmitter<{
     this.language = opts?.language ?? DEFAULT_LOCALE;
     this.countryCode = opts?.countryCode ?? DEFAULT_COUNTRY_CODE;
     this.device = opts?.device ?? generateDeviceConfig(randomUUID());
+
+    const throttle = pThrottle({
+      limit: opts?.throttleLimit ?? DEFAULT_THROTTLE_LIMIT,
+      interval: opts?.throttleInterval ?? DEFAULT_THROTTLE_INTERVAL,
+    });
+    this.#throttledRequest = throttle(
+      this.axiosClient.request.bind(this.axiosClient),
+    );
   }
 
   generateTemporaryGuid(seed: string, lifetimeMs: number) {
@@ -307,7 +324,7 @@ export class ApiClient extends EventEmitter<{
       form = this.signFormData(form);
     }
     const baseHeaders = this.#getBaseHeaders();
-    const response = await this.axiosClient.request<R>({
+    const response = await this.#throttledRequest<R>({
       ...opts,
       headers: {
         ...baseHeaders,
