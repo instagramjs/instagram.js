@@ -1,5 +1,13 @@
 # @instagramjs/api
 
+## 0.0.2
+
+### Patch Changes
+
+- d40e241: Fetch and cache new message authors
+- Updated dependencies [d40e241]
+  - @instagramjs/api-types@0.0.2
+
 ## 0.0.1
 
 ### Patch Changes
