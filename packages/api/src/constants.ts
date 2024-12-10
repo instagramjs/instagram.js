@@ -8,6 +8,9 @@ export const DEFAULT_APP_VERSION_CODE = "375311763";
 export const DEFAULT_LOCALE = "en_US";
 export const DEFAULT_COUNTRY_CODE = "US";
 
+export const DEFAULT_THROTTLE_LIMIT = 2;
+export const DEFAULT_THROTTLE_INTERVAL = 1000;
+
 export const SIGNATURE_KEY =
   "9193488027538fd3450b83b7d05286d4ca9599a0f7eeed90d8c85925698a05dc";
 export const BREADCRUMB_KEY = "iN4$aGr0m";
