@@ -1,5 +1,11 @@
 # @instagramjs/instagram.js
 
+## 0.0.3
+
+### Patch Changes
+
+- c5ac8d5: Fix new messages not being added to thread messages
+
 ## 0.0.2
 
 ### Patch Changes
