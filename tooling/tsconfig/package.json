@@ -1,8 +1,8 @@
 {
-    "name": "@instagramjs/tsconfig",
-    "private": true,
-    "version": "0.1.1",
-    "files": [
-        "*.json"
-    ]
+  "name": "@instagramjs/tsconfig",
+  "private": true,
+  "version": "0.1.1",
+  "files": [
+    "*.json"
+  ]
 }

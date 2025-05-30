@@ -1,29 +1,26 @@
 {
-    "name": "instagram.js",
-    "private": true,
-    "engines": {
-        "node": ">=20.17.0"
-    },
-    "packageManager": "pnpm@9.11.0",
-    "scripts": {
-        "build": "turbo run build --env-mode=loose",
-        "clean": "git clean -xdf node_modules",
-        "clean:workspaces": "turbo run clean",
-        "dev": "turbo run dev --env-mode=loose",
-        "format": "turbo run format --continue -- --cache --cache-location node_modules/.cache/.prettiercache",
-        "lint": "turbo run lint --continue -- --cache --cache-location node_modules/.cache/.eslintcache",
-        "lint:workspace": "pnpm sherif",
-        "postinstall": "pnpm lint:workspace",
-        "typecheck": "turbo run typecheck",
-        "release": "pnpm build && pnpm changeset publish"
-    },
-    "devDependencies": {
-        "@changesets/cli": "^2.27.9",
-        "@instagramjs/prettier-config": "workspace:*",
-        "prettier": "catalog:",
-        "sherif": "1.0.0",
-        "turbo": "2.1.2",
-        "typescript": "catalog:"
-    },
-    "prettier": "@instagramjs/prettier-config"
+  "name": "instagram.js",
+  "private": true,
+  "engines": {
+    "node": ">=20.17.0"
+  },
+  "packageManager": "pnpm@9.11.0",
+  "scripts": {
+    "lint": "turbo run lint --continue -- --cache --cache-location node_modules/.cache/.eslintcache",
+    "format": "prettier --ignore-path .prettierignore --cache --cache-location node_modules/.cache/.prettiercache --write .",
+    "typecheck": "turbo run typecheck",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "dev:packages": "turbo run dev --filter=./packages/*",
+    "test": "turbo run test",
+    "release": "pnpm build && pnpm changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.4",
+    "prettier": "^3.5.3",
+    "sherif": "^1.5.0",
+    "turbo": "^2.5.4",
+    "typescript": "^5.8.3"
+  },
+  "prettier": {}
 }

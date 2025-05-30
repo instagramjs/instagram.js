@@ -15,7 +15,6 @@
   },
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "dev": "pnpm build --watch",
@@ -23,16 +22,13 @@
   },
   "devDependencies": {
     "@instagramjs/eslint-config": "workspace:*",
-    "@instagramjs/prettier-config": "workspace:*",
     "@instagramjs/tsconfig": "workspace:*",
-    "@swc/core": "catalog:",
-    "@types/eslint": "catalog:",
-    "@types/node": "catalog:",
-    "eslint": "catalog:",
-    "prettier": "catalog:",
-    "tsup": "catalog:",
-    "typescript": "catalog:",
-    "typescript-eslint": "catalog:"
-  },
-  "prettier": "@instagramjs/prettier-config"
+    "@swc/core": "^1.11.29",
+    "@types/eslint": "^9.6.1",
+    "@types/node": "^22.15.29",
+    "eslint": "^9.28.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.33.0"
+  }
 }
