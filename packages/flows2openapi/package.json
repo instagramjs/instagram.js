@@ -1,0 +1,35 @@
+{
+  "name": "@instagramjs/flows2openapi",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "dev": "pnpm build --watch",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean --no-splitting"
+  },
+  "devDependencies": {
+    "@instagramjs/eslint-config": "workspace:*",
+    "@instagramjs/tsconfig": "workspace:*",
+    "@types/eslint": "^9.6.1",
+    "@types/node": "^22.15.29",
+    "eslint": "^9.28.0",
+    "openapi-typescript": "^7.8.0",
+    "tsup": "^8.5.0",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.33.0"
+  },
+  "dependencies": {
+    "openapi-fetch": "^0.14.0"
+  }
+}
