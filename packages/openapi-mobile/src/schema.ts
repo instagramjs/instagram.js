@@ -1502,7 +1502,7 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            ad_media_items: {
+                            ad_media_items: ({
                                 ad_id: null;
                                 is_demo: boolean;
                                 label: null;
@@ -1539,8 +1539,8 @@ export interface paths {
                                         post_gap_to_previous_ad: number;
                                         post_gap_to_previous_netego: number;
                                         predicted_xout_rate: null;
-                                        push_up_min_gap: number;
-                                        time_based_insertion_gap_in_seconds: number;
+                                        push_up_min_gap: number | null;
+                                        time_based_insertion_gap_in_seconds: number | null;
                                         user_engagement_based_insertion_settings: null;
                                     };
                                     common_currency_insertion_rule: {
@@ -1643,7 +1643,9 @@ export interface paths {
                                         sharing_friction_payload: null;
                                     };
                                     timeline_pinned_user_ids: null[];
+                                    play_count: number;
                                     has_views_fetching: boolean;
+                                    ig_play_count: number;
                                     original_media_has_visual_reply_media: boolean;
                                     coauthor_producers: null[];
                                     coauthor_producer_can_see_organic_insights: boolean;
@@ -1651,11 +1653,46 @@ export interface paths {
                                     is_in_profile_grid: boolean;
                                     profile_grid_control_enabled: boolean;
                                     image_versions2: {
+                                        additional_candidates: {
+                                            first_frame: {
+                                                estimated_scans_sizes: number[];
+                                                height: number;
+                                                scans_profile: null;
+                                                url: null;
+                                                width: number;
+                                            };
+                                            igtv_first_frame: {
+                                                estimated_scans_sizes: number[];
+                                                height: number;
+                                                scans_profile: null;
+                                                url: null;
+                                                width: number;
+                                            };
+                                            smart_frame: null;
+                                        };
                                         candidates: {
+                                            estimated_scans_sizes: number[];
                                             height: number;
+                                            scans_profile: null;
                                             url: null;
                                             width: number;
                                         }[];
+                                        scrubber_spritesheet_info_candidates: {
+                                            default: {
+                                                file_size_kb: number;
+                                                max_thumbnails_per_sprite: number;
+                                                rendered_width: number;
+                                                sprite_height: number;
+                                                sprite_urls: null[];
+                                                sprite_width: number;
+                                                thumbnail_duration: number;
+                                                thumbnail_height: number;
+                                                thumbnail_width: number;
+                                                thumbnails_per_row: number;
+                                                total_thumbnail_num_per_sprite: number;
+                                                video_length: number;
+                                            };
+                                        };
                                     };
                                     original_width: number;
                                     original_height: number;
@@ -1722,6 +1759,7 @@ export interface paths {
                                     product_suggestions: null[];
                                     ad_header_style: number;
                                     caption_is_edited: boolean;
+                                    click_id: null;
                                     dr_ad_type: number;
                                     fb_page_url: null;
                                     is_sensitive_vertical_ad: boolean;
@@ -1778,11 +1816,6 @@ export interface paths {
                                         value: null;
                                         type: number;
                                     }[];
-                                    ad_tag: {
-                                        ad_id: number;
-                                        subtitle: null;
-                                        title: null;
-                                    };
                                     android_links: {
                                         androidClass: null;
                                         appId: null;
@@ -1808,6 +1841,7 @@ export interface paths {
                                     collapse_comments: boolean;
                                     dominant_color: null;
                                     force_overlay: boolean;
+                                    has_audio: boolean;
                                     has_liked: boolean;
                                     hide_nux_text: boolean;
                                     igbio_product: null;
@@ -1875,7 +1909,7 @@ export interface paths {
                                         lead_gen_new_experience_ineligible: boolean;
                                         media_id: number;
                                         optimization_goal_name: null;
-                                        pac_ad_media_ids: null;
+                                        pac_ad_media_ids: number[] | null;
                                         page_id: number;
                                         phone_number: null;
                                         should_show_secondary_cta_on_profile: boolean;
@@ -1889,7 +1923,9 @@ export interface paths {
                                         };
                                         afi_info: {
                                             is_reels_dwell_afi_eligible: boolean;
-                                            reels_dwell_ini_info: null;
+                                            reels_dwell_ini_info: {
+                                                trigger_condition: null;
+                                            } | null;
                                             iab_dwell_afi_info: null;
                                             reels_repetition_info: null;
                                         };
@@ -1897,6 +1933,10 @@ export interface paths {
                                         click_to_direct_lead_gen_ads_info: {
                                             isLeadGenAd: boolean;
                                         };
+                                        cop_render_output: {
+                                            optimization_type: number;
+                                            option_value: number;
+                                        }[];
                                         ctd_ads_info: {
                                             business_response_time_in_sec: null;
                                             business_responsiveness_time_text: null;
@@ -1935,6 +1975,11 @@ export interface paths {
                                             local_surface: {
                                                 instruction: {
                                                     signal: null;
+                                                    conditions?: {
+                                                        comparator: null;
+                                                        lhs: null;
+                                                        rhs: number;
+                                                    }[];
                                                 };
                                             }[];
                                         };
@@ -1943,20 +1988,33 @@ export interface paths {
                                         label: null;
                                         show_ad_choices: boolean;
                                         sponsored_ad_disclaimer: null;
-                                        call_ads_info: {
+                                        page_type_code: number;
+                                        reels_mid_scene_info?: {
+                                            format: null;
+                                            delay_in_ms: number;
+                                            is_repeated_ad: boolean;
+                                            image_url: null;
+                                            image_url_list: null[];
+                                            image_width: number;
+                                            image_height: number;
+                                            title_list: null[];
+                                            title_option: null;
+                                            mid_scene_card_height: number;
+                                        };
+                                        call_ads_info?: {
                                             parsed_phone_number: null;
                                             should_render_phone_number_to_cta: boolean;
                                         };
-                                        page_type_code: number;
                                     };
+                                    is_dash_eligible: number;
                                     item_client_gap_rules: {
                                         enable_user_engagement_base_insertion: boolean;
                                         max_xout_prediction_threshold: null;
                                         post_gap_to_previous_ad: number;
                                         post_gap_to_previous_netego: number;
                                         predicted_xout_rate: null;
-                                        push_up_min_gap: number;
-                                        time_based_insertion_gap_in_seconds: number;
+                                        push_up_min_gap: number | null;
+                                        time_based_insertion_gap_in_seconds: number | null;
                                         user_engagement_based_insertion_settings: null;
                                     };
                                     like_count: number;
@@ -1987,15 +2045,45 @@ export interface paths {
                                         };
                                         uas: null;
                                     };
+                                    number_of_qualities: number;
                                     original_dominant_color: null;
                                     overlay_subtitle: null;
                                     overlay_text: null;
                                     overlay_title: null;
+                                    video_codec: null;
+                                    video_dash_manifest: null;
+                                    video_duration: number;
+                                    video_versions: {
+                                        bandwidth: number;
+                                        height: number;
+                                        id: null;
+                                        type: number;
+                                        url: null;
+                                        width: number;
+                                    }[];
+                                    clips_metadata: {
+                                        additional_audio_info: {
+                                            additional_audio_username: null;
+                                            audio_reattribution_info: {
+                                                should_allow_restore: boolean;
+                                            };
+                                        };
+                                    };
                                     social_context: {
                                         social_context_type: null;
                                         social_context_users_count: number;
                                         social_context_facepile_users: null[];
                                     }[];
+                                    commenting_disabled_for_viewer?: boolean;
+                                    iab_autofill_optout_info?: {
+                                        domain: null;
+                                        is_iab_autofill_optout: boolean;
+                                    };
+                                    ad_tag?: {
+                                        ad_id: number;
+                                        subtitle: null;
+                                        title: null;
+                                    };
                                 }[];
                                 hide_label: null;
                                 dominant_color: null;
@@ -2004,9 +2092,17 @@ export interface paths {
                                 is_pharma_vertical_ad: boolean;
                                 is_pharma_and_sensitive_vertical_ad: boolean;
                                 overlay_subtitle: null;
+                                cop_render_output: {
+                                    optimization_type: number;
+                                    option_value: number;
+                                }[];
                                 imp_signature: null;
                                 is_luxury_vertical_ad: boolean;
                                 direct_share: boolean;
+                                cta_info: {
+                                    delay_time_ms: number;
+                                    highlight_time_ms: number;
+                                };
                                 enable_reels_end_scene: boolean;
                                 adtaxon_i18n_top1_l7_prediction: null;
                                 view_state_item_type: number;
@@ -2017,7 +2113,9 @@ export interface paths {
                                 afi_info: {
                                     adtaxon_i18n_top1_l7_prediction: null;
                                     is_reels_dwell_afi_eligible: boolean;
-                                    reels_dwell_ini_info: null;
+                                    reels_dwell_ini_info: {
+                                        trigger_condition: null;
+                                    } | null;
                                     iab_dwell_afi_info: null;
                                     reels_repetition_info: null;
                                 };
@@ -2036,7 +2134,36 @@ export interface paths {
                                 bqrt_version: number;
                                 is_eligible_for_feed_immersive: boolean;
                                 page_type_code: number;
-                            }[];
+                                reels_mid_scene_info?: {
+                                    format: null;
+                                    delay_in_ms: number;
+                                    is_repeated_ad: boolean;
+                                    image_url: null;
+                                    image_url_list: null[];
+                                    image_width: number;
+                                    image_height: number;
+                                    title_list: null[];
+                                    title_option: null;
+                                    mid_scene_card_height: number;
+                                };
+                                display_domain?: null;
+                                on_impressions_control?: {
+                                    negative_confirmation_body: null;
+                                    negative_confirmation_cta_text: null;
+                                    negative_confirmation_icon: null;
+                                    negative_confirmation_title: null;
+                                    negative_icon: null;
+                                    negative_text: null;
+                                    positive_confirmation_body: null;
+                                    positive_confirmation_cta_text: null;
+                                    positive_confirmation_icon: null;
+                                    positive_confirmation_title: null;
+                                    positive_icon: null;
+                                    positive_text: null;
+                                    style: null;
+                                };
+                                is_ad_eligible_for_skip_cta_timeline?: boolean;
+                            } | null)[];
                             netego_media_items: null[];
                             container_module: null;
                             media_id_to_brand_safety_content_blocklist_map: {
@@ -2046,7 +2173,7 @@ export interface paths {
                                     bitmap_array: number[];
                                     bitmap_map: null[];
                                     bitmap_string: null;
-                                };
+                                } | null;
                             }[];
                             media_id_to_brand_safety_severity_map: {
                                 [key: string]: number;
@@ -2879,7 +3006,7 @@ export interface paths {
                                             is_restricted: boolean;
                                             incoming_request: boolean;
                                             outgoing_request: boolean;
-                                            is_viewer_unconnected: boolean;
+                                            is_viewer_unconnected?: boolean;
                                             reachability_status: number;
                                             is_group_creation_reachable: boolean;
                                         };
@@ -2905,7 +3032,7 @@ export interface paths {
                                     discoverable_thread_data: null;
                                     context_line: null;
                                     is_following_chat_creator: null;
-                                    thread_subtype: null;
+                                    thread_subtype: number | null;
                                     share_sheet_section: null;
                                     should_badge_in_invitations: null;
                                     channels_context_lines_data: null;
@@ -3033,592 +3160,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": {
-                            layout: {
-                                bloks_payload: {
-                                    ft: {
-                                        "13f9xgdx8p": null;
-                                        "13f9xgdx8t": null;
-                                        "13f9xgdx8z": null;
-                                        "13f9xgdx93": null;
-                                        "13f9xgdx98": null;
-                                        "13f9xgdx99": null;
-                                        "13f9xgdx9a": null;
-                                        "13f9xgdx9e": null;
-                                        "13f9xgdx9g": null;
-                                        "13f9xgdx9i": null;
-                                        "13f9xgdx9k": null;
-                                        "13f9xgdx9l": null;
-                                        "13f9xgdx9m": null;
-                                        "13f9xgdx9n": null;
-                                        "13f9xgdx9s": null;
-                                        "13f9xgdx9t": null;
-                                        "13f9xgdx9v": null;
-                                        "13f9xgdx9x": null;
-                                        "13f9xgdx9y": null;
-                                        "13f9xgdxa2": null;
-                                        "13f9xgdxa4": null;
-                                        "13f9xgdxa5": null;
-                                        "13f9xgdxa6": null;
-                                        "13f9xgdxa8": null;
-                                        "13f9xgdxa9": null;
-                                        "13f9xgdxaa": null;
-                                        "13f9xgdxab": null;
-                                        "13f9xgdxae": null;
-                                        "13f9xgdxaf": null;
-                                        "13f9xgdxag": null;
-                                        "13f9xgdxah": null;
-                                        "13f9xgdxak": null;
-                                        "13f9xgdxal": null;
-                                        "13f9xgdxam": null;
-                                        "13f9xgdxan": null;
-                                        "13f9xgdxao": null;
-                                        "13f9xgdxap": null;
-                                        "13f9xgdxaq": null;
-                                        "13f9xgdxar": null;
-                                        "13f9xgdxas": null;
-                                        "13f9xgdxat": null;
-                                        "13f9xgdxau": null;
-                                        "13f9xgdxav": null;
-                                        "13f9xgdxaw": null;
-                                        "13f9xgdxax": null;
-                                        "13f9xgdxay": null;
-                                        "13f9xgdxaz": null;
-                                        "13f9xgdxb2": null;
-                                        "13f9xgdxbf": null;
-                                        "13f9xgdxbg": null;
-                                        "13f9xgdxbs": null;
-                                        "13f9xgdxbt": null;
-                                        "13f9xgdxby": null;
-                                        "13f9xgdxcf": null;
-                                        "13f9xgdxck": null;
-                                        "13f9xgdx8v": null;
-                                        "13f9xgdx8w": null;
-                                        "13f9xgdxcu": null;
-                                        "13f9xgdxcv": null;
-                                        "13f9xgdxd3": null;
-                                    };
-                                    data: {
-                                        id: null;
-                                        type: null;
-                                        data: {
-                                            initial: number;
-                                        };
-                                    }[];
-                                    embedded_payloads: {
-                                        id: null;
-                                        payload: {
-                                            layout: {
-                                                bloks_payload: {
-                                                    referenced: null[];
-                                                    tree: {
-                                                        "\u3408": {
-                                                            " ": {
-                                                                "\u3408": {
-                                                                    " ": {
-                                                                        "\u3408": {
-                                                                            "&": {
-                                                                                "\u3402": {
-                                                                                    "#": {
-                                                                                        "\u408E": {
-                                                                                            "+": null;
-                                                                                            "#": null;
-                                                                                            "*": null;
-                                                                                            "&": null;
-                                                                                            "(": null;
-                                                                                            ")": {
-                                                                                                "\u3435": {
-                                                                                                    $: null;
-                                                                                                    "#": null;
-                                                                                                };
-                                                                                            };
-                                                                                            $: {
-                                                                                                "\u3435": {
-                                                                                                    $: null;
-                                                                                                    "#": null;
-                                                                                                };
-                                                                                            };
-                                                                                        };
-                                                                                    };
-                                                                                };
-                                                                            };
-                                                                            $: null;
-                                                                            " ": {
-                                                                                "\u3408": {
-                                                                                    " ": {
-                                                                                        "\u3408": {
-                                                                                            ")": null;
-                                                                                            $: null;
-                                                                                            " ": {
-                                                                                                "\u3408": {
-                                                                                                    ")": null;
-                                                                                                    " ": {
-                                                                                                        "\u3411": {
-                                                                                                            0: number;
-                                                                                                            5: {
-                                                                                                                "\u3435": {
-                                                                                                                    $: null;
-                                                                                                                    "#": null;
-                                                                                                                };
-                                                                                                            };
-                                                                                                            " ": {
-                                                                                                                "\u341B": {
-                                                                                                                    1: number;
-                                                                                                                    "*": null;
-                                                                                                                    "+": null;
-                                                                                                                    ",": {
-                                                                                                                        "\u3435": {
-                                                                                                                            $: null;
-                                                                                                                            "#": null;
-                                                                                                                        };
-                                                                                                                    };
-                                                                                                                    "#": null;
-                                                                                                                    "-": boolean;
-                                                                                                                    "\u0087": null[];
-                                                                                                                };
-                                                                                                            }[];
-                                                                                                            "*": null;
-                                                                                                            "&": number;
-                                                                                                            "(": number;
-                                                                                                            ",": {
-                                                                                                                "\u341B": {
-                                                                                                                    1: number;
-                                                                                                                    "&": null;
-                                                                                                                    "*": null;
-                                                                                                                    "+": null;
-                                                                                                                    ",": {
-                                                                                                                        "\u3435": {
-                                                                                                                            $: null;
-                                                                                                                            "#": null;
-                                                                                                                        };
-                                                                                                                    };
-                                                                                                                    "#": null;
-                                                                                                                };
-                                                                                                            }[];
-                                                                                                            ".": number;
-                                                                                                            "!": null;
-                                                                                                            "\u0085": {
-                                                                                                                "\u36B1": {
-                                                                                                                    0: boolean;
-                                                                                                                    "(": boolean;
-                                                                                                                    "*": null;
-                                                                                                                    "\u0087": null[];
-                                                                                                                };
-                                                                                                            }[];
-                                                                                                        };
-                                                                                                    }[];
-                                                                                                    "\u0084": {
-                                                                                                        "\u3438": {
-                                                                                                            ")": number;
-                                                                                                            A: number;
-                                                                                                            "#": null;
-                                                                                                        };
-                                                                                                    };
-                                                                                                };
-                                                                                            }[];
-                                                                                            "\u0084": {
-                                                                                                "\u3438": {
-                                                                                                    ")": number;
-                                                                                                };
-                                                                                            };
-                                                                                        };
-                                                                                    }[];
-                                                                                    "\u0085": null[];
-                                                                                    "\u0084": {
-                                                                                        "\u3438": {
-                                                                                            5: null;
-                                                                                            8: null;
-                                                                                            D: null;
-                                                                                            ";": null;
-                                                                                        };
-                                                                                    };
-                                                                                };
-                                                                            }[];
-                                                                            "\u0084": {
-                                                                                "\u3438": {
-                                                                                    7: null;
-                                                                                    9: null;
-                                                                                    "=": null;
-                                                                                    ":": null;
-                                                                                };
-                                                                            };
-                                                                        };
-                                                                    }[];
-                                                                    "\u0084": {
-                                                                        "\u3438": {
-                                                                            [key: string]: null;
-                                                                        };
-                                                                    };
-                                                                };
-                                                            }[];
-                                                            "\u0085": {
-                                                                "\u4083": {
-                                                                    "#": number;
-                                                                };
-                                                            }[];
-                                                            "\u0084": {
-                                                                "\u3438": {
-                                                                    ")": number;
-                                                                };
-                                                            };
-                                                        };
-                                                    };
-                                                };
-                                            };
-                                        };
-                                    }[];
-                                    props: {
-                                        id: null;
-                                        name: null;
-                                    }[];
-                                    templates: {
-                                        "13f9xgdxdi": {
-                                            "\u341C": {
-                                                "#": {
-                                                    "\u3435": {
-                                                        $: null;
-                                                        "#": null;
-                                                    };
-                                                };
-                                            };
-                                        };
-                                        "13f9xgdxdj": {
-                                            "\u341C": {
-                                                "#": {
-                                                    "\u3435": {
-                                                        $: null;
-                                                        "#": null;
-                                                    };
-                                                };
-                                            };
-                                        };
-                                        "13f9xgdxdk": {
-                                            "\u3435": {
-                                                $: null;
-                                                "#": null;
-                                            };
-                                        };
-                                        "13f9xgdxdl": {
-                                            "\u3435": {
-                                                $: null;
-                                                "#": null;
-                                            };
-                                        };
-                                        "13f9xgdxdm": {
-                                            "\u3435": {
-                                                $: null;
-                                                "#": null;
-                                            };
-                                        };
-                                        "13f9xgdxdn": {
-                                            "\u3435": {
-                                                $: null;
-                                                "#": null;
-                                            };
-                                        };
-                                        "13f9xgdxdo": {
-                                            "\u341C": {
-                                                "#": {
-                                                    "\u3435": {
-                                                        $: null;
-                                                        "#": null;
-                                                    };
-                                                };
-                                            };
-                                        };
-                                        "13f9xgdxdp": {
-                                            "\u341C": {
-                                                "#": {
-                                                    "\u3435": {
-                                                        $: null;
-                                                        "#": null;
-                                                    };
-                                                };
-                                            };
-                                        };
-                                        "13f9xgdxdq": {
-                                            "\u3435": {
-                                                $: null;
-                                                "#": null;
-                                            };
-                                        };
-                                        "13f9xgdxdr": {
-                                            "\u3435": {
-                                                $: null;
-                                                "#": null;
-                                            };
-                                        };
-                                        "13f9xgdxds": {
-                                            "\u3435": {
-                                                $: null;
-                                                "#": null;
-                                            };
-                                        };
-                                        "13f9xgdxdt": {
-                                            "\u3435": {
-                                                $: null;
-                                                "#": null;
-                                            };
-                                        };
-                                        "13f9xgdxdu": {
-                                            "\u3725": {
-                                                "#": null;
-                                            };
-                                        };
-                                        "13f9xgdxdv": {
-                                            "\u3725": {
-                                                "#": null;
-                                            };
-                                        };
-                                        "13f9xgdxdw": {
-                                            "\u3725": {
-                                                "#": null;
-                                            };
-                                        };
-                                    };
-                                    error_attribution: {
-                                        logging_id: null;
-                                        source_map_id: null;
-                                    };
-                                    tree: {
-                                        "\u370D": {
-                                            $: {
-                                                "\u3408": {
-                                                    ")": null;
-                                                    $: null;
-                                                    " ": {
-                                                        "\u3408": {
-                                                            ")": null;
-                                                            $: null;
-                                                            " ": {
-                                                                "\u3408": {
-                                                                    ")": null;
-                                                                    " ": {
-                                                                        "\u3408": {
-                                                                            ")": null;
-                                                                            " ": {
-                                                                                "\u3408": {
-                                                                                    ")": null;
-                                                                                    " ": {
-                                                                                        "\u3408": {
-                                                                                            ")": null;
-                                                                                            " ": {
-                                                                                                "\u3408": {
-                                                                                                    "&": {
-                                                                                                        "\u3402": Record<string, never>;
-                                                                                                    };
-                                                                                                    ")": null;
-                                                                                                    " ": {
-                                                                                                        "\u3408": {
-                                                                                                            ")": null;
-                                                                                                            " ": {
-                                                                                                                "\u3408": {
-                                                                                                                    ")": null;
-                                                                                                                    ",": null;
-                                                                                                                    $: null;
-                                                                                                                    " ": {
-                                                                                                                        "\u3408": {
-                                                                                                                            ")": null;
-                                                                                                                            "-": null;
-                                                                                                                            " ": {
-                                                                                                                                "\u3408": {
-                                                                                                                                    ")": null;
-                                                                                                                                    ",": null;
-                                                                                                                                    " ": {
-                                                                                                                                        "\u3408": {
-                                                                                                                                            ",": null;
-                                                                                                                                            $: null;
-                                                                                                                                            " ": {
-                                                                                                                                                "\u340B": {
-                                                                                                                                                    ")": null;
-                                                                                                                                                    "(": null;
-                                                                                                                                                    $: null;
-                                                                                                                                                    "#": {
-                                                                                                                                                        "\u3435": {
-                                                                                                                                                            $: null;
-                                                                                                                                                            "#": null;
-                                                                                                                                                        };
-                                                                                                                                                    };
-                                                                                                                                                    "\u0085": {
-                                                                                                                                                        "\u34E2": {
-                                                                                                                                                            "&": null;
-                                                                                                                                                            "#": null;
-                                                                                                                                                        };
-                                                                                                                                                    }[];
-                                                                                                                                                    "\u0084": {
-                                                                                                                                                        "\u3438": {
-                                                                                                                                                            "*": null;
-                                                                                                                                                            $: number;
-                                                                                                                                                        };
-                                                                                                                                                    };
-                                                                                                                                                    "\u0087": null[];
-                                                                                                                                                };
-                                                                                                                                            }[];
-                                                                                                                                            "\u0084": {
-                                                                                                                                                "\u3438": {
-                                                                                                                                                    7: null;
-                                                                                                                                                    "=": null;
-                                                                                                                                                };
-                                                                                                                                            };
-                                                                                                                                            "\u0087": null[];
-                                                                                                                                        };
-                                                                                                                                    }[];
-                                                                                                                                    "\u0085": {
-                                                                                                                                        "\u35CE": {
-                                                                                                                                            $: null;
-                                                                                                                                            "#": null;
-                                                                                                                                        };
-                                                                                                                                    }[];
-                                                                                                                                    "\u0084": {
-                                                                                                                                        "\u3438": {
-                                                                                                                                            ")": number;
-                                                                                                                                            A: number;
-                                                                                                                                            "\u0087": null[];
-                                                                                                                                        };
-                                                                                                                                    };
-                                                                                                                                    "\u0087": null[];
-                                                                                                                                };
-                                                                                                                            }[];
-                                                                                                                            "\u0085": {
-                                                                                                                                "\u3401": {
-                                                                                                                                    "#": boolean;
-                                                                                                                                };
-                                                                                                                            }[];
-                                                                                                                            "\u0084": {
-                                                                                                                                "\u3438": {
-                                                                                                                                    "*": null;
-                                                                                                                                    "\u0087": null[];
-                                                                                                                                };
-                                                                                                                            };
-                                                                                                                            "\u0087": null[];
-                                                                                                                        };
-                                                                                                                    }[];
-                                                                                                                    "\u0084": {
-                                                                                                                        "\u3438": {
-                                                                                                                            "*": null;
-                                                                                                                        };
-                                                                                                                    };
-                                                                                                                };
-                                                                                                            }[];
-                                                                                                            "!": null;
-                                                                                                            "\u0084": {
-                                                                                                                "\u3438": {
-                                                                                                                    7: null;
-                                                                                                                    9: null;
-                                                                                                                    D: null;
-                                                                                                                    "=": null;
-                                                                                                                    ":": null;
-                                                                                                                };
-                                                                                                            };
-                                                                                                        };
-                                                                                                    }[];
-                                                                                                    "\u0085": {
-                                                                                                        "\u365A": {
-                                                                                                            ")": null;
-                                                                                                        };
-                                                                                                    }[];
-                                                                                                    "\u0084": {
-                                                                                                        "\u3438": {
-                                                                                                            D: null;
-                                                                                                        };
-                                                                                                    };
-                                                                                                };
-                                                                                            }[];
-                                                                                            "\u0085": null[];
-                                                                                            "\u0084": {
-                                                                                                "\u3438": {
-                                                                                                    ")": number;
-                                                                                                };
-                                                                                            };
-                                                                                        };
-                                                                                    }[];
-                                                                                    "\u0084": {
-                                                                                        "\u3438": {
-                                                                                            D: null;
-                                                                                            "*": null;
-                                                                                        };
-                                                                                    };
-                                                                                };
-                                                                            }[];
-                                                                        };
-                                                                    }[];
-                                                                    "\u0084": {
-                                                                        "\u3438": {
-                                                                            4: null;
-                                                                            D: null;
-                                                                            "*": null;
-                                                                            A: number;
-                                                                        };
-                                                                    };
-                                                                };
-                                                            }[];
-                                                            "!": null;
-                                                            "\u0085": {
-                                                                "\u4091": {
-                                                                    "#": null;
-                                                                };
-                                                            }[];
-                                                            "\u0084": {
-                                                                "\u3438": {
-                                                                    D: null;
-                                                                    "*": null;
-                                                                };
-                                                            };
-                                                        };
-                                                    }[];
-                                                };
-                                            };
-                                            "(": {
-                                                "\u3408": {
-                                                    ")": null;
-                                                    " ": {
-                                                        "\u3408": {
-                                                            ")": null;
-                                                            ",": null;
-                                                            $: null;
-                                                            " ": {
-                                                                "\u3408": {
-                                                                    ")": null;
-                                                                    ",": null;
-                                                                    $: null;
-                                                                    " ": null[];
-                                                                    "\u0084": {
-                                                                        "\u3438": {
-                                                                            4: null;
-                                                                            6: null;
-                                                                            ")": number;
-                                                                            A: number;
-                                                                        };
-                                                                    };
-                                                                };
-                                                            }[];
-                                                            "\u0085": null[];
-                                                            "\u0084": {
-                                                                "\u3438": {
-                                                                    D: null;
-                                                                    "*": null;
-                                                                };
-                                                            };
-                                                        };
-                                                    }[];
-                                                    "\u0084": {
-                                                        "\u3438": {
-                                                            [key: string]: null;
-                                                        };
-                                                    };
-                                                };
-                                            };
-                                            "\u0085": {
-                                                "\u4091": {
-                                                    $: null;
-                                                };
-                                            }[];
-                                        };
-                                    };
-                                };
-                            };
-                            status: null;
-                        };
+                        "application/json": string;
                     };
                 };
             };
@@ -3760,13 +3302,92 @@ export interface paths {
                                                             ")": null;
                                                             " ": {
                                                                 "\u3408": {
+                                                                    ")"?: null;
                                                                     " ": {
                                                                         "\u3408": {
+                                                                            ")"?: null;
+                                                                            ","?: null;
                                                                             " ": {
-                                                                                "\u340B": Record<string, never>;
+                                                                                "\u3408"?: {
+                                                                                    " ": {
+                                                                                        "\u340B"?: {
+                                                                                            ")": null;
+                                                                                            "(": null;
+                                                                                            $: null;
+                                                                                            "\u0084": {
+                                                                                                "\u3438": {
+                                                                                                    D: null;
+                                                                                                    "*": null;
+                                                                                                };
+                                                                                            };
+                                                                                        };
+                                                                                        "\u3417"?: {
+                                                                                            0: {
+                                                                                                "\u3435": {
+                                                                                                    $: null;
+                                                                                                    "#": null;
+                                                                                                };
+                                                                                            };
+                                                                                            ")": null;
+                                                                                            "-": null;
+                                                                                            ".": null;
+                                                                                            "*": null;
+                                                                                            "\u0084": {
+                                                                                                "\u3438": {
+                                                                                                    ",": null;
+                                                                                                };
+                                                                                            };
+                                                                                        };
+                                                                                    }[];
+                                                                                    "\u0084"?: {
+                                                                                        "\u3438": {
+                                                                                            ",": null;
+                                                                                            "#": null;
+                                                                                        };
+                                                                                    };
+                                                                                    ")"?: null;
+                                                                                    "\u0085"?: {
+                                                                                        "\u3401": {
+                                                                                            "#": boolean;
+                                                                                            $: null;
+                                                                                            "&": null;
+                                                                                        };
+                                                                                    }[];
+                                                                                };
+                                                                                "\u3411"?: {
+                                                                                    " ": {
+                                                                                        "\u341B": {
+                                                                                            "&": null;
+                                                                                            "*": null;
+                                                                                            ",": {
+                                                                                                "\u3435": {
+                                                                                                    $: null;
+                                                                                                    "#": null;
+                                                                                                };
+                                                                                            };
+                                                                                        };
+                                                                                    }[];
+                                                                                    "*": null;
+                                                                                    "\u0085": {
+                                                                                        "\u3401": {
+                                                                                            "#": boolean;
+                                                                                            "&": null;
+                                                                                        };
+                                                                                    }[];
+                                                                                };
+                                                                                "\u340B"?: Record<string, never>;
                                                                             }[];
-                                                                            "!": number;
-                                                                            "\u0085": {
+                                                                            "\u0084"?: {
+                                                                                "\u3438": {
+                                                                                    7: null;
+                                                                                    9: null;
+                                                                                    D: null;
+                                                                                    "=": null;
+                                                                                    ":": null;
+                                                                                };
+                                                                            };
+                                                                            "!"?: number;
+                                                                            "\u0085"?: {
                                                                                 "\u3452": {
                                                                                     "#": null;
                                                                                     $: null;
@@ -3774,15 +3395,16 @@ export interface paths {
                                                                             }[];
                                                                         };
                                                                     }[];
-                                                                    "!": number;
                                                                     "\u0084": {
                                                                         "\u3438": {
+                                                                            D?: null;
                                                                             "*": null;
-                                                                            C: null;
-                                                                            "+": null;
-                                                                            ">": null;
+                                                                            C?: null;
+                                                                            "+"?: null;
+                                                                            ">"?: null;
                                                                         };
                                                                     };
+                                                                    "!"?: number;
                                                                 };
                                                             }[];
                                                             "\u0085": {
@@ -3951,13 +3573,92 @@ export interface paths {
                                                             ")": null;
                                                             " ": {
                                                                 "\u3408": {
+                                                                    ")"?: null;
                                                                     " ": {
                                                                         "\u3408": {
+                                                                            ")"?: null;
+                                                                            ","?: null;
                                                                             " ": {
-                                                                                "\u340B": Record<string, never>;
+                                                                                "\u3408"?: {
+                                                                                    " ": {
+                                                                                        "\u340B"?: {
+                                                                                            ")": null;
+                                                                                            "(": null;
+                                                                                            $: null;
+                                                                                            "\u0084": {
+                                                                                                "\u3438": {
+                                                                                                    D: null;
+                                                                                                    "*": null;
+                                                                                                };
+                                                                                            };
+                                                                                        };
+                                                                                        "\u3417"?: {
+                                                                                            0: {
+                                                                                                "\u3435": {
+                                                                                                    $: null;
+                                                                                                    "#": null;
+                                                                                                };
+                                                                                            };
+                                                                                            ")": null;
+                                                                                            "-": null;
+                                                                                            ".": null;
+                                                                                            "*": null;
+                                                                                            "\u0084": {
+                                                                                                "\u3438": {
+                                                                                                    ",": null;
+                                                                                                };
+                                                                                            };
+                                                                                        };
+                                                                                    }[];
+                                                                                    "\u0084"?: {
+                                                                                        "\u3438": {
+                                                                                            ",": null;
+                                                                                            "#": null;
+                                                                                        };
+                                                                                    };
+                                                                                    ")"?: null;
+                                                                                    "\u0085"?: {
+                                                                                        "\u3401": {
+                                                                                            "#": boolean;
+                                                                                            $: null;
+                                                                                            "&": null;
+                                                                                        };
+                                                                                    }[];
+                                                                                };
+                                                                                "\u3411"?: {
+                                                                                    " ": {
+                                                                                        "\u341B": {
+                                                                                            "&": null;
+                                                                                            "*": null;
+                                                                                            ",": {
+                                                                                                "\u3435": {
+                                                                                                    $: null;
+                                                                                                    "#": null;
+                                                                                                };
+                                                                                            };
+                                                                                        };
+                                                                                    }[];
+                                                                                    "*": null;
+                                                                                    "\u0085": {
+                                                                                        "\u3401": {
+                                                                                            "#": boolean;
+                                                                                            "&": null;
+                                                                                        };
+                                                                                    }[];
+                                                                                };
+                                                                                "\u340B"?: Record<string, never>;
                                                                             }[];
-                                                                            "!": number;
-                                                                            "\u0085": {
+                                                                            "\u0084"?: {
+                                                                                "\u3438": {
+                                                                                    7: null;
+                                                                                    9: null;
+                                                                                    D: null;
+                                                                                    "=": null;
+                                                                                    ":": null;
+                                                                                };
+                                                                            };
+                                                                            "!"?: number;
+                                                                            "\u0085"?: {
                                                                                 "\u3452": {
                                                                                     "#": null;
                                                                                     $: null;
@@ -3965,15 +3666,16 @@ export interface paths {
                                                                             }[];
                                                                         };
                                                                     }[];
-                                                                    "!": number;
                                                                     "\u0084": {
                                                                         "\u3438": {
+                                                                            D?: null;
                                                                             "*": null;
-                                                                            C: null;
-                                                                            "+": null;
-                                                                            ">": null;
+                                                                            C?: null;
+                                                                            "+"?: null;
+                                                                            ">"?: null;
                                                                         };
                                                                     };
+                                                                    "!"?: number;
                                                                 };
                                                             }[];
                                                             "\u0085": {
@@ -4129,7 +3831,8 @@ export interface paths {
                                         id: null;
                                         type: null;
                                         data: {
-                                            initial_lispy: null;
+                                            initial?: null;
+                                            initial_lispy?: null;
                                         };
                                     }[];
                                     tree: {
@@ -4142,12 +3845,236 @@ export interface paths {
                                                             " ": {
                                                                 "\u3408": {
                                                                     " ": {
-                                                                        "\u3408": Record<string, never>;
+                                                                        "\u3408"?: Record<string, never>;
+                                                                        "\u3405"?: {
+                                                                            "*": null;
+                                                                            " ": {
+                                                                                "\u3408": {
+                                                                                    ")": null;
+                                                                                    " ": {
+                                                                                        "\u3408": {
+                                                                                            ")": null;
+                                                                                            " ": {
+                                                                                                "\u3408": {
+                                                                                                    ")": null;
+                                                                                                    " ": {
+                                                                                                        "\u3408": {
+                                                                                                            "&"?: {
+                                                                                                                "\u3402": {
+                                                                                                                    "#": {
+                                                                                                                        "\u3414": {
+                                                                                                                            "#": {
+                                                                                                                                "\u3415": {
+                                                                                                                                    $: null;
+                                                                                                                                    "#": {
+                                                                                                                                        "\u341C": {
+                                                                                                                                            "#": {
+                                                                                                                                                "\u3435": {
+                                                                                                                                                    $: null;
+                                                                                                                                                    "#": null;
+                                                                                                                                                };
+                                                                                                                                            };
+                                                                                                                                        };
+                                                                                                                                    };
+                                                                                                                                };
+                                                                                                                            }[];
+                                                                                                                        };
+                                                                                                                    };
+                                                                                                                };
+                                                                                                            };
+                                                                                                            ")"?: null;
+                                                                                                            " ": {
+                                                                                                                "\u3408": {
+                                                                                                                    ")": null;
+                                                                                                                    $?: null;
+                                                                                                                    " ": {
+                                                                                                                        "\u3408": {
+                                                                                                                            ")": null;
+                                                                                                                            " ": {
+                                                                                                                                "\u3408": {
+                                                                                                                                    " ": {
+                                                                                                                                        "\u3411"?: {
+                                                                                                                                            0: number;
+                                                                                                                                            " ": {
+                                                                                                                                                "\u341B": {
+                                                                                                                                                    "&"?: null;
+                                                                                                                                                    "*"?: null;
+                                                                                                                                                    "+"?: null;
+                                                                                                                                                    ","?: {
+                                                                                                                                                        "\u3435": {
+                                                                                                                                                            $: null;
+                                                                                                                                                            "#": null;
+                                                                                                                                                        };
+                                                                                                                                                    };
+                                                                                                                                                    "#"?: null;
+                                                                                                                                                };
+                                                                                                                                            }[];
+                                                                                                                                            "&": number;
+                                                                                                                                            ".": number;
+                                                                                                                                        };
+                                                                                                                                        "\u3408"?: {
+                                                                                                                                            " ": {
+                                                                                                                                                "\u3411": {
+                                                                                                                                                    0: number;
+                                                                                                                                                    " ": {
+                                                                                                                                                        "\u341B": {
+                                                                                                                                                            "&"?: null;
+                                                                                                                                                            "*"?: null;
+                                                                                                                                                            "+"?: null;
+                                                                                                                                                            ","?: {
+                                                                                                                                                                "\u3435": {
+                                                                                                                                                                    $: null;
+                                                                                                                                                                    "#": null;
+                                                                                                                                                                };
+                                                                                                                                                            };
+                                                                                                                                                            "#"?: null;
+                                                                                                                                                            "\u0087"?: null;
+                                                                                                                                                            "!"?: number;
+                                                                                                                                                        };
+                                                                                                                                                    }[];
+                                                                                                                                                    "&": number;
+                                                                                                                                                    ".": number;
+                                                                                                                                                };
+                                                                                                                                            }[];
+                                                                                                                                        };
+                                                                                                                                    }[];
+                                                                                                                                    ")"?: null;
+                                                                                                                                    "\u0084"?: {
+                                                                                                                                        "\u3438": {
+                                                                                                                                            ")": number;
+                                                                                                                                        };
+                                                                                                                                    };
+                                                                                                                                };
+                                                                                                                                "\u344F"?: {
+                                                                                                                                    $: null;
+                                                                                                                                    "#": null;
+                                                                                                                                    "&": boolean;
+                                                                                                                                    "\u0086": null;
+                                                                                                                                    "\u0087": null;
+                                                                                                                                    "!": number;
+                                                                                                                                };
+                                                                                                                            }[];
+                                                                                                                            "\u0084": {
+                                                                                                                                "\u3438": {
+                                                                                                                                    ")": number;
+                                                                                                                                    D?: null;
+                                                                                                                                    A?: number;
+                                                                                                                                    ";"?: null;
+                                                                                                                                };
+                                                                                                                            };
+                                                                                                                            $?: null;
+                                                                                                                            "\u0085"?: {
+                                                                                                                                "\u3401": {
+                                                                                                                                    "#": boolean;
+                                                                                                                                    $: null;
+                                                                                                                                    "&": null;
+                                                                                                                                    "+": boolean;
+                                                                                                                                };
+                                                                                                                            }[];
+                                                                                                                        };
+                                                                                                                        "\u3444"?: {
+                                                                                                                            ")": null;
+                                                                                                                            $: null;
+                                                                                                                            "#": null;
+                                                                                                                            "*": null;
+                                                                                                                            "(": {
+                                                                                                                                "\u3435": {
+                                                                                                                                    $: null;
+                                                                                                                                    "#": null;
+                                                                                                                                };
+                                                                                                                            };
+                                                                                                                        };
+                                                                                                                    }[];
+                                                                                                                    "\u0085"?: {
+                                                                                                                        "\u3401": {
+                                                                                                                            "#": boolean;
+                                                                                                                            $: null;
+                                                                                                                            "&": null;
+                                                                                                                            "+": boolean;
+                                                                                                                        };
+                                                                                                                        "\u34E2"?: {
+                                                                                                                            "&": null;
+                                                                                                                            "#": null;
+                                                                                                                        };
+                                                                                                                    }[];
+                                                                                                                    "\u0084": {
+                                                                                                                        "\u3438": {
+                                                                                                                            5?: null;
+                                                                                                                            7?: null;
+                                                                                                                            9?: null;
+                                                                                                                            D: null;
+                                                                                                                            ")"?: number;
+                                                                                                                            A?: number;
+                                                                                                                            ";"?: null;
+                                                                                                                            "="?: null;
+                                                                                                                            ":"?: null;
+                                                                                                                        };
+                                                                                                                    };
+                                                                                                                    "&"?: {
+                                                                                                                        "\u3402": {
+                                                                                                                            "#": {
+                                                                                                                                "\u3414": {
+                                                                                                                                    "#": {
+                                                                                                                                        "\u3415": {
+                                                                                                                                            $: null;
+                                                                                                                                            "#": {
+                                                                                                                                                "\u341C": {
+                                                                                                                                                    "#": {
+                                                                                                                                                        "\u3435": {
+                                                                                                                                                            $: null;
+                                                                                                                                                            "#": null;
+                                                                                                                                                        };
+                                                                                                                                                    };
+                                                                                                                                                };
+                                                                                                                                            };
+                                                                                                                                        };
+                                                                                                                                    }[];
+                                                                                                                                };
+                                                                                                                            };
+                                                                                                                        };
+                                                                                                                    };
+                                                                                                                };
+                                                                                                            }[];
+                                                                                                            "\u0084"?: {
+                                                                                                                "\u3438": {
+                                                                                                                    5: null;
+                                                                                                                    7: null;
+                                                                                                                    9: null;
+                                                                                                                    D: null;
+                                                                                                                    "=": null;
+                                                                                                                    ":": null;
+                                                                                                                };
+                                                                                                            };
+                                                                                                            "-"?: null;
+                                                                                                        };
+                                                                                                    }[];
+                                                                                                };
+                                                                                            }[];
+                                                                                        };
+                                                                                    }[];
+                                                                                    "\u0085": {
+                                                                                        "\u34E2": {
+                                                                                            "&": null;
+                                                                                            "#": null;
+                                                                                        };
+                                                                                    }[];
+                                                                                };
+                                                                            }[];
+                                                                            "\u0084": {
+                                                                                "\u3438": {
+                                                                                    D: null;
+                                                                                    "*": null;
+                                                                                    ")": number;
+                                                                                };
+                                                                            };
+                                                                        };
                                                                     }[];
                                                                     "\u0084": {
                                                                         "\u3438": {
                                                                             D: null;
-                                                                            A: number;
+                                                                            A?: number;
+                                                                            "*"?: null;
+                                                                            ")"?: number;
                                                                         };
                                                                     };
                                                                 };
@@ -4479,8 +4406,6 @@ export interface paths {
                                                             "*": null;
                                                             " ": {
                                                                 "\u3408": {
-                                                                    ")": null;
-                                                                    $: null;
                                                                     " ": {
                                                                         "\u3411": {
                                                                             0: number;
@@ -4495,11 +4420,42 @@ export interface paths {
                                                                                             "#": null;
                                                                                         };
                                                                                     };
+                                                                                    $?: null;
                                                                                 };
                                                                             }[];
                                                                             "*": null;
                                                                             "&": number;
                                                                             ".": number;
+                                                                            "\u0084"?: {
+                                                                                "\u3438": {
+                                                                                    D: null;
+                                                                                };
+                                                                            };
+                                                                        };
+                                                                        "\u3408"?: {
+                                                                            "&": {
+                                                                                "\u3402": {
+                                                                                    ".": null;
+                                                                                    "(": null;
+                                                                                    "+": boolean;
+                                                                                    "&": {
+                                                                                        "\u3435": {
+                                                                                            $: null;
+                                                                                            "#": null;
+                                                                                        };
+                                                                                    };
+                                                                                };
+                                                                            };
+                                                                            ",": null;
+                                                                            $: null;
+                                                                            "\u0084": {
+                                                                                "\u3438": {
+                                                                                    0: null;
+                                                                                    D: null;
+                                                                                    "*": null;
+                                                                                    A: number;
+                                                                                };
+                                                                            };
                                                                         };
                                                                     }[];
                                                                     "\u0084": {
@@ -4511,6 +4467,8 @@ export interface paths {
                                                                             A: number;
                                                                         };
                                                                     };
+                                                                    ")"?: null;
+                                                                    $?: null;
                                                                 };
                                                             }[];
                                                             "?": boolean;
@@ -4668,7 +4626,9 @@ export interface paths {
                                         id: null;
                                         type: null;
                                         data: {
-                                            initial: number;
+                                            key?: null;
+                                            mode?: null;
+                                            initial: boolean | number;
                                         };
                                     }[];
                                     embedded_payloads: {
@@ -4676,63 +4636,185 @@ export interface paths {
                                         payload: {
                                             layout: {
                                                 bloks_payload: {
-                                                    ft: {
-                                                        "13i8q0a7l3": null;
-                                                        "13i8q0a7l4": null;
-                                                        "13i8q0a7l5": null;
-                                                        "13i8q0a7l6": null;
-                                                        "13i8q0a7l7": null;
-                                                        "13i8q0a7l8": null;
-                                                        "13i8q0a7l9": null;
-                                                        "13i8q0a7la": null;
-                                                        "13i8q0a7lb": null;
-                                                        "13i8q0a7lc": null;
-                                                        "13i8q0a7ld": null;
-                                                        "13i8q0a7le": null;
-                                                        "13i8q0a7lf": null;
-                                                        "13i8q0a7lh": null;
-                                                        "13i8q0a7li": null;
-                                                        "13i8q0a7lj": null;
-                                                        "13i8q0a7lk": null;
-                                                        "13i8q0a7ll": null;
-                                                        "13i8q0a7lm": null;
-                                                        "13i8q0a7ln": null;
-                                                        "13i8q0a7lo": null;
-                                                        "13i8q0a7lp": null;
-                                                        "13i8q0a7lq": null;
-                                                        "13i8q0a7lr": null;
-                                                        "13i8q0a7ls": null;
-                                                        "13i8q0a7lt": null;
-                                                        "13i8q0a7m9": null;
-                                                        "13i8q0a7ma": null;
-                                                        "13i8q0a7mb": null;
-                                                        "13i8q0a7mc": null;
-                                                        "13i8q0a7md": null;
-                                                        "13i8q0a7me": null;
-                                                        "13i8q0a7mf": null;
-                                                        "13i8q0a7mg": null;
-                                                        "13i8q0a7mh": null;
-                                                        "13i8q0a7mi": null;
-                                                        "13i8q0a7mj": null;
-                                                        "13i8q0a7mk": null;
-                                                        "13i8q0a7ml": null;
-                                                    };
-                                                    referenced: null[];
-                                                    referenced_embedded_payloads: null[];
-                                                    templates: {
-                                                        "13i8q0a7n2": {
-                                                            "\u3725": {
-                                                                "#": null;
-                                                            };
-                                                        };
-                                                        "13i8q0a7n3": {
-                                                            "\u3725": {
-                                                                "#": null;
-                                                            };
-                                                        };
-                                                    };
                                                     tree: {
-                                                        "\u370D": {
+                                                        "\u3408"?: {
+                                                            " ": {
+                                                                "\u3408": {
+                                                                    " ": {
+                                                                        "\u3408": {
+                                                                            "&": {
+                                                                                "\u3402": {
+                                                                                    "#": {
+                                                                                        "\u408E": {
+                                                                                            "+": null;
+                                                                                            "#": null;
+                                                                                            "*": null;
+                                                                                            "&": null;
+                                                                                            "(": null;
+                                                                                            ")": {
+                                                                                                "\u3435": {
+                                                                                                    $: null;
+                                                                                                    "#": null;
+                                                                                                };
+                                                                                            };
+                                                                                            $: {
+                                                                                                "\u3435": {
+                                                                                                    $: null;
+                                                                                                    "#": null;
+                                                                                                };
+                                                                                            };
+                                                                                        };
+                                                                                    };
+                                                                                };
+                                                                            };
+                                                                            $: null;
+                                                                            " ": {
+                                                                                "\u3408": {
+                                                                                    " ": {
+                                                                                        "\u3408": {
+                                                                                            ")": null;
+                                                                                            $: null;
+                                                                                            " ": {
+                                                                                                "\u3408": {
+                                                                                                    " ": {
+                                                                                                        "\u3408"?: {
+                                                                                                            ",": null;
+                                                                                                            $: null;
+                                                                                                            " ": {
+                                                                                                                "\u340B": {
+                                                                                                                    ")": null;
+                                                                                                                    "#": {
+                                                                                                                        "\u3435": {
+                                                                                                                            $: null;
+                                                                                                                            "#": null;
+                                                                                                                        };
+                                                                                                                    };
+                                                                                                                };
+                                                                                                            }[];
+                                                                                                            "\u0085": {
+                                                                                                                "\u365A": {
+                                                                                                                    ")": null;
+                                                                                                                };
+                                                                                                            }[];
+                                                                                                            "\u0084": {
+                                                                                                                "\u3438": {
+                                                                                                                    D: null;
+                                                                                                                    "*": null;
+                                                                                                                };
+                                                                                                            };
+                                                                                                        };
+                                                                                                        "\u3411"?: {
+                                                                                                            0: number;
+                                                                                                            5: {
+                                                                                                                "\u3435": {
+                                                                                                                    $: null;
+                                                                                                                    "#": null;
+                                                                                                                };
+                                                                                                            };
+                                                                                                            " ": {
+                                                                                                                "\u341B": {
+                                                                                                                    1: number;
+                                                                                                                    "*": null;
+                                                                                                                    "+": null;
+                                                                                                                    ",": {
+                                                                                                                        "\u3435": {
+                                                                                                                            $: null;
+                                                                                                                            "#": null;
+                                                                                                                        };
+                                                                                                                    };
+                                                                                                                    "#": null;
+                                                                                                                    "-": boolean;
+                                                                                                                    "&": null;
+                                                                                                                };
+                                                                                                            }[];
+                                                                                                            "*": null;
+                                                                                                            "&": number;
+                                                                                                            "(": number;
+                                                                                                            ",": {
+                                                                                                                "\u341B": {
+                                                                                                                    1: number;
+                                                                                                                    "&": null;
+                                                                                                                    "*": null;
+                                                                                                                    "+": null;
+                                                                                                                    ",": {
+                                                                                                                        "\u3435": {
+                                                                                                                            $: null;
+                                                                                                                            "#": null;
+                                                                                                                        };
+                                                                                                                    };
+                                                                                                                    "#": null;
+                                                                                                                };
+                                                                                                            }[];
+                                                                                                            ".": number;
+                                                                                                            "!": null;
+                                                                                                            "\u0085": {
+                                                                                                                "\u36B1": {
+                                                                                                                    0: boolean;
+                                                                                                                    "(": boolean;
+                                                                                                                    "*": null;
+                                                                                                                    "#": null;
+                                                                                                                };
+                                                                                                            }[];
+                                                                                                        };
+                                                                                                    }[];
+                                                                                                    "\u0084": {
+                                                                                                        "\u3438": {
+                                                                                                            ")": number;
+                                                                                                            A: number;
+                                                                                                            "#": null;
+                                                                                                            "-"?: null;
+                                                                                                        };
+                                                                                                    };
+                                                                                                    ")"?: null;
+                                                                                                };
+                                                                                            }[];
+                                                                                            "\u0084": {
+                                                                                                "\u3438": {
+                                                                                                    ")": number;
+                                                                                                };
+                                                                                            };
+                                                                                        };
+                                                                                    }[];
+                                                                                    "\u0085": null[];
+                                                                                    "\u0084": {
+                                                                                        "\u3438": {
+                                                                                            5: null;
+                                                                                            8: null;
+                                                                                            D: null;
+                                                                                            ";": null;
+                                                                                        };
+                                                                                    };
+                                                                                };
+                                                                            }[];
+                                                                            "\u0084": {
+                                                                                "\u3438": {
+                                                                                    7: null;
+                                                                                    9: null;
+                                                                                    "=": null;
+                                                                                    ":": null;
+                                                                                };
+                                                                            };
+                                                                        };
+                                                                    }[];
+                                                                    "\u0084": {
+                                                                        "\u3438": {
+                                                                            [key: string]: null;
+                                                                        };
+                                                                    };
+                                                                };
+                                                            }[];
+                                                            "\u0085": {
+                                                                "\u4083": {
+                                                                    "#": number;
+                                                                };
+                                                            }[];
+                                                            "\u0084": {
+                                                                "\u3438": {
+                                                                    ")": number;
+                                                                };
+                                                            };
+                                                        };
+                                                        "\u370D"?: {
                                                             $: {
                                                                 "\u3408": {
                                                                     ")": null;
@@ -4751,7 +4833,208 @@ export interface paths {
                                                                                                 "\u3408": {
                                                                                                     ")": null;
                                                                                                     " ": {
-                                                                                                        "\u3408": {
+                                                                                                        "\u3405"?: {
+                                                                                                            "*": null;
+                                                                                                            " ": {
+                                                                                                                "\u3408": {
+                                                                                                                    "&": {
+                                                                                                                        "\u3402": Record<string, never>;
+                                                                                                                    };
+                                                                                                                    ")": null;
+                                                                                                                    " ": {
+                                                                                                                        "\u3408": {
+                                                                                                                            ")": null;
+                                                                                                                            " ": {
+                                                                                                                                "\u3408": {
+                                                                                                                                    ")": null;
+                                                                                                                                    $: null;
+                                                                                                                                    " ": {
+                                                                                                                                        "\u3411"?: {
+                                                                                                                                            0: number;
+                                                                                                                                            5: {
+                                                                                                                                                "\u3435": {
+                                                                                                                                                    $: null;
+                                                                                                                                                    "#": null;
+                                                                                                                                                };
+                                                                                                                                            };
+                                                                                                                                            " ": {
+                                                                                                                                                "\u341B": {
+                                                                                                                                                    1: number;
+                                                                                                                                                    "*": null;
+                                                                                                                                                    "+": null;
+                                                                                                                                                    ",": {
+                                                                                                                                                        "\u3435": {
+                                                                                                                                                            $: null;
+                                                                                                                                                            "#": null;
+                                                                                                                                                        };
+                                                                                                                                                    };
+                                                                                                                                                    "#": null;
+                                                                                                                                                    "-": boolean;
+                                                                                                                                                    "&"?: null;
+                                                                                                                                                    "\u0087"?: null[];
+                                                                                                                                                };
+                                                                                                                                            }[];
+                                                                                                                                            "*": null;
+                                                                                                                                            "&": number;
+                                                                                                                                            "(": number;
+                                                                                                                                            ",": {
+                                                                                                                                                "\u341B": {
+                                                                                                                                                    1: number;
+                                                                                                                                                    "&": null;
+                                                                                                                                                    "*": null;
+                                                                                                                                                    "+": null;
+                                                                                                                                                    ",": {
+                                                                                                                                                        "\u3435": {
+                                                                                                                                                            $: null;
+                                                                                                                                                            "#": null;
+                                                                                                                                                        };
+                                                                                                                                                    };
+                                                                                                                                                    "#": null;
+                                                                                                                                                };
+                                                                                                                                            }[];
+                                                                                                                                            ".": number;
+                                                                                                                                            "\u0085"?: {
+                                                                                                                                                "\u3401": {
+                                                                                                                                                    "#": boolean;
+                                                                                                                                                    "&": null;
+                                                                                                                                                    $: null;
+                                                                                                                                                };
+                                                                                                                                            }[];
+                                                                                                                                        };
+                                                                                                                                        "\u3408"?: {
+                                                                                                                                            " ": {
+                                                                                                                                                "\u3408": {
+                                                                                                                                                    " ": {
+                                                                                                                                                        "\u3408": {
+                                                                                                                                                            " ": ({
+                                                                                                                                                                "\u3408": {
+                                                                                                                                                                    "&": {
+                                                                                                                                                                        "\u3402": {
+                                                                                                                                                                            ".": null;
+                                                                                                                                                                            "(": null;
+                                                                                                                                                                            "&": {
+                                                                                                                                                                                "\u3435": {
+                                                                                                                                                                                    $: null;
+                                                                                                                                                                                    "#": null;
+                                                                                                                                                                                };
+                                                                                                                                                                            };
+                                                                                                                                                                        };
+                                                                                                                                                                    };
+                                                                                                                                                                    " ": {
+                                                                                                                                                                        "\u3408": {
+                                                                                                                                                                            "&": {
+                                                                                                                                                                                "\u3402": {
+                                                                                                                                                                                    ".": null;
+                                                                                                                                                                                    "(": null;
+                                                                                                                                                                                    "+": boolean;
+                                                                                                                                                                                    "&": {
+                                                                                                                                                                                        "\u3435": {
+                                                                                                                                                                                            $: null;
+                                                                                                                                                                                            "#": null;
+                                                                                                                                                                                        };
+                                                                                                                                                                                    };
+                                                                                                                                                                                };
+                                                                                                                                                                            };
+                                                                                                                                                                            ",": null;
+                                                                                                                                                                            $: null;
+                                                                                                                                                                            " ": {
+                                                                                                                                                                                "\u340B": {
+                                                                                                                                                                                    ")": null;
+                                                                                                                                                                                    "\u0084": {
+                                                                                                                                                                                        "\u3438": {
+                                                                                                                                                                                            [key: string]: null;
+                                                                                                                                                                                        };
+                                                                                                                                                                                    };
+                                                                                                                                                                                };
+                                                                                                                                                                            }[];
+                                                                                                                                                                            "\u0084": {
+                                                                                                                                                                                "\u3438": {
+                                                                                                                                                                                    1: null;
+                                                                                                                                                                                    2: null;
+                                                                                                                                                                                    D: null;
+                                                                                                                                                                                    "*": null;
+                                                                                                                                                                                };
+                                                                                                                                                                            };
+                                                                                                                                                                        };
+                                                                                                                                                                    }[];
+                                                                                                                                                                    "\u0084": {
+                                                                                                                                                                        "\u3438": {
+                                                                                                                                                                            D: null;
+                                                                                                                                                                            "*": null;
+                                                                                                                                                                        };
+                                                                                                                                                                    };
+                                                                                                                                                                };
+                                                                                                                                                            } | null)[];
+                                                                                                                                                            "\u0084"?: {
+                                                                                                                                                                "\u3438": {
+                                                                                                                                                                    "?": null;
+                                                                                                                                                                    "&": null;
+                                                                                                                                                                    ">": null;
+                                                                                                                                                                };
+                                                                                                                                                            };
+                                                                                                                                                        };
+                                                                                                                                                    }[];
+                                                                                                                                                    "\u0085": {
+                                                                                                                                                        "\u36B1": {
+                                                                                                                                                            0: boolean;
+                                                                                                                                                            "(": boolean;
+                                                                                                                                                            "-": null;
+                                                                                                                                                            D: boolean;
+                                                                                                                                                        };
+                                                                                                                                                    }[];
+                                                                                                                                                    "\u0084": {
+                                                                                                                                                        "\u3438": {
+                                                                                                                                                            0: null;
+                                                                                                                                                            D: null;
+                                                                                                                                                            "*": null;
+                                                                                                                                                            ",": null;
+                                                                                                                                                        };
+                                                                                                                                                    };
+                                                                                                                                                };
+                                                                                                                                            }[];
+                                                                                                                                        };
+                                                                                                                                    }[];
+                                                                                                                                    "\u0084"?: {
+                                                                                                                                        "\u3438": {
+                                                                                                                                            7: null;
+                                                                                                                                            "=": null;
+                                                                                                                                        };
+                                                                                                                                    };
+                                                                                                                                };
+                                                                                                                            }[];
+                                                                                                                            "!": null;
+                                                                                                                            "\u0084": {
+                                                                                                                                "\u3438": {
+                                                                                                                                    7: null;
+                                                                                                                                    9: null;
+                                                                                                                                    D: null;
+                                                                                                                                    "=": null;
+                                                                                                                                    ":": null;
+                                                                                                                                };
+                                                                                                                            };
+                                                                                                                        };
+                                                                                                                    }[];
+                                                                                                                    "\u0085": {
+                                                                                                                        "\u365A": {
+                                                                                                                            ")": null;
+                                                                                                                        };
+                                                                                                                    }[];
+                                                                                                                    "\u0084": {
+                                                                                                                        "\u3438": {
+                                                                                                                            D: null;
+                                                                                                                        };
+                                                                                                                    };
+                                                                                                                };
+                                                                                                            }[];
+                                                                                                            C: boolean;
+                                                                                                            "\u0085": null[];
+                                                                                                            "\u0084": {
+                                                                                                                "\u3438": {
+                                                                                                                    ")": number;
+                                                                                                                };
+                                                                                                            };
+                                                                                                        };
+                                                                                                        "\u3408"?: {
                                                                                                             ")": null;
                                                                                                             " ": {
                                                                                                                 "\u3408": {
@@ -4763,8 +5046,23 @@ export interface paths {
                                                                                                                     ")": null;
                                                                                                                     " ": {
                                                                                                                         "\u3408": {
+                                                                                                                            "&"?: {
+                                                                                                                                "\u3402": {
+                                                                                                                                    "#": {
+                                                                                                                                        "\u341C": {
+                                                                                                                                            "#": {
+                                                                                                                                                "\u3435": {
+                                                                                                                                                    $: null;
+                                                                                                                                                    "#": null;
+                                                                                                                                                };
+                                                                                                                                            };
+                                                                                                                                        };
+                                                                                                                                    };
+                                                                                                                                };
+                                                                                                                            };
                                                                                                                             ")": null;
-                                                                                                                            " ": {
+                                                                                                                            $?: null;
+                                                                                                                            " ": ({
                                                                                                                                 "\u3408": {
                                                                                                                                     " ": {
                                                                                                                                         "\u3408": {
@@ -4807,8 +5105,55 @@ export interface paths {
                                                                                                                                                                     $: null;
                                                                                                                                                                     " ": {
                                                                                                                                                                         "\u3408": {
+                                                                                                                                                                            ")"?: null;
+                                                                                                                                                                            ","?: null;
+                                                                                                                                                                            $?: null;
                                                                                                                                                                             " ": {
-                                                                                                                                                                                "\u3408": {
+                                                                                                                                                                                "\u3411"?: {
+                                                                                                                                                                                    0: number;
+                                                                                                                                                                                    5: {
+                                                                                                                                                                                        "\u3435": {
+                                                                                                                                                                                            $: null;
+                                                                                                                                                                                            "#": null;
+                                                                                                                                                                                        };
+                                                                                                                                                                                    };
+                                                                                                                                                                                    " ": {
+                                                                                                                                                                                        "\u341B": {
+                                                                                                                                                                                            1: number;
+                                                                                                                                                                                            "*": null;
+                                                                                                                                                                                            "+": null;
+                                                                                                                                                                                            ",": {
+                                                                                                                                                                                                "\u3435": {
+                                                                                                                                                                                                    $: null;
+                                                                                                                                                                                                    "#": null;
+                                                                                                                                                                                                };
+                                                                                                                                                                                            };
+                                                                                                                                                                                            "#": null;
+                                                                                                                                                                                            "-": boolean;
+                                                                                                                                                                                            "&": null;
+                                                                                                                                                                                        };
+                                                                                                                                                                                    }[];
+                                                                                                                                                                                    "*": null;
+                                                                                                                                                                                    "&": number;
+                                                                                                                                                                                    "(": number;
+                                                                                                                                                                                    ",": {
+                                                                                                                                                                                        "\u341B": {
+                                                                                                                                                                                            1: number;
+                                                                                                                                                                                            "&": null;
+                                                                                                                                                                                            "*": null;
+                                                                                                                                                                                            "+": null;
+                                                                                                                                                                                            ",": {
+                                                                                                                                                                                                "\u3435": {
+                                                                                                                                                                                                    $: null;
+                                                                                                                                                                                                    "#": null;
+                                                                                                                                                                                                };
+                                                                                                                                                                                            };
+                                                                                                                                                                                            "#": null;
+                                                                                                                                                                                        };
+                                                                                                                                                                                    }[];
+                                                                                                                                                                                    ".": number;
+                                                                                                                                                                                };
+                                                                                                                                                                                "\u3408"?: {
                                                                                                                                                                                     $: null;
                                                                                                                                                                                     " ": {
                                                                                                                                                                                         "\u3D70": {
@@ -4828,19 +5173,19 @@ export interface paths {
                                                                                                                                                                                     "\u0085": null[];
                                                                                                                                                                                 };
                                                                                                                                                                             }[];
-                                                                                                                                                                            "\u0085": {
+                                                                                                                                                                            "\u0087": null[];
+                                                                                                                                                                            "\u0085"?: {
                                                                                                                                                                                 "\u34E2": {
                                                                                                                                                                                     "&": null;
                                                                                                                                                                                     "#": null;
                                                                                                                                                                                 };
                                                                                                                                                                             }[];
-                                                                                                                                                                            "\u0084": {
+                                                                                                                                                                            "\u0084"?: {
                                                                                                                                                                                 "\u3438": {
                                                                                                                                                                                     ">": null;
                                                                                                                                                                                     "#": null;
                                                                                                                                                                                 };
                                                                                                                                                                             };
-                                                                                                                                                                            "\u0087": null[];
                                                                                                                                                                         };
                                                                                                                                                                     }[];
                                                                                                                                                                     "\u0084": {
@@ -4857,7 +5202,15 @@ export interface paths {
                                                                                                                                                             }[];
                                                                                                                                                             "!": null;
                                                                                                                                                             "\u0085": {
-                                                                                                                                                                "\u36B1": {
+                                                                                                                                                                "\u3578"?: {
+                                                                                                                                                                    "\u0087": null[];
+                                                                                                                                                                };
+                                                                                                                                                                "\u369D"?: {
+                                                                                                                                                                    "&": null;
+                                                                                                                                                                    "#": null;
+                                                                                                                                                                    $: null;
+                                                                                                                                                                };
+                                                                                                                                                                "\u36B1"?: {
                                                                                                                                                                     0: boolean;
                                                                                                                                                                     7: {
                                                                                                                                                                         "\u3725": {
@@ -4914,15 +5267,17 @@ export interface paths {
                                                                                                                                         };
                                                                                                                                     };
                                                                                                                                 };
-                                                                                                                            }[];
+                                                                                                                            } | null)[];
                                                                                                                             "\u0084": {
                                                                                                                                 "\u3438": {
-                                                                                                                                    0: null;
-                                                                                                                                    7: null;
-                                                                                                                                    ".": null;
-                                                                                                                                    "=": null;
+                                                                                                                                    0?: null;
+                                                                                                                                    7?: null;
+                                                                                                                                    D?: null;
+                                                                                                                                    "*"?: null;
                                                                                                                                     ")": number;
                                                                                                                                     A: number;
+                                                                                                                                    "."?: null;
+                                                                                                                                    "="?: null;
                                                                                                                                 };
                                                                                                                             };
                                                                                                                         };
@@ -4986,19 +5341,24 @@ export interface paths {
                                                                             $: null;
                                                                             " ": {
                                                                                 "\u3408": {
-                                                                                    ")": null;
-                                                                                    ",": null;
-                                                                                    $: null;
                                                                                     " ": null[];
                                                                                     "\u0085": {
-                                                                                        "\u3578": Record<string, never>;
+                                                                                        "\u4083"?: {
+                                                                                            "#": number;
+                                                                                        };
+                                                                                        "\u3578"?: Record<string, never>;
                                                                                     }[];
                                                                                     "\u0084": {
                                                                                         "\u3438": {
+                                                                                            C?: null;
+                                                                                            ">"?: null;
                                                                                             ")": number;
-                                                                                            A: number;
+                                                                                            A?: number;
                                                                                         };
                                                                                     };
+                                                                                    ")"?: null;
+                                                                                    ","?: null;
+                                                                                    $?: null;
                                                                                 };
                                                                             }[];
                                                                             "\u0085": null[];
@@ -5022,6 +5382,61 @@ export interface paths {
                                                                     $: null;
                                                                 };
                                                             }[];
+                                                        };
+                                                    };
+                                                    ft?: {
+                                                        "13i8q0a7l3": null;
+                                                        "13i8q0a7l4": null;
+                                                        "13i8q0a7l5": null;
+                                                        "13i8q0a7l6": null;
+                                                        "13i8q0a7l7": null;
+                                                        "13i8q0a7l8": null;
+                                                        "13i8q0a7l9": null;
+                                                        "13i8q0a7la": null;
+                                                        "13i8q0a7lb": null;
+                                                        "13i8q0a7lc": null;
+                                                        "13i8q0a7ld": null;
+                                                        "13i8q0a7le": null;
+                                                        "13i8q0a7lf": null;
+                                                        "13i8q0a7lh": null;
+                                                        "13i8q0a7li": null;
+                                                        "13i8q0a7lj": null;
+                                                        "13i8q0a7lk": null;
+                                                        "13i8q0a7ll": null;
+                                                        "13i8q0a7lm": null;
+                                                        "13i8q0a7ln": null;
+                                                        "13i8q0a7lo": null;
+                                                        "13i8q0a7lp": null;
+                                                        "13i8q0a7lq": null;
+                                                        "13i8q0a7lr": null;
+                                                        "13i8q0a7ls": null;
+                                                        "13i8q0a7lt": null;
+                                                        "13i8q0a7m9": null;
+                                                        "13i8q0a7ma": null;
+                                                        "13i8q0a7mb": null;
+                                                        "13i8q0a7mc": null;
+                                                        "13i8q0a7md": null;
+                                                        "13i8q0a7me": null;
+                                                        "13i8q0a7mf": null;
+                                                        "13i8q0a7mg": null;
+                                                        "13i8q0a7mh": null;
+                                                        "13i8q0a7mi": null;
+                                                        "13i8q0a7mj": null;
+                                                        "13i8q0a7mk": null;
+                                                        "13i8q0a7ml": null;
+                                                    };
+                                                    referenced?: null[];
+                                                    referenced_embedded_payloads?: null[];
+                                                    templates?: {
+                                                        "13i8q0a7n2": {
+                                                            "\u3725": {
+                                                                "#": null;
+                                                            };
+                                                        };
+                                                        "13i8q0a7n3": {
+                                                            "\u3725": {
+                                                                "#": null;
+                                                            };
                                                         };
                                                     };
                                                 };
@@ -5315,351 +5730,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": {
-                            layout: {
-                                bloks_payload: {
-                                    ft: {
-                                        "13ewc0xy2i": null;
-                                        "13ewc0xy2j": null;
-                                        "13ewc0xy2m": null;
-                                        "13ewc0xy2p": null;
-                                        "13ewc0xy2q": null;
-                                        "13ewc0xy2w": null;
-                                        "13ewc0xy31": null;
-                                        "13ewc0xy35": null;
-                                    };
-                                    data: {
-                                        id: null;
-                                        type: null;
-                                        data: {
-                                            initial: number;
-                                        };
-                                    }[];
-                                    embedded_payloads: {
-                                        id: null;
-                                        payload: {
-                                            layout: {
-                                                bloks_payload: {
-                                                    ft: {
-                                                        "13ewc0xy81": null;
-                                                        "13ewc0xy82": null;
-                                                        "13ewc0xy8a": null;
-                                                        "13ewc0xy8b": null;
-                                                        "13ewc0xy8j": null;
-                                                        "13ewc0xy8k": null;
-                                                        "13ewc0xy8l": null;
-                                                        "13ewc0xy8m": null;
-                                                        "13ewc0xy8p": null;
-                                                        "13ewc0xy8s": null;
-                                                        "13ewc0xy8u": null;
-                                                        "13ewc0xy8v": null;
-                                                        "13ewc0xy8w": null;
-                                                        "13ewc0xy8z": null;
-                                                        "13ewc0xy92": null;
-                                                        "13ewc0xy93": null;
-                                                        "13ewc0xy99": null;
-                                                        "13ewc0xy9l": null;
-                                                        "13ewc0xy9m": null;
-                                                        "13ewc0xy9n": null;
-                                                        "13ewc0xy9o": null;
-                                                        "13ewc0xy9q": null;
-                                                        "13ewc0xy9u": null;
-                                                        "13ewc0xy9v": null;
-                                                        "13ewc0xy9x": null;
-                                                        "13ewc0xya0": null;
-                                                        "13ewc0xya1": null;
-                                                        "13ewc0xya2": null;
-                                                        "13ewc0xya3": null;
-                                                        "13ewc0xya6": null;
-                                                        "13ewc0xya7": null;
-                                                        "13ewc0xya8": null;
-                                                        "13ewc0xya9": null;
-                                                        "13ewc0xyaa": null;
-                                                        "13ewc0xyab": null;
-                                                        "13ewc0xyac": null;
-                                                        "13ewc0xyad": null;
-                                                        "13ewc0xyae": null;
-                                                        "13ewc0xyai": null;
-                                                        "13ewc0xyak": null;
-                                                        "13ewc0xyan": null;
-                                                        "13ewc0xyao": null;
-                                                        "13ewc0xyap": null;
-                                                        "13ewc0xyat": null;
-                                                        "13ewc0xyaw": null;
-                                                        "13ewc0xybb": null;
-                                                        "13ewc0xybc": null;
-                                                        "13ewc0xybe": null;
-                                                        "13ewc0xyb8": null;
-                                                        "13ewc0xyb9": null;
-                                                        "13ewc0xybg": null;
-                                                        "13ewc0xybh": null;
-                                                        "13ewc0xybj": null;
-                                                        "13ewc0xybk": null;
-                                                        "13ewc0xybm": null;
-                                                        "13ewc0xybp": null;
-                                                        "13ewc0xybq": null;
-                                                        "13ewc0xybr": null;
-                                                        "13ewc0xybv": null;
-                                                        "13ewc0xyby": null;
-                                                        "13ewc0xyc1": null;
-                                                        "13ewc0xyc2": null;
-                                                        "13ewc0xyc3": null;
-                                                        "13ewc0xyc6": null;
-                                                        "13ewc0xyc7": null;
-                                                        "13ewc0xyc8": null;
-                                                        "13ewc0xyc9": null;
-                                                        "13ewc0xyca": null;
-                                                        "13ewc0xycb": null;
-                                                        "13ewc0xycc": null;
-                                                        "13ewc0xycd": null;
-                                                        "13ewc0xycq": null;
-                                                        "13ewc0xycr": null;
-                                                        "13ewc0xycu": null;
-                                                        "13ewc0xycv": null;
-                                                        "13ewc0xyd6": null;
-                                                        "13ewc0xyd9": null;
-                                                        "13ewc0xydx": null;
-                                                    };
-                                                    referenced: null[];
-                                                    referenced_embedded_payloads: null[];
-                                                    templates: {
-                                                        "13ewc0xye8": {
-                                                            "\u3725": {
-                                                                "#": null;
-                                                            };
-                                                        };
-                                                        "13ewc0xye9": {
-                                                            "\u341B": {
-                                                                1: number;
-                                                                "*": null;
-                                                                "+": null;
-                                                                ",": {
-                                                                    "\u3435": {
-                                                                        $: null;
-                                                                        "#": null;
-                                                                    };
-                                                                };
-                                                                "#": null;
-                                                                "-": boolean;
-                                                                "\u0087": null[];
-                                                            };
-                                                        };
-                                                    };
-                                                    tree: {
-                                                        "\u370D": {
-                                                            $: {
-                                                                "\u3408": {
-                                                                    ")": null;
-                                                                    $: null;
-                                                                    " ": {
-                                                                        "\u3408": {
-                                                                            ")": null;
-                                                                            $: null;
-                                                                            " ": {
-                                                                                "\u3408": {
-                                                                                    ")": null;
-                                                                                    " ": {
-                                                                                        "\u3408": {
-                                                                                            ")": null;
-                                                                                            " ": {
-                                                                                                "\u3408": {
-                                                                                                    ")": null;
-                                                                                                    " ": {
-                                                                                                        "\u3408": {
-                                                                                                            ")": null;
-                                                                                                            " ": {
-                                                                                                                "\u3408": {
-                                                                                                                    "&": {
-                                                                                                                        "\u3402": Record<string, never>;
-                                                                                                                    };
-                                                                                                                    ")": null;
-                                                                                                                    " ": {
-                                                                                                                        "\u3408": {
-                                                                                                                            ")": null;
-                                                                                                                            " ": {
-                                                                                                                                "\u3408": {
-                                                                                                                                    ")": null;
-                                                                                                                                    ",": null;
-                                                                                                                                    $: null;
-                                                                                                                                    " ": {
-                                                                                                                                        "\u3408": {
-                                                                                                                                            ")": null;
-                                                                                                                                            ",": null;
-                                                                                                                                            $: null;
-                                                                                                                                            " ": {
-                                                                                                                                                "\u3408": {
-                                                                                                                                                    ",": null;
-                                                                                                                                                    $: null;
-                                                                                                                                                    " ": {
-                                                                                                                                                        "\u340B": {
-                                                                                                                                                            ")": null;
-                                                                                                                                                            "(": null;
-                                                                                                                                                            $: null;
-                                                                                                                                                            "#": {
-                                                                                                                                                                "\u3435": {
-                                                                                                                                                                    $: null;
-                                                                                                                                                                    "#": null;
-                                                                                                                                                                };
-                                                                                                                                                            };
-                                                                                                                                                            "\u0085": {
-                                                                                                                                                                "\u3401": {
-                                                                                                                                                                    "#": boolean;
-                                                                                                                                                                    $: null;
-                                                                                                                                                                };
-                                                                                                                                                            }[];
-                                                                                                                                                            "\u0084": {
-                                                                                                                                                                "\u3438": {
-                                                                                                                                                                    "*": null;
-                                                                                                                                                                    $: number;
-                                                                                                                                                                };
-                                                                                                                                                            };
-                                                                                                                                                            "\u0087": null[];
-                                                                                                                                                        };
-                                                                                                                                                    }[];
-                                                                                                                                                    "\u0084": {
-                                                                                                                                                        "\u3438": {
-                                                                                                                                                            7: null;
-                                                                                                                                                            9: null;
-                                                                                                                                                            "=": null;
-                                                                                                                                                            ":": null;
-                                                                                                                                                        };
-                                                                                                                                                    };
-                                                                                                                                                };
-                                                                                                                                            }[];
-                                                                                                                                            "\u0084": {
-                                                                                                                                                "\u3438": {
-                                                                                                                                                    7: null;
-                                                                                                                                                    "*": null;
-                                                                                                                                                };
-                                                                                                                                            };
-                                                                                                                                        };
-                                                                                                                                    }[];
-                                                                                                                                    "\u0084": {
-                                                                                                                                        "\u3438": {
-                                                                                                                                            "*": null;
-                                                                                                                                        };
-                                                                                                                                    };
-                                                                                                                                };
-                                                                                                                            }[];
-                                                                                                                            "!": null;
-                                                                                                                            "\u0084": {
-                                                                                                                                "\u3438": {
-                                                                                                                                    7: null;
-                                                                                                                                    9: null;
-                                                                                                                                    D: null;
-                                                                                                                                    "=": null;
-                                                                                                                                    ":": null;
-                                                                                                                                };
-                                                                                                                            };
-                                                                                                                        };
-                                                                                                                    }[];
-                                                                                                                    "\u0085": {
-                                                                                                                        "\u365A": {
-                                                                                                                            ")": null;
-                                                                                                                        };
-                                                                                                                    }[];
-                                                                                                                    "\u0084": {
-                                                                                                                        "\u3438": {
-                                                                                                                            D: null;
-                                                                                                                        };
-                                                                                                                    };
-                                                                                                                };
-                                                                                                            }[];
-                                                                                                            "\u0085": null[];
-                                                                                                            "\u0084": {
-                                                                                                                "\u3438": {
-                                                                                                                    ")": number;
-                                                                                                                };
-                                                                                                            };
-                                                                                                        };
-                                                                                                    }[];
-                                                                                                    "\u0084": {
-                                                                                                        "\u3438": {
-                                                                                                            D: null;
-                                                                                                            "*": null;
-                                                                                                        };
-                                                                                                    };
-                                                                                                };
-                                                                                            }[];
-                                                                                        };
-                                                                                    }[];
-                                                                                    "\u0084": {
-                                                                                        "\u3438": {
-                                                                                            4: null;
-                                                                                            D: null;
-                                                                                            "*": null;
-                                                                                            A: number;
-                                                                                        };
-                                                                                    };
-                                                                                };
-                                                                            }[];
-                                                                            "!": null;
-                                                                            "\u0085": {
-                                                                                "\u4091": {
-                                                                                    "#": null;
-                                                                                };
-                                                                            }[];
-                                                                            "\u0084": {
-                                                                                "\u3438": {
-                                                                                    D: null;
-                                                                                    "*": null;
-                                                                                };
-                                                                            };
-                                                                        };
-                                                                    }[];
-                                                                };
-                                                            };
-                                                            "(": {
-                                                                "\u3408": {
-                                                                    " ": {
-                                                                        "\u3408": {
-                                                                            " ": null[];
-                                                                            "\u0085": {
-                                                                                "\u4083": {
-                                                                                    "#": number;
-                                                                                };
-                                                                            }[];
-                                                                            "\u0084": {
-                                                                                "\u3438": {
-                                                                                    C: null;
-                                                                                    ">": null;
-                                                                                    ")": number;
-                                                                                };
-                                                                            };
-                                                                        };
-                                                                    }[];
-                                                                    "\u0084": {
-                                                                        "\u3438": {
-                                                                            D: null;
-                                                                            "*": null;
-                                                                        };
-                                                                    };
-                                                                };
-                                                            };
-                                                            "\u0085": {
-                                                                "\u4091": {
-                                                                    $: null;
-                                                                };
-                                                            }[];
-                                                        };
-                                                    };
-                                                };
-                                            };
-                                        };
-                                    }[];
-                                    props: {
-                                        id: null;
-                                        name: null;
-                                    }[];
-                                    error_attribution: {
-                                        logging_id: null;
-                                        source_map_id: null;
-                                    };
-                                    action: null;
-                                };
-                            };
-                            status: null;
-                        };
+                        "application/json": string;
                     };
                 };
             };
@@ -6047,9 +6118,20 @@ export interface paths {
                             component_query_responses: {
                                 payload: null;
                                 consumed_params: {
-                                    caller_name: null;
+                                    __infra__container_config_id?: null;
+                                    caller_name?: null;
                                 };
                                 app_id: null;
+                                resources?: {
+                                    acq: {
+                                        app_id: null;
+                                        cache_ttl: number;
+                                        consumed_params?: {
+                                            caller_name: null;
+                                        };
+                                        cache_keys?: null[];
+                                    }[];
+                                };
                             }[];
                             status: null;
                         };
@@ -6726,7 +6808,7 @@ export interface paths {
                                         };
                                         is_covered: boolean;
                                         private_reply_status: number;
-                                    };
+                                    } | null;
                                     fundraiser_tag: {
                                         has_standalone_fundraiser: boolean;
                                     };
@@ -6741,13 +6823,30 @@ export interface paths {
                                     ig_play_count: number;
                                     original_media_has_visual_reply_media: boolean;
                                     creator_viewer_insights: null[];
-                                    coauthor_producers: null[];
+                                    coauthor_producers: ({
+                                        pk: number;
+                                        pk_id: null;
+                                        id: null;
+                                        full_name: null;
+                                        is_private: boolean;
+                                        strong_id__: null;
+                                        username: null;
+                                        is_verified: boolean;
+                                        profile_pic_id: null;
+                                        profile_pic_url: null;
+                                    } | null)[];
                                     coauthor_producer_can_see_organic_insights: boolean;
                                     invited_coauthor_producers: null[];
                                     is_in_profile_grid: boolean;
                                     profile_grid_control_enabled: boolean;
                                     media_cropping_info: {
                                         square_crop: {
+                                            crop_left: number;
+                                            crop_right: number;
+                                            crop_top: number;
+                                            crop_bottom: number;
+                                        };
+                                        four_by_three_crop?: {
                                             crop_left: number;
                                             crop_right: number;
                                             crop_top: number;
@@ -6769,18 +6868,21 @@ export interface paths {
                                         account_type: number;
                                         account_badges: null[];
                                         fan_club_info: {
-                                            autosave_to_exclusive_highlight: null;
-                                            connected_member_count: null;
+                                            autosave_to_exclusive_highlight: boolean | null;
+                                            connected_member_count: number | null;
                                             fan_club_id: null;
                                             fan_club_name: null;
                                             has_created_ssc: null;
                                             has_enough_subscribers_for_ssc: null;
-                                            is_fan_club_gifting_eligible: null;
-                                            is_fan_club_referral_eligible: null;
-                                            is_free_trial_eligible: null;
+                                            is_fan_club_gifting_eligible: boolean | null;
+                                            is_fan_club_referral_eligible: boolean | null;
+                                            is_free_trial_eligible: boolean | null;
                                             largest_public_bc_id: null;
-                                            subscriber_count: null;
-                                            fan_consideration_page_revamp_eligiblity: null;
+                                            subscriber_count: number | null;
+                                            fan_consideration_page_revamp_eligiblity: {
+                                                should_show_social_context: boolean;
+                                                should_show_content_preview: boolean;
+                                            } | null;
                                         };
                                         friendship_status: {
                                             is_muting_reel: boolean;
@@ -6802,25 +6904,29 @@ export interface paths {
                                     image_versions2: {
                                         additional_candidates: {
                                             first_frame: {
+                                                estimated_scans_sizes?: number[];
                                                 height: number;
                                                 scans_profile: null;
                                                 url: null;
                                                 width: number;
                                             };
                                             igtv_first_frame: {
+                                                estimated_scans_sizes?: number[];
                                                 height: number;
                                                 scans_profile: null;
                                                 url: null;
                                                 width: number;
                                             };
                                             smart_frame: {
+                                                estimated_scans_sizes?: number[];
                                                 height: number;
                                                 scans_profile: null;
                                                 url: null;
                                                 width: number;
-                                            };
+                                            } | null;
                                         };
                                         candidates: {
+                                            estimated_scans_sizes?: number[];
                                             height: number;
                                             scans_profile: null;
                                             url: null;
@@ -6855,7 +6961,26 @@ export interface paths {
                                     is_paid_partnership: boolean;
                                     inventory_source: null;
                                     music_metadata: null;
-                                    social_context: null[];
+                                    social_context: ({
+                                        social_context_type: null;
+                                        social_context_users_count: number;
+                                        social_context_facepile_users: {
+                                            pk: number;
+                                            pk_id: null;
+                                            id: null;
+                                            full_name: null;
+                                            is_private: boolean;
+                                            strong_id__: null;
+                                            username: null;
+                                            is_verified: boolean;
+                                            profile_pic_id: null;
+                                            profile_pic_url: null;
+                                        }[];
+                                        social_context_action_metadata: ({
+                                            facepile_user_id: number;
+                                            is_high_value: boolean;
+                                        } | null)[];
+                                    } | null)[];
                                     organic_tracking_token: null;
                                     is_third_party_downloads_eligible: boolean;
                                     ig_media_sharing_disabled: boolean;
@@ -6889,7 +7014,22 @@ export interface paths {
                                     is_eligible_for_meta_ai_share: boolean;
                                     meta_ai_suggested_prompts: null[];
                                     can_reply: boolean;
-                                    floating_context_items: null[];
+                                    floating_context_items: ({
+                                        floating_context_item_type: null;
+                                        floating_context_item_source: null;
+                                        user: {
+                                            pk: number;
+                                            pk_id: null;
+                                            id: null;
+                                            full_name: null;
+                                            is_private: boolean;
+                                            strong_id__: null;
+                                            username: null;
+                                            is_verified: boolean;
+                                            profile_pic_id: null;
+                                            profile_pic_url: null;
+                                        };
+                                    } | null)[];
                                     is_eligible_content_for_post_roll_ad: boolean;
                                     related_ads_pivots_media_info: null;
                                     is_open_to_public_submission: boolean;
@@ -6906,8 +7046,8 @@ export interface paths {
                                     has_liked: boolean;
                                     like_count: number;
                                     top_likers: null[];
-                                    video_subtitles_uri: null;
-                                    video_subtitles_locale: null;
+                                    video_subtitles_uri?: null;
+                                    video_subtitles_locale?: null;
                                     video_sticker_locales: null[];
                                     is_dash_eligible: number;
                                     video_dash_manifest: null;
@@ -6953,7 +7093,17 @@ export interface paths {
                                         challenge_info: null;
                                         content_appreciation_info: {
                                             enabled: boolean;
-                                            entry_point_container: null;
+                                            entry_point_container: {
+                                                comment: {
+                                                    action_type: null;
+                                                };
+                                                overflow: null;
+                                                pill: {
+                                                    action_type: null;
+                                                    priority: number;
+                                                };
+                                                ufi: null;
+                                            } | null;
                                         };
                                         contextual_highlight_info: null;
                                         cutout_sticker_info: null[];
@@ -6979,7 +7129,79 @@ export interface paths {
                                         };
                                         merchandising_pill_info: null;
                                         music_canonical_id: null;
-                                        music_info: null;
+                                        music_info: {
+                                            music_canonical_id: null;
+                                            music_asset_info: {
+                                                allows_saving: boolean;
+                                                artist_id: null;
+                                                audio_asset_id: null;
+                                                audio_cluster_id: null;
+                                                cover_artwork_thumbnail_uri: null;
+                                                cover_artwork_uri: null;
+                                                dark_message: null;
+                                                dash_manifest: null;
+                                                display_artist: null;
+                                                duration_in_ms: number;
+                                                fast_start_progressive_download_url: null;
+                                                has_lyrics: boolean;
+                                                highlight_start_times_in_ms: (number | null)[];
+                                                id: null;
+                                                ig_username: null;
+                                                is_eligible_for_audio_effects: boolean;
+                                                is_eligible_for_vinyl_sticker: boolean;
+                                                is_explicit: boolean;
+                                                licensed_music_subtype: null;
+                                                progressive_download_url: null;
+                                                reactive_audio_download_url: null;
+                                                sanitized_title: null;
+                                                song_monetization_info: null;
+                                                subtitle: null;
+                                                title: null;
+                                                web_30s_preview_download_url: null;
+                                                lyrics: null;
+                                                spotify_track_metadata: null;
+                                            };
+                                            music_consumption_info: {
+                                                allow_media_creation_with_music: boolean;
+                                                music_creation_restriction_reason: null;
+                                                audio_asset_start_time_in_ms: number;
+                                                contains_lyrics: null;
+                                                derived_content_id: null;
+                                                display_labels: null;
+                                                formatted_clips_media_count: null;
+                                                is_bookmarked: boolean;
+                                                is_trending_in_clips: boolean;
+                                                overlap_duration_in_ms: number;
+                                                placeholder_profile_pic_url: null;
+                                                should_allow_music_editing: boolean;
+                                                should_mute_audio: boolean;
+                                                should_mute_audio_reason: null;
+                                                should_mute_audio_reason_type: null;
+                                                should_render_soundwave: boolean;
+                                                trend_rank: null;
+                                                previous_trend_rank: null;
+                                                ig_artist: {
+                                                    pk: number;
+                                                    pk_id: null;
+                                                    id: null;
+                                                    username: null;
+                                                    full_name: null;
+                                                    is_private: boolean;
+                                                    is_verified: boolean;
+                                                    profile_pic_id: null;
+                                                    profile_pic_url: null;
+                                                    strong_id__: null;
+                                                } | null;
+                                                audio_filter_infos: null[];
+                                                audio_muting_info: {
+                                                    mute_audio: boolean;
+                                                    mute_reason_str: null;
+                                                    allow_audio_editing: boolean;
+                                                    show_muted_audio_toast: boolean;
+                                                };
+                                                user_notes: null;
+                                            };
+                                        } | null;
                                         nux_info: null;
                                         original_sound_info: {
                                             allow_creator_to_rename: boolean;
@@ -7023,8 +7245,32 @@ export interface paths {
                                                 strong_id__: null;
                                             };
                                             audio_filter_infos: null[];
-                                            audio_parts: null[];
-                                            audio_parts_by_filter: null[];
+                                            audio_parts: ({
+                                                music_canonical_id: null;
+                                                audio_type: null;
+                                                display_artist: null;
+                                                display_title: null;
+                                                thumbnail_uri: null;
+                                                is_bookmarked: boolean;
+                                                is_explicit: boolean;
+                                                parent_start_time_in_ms: number;
+                                                audio_start_time_in_ms: number;
+                                                duration_in_ms: number;
+                                                is_eligible_for_audio_effects: boolean;
+                                            } | null)[];
+                                            audio_parts_by_filter: ({
+                                                music_canonical_id: null;
+                                                audio_type: null;
+                                                display_artist: null;
+                                                display_title: null;
+                                                thumbnail_uri: null;
+                                                is_bookmarked: boolean;
+                                                is_explicit: boolean;
+                                                parent_start_time_in_ms: number;
+                                                audio_start_time_in_ms: number;
+                                                duration_in_ms: number;
+                                                is_eligible_for_audio_effects: boolean;
+                                            } | null)[];
                                             consumption_info: {
                                                 display_media_id: null;
                                                 is_bookmarked: boolean;
@@ -7058,6 +7304,68 @@ export interface paths {
                                     view_state_item_type: number;
                                     is_reuse_allowed: boolean;
                                     brs_severity: number;
+                                    fb_play_count?: number;
+                                    fb_like_count?: number;
+                                    facepile_top_likers?: {
+                                        pk: number;
+                                        pk_id: null;
+                                        id: null;
+                                        full_name: null;
+                                        is_private: boolean;
+                                        strong_id__: null;
+                                        username: null;
+                                        is_verified: boolean;
+                                        profile_pic_id: null;
+                                        profile_pic_url: null;
+                                    }[];
+                                    brs_content_blocklist_bitmap_obj?: {
+                                        bitmap_array: number[];
+                                        bitmap_string: null;
+                                        encode: number;
+                                        bitmap_map: null[];
+                                    };
+                                    commerce_integrity_review_decision?: null;
+                                    creative_config?: {
+                                        capture_type: null;
+                                        face_effect_id: null;
+                                        attribution_user: null;
+                                        creation_tool_info: {
+                                            camera_tool: number;
+                                            duration_selector_seconds: number;
+                                            speed_selector: number;
+                                            color_filters: null;
+                                            appearance_effect: number;
+                                            timer_selector_seconds: number;
+                                            magic_cut_start_time: number;
+                                            magic_cut_end_time: number;
+                                        }[];
+                                        effect_configs: null;
+                                        effect_preview: null;
+                                    };
+                                    usertags?: {
+                                        in: {
+                                            position: number[];
+                                            show_category_of_user: boolean;
+                                            user: {
+                                                pk: number;
+                                                pk_id: null;
+                                                id: null;
+                                                full_name: null;
+                                                is_private: boolean;
+                                                strong_id__: null;
+                                                username: null;
+                                                is_verified: boolean;
+                                                profile_pic_id: null;
+                                                profile_pic_url: null;
+                                            };
+                                        }[];
+                                    };
+                                    photo_of_you?: boolean;
+                                    collab_follow_button_info?: {
+                                        show_follow_button: boolean;
+                                        is_owner_in_author_exp: boolean;
+                                    };
+                                    commenting_disabled_for_viewer?: boolean;
                                 };
                             }[];
                             status: null;
@@ -7666,16 +7974,17 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            items: {
+                            items: ({
                                 collection_id: null;
                                 collection_name: null;
                                 collection_type: null;
-                                cover_media: {
+                                collection_media_count: number;
+                                cover_media_list?: {
                                     id: null;
                                     pk: number;
                                     strong_id__: null;
                                     image_versions2: {
-                                        additional_candidates: {
+                                        additional_candidates?: {
                                             first_frame: {
                                                 height: number;
                                                 scans_profile: null;
@@ -7695,8 +8004,60 @@ export interface paths {
                                             scans_profile: null;
                                             url: null;
                                             width: number;
+                                            estimated_scans_sizes?: number[];
                                         }[];
-                                        scrubber_spritesheet_info_candidates: {
+                                        scrubber_spritesheet_info_candidates?: {
+                                            default: {
+                                                file_size_kb: number;
+                                                max_thumbnails_per_sprite: number;
+                                                rendered_width: number;
+                                                sprite_height: number;
+                                                sprite_urls: null[];
+                                                sprite_width: number;
+                                                thumbnail_duration: number;
+                                                thumbnail_height: number;
+                                                thumbnail_width: number;
+                                                thumbnails_per_row: number;
+                                                total_thumbnail_num_per_sprite: number;
+                                                video_length: number;
+                                            };
+                                        };
+                                    };
+                                    media_type: number;
+                                    original_height: number;
+                                    original_width: number;
+                                    product_type: null;
+                                }[];
+                                cover_media?: {
+                                    id: null;
+                                    pk: number;
+                                    strong_id__: null;
+                                    image_versions2: {
+                                        additional_candidates?: {
+                                            first_frame: {
+                                                estimated_scans_sizes?: number[];
+                                                height: number;
+                                                scans_profile: null;
+                                                url: null;
+                                                width: number;
+                                            };
+                                            igtv_first_frame: {
+                                                estimated_scans_sizes?: number[];
+                                                height: number;
+                                                scans_profile: null;
+                                                url: null;
+                                                width: number;
+                                            };
+                                            smart_frame: null;
+                                        };
+                                        candidates: {
+                                            estimated_scans_sizes?: number[];
+                                            height: number;
+                                            scans_profile: null;
+                                            url: null;
+                                            width: number;
+                                        }[];
+                                        scrubber_spritesheet_info_candidates?: {
                                             default: {
                                                 file_size_kb: number;
                                                 max_thumbnails_per_sprite: number;
@@ -7718,11 +8079,10 @@ export interface paths {
                                     original_width: number;
                                     product_type: null;
                                 };
-                                collection_media_count: number;
-                                collection_clips_count: number;
-                                viewer_access_level: null;
-                                contains_provided_media_id: boolean;
-                                collab_meta: {
+                                collection_clips_count?: number;
+                                viewer_access_level?: null;
+                                contains_provided_media_id?: boolean;
+                                collab_meta?: {
                                     ig_thread_id: null;
                                     facepile_users: {
                                         pk: number;
@@ -7738,10 +8098,10 @@ export interface paths {
                                     }[];
                                     social_context_subtitle: null;
                                 };
-                            }[];
-                            more_available: boolean;
-                            auto_load_more_enabled: boolean;
+                            } | null)[];
                             status: null;
+                            more_available?: boolean;
+                            auto_load_more_enabled?: boolean;
                         };
                     };
                 };
@@ -8323,24 +8683,53 @@ export interface paths {
                                 section_title: null;
                                 allow_overflow: boolean;
                                 sticker_bundles: {
-                                    id: number;
+                                    id: number | null;
                                     stickers: {
-                                        id: number;
-                                        type: null;
-                                        name: null;
-                                        tap_state_str_id: null;
-                                        image_url: null;
-                                        image_width_ratio: number;
-                                        tray_image_width_ratio: number;
-                                        image_width: number;
-                                        image_height: number;
-                                        sticker_accessibility_label: null;
+                                        id: number | null;
+                                        is_editable?: number;
+                                        question?: null;
+                                        profile_pic_url?: null;
+                                        question_types?: null[];
+                                        response_types?: null[];
+                                        image_asset_id?: number;
+                                        type?: null;
+                                        name?: null;
+                                        tap_state_str_id?: null;
+                                        image_url?: null;
+                                        image_width_ratio?: number;
+                                        tray_image_width_ratio?: number;
+                                        image_width?: number;
+                                        image_height?: number;
+                                        is_fl?: boolean;
+                                        links_integrity?: {
+                                            xig_ides_enforcement_via_restriction: {
+                                                decision: boolean;
+                                                enforcement_id: null;
+                                                enforcement_protocol_code: null;
+                                                reason: null;
+                                                entity_id: null;
+                                            };
+                                        };
+                                        emoji?: null;
+                                        has_countdowns?: boolean;
+                                        has_countdown_suggestions?: boolean;
+                                        sticker_accessibility_label?: null;
                                     }[];
-                                    include_in_recent: boolean;
                                     keywords: null[];
-                                    has_attribution: null;
-                                    available_in_direct: boolean;
                                     is_boost_eligible: boolean;
+                                    is_interactive_sticker?: boolean;
+                                    suggested_prompts?: null[];
+                                    include_in_recent?: boolean;
+                                    prompts?: null[];
+                                    has_attribution?: boolean | null;
+                                    available_in_direct?: boolean;
+                                    render_framework?: null;
+                                    reel_media_sticker_limit?: number;
+                                    help_text?: null;
+                                    bounding_box_enabled?: boolean;
+                                    minimum_scale?: number;
+                                    maximum_scale?: number;
+                                    has_avatar?: boolean;
                                 }[];
                                 show_separator: boolean;
                                 is_separator_invisible: boolean;
@@ -8657,6 +9046,30 @@ export interface paths {
                                             size: null;
                                             url: null;
                                         };
+                                        hd?: {
+                                            height: null;
+                                            width: null;
+                                            mp4_size: null;
+                                            mp4: null;
+                                        };
+                                        "4k"?: {
+                                            height: null;
+                                            width: null;
+                                            mp4_size: null;
+                                            mp4: null;
+                                        };
+                                    };
+                                    user?: {
+                                        avatar_url: null;
+                                        banner_image: null;
+                                        banner_url: null;
+                                        profile_url: null;
+                                        username: null;
+                                        display_name: null;
+                                        description: null;
+                                        instagram_url: null;
+                                        website_url: null;
+                                        is_verified: boolean;
                                     };
                                     analytics_response_payload: null;
                                     analytics: {
@@ -8941,6 +9354,18 @@ export interface paths {
                                 show_in_settings: boolean;
                                 mes_status: null;
                                 is_eligible_to_onboard: boolean;
+                                product_config?: {
+                                    has_selected_creator_interests: boolean;
+                                    is_new_brand_available_in_wishlist: boolean;
+                                    has_user_onboarded_for_payouts: boolean;
+                                    is_partnership_messaging_eligible: boolean;
+                                };
+                                branded_content_config?: {
+                                    has_selected_creator_interests: boolean;
+                                    is_new_brand_available_in_wishlist: boolean;
+                                    has_user_onboarded_for_payouts: boolean;
+                                    is_partnership_messaging_eligible: boolean;
+                                };
                             }[];
                             status: null;
                         };
@@ -10077,7 +10502,7 @@ export interface paths {
                     content: {
                         "application/json": {
                             inbox: {
-                                threads: {
+                                threads: ({
                                     thread_id: null;
                                     icebreakers: null;
                                     snippet: Record<string, never>;
@@ -10112,7 +10537,6 @@ export interface paths {
                                     is_xac_readonly: boolean;
                                     creator_agent_enabled: boolean;
                                     read_receipts_disabled: number;
-                                    unpublished_pro_page_id: null;
                                     live_location_session_id: null;
                                     is_pin: boolean;
                                     pinned_timestamp: null;
@@ -10121,11 +10545,6 @@ export interface paths {
                                     typing_indicator_disabled: number;
                                     locked_status: null;
                                     notification_preview_controls: null;
-                                    universal_business_consent_settings: {
-                                        has_made_ubc_decision: boolean;
-                                        business_opt_in_status: boolean;
-                                        consumer_opt_in_status: boolean;
-                                    };
                                     customer_details: null;
                                     recurring_prompt_type: null;
                                     snoozed_messages_metadata: {
@@ -10134,14 +10553,19 @@ export interface paths {
                                         show_snooze_pill: boolean;
                                     };
                                     is_verified_thread: boolean;
-                                    last_mentioned_item_timestamp_us: null;
+                                    last_mentioned_item_timestamp_us: number | null;
                                     lightweight_intervention_appealable_entity_id: null;
                                     nudge: {
-                                        create_time: null;
+                                        create_time: number | null;
                                         nudge_type: number;
                                     };
-                                    nicknames: null[];
-                                    reachability_status: number;
+                                    nicknames: ({
+                                        igid: null;
+                                        eimu_id: null;
+                                        fbid_v2: null;
+                                        nickname: null;
+                                    } | null)[];
+                                    reachability_status: number | null;
                                     nicknames_setting: {
                                         user_igid: null;
                                         nickname_setting: null;
@@ -10150,9 +10574,8 @@ export interface paths {
                                     must_show_in_thread_business_disclaimer: boolean;
                                     ai_agent_voice_calling_enabled: boolean;
                                     ai_agent_remixable: boolean;
-                                    recent_creation_time: number;
+                                    recent_creation_time: number | null;
                                     should_show_safety_card: boolean;
-                                    has_epd_restricted_user: boolean;
                                     is_last_message_story_reply: boolean;
                                     is_new_friend_bump: null;
                                     pinned_activity: null;
@@ -10198,21 +10621,21 @@ export interface paths {
                                             is_bestie: boolean;
                                             is_feed_favorite: boolean;
                                             is_restricted: boolean;
-                                            outgoing_request: boolean;
-                                            incoming_request: boolean;
                                             muting: boolean;
                                             blocking: boolean;
                                             is_messaging_pseudo_blocking: boolean;
                                             is_private: boolean;
-                                            is_viewer_unconnected: boolean;
-                                            reachability_status: number;
+                                            outgoing_request?: boolean;
+                                            incoming_request?: boolean;
+                                            is_viewer_unconnected?: boolean;
+                                            reachability_status?: number;
                                         };
                                         is_shared_account: boolean;
                                         is_shared_account_with_messaging_access: boolean;
                                         ai_agent_banner_type: null;
                                         is_eligible_for_ai_bot_group_chats: boolean;
-                                        ai_agent_can_participate_in_audio_call: null;
-                                        ai_agent_can_participate_in_video_call: null;
+                                        ai_agent_can_participate_in_audio_call?: null;
+                                        ai_agent_can_participate_in_video_call?: null;
                                     }[];
                                     shh_mode_enabled: boolean;
                                     canonical: boolean;
@@ -10224,13 +10647,38 @@ export interface paths {
                                     marked_as_unread: boolean;
                                     approval_required_for_new_members: boolean;
                                     assigned_admin_id: number;
-                                    admin_user_ids: null[];
+                                    thread_image?: {
+                                        media_type: number;
+                                        id: number;
+                                        original_width: number;
+                                        original_height: number;
+                                        image_versions2: {
+                                            candidates: {
+                                                width: number;
+                                                height: number;
+                                                url: null;
+                                                scans_profile: null;
+                                                fallback: {
+                                                    url: null;
+                                                };
+                                                url_expiration_timestamp_us: number;
+                                            }[];
+                                        };
+                                    } | null;
+                                    admin_user_ids: (number | null)[];
                                     ongoing_call_timestamp_ms: null;
-                                    pinned_messages_metadata: null;
+                                    pinned_messages_metadata: {
+                                        message_id: null;
+                                        item_id: null;
+                                        title_text: null;
+                                        pinned_timestamp_ms: number;
+                                        item_type: null;
+                                        preview_thumbnail_url: null;
+                                    }[] | null;
                                     ad_context_data: null;
                                     label_items: null[];
                                     shh_transport_mode: number;
-                                    shh_toggler_userid: null;
+                                    shh_toggler_userid: number | null;
                                     messaging_thread_key: number;
                                     has_newer: boolean;
                                     has_older: boolean;
@@ -10240,19 +10688,151 @@ export interface paths {
                                     theme: {
                                         id: null;
                                     };
-                                    thread_context_items: null[];
+                                    theme_data?: {
+                                        theme_id: number;
+                                        name: null;
+                                        theme_type: number;
+                                        alternative_themes: {
+                                            theme_id: number;
+                                            name: null;
+                                            theme_type: number;
+                                            alternative_themes: null[];
+                                            gradient_colors: null[];
+                                            is_deprecated: boolean;
+                                            corner_radius: number;
+                                            should_use_diagonal_gradient_for_composer_circle_button: boolean;
+                                            should_show_incoming_message_bubble_border: boolean;
+                                            can_display_border_on_visual_message_tombstones: boolean;
+                                            icon_asset: {
+                                                fifty: null;
+                                                seventy_five: null;
+                                                one_hundred: null;
+                                                two_hundred: null;
+                                                icon_images: null[];
+                                            };
+                                            secondary_text_color: null;
+                                            incoming_message_bubble_color: null;
+                                            quoted_incoming_message_bubble_color: null;
+                                            thread_background_color: null;
+                                            thread_background_asset: {
+                                                four_hundred_eighty: null;
+                                                seven_hundred_twenty: null;
+                                                one_thousand_twenty_four: null;
+                                                two_thousand_forty_eight: null;
+                                                background_images: null[];
+                                            };
+                                            navigation_bar_color: null;
+                                            navigation_bar_title_color: null;
+                                            navigation_bar_subtitle_color: null;
+                                            navigation_bar_icon_color: null;
+                                            solid_composer_background_color: null;
+                                            blurred_composer_background_color: null;
+                                            composer_secondary_button_color: null;
+                                            reaction_pill_color: null;
+                                            emphasized_action_color: null;
+                                            emphasis_colors: null[];
+                                            solid_separator_color: null;
+                                            shh_mode_interleaved_background_color: null;
+                                            blurred_composer_opaque_background_color: null;
+                                            app_color_mode: null;
+                                            fallback_color: null;
+                                            inbound_message_text_color: null;
+                                            outbound_message_text_color: null;
+                                            composer_send_button_colors: null[];
+                                            composer_input_background_color: null;
+                                            composer_circle_button_colors: null[];
+                                            subtitle?: null;
+                                            composer_placeholder_text_color?: null;
+                                            loading_message_bubble_color?: null;
+                                            bottom_gradient_color?: null;
+                                        }[];
+                                        gradient_colors: null[];
+                                        is_deprecated: boolean;
+                                        corner_radius: number;
+                                        should_use_diagonal_gradient_for_composer_circle_button: boolean;
+                                        should_show_incoming_message_bubble_border: boolean;
+                                        can_display_border_on_visual_message_tombstones: boolean;
+                                        icon_asset: {
+                                            fifty: null;
+                                            seventy_five: null;
+                                            one_hundred: null;
+                                            two_hundred: null;
+                                            icon_images: null[];
+                                        };
+                                        secondary_text_color: null;
+                                        incoming_message_bubble_color: null;
+                                        quoted_incoming_message_bubble_color: null;
+                                        thread_background_color: null;
+                                        thread_background_asset: {
+                                            four_hundred_eighty: null;
+                                            seven_hundred_twenty: null;
+                                            one_thousand_twenty_four: null;
+                                            two_thousand_forty_eight: null;
+                                            background_images: null[];
+                                        };
+                                        navigation_bar_color: null;
+                                        navigation_bar_title_color: null;
+                                        navigation_bar_subtitle_color: null;
+                                        navigation_bar_icon_color: null;
+                                        solid_composer_background_color: null;
+                                        blurred_composer_background_color: null;
+                                        composer_secondary_button_color: null;
+                                        reaction_pill_color: null;
+                                        emphasized_action_color: null;
+                                        emphasis_colors: null[];
+                                        solid_separator_color: null;
+                                        shh_mode_interleaved_background_color: null;
+                                        blurred_composer_opaque_background_color: null;
+                                        app_color_mode: null;
+                                        fallback_color: null;
+                                        inbound_message_text_color: null;
+                                        outbound_message_text_color: null;
+                                        composer_send_button_colors: null[];
+                                        composer_input_background_color: null;
+                                        composer_circle_button_colors: null[];
+                                        subtitle?: null;
+                                        composer_placeholder_text_color?: null;
+                                        loading_message_bubble_color?: null;
+                                        bottom_gradient_color?: null;
+                                    };
+                                    thread_context_items: ({
+                                        text: null;
+                                        type: number;
+                                    } | null)[];
                                     professional_metadata: null;
                                     pending: boolean;
-                                    pending_user_ids: null[];
+                                    pending_user_ids: (number | null)[];
                                     last_seen_at: {
                                         [key: string]: {
                                             item_id: null;
                                             timestamp: null;
                                             created_at: null;
                                             shh_seen_state: Record<string, never>;
+                                            disappearing_messages_seen_state?: {
+                                                item_id: null;
+                                                timestamp: null;
+                                                created_at: null;
+                                            };
                                         };
                                     };
-                                    smart_suggestion: null;
+                                    smart_suggestion: {
+                                        type: null;
+                                        title: null;
+                                        body: null;
+                                        request_id: null;
+                                        source: null;
+                                        primary_cta: {
+                                            type: null;
+                                            title: null;
+                                        };
+                                        secondary_cta: {
+                                            type: null;
+                                            title: null;
+                                        };
+                                        additional_info: {
+                                            suggested_ml_model_type: null;
+                                        };
+                                    } | null;
                                     system_folder: number;
                                     persistent_menu_icebreakers: {
                                         persistent_icebreakers: null[];
@@ -10295,32 +10875,32 @@ export interface paths {
                                             is_bestie: boolean;
                                             is_feed_favorite: boolean;
                                             is_restricted: boolean;
-                                            outgoing_request: boolean;
-                                            incoming_request: boolean;
                                             muting: boolean;
                                             blocking: boolean;
                                             is_messaging_pseudo_blocking: boolean;
                                             is_private: boolean;
-                                            is_viewer_unconnected: boolean;
-                                            reachability_status: number;
+                                            outgoing_request?: boolean;
+                                            incoming_request?: boolean;
+                                            is_viewer_unconnected?: boolean;
+                                            reachability_status?: number;
                                         };
                                         is_shared_account: boolean;
                                         is_shared_account_with_messaging_access: boolean;
                                         ai_agent_banner_type: null;
                                         is_eligible_for_ai_bot_group_chats: boolean;
-                                        ai_agent_can_participate_in_audio_call: null;
-                                        ai_agent_can_participate_in_video_call: null;
+                                        ai_agent_can_participate_in_audio_call?: null;
+                                        ai_agent_can_participate_in_video_call?: null;
                                     };
                                     input_mode: number;
                                     thread_v2_id: null;
-                                    has_reached_message_request_limit: boolean;
+                                    has_reached_message_request_limit: boolean | null;
                                     last_mentioned_item_id: null;
                                     thread_type: null;
                                     thread_subtype: number;
                                     btv_enabled_map: {
                                         instamadillo_cutover: number;
                                         item_type: {
-                                            text: number;
+                                            text?: number;
                                         };
                                         ttlc: number;
                                         proton: number;
@@ -10339,7 +10919,7 @@ export interface paths {
                                     is_appointment_booking_enabled: boolean;
                                     muted: boolean;
                                     mentions_muted: boolean;
-                                    tq_seq_id: null;
+                                    tq_seq_id: number | null;
                                     named: boolean;
                                     is_close_friend_thread: boolean;
                                     vc_muted: boolean;
@@ -10349,6 +10929,7 @@ export interface paths {
                                     archived: boolean;
                                     bc_partnership: boolean;
                                     shh_replay_enabled: boolean;
+                                    pals_feature_status?: null;
                                     is_stale: boolean;
                                     ig_thread_capabilities: {
                                         capabilities_0: number;
@@ -10379,12 +10960,177 @@ export interface paths {
                                         send_attribution: null;
                                         is_sent_by_viewer: boolean;
                                         uq_seq_id: number;
+                                        tq_seq_id?: number;
                                         latest_snooze_state: number;
                                         one_click_upsell: null;
                                         genai_params: Record<string, never>;
                                         is_pinned: boolean;
                                         system_folder: number;
-                                        media: {
+                                        visual_media?: {
+                                            media: {
+                                                media_type: number;
+                                                id?: null;
+                                                image_versions2?: {
+                                                    candidates: {
+                                                        width: number;
+                                                        height: number;
+                                                        url: null;
+                                                        scans_profile: null;
+                                                        fallback: {
+                                                            url: null;
+                                                        };
+                                                        url_expiration_timestamp_us: number;
+                                                    }[];
+                                                };
+                                                original_width?: number;
+                                                original_height?: number;
+                                                media_id?: number;
+                                                organic_tracking_token?: null;
+                                                user?: {
+                                                    id: null;
+                                                    strong_id__: null;
+                                                    pk: number;
+                                                    pk_id: null;
+                                                    full_name: null;
+                                                    username: null;
+                                                    short_name: null;
+                                                    profile_pic_url: null;
+                                                    is_verified: boolean;
+                                                    interop_messaging_user_fbid: number;
+                                                    fbid_v2: number;
+                                                    has_ig_profile: boolean;
+                                                    interop_user_type: number;
+                                                    is_using_unified_inbox_for_direct: boolean;
+                                                    is_private: boolean;
+                                                    is_creator_agent_enabled: boolean;
+                                                    is_creator_automated_response_enabled: boolean;
+                                                    friendship_status: {
+                                                        blocking: boolean;
+                                                        is_messaging_only_blocking: boolean;
+                                                        is_messaging_pseudo_blocking: boolean;
+                                                        is_unavailable: boolean;
+                                                    };
+                                                    is_shared_account: boolean;
+                                                    is_shared_account_with_messaging_access: boolean;
+                                                    ai_agent_banner_type: null;
+                                                    is_eligible_for_ai_bot_group_chats: boolean;
+                                                };
+                                                create_mode_attribution?: null;
+                                                creative_config?: null;
+                                                expiring_media_action_summary?: null;
+                                            };
+                                            expiring_media_action_summary: {
+                                                type: null;
+                                                timestamp: number;
+                                                count: number;
+                                            } | null;
+                                            seen_user_ids: null[];
+                                            view_mode: null;
+                                            seen_count: number;
+                                            replay_expiring_at_us: number | null;
+                                            reply_type: null;
+                                            playback_duration_secs?: number;
+                                            url_expire_at_secs?: number;
+                                            story_app_attribution?: null;
+                                            tap_models?: null[];
+                                        };
+                                        xma_media_share?: {
+                                            xma_template_type: null;
+                                            xma_layout_type: number;
+                                            preview_url: null;
+                                            preview_url_mime_type: null;
+                                            preview_width: number;
+                                            preview_height: number;
+                                            title_text: null;
+                                            max_title_num_of_lines: number;
+                                            max_subtitle_num_of_lines: number;
+                                            subtitle_text: null;
+                                            subtitle_decoration_type: null;
+                                            default_cta_type: null;
+                                            default_cta_title: null;
+                                            header_icon_url: null;
+                                            header_icon_mime_type: null;
+                                            header_icon_width: number;
+                                            header_icon_height: number;
+                                            header_title_text: null;
+                                            header_subtitle_text: null;
+                                            header_cta_type: null;
+                                            header_cta_title: null;
+                                            header_icon_layout_type: number;
+                                            header_icons_count: null;
+                                            caption_body_text: null;
+                                            group_name: null;
+                                            preview_media_fbid: number;
+                                            target_url: null;
+                                            ig_template_type: null;
+                                            playable_width: number;
+                                            playable_height: number;
+                                            playable_url: null;
+                                            video_codec: null;
+                                            video_dash_manifest: null;
+                                            playable_url_mime_type: null;
+                                            preview_url_info: {
+                                                url: null;
+                                                fallback: {
+                                                    url: null;
+                                                };
+                                                url_expiration_timestamp_us: number;
+                                                width: number;
+                                                height: number;
+                                            };
+                                            header_icon_url_info: {
+                                                url: null;
+                                                fallback: {
+                                                    url: null;
+                                                };
+                                                url_expiration_timestamp_us: number;
+                                                width: number;
+                                                height: number;
+                                            };
+                                            header_icons_url_info: {
+                                                url: null;
+                                                fallback: {
+                                                    url: null;
+                                                };
+                                                url_expiration_timestamp_us: number;
+                                                width: number;
+                                                height: number;
+                                            }[];
+                                            playable_url_info: null;
+                                            favicon_url_info: null;
+                                            favicon_style: null;
+                                            favicons_url_info: null;
+                                            preview_image_decoration_type: null;
+                                            cta_buttons: null;
+                                            is_quoted: null;
+                                            is_borderless: null;
+                                            is_sharable: boolean;
+                                            verified_type: number;
+                                            sticker_type: null;
+                                            accessibility_summary_text: null;
+                                            accessibility_summary_hint: null;
+                                            collapsible_id: null;
+                                            countdown_timestamp_ms: null;
+                                            presence_source: null;
+                                            should_respect_server_preview_size: null;
+                                            accessory_preview_url_info: null;
+                                            accessory_playable_url_info: null;
+                                            playable_audio_url: null;
+                                            preview_icon_info: null;
+                                            quoted_attribution_text: null;
+                                            quoted_caption_body_text: null;
+                                            quoted_title_text: null;
+                                            quoted_favicon_url_info: null;
+                                            quoted_author_verified_type: null;
+                                            save_icon_state: number;
+                                            should_refresh: boolean;
+                                            audio_segment_start_time_ms: null;
+                                            audio_segment_duration_ms: null;
+                                            preview_extra_urls_info: null;
+                                            preview_layout_type: number;
+                                            serialized_content_ref: null;
+                                        }[];
+                                        media?: {
                                             id: number;
                                             user: {
                                                 id: null;
@@ -10446,6 +11192,105 @@ export interface paths {
                                             video_dash_manifest: null;
                                             is_dash_eligible: number;
                                         };
+                                        text?: null;
+                                        auxiliary_text?: null;
+                                        xma_story_share?: {
+                                            xma_template_type: null;
+                                            xma_layout_type: number;
+                                            preview_url: null;
+                                            preview_url_mime_type: null;
+                                            preview_width: number;
+                                            preview_height: number;
+                                            title_text: null;
+                                            max_title_num_of_lines: number;
+                                            max_subtitle_num_of_lines: number;
+                                            subtitle_text: null;
+                                            subtitle_decoration_type: number;
+                                            default_cta_type: null;
+                                            default_cta_title: null;
+                                            header_icon_url: null;
+                                            header_icon_mime_type: null;
+                                            header_icon_width: number;
+                                            header_icon_height: number;
+                                            header_title_text: null;
+                                            header_subtitle_text: null;
+                                            header_cta_type: null;
+                                            header_cta_title: null;
+                                            header_icon_layout_type: number;
+                                            header_icons_count: null;
+                                            caption_body_text: null;
+                                            group_name: null;
+                                            preview_media_fbid: number;
+                                            target_url: null;
+                                            ig_template_type: null;
+                                            playable_width: number;
+                                            playable_height: number;
+                                            playable_url: null;
+                                            video_codec: null;
+                                            video_dash_manifest: null;
+                                            playable_url_mime_type: null;
+                                            preview_url_info: {
+                                                url: null;
+                                                fallback: {
+                                                    url: null;
+                                                };
+                                                url_expiration_timestamp_us: number;
+                                                width: number;
+                                                height: number;
+                                            };
+                                            header_icon_url_info: {
+                                                url: null;
+                                                fallback: {
+                                                    url: null;
+                                                };
+                                                url_expiration_timestamp_us: number;
+                                                width: number;
+                                                height: number;
+                                            };
+                                            header_icons_url_info: {
+                                                url: null;
+                                                fallback: {
+                                                    url: null;
+                                                };
+                                                url_expiration_timestamp_us: number;
+                                                width: number;
+                                                height: number;
+                                            }[];
+                                            playable_url_info: null;
+                                            favicon_url_info: null;
+                                            favicon_style: null;
+                                            favicons_url_info: null;
+                                            preview_image_decoration_type: number;
+                                            cta_buttons: null;
+                                            is_quoted: boolean;
+                                            is_borderless: null;
+                                            is_sharable: boolean;
+                                            verified_type: number;
+                                            sticker_type: null;
+                                            accessibility_summary_text: null;
+                                            accessibility_summary_hint: null;
+                                            collapsible_id: null;
+                                            countdown_timestamp_ms: null;
+                                            presence_source: null;
+                                            should_respect_server_preview_size: null;
+                                            accessory_preview_url_info: null;
+                                            accessory_playable_url_info: null;
+                                            playable_audio_url: null;
+                                            preview_icon_info: null;
+                                            quoted_attribution_text: null;
+                                            quoted_caption_body_text: null;
+                                            quoted_title_text: null;
+                                            quoted_favicon_url_info: null;
+                                            quoted_author_verified_type: null;
+                                            target_expiry_timestamp_ms: number;
+                                            should_refresh: boolean;
+                                            audio_segment_start_time_ms: null;
+                                            audio_segment_duration_ms: null;
+                                            preview_extra_urls_info: null;
+                                            preview_layout_type: number;
+                                            serialized_content_ref: null;
+                                        }[];
+                                        is_edit_with_ai_eligible?: boolean;
                                     };
                                     items: {
                                         item_id: null;
@@ -10467,15 +11312,219 @@ export interface paths {
                                         };
                                         is_replyable_in_bc: boolean;
                                         skip_bump_thread: boolean;
-                                        send_attribution: null;
+                                        send_attribution?: null;
                                         is_sent_by_viewer: boolean;
                                         uq_seq_id: number;
+                                        tq_seq_id?: number;
                                         latest_snooze_state: number;
                                         one_click_upsell: null;
                                         genai_params: Record<string, never>;
                                         is_pinned: boolean;
                                         system_folder: number;
-                                        xma_clip: {
+                                        visual_media?: {
+                                            media: {
+                                                media_type: number;
+                                                id?: null;
+                                                image_versions2?: {
+                                                    candidates: {
+                                                        width: number;
+                                                        height: number;
+                                                        url: null;
+                                                        scans_profile: null;
+                                                        fallback: {
+                                                            url: null;
+                                                        };
+                                                        url_expiration_timestamp_us: number;
+                                                    }[];
+                                                };
+                                                original_width?: number;
+                                                original_height?: number;
+                                                media_id?: number;
+                                                organic_tracking_token?: null;
+                                                user?: {
+                                                    id: null;
+                                                    strong_id__: null;
+                                                    pk: number;
+                                                    pk_id: null;
+                                                    full_name: null;
+                                                    username: null;
+                                                    short_name: null;
+                                                    profile_pic_url: null;
+                                                    is_verified: boolean;
+                                                    interop_messaging_user_fbid: number;
+                                                    fbid_v2: number;
+                                                    has_ig_profile: boolean;
+                                                    interop_user_type: number;
+                                                    is_using_unified_inbox_for_direct: boolean;
+                                                    is_private: boolean;
+                                                    is_creator_agent_enabled: boolean;
+                                                    is_creator_automated_response_enabled: boolean;
+                                                    friendship_status: {
+                                                        blocking: boolean;
+                                                        is_messaging_only_blocking: boolean;
+                                                        is_messaging_pseudo_blocking: boolean;
+                                                        is_unavailable: boolean;
+                                                    };
+                                                    is_shared_account: boolean;
+                                                    is_shared_account_with_messaging_access: boolean;
+                                                    ai_agent_banner_type: null;
+                                                    is_eligible_for_ai_bot_group_chats: boolean;
+                                                };
+                                                create_mode_attribution?: null;
+                                                creative_config?: null;
+                                                expiring_media_action_summary?: null;
+                                                video_versions?: {
+                                                    id: null;
+                                                    type: number;
+                                                    width: number;
+                                                    height: number;
+                                                    url: null;
+                                                    fallback: {
+                                                        url: null;
+                                                    };
+                                                    url_expiration_timestamp_us: number;
+                                                    bandwidth: number;
+                                                }[];
+                                                video_duration?: number;
+                                                video_dash_manifest?: null;
+                                                is_dash_eligible?: number;
+                                            };
+                                            expiring_media_action_summary: {
+                                                type: null;
+                                                timestamp: number;
+                                                count: number;
+                                            } | null;
+                                            seen_user_ids: null[];
+                                            view_mode: null;
+                                            seen_count: number;
+                                            replay_expiring_at_us: number | null;
+                                            reply_type: null;
+                                            playback_duration_secs?: number;
+                                            url_expire_at_secs?: number;
+                                            story_app_attribution?: null;
+                                            tap_models?: null[];
+                                        };
+                                        action_log?: {
+                                            description: null;
+                                            bold: ({
+                                                start: number;
+                                                end: number;
+                                            } | null)[];
+                                            text_attributes: ({
+                                                start: number;
+                                                end: number;
+                                                bold: number;
+                                                color: null;
+                                                intent: null;
+                                                semantic_color: null;
+                                            } | null)[];
+                                            text_parts: {
+                                                text: null;
+                                                bold?: number;
+                                                color?: null;
+                                                intent?: null;
+                                                semantic_color?: null;
+                                            }[];
+                                            is_reaction_log?: boolean;
+                                        };
+                                        text?: null;
+                                        xma_media_share?: {
+                                            xma_template_type: null;
+                                            xma_layout_type: number;
+                                            preview_url: null;
+                                            preview_url_mime_type: null;
+                                            preview_width: number;
+                                            preview_height: number;
+                                            title_text: null;
+                                            max_title_num_of_lines: number;
+                                            max_subtitle_num_of_lines: number;
+                                            subtitle_text: null;
+                                            subtitle_decoration_type: null;
+                                            default_cta_type: null;
+                                            default_cta_title: null;
+                                            header_icon_url: null;
+                                            header_icon_mime_type: null;
+                                            header_icon_width: number;
+                                            header_icon_height: number;
+                                            header_title_text: null;
+                                            header_subtitle_text: null;
+                                            header_cta_type: null;
+                                            header_cta_title: null;
+                                            header_icon_layout_type: number;
+                                            header_icons_count: null;
+                                            caption_body_text: null;
+                                            group_name: null;
+                                            preview_media_fbid: number;
+                                            target_url: null;
+                                            ig_template_type: null;
+                                            playable_width: number;
+                                            playable_height: number;
+                                            playable_url: null;
+                                            video_codec: null;
+                                            video_dash_manifest: null;
+                                            playable_url_mime_type: null;
+                                            preview_url_info: {
+                                                url: null;
+                                                fallback: {
+                                                    url: null;
+                                                };
+                                                url_expiration_timestamp_us: number;
+                                                width: number;
+                                                height: number;
+                                            };
+                                            header_icon_url_info: {
+                                                url: null;
+                                                fallback: {
+                                                    url: null;
+                                                };
+                                                url_expiration_timestamp_us: number;
+                                                width: number;
+                                                height: number;
+                                            };
+                                            header_icons_url_info: {
+                                                url: null;
+                                                fallback: {
+                                                    url: null;
+                                                };
+                                                url_expiration_timestamp_us: number;
+                                                width: number;
+                                                height: number;
+                                            }[];
+                                            playable_url_info: null;
+                                            favicon_url_info: null;
+                                            favicon_style: null;
+                                            favicons_url_info: null;
+                                            preview_image_decoration_type: number | null;
+                                            cta_buttons: null;
+                                            is_quoted: null;
+                                            is_borderless: null;
+                                            is_sharable: boolean;
+                                            verified_type: number;
+                                            sticker_type: null;
+                                            accessibility_summary_text: null;
+                                            accessibility_summary_hint: null;
+                                            collapsible_id: null;
+                                            countdown_timestamp_ms: null;
+                                            presence_source: null;
+                                            should_respect_server_preview_size: null;
+                                            accessory_preview_url_info: null;
+                                            accessory_playable_url_info: null;
+                                            playable_audio_url: null;
+                                            preview_icon_info: null;
+                                            quoted_attribution_text: null;
+                                            quoted_caption_body_text: null;
+                                            quoted_title_text: null;
+                                            quoted_favicon_url_info: null;
+                                            quoted_author_verified_type: null;
+                                            save_icon_state: number;
+                                            should_refresh: boolean;
+                                            audio_segment_start_time_ms: null;
+                                            audio_segment_duration_ms: null;
+                                            preview_extra_urls_info: null;
+                                            preview_layout_type: number;
+                                            serialized_content_ref: null;
+                                        }[];
+                                        xma_clip?: {
                                             xma_template_type: null;
                                             xma_layout_type: number;
                                             preview_url: null;
@@ -10571,7 +11620,168 @@ export interface paths {
                                             preview_layout_type: number;
                                             serialized_content_ref: null;
                                         }[];
-                                        reactions: {
+                                        auxiliary_text?: null;
+                                        xma_story_share?: {
+                                            xma_template_type: null;
+                                            xma_layout_type: number;
+                                            preview_url: null;
+                                            preview_url_mime_type: null;
+                                            preview_width: number | null;
+                                            preview_height: number | null;
+                                            title_text: null;
+                                            max_title_num_of_lines: number;
+                                            max_subtitle_num_of_lines: number;
+                                            subtitle_text: null;
+                                            subtitle_decoration_type: number;
+                                            default_cta_type: null;
+                                            default_cta_title: null;
+                                            header_icon_url: null;
+                                            header_icon_mime_type: null;
+                                            header_icon_width: number | null;
+                                            header_icon_height: number | null;
+                                            header_title_text: null;
+                                            header_subtitle_text: null;
+                                            header_cta_type: null;
+                                            header_cta_title: null;
+                                            header_icon_layout_type?: number;
+                                            header_icons_count: null;
+                                            caption_body_text: null;
+                                            group_name: null;
+                                            preview_media_fbid: number | null;
+                                            target_url: null;
+                                            ig_template_type: null;
+                                            playable_width: number | null;
+                                            playable_height: number | null;
+                                            playable_url: null;
+                                            video_codec: null;
+                                            video_dash_manifest: null;
+                                            playable_url_mime_type: null;
+                                            preview_url_info: {
+                                                url: null;
+                                                fallback: {
+                                                    url: null;
+                                                };
+                                                url_expiration_timestamp_us: number;
+                                                width: number;
+                                                height: number;
+                                            } | null;
+                                            header_icon_url_info: {
+                                                url: null;
+                                                fallback: {
+                                                    url: null;
+                                                };
+                                                url_expiration_timestamp_us: number;
+                                                width: number;
+                                                height: number;
+                                            } | null;
+                                            header_icons_url_info: {
+                                                url: null;
+                                                fallback: {
+                                                    url: null;
+                                                };
+                                                url_expiration_timestamp_us: number;
+                                                width: number;
+                                                height: number;
+                                            }[] | null;
+                                            playable_url_info: null;
+                                            favicon_url_info: null;
+                                            favicon_style: null;
+                                            favicons_url_info: null;
+                                            preview_image_decoration_type: number | null;
+                                            cta_buttons: null;
+                                            is_quoted: boolean | null;
+                                            is_borderless: null;
+                                            is_sharable: boolean;
+                                            verified_type: number | null;
+                                            sticker_type?: null;
+                                            accessibility_summary_text: null;
+                                            accessibility_summary_hint: null;
+                                            collapsible_id: null;
+                                            countdown_timestamp_ms: null;
+                                            presence_source: null;
+                                            should_respect_server_preview_size: null;
+                                            accessory_preview_url_info: null;
+                                            accessory_playable_url_info: null;
+                                            playable_audio_url: null;
+                                            preview_icon_info?: null;
+                                            quoted_attribution_text?: null;
+                                            quoted_caption_body_text?: null;
+                                            quoted_title_text?: null;
+                                            quoted_favicon_url_info?: null;
+                                            quoted_author_verified_type?: null;
+                                            should_refresh: boolean;
+                                            audio_segment_start_time_ms: number | null;
+                                            audio_segment_duration_ms: number | null;
+                                            preview_extra_urls_info: null;
+                                            preview_layout_type: number;
+                                            serialized_content_ref: null;
+                                            target_expiry_timestamp_ms?: number;
+                                            view_mode?: null;
+                                            view_count?: null;
+                                        }[];
+                                        media?: {
+                                            id: number;
+                                            user: {
+                                                id: null;
+                                                strong_id__: null;
+                                                pk: number;
+                                                pk_id: null;
+                                                full_name: null;
+                                                username: null;
+                                                short_name: null;
+                                                profile_pic_url: null;
+                                                is_verified: boolean;
+                                                interop_messaging_user_fbid: number;
+                                                fbid_v2: number;
+                                                has_ig_profile: boolean;
+                                                interop_user_type: number;
+                                                is_using_unified_inbox_for_direct: boolean;
+                                                is_private: boolean;
+                                                is_creator_agent_enabled: boolean;
+                                                is_creator_automated_response_enabled: boolean;
+                                                friendship_status: {
+                                                    blocking: boolean;
+                                                    is_messaging_only_blocking: boolean;
+                                                    is_messaging_pseudo_blocking: boolean;
+                                                    is_unavailable: boolean;
+                                                };
+                                                is_shared_account: boolean;
+                                                is_shared_account_with_messaging_access: boolean;
+                                                ai_agent_banner_type: null;
+                                                is_eligible_for_ai_bot_group_chats: boolean;
+                                            };
+                                            image_versions2: {
+                                                candidates: {
+                                                    width: number;
+                                                    height: number;
+                                                    url: null;
+                                                    fallback: {
+                                                        url: null;
+                                                    };
+                                                    scans_profile: null;
+                                                    url_expiration_timestamp_us: number;
+                                                }[];
+                                            };
+                                            video_versions: {
+                                                id: null;
+                                                type: number;
+                                                width: number;
+                                                height: number;
+                                                url: null;
+                                                fallback: {
+                                                    url: null;
+                                                };
+                                                url_expiration_timestamp_us: number;
+                                                bandwidth: number;
+                                            }[];
+                                            original_width: number;
+                                            original_height: number;
+                                            media_type: number;
+                                            video_duration: number;
+                                            video_dash_manifest: null;
+                                            is_dash_eligible: number;
+                                        };
+                                        reactions?: {
                                             likes: null[];
                                             likes_count: number;
                                             emojis: {
@@ -10582,8 +11792,270 @@ export interface paths {
                                                 super_react_type: null;
                                             }[];
                                         };
+                                        processed_business_suggestion?: boolean;
+                                        send_silently?: boolean;
+                                        is_edit_with_ai_eligible?: boolean;
+                                        generic_xma?: {
+                                            xma_template_type: null;
+                                            xma_layout_type: number;
+                                            preview_url: null;
+                                            preview_url_mime_type: null;
+                                            preview_width: number;
+                                            preview_height: number;
+                                            title_text: null;
+                                            max_title_num_of_lines: number;
+                                            max_subtitle_num_of_lines: number;
+                                            subtitle_text: null;
+                                            subtitle_decoration_type: number;
+                                            default_cta_type: null;
+                                            default_cta_title: null;
+                                            header_icon_url: null;
+                                            header_icon_mime_type: null;
+                                            header_icon_width: number;
+                                            header_icon_height: number;
+                                            header_title_text: null;
+                                            header_subtitle_text: null;
+                                            header_cta_type: null;
+                                            header_cta_title: null;
+                                            header_icon_layout_type: null;
+                                            header_icons_count: null;
+                                            caption_body_text: null;
+                                            group_name: null;
+                                            preview_media_fbid: null;
+                                            target_url: null;
+                                            ig_template_type: null;
+                                            playable_width: number;
+                                            playable_height: number;
+                                            playable_url: null;
+                                            video_codec: null;
+                                            video_dash_manifest: null;
+                                            playable_url_mime_type: null;
+                                            preview_url_info: {
+                                                url: null;
+                                                fallback: {
+                                                    url: null;
+                                                };
+                                                width: number;
+                                                height: number;
+                                            };
+                                            header_icon_url_info: null;
+                                            header_icons_url_info: null;
+                                            playable_url_info: null;
+                                            favicon_url_info: null;
+                                            favicon_style: null;
+                                            favicons_url_info: null;
+                                            preview_image_decoration_type: null;
+                                            cta_buttons: null;
+                                            is_quoted: boolean;
+                                            is_borderless: boolean;
+                                            is_sharable: boolean;
+                                            verified_type: null;
+                                            sticker_type: null;
+                                            accessibility_summary_text: null;
+                                            accessibility_summary_hint: null;
+                                            collapsible_id: null;
+                                            countdown_timestamp_ms: null;
+                                            presence_source: null;
+                                            should_respect_server_preview_size: boolean;
+                                            accessory_preview_url_info: null;
+                                            accessory_playable_url_info: null;
+                                            playable_audio_url: null;
+                                            preview_icon_info: null;
+                                            quoted_attribution_text: null;
+                                            quoted_caption_body_text: null;
+                                            quoted_title_text: null;
+                                            quoted_favicon_url_info: null;
+                                            quoted_author_verified_type: null;
+                                            attachment_id: null;
+                                            should_refresh: boolean;
+                                            audio_segment_start_time_ms: null;
+                                            audio_segment_duration_ms: null;
+                                            preview_extra_urls_info: null;
+                                            preview_layout_type: number;
+                                        }[];
+                                        replied_to_message?: {
+                                            item_id: null;
+                                            message_id: null;
+                                            user_id: number;
+                                            timestamp: number;
+                                            item_type: null;
+                                            client_context: null;
+                                            show_forward_attribution: boolean;
+                                            forward_score: null;
+                                            is_shh_mode: boolean;
+                                            otid: null;
+                                            is_ae_dual_send: boolean;
+                                            is_ephemeral_exception: boolean;
+                                            is_disappearing: boolean;
+                                            is_superlative: boolean;
+                                            paid_partnership_info: {
+                                                is_paid_partnership: boolean;
+                                            };
+                                            is_replyable_in_bc: boolean;
+                                            skip_bump_thread: boolean;
+                                            send_attribution: null;
+                                            is_sent_by_viewer: boolean;
+                                            uq_seq_id: number;
+                                            tq_seq_id: number;
+                                            latest_snooze_state: number;
+                                            one_click_upsell: null;
+                                            genai_params: Record<string, never>;
+                                            is_pinned: boolean;
+                                            system_folder: number;
+                                            text: null;
+                                        };
+                                        edit_count?: number;
+                                        edit_history?: {
+                                            body: null;
+                                            timestamp: number;
+                                        }[];
+                                        hide_in_thread?: number;
                                     }[];
-                                }[];
+                                    unpublished_pro_page_id?: null;
+                                    universal_business_consent_settings?: {
+                                        has_made_ubc_decision: boolean;
+                                        business_opt_in_status: boolean;
+                                        consumer_opt_in_status: boolean;
+                                    };
+                                    has_epd_restricted_user?: boolean;
+                                    dm_settings?: {
+                                        mode: number;
+                                        ttl_sec: number;
+                                        view_ttl_sec: number;
+                                        last_set_actor_id: null;
+                                        last_set_timestamp_ms: number;
+                                        last_set_action_log_type: null;
+                                        last_set_ttl_sec: number;
+                                        last_set_view_ttl_sec: number;
+                                        e2ee_attribution_timestamp_ms: null;
+                                    };
+                                    direct_story?: {
+                                        items: {
+                                            item_id: null;
+                                            message_id: null;
+                                            user_id: number;
+                                            timestamp: number;
+                                            item_type: null;
+                                            client_context: null;
+                                            show_forward_attribution: boolean;
+                                            forward_score: null;
+                                            is_shh_mode: boolean;
+                                            otid: null;
+                                            is_ae_dual_send: boolean;
+                                            is_ephemeral_exception: boolean;
+                                            is_disappearing: boolean;
+                                            is_superlative: boolean;
+                                            paid_partnership_info: {
+                                                is_paid_partnership: boolean;
+                                            };
+                                            is_replyable_in_bc: boolean;
+                                            skip_bump_thread: boolean;
+                                            send_attribution?: null;
+                                            is_sent_by_viewer: boolean;
+                                            uq_seq_id: number;
+                                            latest_snooze_state: number;
+                                            one_click_upsell: null;
+                                            genai_params: Record<string, never>;
+                                            is_pinned: boolean;
+                                            system_folder: number;
+                                            visual_media: {
+                                                media: {
+                                                    id: null;
+                                                    image_versions2: {
+                                                        candidates: {
+                                                            width: number;
+                                                            height: number;
+                                                            url: null;
+                                                            scans_profile: null;
+                                                            fallback: {
+                                                                url: null;
+                                                            };
+                                                            url_expiration_timestamp_us: number;
+                                                        }[];
+                                                    };
+                                                    original_width: number;
+                                                    original_height: number;
+                                                    media_type: number;
+                                                    media_id: number;
+                                                    organic_tracking_token: null;
+                                                    user: {
+                                                        id: null;
+                                                        strong_id__: null;
+                                                        pk: number;
+                                                        pk_id: null;
+                                                        full_name: null;
+                                                        username: null;
+                                                        short_name: null;
+                                                        profile_pic_url: null;
+                                                        is_verified: boolean;
+                                                        interop_messaging_user_fbid: number;
+                                                        fbid_v2: number;
+                                                        has_ig_profile: boolean;
+                                                        interop_user_type: number;
+                                                        is_using_unified_inbox_for_direct: boolean;
+                                                        is_private: boolean;
+                                                        is_creator_agent_enabled: boolean;
+                                                        is_creator_automated_response_enabled: boolean;
+                                                        friendship_status: {
+                                                            blocking: boolean;
+                                                            is_messaging_only_blocking: boolean;
+                                                            is_messaging_pseudo_blocking: boolean;
+                                                            is_unavailable: boolean;
+                                                        };
+                                                        is_shared_account: boolean;
+                                                        is_shared_account_with_messaging_access: boolean;
+                                                        ai_agent_banner_type: null;
+                                                        is_eligible_for_ai_bot_group_chats: boolean;
+                                                    };
+                                                    create_mode_attribution: null;
+                                                    creative_config: null;
+                                                    expiring_media_action_summary: null;
+                                                    video_versions: {
+                                                        id: null;
+                                                        type: number;
+                                                        width: number;
+                                                        height: number;
+                                                        url: null;
+                                                        fallback: {
+                                                            url: null;
+                                                        };
+                                                        url_expiration_timestamp_us: number;
+                                                        bandwidth: number;
+                                                    }[];
+                                                    video_duration: number;
+                                                    video_dash_manifest?: null;
+                                                    is_dash_eligible?: number;
+                                                };
+                                                seen_user_ids: null[];
+                                                seen_count: number;
+                                                view_mode: null;
+                                                replay_expiring_at_us: null;
+                                                reply_type: null;
+                                                url_expire_at_secs: number;
+                                                story_app_attribution: null;
+                                                playback_duration_secs: number;
+                                                tap_models: null[];
+                                                expiring_media_action_summary: null;
+                                            };
+                                            reactions?: {
+                                                likes: null[];
+                                                likes_count: number;
+                                                emojis: {
+                                                    timestamp: number;
+                                                    client_context: null;
+                                                    sender_id: number;
+                                                    emoji: null;
+                                                    super_react_type: null;
+                                                }[];
+                                            };
+                                            tq_seq_id?: number;
+                                        }[];
+                                        newest_cursor: null;
+                                        last_activity_at: number;
+                                        unseen_count: number;
+                                        has_newer: boolean;
+                                    };
+                                } | null)[];
                                 pinned_threads: null[];
                                 unseen_count: number;
                                 unseen_count_ts: number;
@@ -10593,13 +12065,13 @@ export interface paths {
                                     cursor_relevancy_score: number;
                                 };
                                 has_older: boolean;
-                                oldest_cursor: null;
                                 next_cursor: {
                                     cursor_thread_v2_id: number;
                                     cursor_timestamp_seconds: number;
                                     cursor_relevancy_score: number;
                                 };
                                 blended_inbox_enabled: boolean;
+                                oldest_cursor?: null;
                             };
                             viewer: {
                                 strong_id__: null;
@@ -11146,7 +12618,7 @@ export interface paths {
                         "application/json": {
                             section_order: null[];
                             filtered: boolean;
-                            ranked_recipients: {
+                            ranked_recipients: ({
                                 user: {
                                     id: null;
                                     pk: number;
@@ -11174,7 +12646,7 @@ export interface paths {
                                         blocking: boolean;
                                         is_messaging_pseudo_blocking: boolean;
                                         is_private: boolean;
-                                        is_viewer_unconnected: boolean;
+                                        is_viewer_unconnected: boolean | null;
                                         reachability_status: number;
                                         is_group_creation_reachable: boolean;
                                         incoming_request: boolean;
@@ -11190,7 +12662,73 @@ export interface paths {
                                     is_armadillo_message_request_eligible: boolean;
                                     restriction_type: number;
                                 };
-                            }[];
+                                thread?: {
+                                    thread_id: null;
+                                    thread_title: null;
+                                    named: boolean;
+                                    pending: boolean;
+                                    thread_subtype: number;
+                                    messaging_thread_key: number;
+                                    is_group: boolean;
+                                    canonical: boolean;
+                                    viewer_id: number;
+                                    wa_group_thread_id: null;
+                                    instamadillo_cutover: null;
+                                    thread_image_url: null;
+                                    context_line: null;
+                                    is_following_chat_creator: boolean;
+                                    is_creator_subscriber_thread: boolean;
+                                    channels_context_lines_data: {
+                                        primary_channel_context_line_search: null;
+                                        secondary_channel_context_line_search: null;
+                                    };
+                                    creator_broadcast_thread_data: null;
+                                    creator_subscriber_thread_data: null;
+                                    discoverable_thread_data: null;
+                                    users: {
+                                        id: null;
+                                        pk: number;
+                                        pk_id: null;
+                                        fbid_v2: number;
+                                        has_anonymous_profile_picture: boolean;
+                                        interop_messaging_user_fbid: number;
+                                        username: null;
+                                        full_name: null;
+                                        profile_pic_url: null;
+                                        profile_pic_id: null;
+                                        is_verified: boolean;
+                                        is_private: boolean;
+                                        is_creator_agent_enabled: boolean;
+                                        biz_user_inbox_state: number;
+                                        wa_eligibility: number;
+                                        wa_addressable: boolean;
+                                        account_type: number;
+                                        friendship_status: {
+                                            following: boolean;
+                                            followed_by: boolean;
+                                            is_restricted: boolean;
+                                            muting: boolean;
+                                            blocking: boolean;
+                                            is_messaging_pseudo_blocking: boolean;
+                                            is_private: boolean;
+                                            is_viewer_unconnected: boolean | null;
+                                            reachability_status: number;
+                                            incoming_request: boolean;
+                                            outgoing_request: boolean;
+                                            is_group_creation_reachable: boolean;
+                                        };
+                                        default_e2ee_thread_one_to_one: boolean;
+                                        has_cutover_thread: boolean;
+                                        is_eligible_for_ai_bot_group_chats: boolean;
+                                        supports_e2ee_spamd_storage: boolean;
+                                        is_using_unified_inbox_for_direct: boolean;
+                                        is_shared_account: boolean;
+                                        is_shared_account_with_messaging_access: boolean;
+                                        is_armadillo_message_request_eligible: boolean;
+                                        restriction_type: number;
+                                    }[];
+                                };
+                            } | null)[];
                             rank_token: null;
                             request_id: null;
                             inform_module: null;
@@ -11548,6 +13086,7 @@ export interface paths {
                                     seventy_five: null;
                                     one_hundred: null;
                                     two_hundred: null;
+                                    icon_images?: null[];
                                 };
                                 alternative_themes: {
                                     theme_id: number;
@@ -11559,6 +13098,7 @@ export interface paths {
                                         seventy_five: null;
                                         one_hundred: null;
                                         two_hundred: null;
+                                        icon_images?: null[];
                                     };
                                     alternative_themes: null[];
                                     gradient_colors: null[];
@@ -11568,8 +13108,10 @@ export interface paths {
                                         seven_hundred_twenty: null;
                                         one_thousand_twenty_four: null;
                                         two_thousand_forty_eight: null;
+                                        background_images?: null[];
                                     };
                                     is_deprecated: boolean;
+                                    subtitle?: null;
                                 }[];
                                 gradient_colors: null[];
                                 background_preview_url: null;
@@ -11578,8 +13120,10 @@ export interface paths {
                                     seven_hundred_twenty: null;
                                     one_thousand_twenty_four: null;
                                     two_thousand_forty_eight: null;
+                                    background_images?: null[];
                                 };
                                 is_deprecated: boolean;
+                                subtitle?: null;
                             }[];
                             status: null;
                         };
@@ -11951,7 +13495,7 @@ export interface paths {
                                 is_xac_readonly: boolean;
                                 creator_agent_enabled: boolean;
                                 read_receipts_disabled: number;
-                                unpublished_pro_page_id: null;
+                                unpublished_pro_page_id?: null;
                                 live_location_session_id: null;
                                 is_pin: boolean;
                                 pinned_timestamp: null;
@@ -11960,7 +13504,7 @@ export interface paths {
                                 typing_indicator_disabled: number;
                                 locked_status: null;
                                 notification_preview_controls: null;
-                                universal_business_consent_settings: {
+                                universal_business_consent_settings?: {
                                     has_made_ubc_decision: boolean;
                                     business_opt_in_status: boolean;
                                     consumer_opt_in_status: boolean;
@@ -11973,14 +13517,19 @@ export interface paths {
                                     show_snooze_pill: boolean;
                                 };
                                 is_verified_thread: boolean;
-                                last_mentioned_item_timestamp_us: null;
+                                last_mentioned_item_timestamp_us: number | null;
                                 lightweight_intervention_appealable_entity_id: null;
                                 nudge: {
-                                    create_time: null;
+                                    create_time: number | null;
                                     nudge_type: number;
                                 };
-                                nicknames: null[];
-                                reachability_status: number;
+                                nicknames: ({
+                                    igid: null;
+                                    eimu_id: null;
+                                    fbid_v2: null;
+                                    nickname: null;
+                                } | null)[];
+                                reachability_status: number | null;
                                 nicknames_setting: {
                                     user_igid: null;
                                     nickname_setting: null;
@@ -11989,9 +13538,9 @@ export interface paths {
                                 must_show_in_thread_business_disclaimer: boolean;
                                 ai_agent_voice_calling_enabled: boolean;
                                 ai_agent_remixable: boolean;
-                                recent_creation_time: number;
+                                recent_creation_time: number | null;
                                 should_show_safety_card: boolean;
-                                has_epd_restricted_user: boolean;
+                                has_epd_restricted_user?: boolean;
                                 is_last_message_story_reply: boolean;
                                 is_new_friend_bump: null;
                                 pinned_activity: null;
@@ -12037,21 +13586,21 @@ export interface paths {
                                         is_bestie: boolean;
                                         is_feed_favorite: boolean;
                                         is_restricted: boolean;
-                                        outgoing_request: boolean;
-                                        incoming_request: boolean;
+                                        outgoing_request?: boolean;
+                                        incoming_request?: boolean;
                                         muting: boolean;
                                         blocking: boolean;
                                         is_messaging_pseudo_blocking: boolean;
                                         is_private: boolean;
-                                        is_viewer_unconnected: boolean;
-                                        reachability_status: number;
+                                        is_viewer_unconnected?: boolean;
+                                        reachability_status?: number;
                                     };
                                     is_shared_account: boolean;
                                     is_shared_account_with_messaging_access: boolean;
                                     ai_agent_banner_type: null;
                                     is_eligible_for_ai_bot_group_chats: boolean;
-                                    ai_agent_can_participate_in_audio_call: null;
-                                    ai_agent_can_participate_in_video_call: null;
+                                    ai_agent_can_participate_in_audio_call?: null;
+                                    ai_agent_can_participate_in_video_call?: null;
                                 }[];
                                 shh_mode_enabled: boolean;
                                 canonical: boolean;
@@ -12063,13 +13612,20 @@ export interface paths {
                                 marked_as_unread: boolean;
                                 approval_required_for_new_members: boolean;
                                 assigned_admin_id: number;
-                                admin_user_ids: null[];
+                                admin_user_ids: (number | null)[];
                                 ongoing_call_timestamp_ms: null;
-                                pinned_messages_metadata: null;
+                                pinned_messages_metadata: {
+                                    message_id: null;
+                                    item_id: null;
+                                    title_text: null;
+                                    pinned_timestamp_ms: number;
+                                    item_type: null;
+                                    preview_thumbnail_url: null;
+                                }[] | null;
                                 ad_context_data: null;
                                 label_items: null[];
                                 shh_transport_mode: number;
-                                shh_toggler_userid: null;
+                                shh_toggler_userid: number | null;
                                 messaging_thread_key: number;
                                 has_newer: boolean;
                                 has_older: boolean;
@@ -12079,19 +13635,44 @@ export interface paths {
                                 theme: {
                                     id: null;
                                 };
-                                thread_context_items: null[];
+                                thread_context_items: ({
+                                    text: null;
+                                    type: number;
+                                } | null)[];
                                 professional_metadata: null;
                                 pending: boolean;
-                                pending_user_ids: null[];
+                                pending_user_ids: (number | null)[];
                                 last_seen_at: {
                                     [key: string]: {
                                         item_id: null;
                                         timestamp: null;
                                         created_at: null;
                                         shh_seen_state: Record<string, never>;
+                                        disappearing_messages_seen_state?: {
+                                            item_id: null;
+                                            timestamp: null;
+                                            created_at: null;
+                                        };
                                     };
                                 };
-                                smart_suggestion: null;
+                                smart_suggestion: {
+                                    type: null;
+                                    title: null;
+                                    body: null;
+                                    request_id: null;
+                                    source: null;
+                                    primary_cta: {
+                                        type: null;
+                                        title: null;
+                                    };
+                                    secondary_cta: {
+                                        type: null;
+                                        title: null;
+                                    };
+                                    additional_info: {
+                                        suggested_ml_model_type?: null;
+                                    };
+                                } | null;
                                 system_folder: number;
                                 persistent_menu_icebreakers: {
                                     persistent_icebreakers: null[];
@@ -12134,32 +13715,32 @@ export interface paths {
                                         is_bestie: boolean;
                                         is_feed_favorite: boolean;
                                         is_restricted: boolean;
-                                        outgoing_request: boolean;
-                                        incoming_request: boolean;
+                                        outgoing_request?: boolean;
+                                        incoming_request?: boolean;
                                         muting: boolean;
                                         blocking: boolean;
                                         is_messaging_pseudo_blocking: boolean;
                                         is_private: boolean;
-                                        is_viewer_unconnected: boolean;
-                                        reachability_status: number;
+                                        is_viewer_unconnected?: boolean;
+                                        reachability_status?: number;
                                     };
                                     is_shared_account: boolean;
                                     is_shared_account_with_messaging_access: boolean;
                                     ai_agent_banner_type: null;
                                     is_eligible_for_ai_bot_group_chats: boolean;
-                                    ai_agent_can_participate_in_audio_call: null;
-                                    ai_agent_can_participate_in_video_call: null;
+                                    ai_agent_can_participate_in_audio_call?: null;
+                                    ai_agent_can_participate_in_video_call?: null;
                                 };
                                 input_mode: number;
                                 thread_v2_id: null;
-                                has_reached_message_request_limit: boolean;
+                                has_reached_message_request_limit: boolean | null;
                                 last_mentioned_item_id: null;
                                 thread_type: null;
                                 thread_subtype: number;
                                 btv_enabled_map: {
                                     instamadillo_cutover: number;
                                     item_type: {
-                                        text: number;
+                                        text?: number;
                                     };
                                     ttlc: number;
                                     proton: number;
@@ -12178,7 +13759,7 @@ export interface paths {
                                 is_appointment_booking_enabled: boolean;
                                 muted: boolean;
                                 mentions_muted: boolean;
-                                tq_seq_id: null;
+                                tq_seq_id: number | null;
                                 named: boolean;
                                 is_close_friend_thread: boolean;
                                 vc_muted: boolean;
@@ -12215,7 +13796,7 @@ export interface paths {
                                     };
                                     is_replyable_in_bc: boolean;
                                     skip_bump_thread: boolean;
-                                    send_attribution: null;
+                                    send_attribution?: null;
                                     is_sent_by_viewer: boolean;
                                     uq_seq_id: number;
                                     latest_snooze_state: number;
@@ -12223,7 +13804,71 @@ export interface paths {
                                     genai_params: Record<string, never>;
                                     is_pinned: boolean;
                                     system_folder: number;
-                                    xma_clip: {
+                                    text?: null;
+                                    tq_seq_id?: number;
+                                    media?: {
+                                        id: number;
+                                        user: {
+                                            id: null;
+                                            strong_id__: null;
+                                            pk: number;
+                                            pk_id: null;
+                                            full_name: null;
+                                            username: null;
+                                            short_name: null;
+                                            profile_pic_url: null;
+                                            is_verified: boolean;
+                                            interop_messaging_user_fbid: number;
+                                            fbid_v2: number;
+                                            has_ig_profile: boolean;
+                                            interop_user_type: number;
+                                            is_using_unified_inbox_for_direct: boolean;
+                                            is_private: boolean;
+                                            is_creator_agent_enabled: boolean;
+                                            is_creator_automated_response_enabled: boolean;
+                                            friendship_status: {
+                                                blocking: boolean;
+                                                is_messaging_only_blocking: boolean;
+                                                is_messaging_pseudo_blocking: boolean;
+                                                is_unavailable: boolean;
+                                            };
+                                            is_shared_account: boolean;
+                                            is_shared_account_with_messaging_access: boolean;
+                                            ai_agent_banner_type: null;
+                                            is_eligible_for_ai_bot_group_chats: boolean;
+                                        };
+                                        image_versions2: {
+                                            candidates: {
+                                                width: number;
+                                                height: number;
+                                                url: null;
+                                                fallback: {
+                                                    url: null;
+                                                };
+                                                scans_profile: null;
+                                                url_expiration_timestamp_us: number;
+                                            }[];
+                                        };
+                                        video_versions?: {
+                                            id: null;
+                                            type: number;
+                                            width: number;
+                                            height: number;
+                                            url: null;
+                                            fallback: {
+                                                url: null;
+                                            };
+                                            url_expiration_timestamp_us: number;
+                                            bandwidth: number;
+                                        }[];
+                                        original_width: number;
+                                        original_height: number;
+                                        media_type: number;
+                                        video_duration?: number;
+                                        video_dash_manifest?: null;
+                                        is_dash_eligible?: number;
+                                    };
+                                    xma_clip?: {
                                         xma_template_type: null;
                                         xma_layout_type: number;
                                         preview_url: null;
@@ -12319,7 +13964,232 @@ export interface paths {
                                         preview_layout_type: number;
                                         serialized_content_ref: null;
                                     }[];
-                                    reactions: {
+                                    xma_media_share?: {
+                                        xma_template_type: null;
+                                        xma_layout_type: number;
+                                        preview_url: null;
+                                        preview_url_mime_type: null;
+                                        preview_width: number;
+                                        preview_height: number;
+                                        title_text: null;
+                                        max_title_num_of_lines: number;
+                                        max_subtitle_num_of_lines: number;
+                                        subtitle_text: null;
+                                        subtitle_decoration_type: null;
+                                        default_cta_type: null;
+                                        default_cta_title: null;
+                                        header_icon_url: null;
+                                        header_icon_mime_type: null;
+                                        header_icon_width: number;
+                                        header_icon_height: number;
+                                        header_title_text: null;
+                                        header_subtitle_text: null;
+                                        header_cta_type: null;
+                                        header_cta_title: null;
+                                        header_icon_layout_type: number;
+                                        header_icons_count: null;
+                                        caption_body_text: null;
+                                        group_name: null;
+                                        preview_media_fbid: number;
+                                        target_url: null;
+                                        ig_template_type: null;
+                                        playable_width: number;
+                                        playable_height: number;
+                                        playable_url: null;
+                                        video_codec: null;
+                                        video_dash_manifest: null;
+                                        playable_url_mime_type: null;
+                                        preview_url_info: {
+                                            url: null;
+                                            fallback: {
+                                                url: null;
+                                            };
+                                            url_expiration_timestamp_us: number;
+                                            width: number;
+                                            height: number;
+                                        };
+                                        header_icon_url_info: {
+                                            url: null;
+                                            fallback: {
+                                                url: null;
+                                            };
+                                            url_expiration_timestamp_us: number;
+                                            width: number;
+                                            height: number;
+                                        };
+                                        header_icons_url_info: {
+                                            url: null;
+                                            fallback: {
+                                                url: null;
+                                            };
+                                            url_expiration_timestamp_us: number;
+                                            width: number;
+                                            height: number;
+                                        }[];
+                                        playable_url_info: null;
+                                        favicon_url_info: null;
+                                        favicon_style: null;
+                                        favicons_url_info: null;
+                                        preview_image_decoration_type: null;
+                                        cta_buttons: null;
+                                        is_quoted: null;
+                                        is_borderless: null;
+                                        is_sharable: boolean;
+                                        verified_type: number;
+                                        sticker_type: null;
+                                        accessibility_summary_text: null;
+                                        accessibility_summary_hint: null;
+                                        collapsible_id: null;
+                                        countdown_timestamp_ms: null;
+                                        presence_source: null;
+                                        should_respect_server_preview_size: null;
+                                        accessory_preview_url_info: null;
+                                        accessory_playable_url_info: null;
+                                        playable_audio_url: null;
+                                        preview_icon_info: null;
+                                        quoted_attribution_text: null;
+                                        quoted_caption_body_text: null;
+                                        quoted_title_text: null;
+                                        quoted_favicon_url_info: null;
+                                        quoted_author_verified_type: null;
+                                        save_icon_state: number;
+                                        should_refresh: boolean;
+                                        audio_segment_start_time_ms: null;
+                                        audio_segment_duration_ms: null;
+                                        preview_extra_urls_info: null;
+                                        preview_layout_type: number;
+                                        serialized_content_ref: null;
+                                    }[];
+                                    is_edit_with_ai_eligible?: boolean;
+                                    auxiliary_text?: null;
+                                    xma_story_share?: {
+                                        xma_template_type: null;
+                                        xma_layout_type: number;
+                                        preview_url: null;
+                                        preview_url_mime_type: null;
+                                        preview_width: number;
+                                        preview_height: number;
+                                        title_text: null;
+                                        max_title_num_of_lines: number;
+                                        max_subtitle_num_of_lines: number;
+                                        subtitle_text: null;
+                                        subtitle_decoration_type: number;
+                                        default_cta_type: null;
+                                        default_cta_title: null;
+                                        header_icon_url: null;
+                                        header_icon_mime_type: null;
+                                        header_icon_width: number;
+                                        header_icon_height: number;
+                                        header_title_text: null;
+                                        header_subtitle_text: null;
+                                        header_cta_type: null;
+                                        header_cta_title: null;
+                                        header_icon_layout_type: number;
+                                        header_icons_count: null;
+                                        caption_body_text: null;
+                                        group_name: null;
+                                        preview_media_fbid: number;
+                                        target_url: null;
+                                        ig_template_type: null;
+                                        playable_width: number;
+                                        playable_height: number;
+                                        playable_url: null;
+                                        video_codec: null;
+                                        video_dash_manifest: null;
+                                        playable_url_mime_type: null;
+                                        preview_url_info: {
+                                            url: null;
+                                            fallback: {
+                                                url: null;
+                                            };
+                                            url_expiration_timestamp_us: number;
+                                            width: number;
+                                            height: number;
+                                        };
+                                        header_icon_url_info: {
+                                            url: null;
+                                            fallback: {
+                                                url: null;
+                                            };
+                                            url_expiration_timestamp_us: number;
+                                            width: number;
+                                            height: number;
+                                        };
+                                        header_icons_url_info: {
+                                            url: null;
+                                            fallback: {
+                                                url: null;
+                                            };
+                                            url_expiration_timestamp_us: number;
+                                            width: number;
+                                            height: number;
+                                        }[];
+                                        playable_url_info: null;
+                                        favicon_url_info: null;
+                                        favicon_style: null;
+                                        favicons_url_info: null;
+                                        preview_image_decoration_type: number;
+                                        cta_buttons: null;
+                                        is_quoted: boolean;
+                                        is_borderless: null;
+                                        is_sharable: boolean;
+                                        verified_type: number;
+                                        sticker_type: null;
+                                        accessibility_summary_text: null;
+                                        accessibility_summary_hint: null;
+                                        collapsible_id: null;
+                                        countdown_timestamp_ms: null;
+                                        presence_source: null;
+                                        should_respect_server_preview_size: null;
+                                        accessory_preview_url_info: null;
+                                        accessory_playable_url_info: null;
+                                        playable_audio_url: null;
+                                        preview_icon_info: null;
+                                        quoted_attribution_text: null;
+                                        quoted_caption_body_text: null;
+                                        quoted_title_text: null;
+                                        quoted_favicon_url_info: null;
+                                        quoted_author_verified_type: null;
+                                        target_expiry_timestamp_ms: number;
+                                        should_refresh: boolean;
+                                        audio_segment_start_time_ms: null;
+                                        audio_segment_duration_ms: null;
+                                        preview_extra_urls_info: null;
+                                        preview_layout_type: number;
+                                        serialized_content_ref: null;
+                                    }[];
+                                    replied_to_message?: {
+                                        item_id: null;
+                                        message_id: null;
+                                        user_id: number;
+                                        timestamp: number;
+                                        item_type: null;
+                                        client_context: null;
+                                        show_forward_attribution: boolean;
+                                        forward_score: null;
+                                        is_shh_mode: boolean;
+                                        otid: null;
+                                        is_ae_dual_send: boolean;
+                                        is_ephemeral_exception: boolean;
+                                        is_disappearing: boolean;
+                                        is_superlative: boolean;
+                                        paid_partnership_info: {
+                                            is_paid_partnership: boolean;
+                                        };
+                                        is_replyable_in_bc: boolean;
+                                        skip_bump_thread: boolean;
+                                        send_attribution: null;
+                                        is_sent_by_viewer: boolean;
+                                        uq_seq_id: number;
+                                        tq_seq_id: number;
+                                        latest_snooze_state: number;
+                                        one_click_upsell: null;
+                                        genai_params: Record<string, never>;
+                                        is_pinned: boolean;
+                                        system_folder: number;
+                                        text: null;
+                                    };
+                                    reactions?: {
                                         likes: null[];
                                         likes_count: number;
                                         emojis: {
@@ -12330,8 +14200,87 @@ export interface paths {
                                             super_react_type: null;
                                         }[];
                                     };
-                                };
-                                items: {
+                                    visual_media?: {
+                                        media: {
+                                            id: null;
+                                            image_versions2: {
+                                                candidates: {
+                                                    width: number;
+                                                    height: number;
+                                                    url: null;
+                                                    scans_profile: null;
+                                                    fallback: {
+                                                        url: null;
+                                                    };
+                                                    url_expiration_timestamp_us: number;
+                                                }[];
+                                            };
+                                            original_width: number;
+                                            original_height: number;
+                                            media_type: number;
+                                            media_id: number;
+                                            organic_tracking_token: null;
+                                            user: {
+                                                id: null;
+                                                strong_id__: null;
+                                                pk: number;
+                                                pk_id: null;
+                                                full_name: null;
+                                                username: null;
+                                                short_name: null;
+                                                profile_pic_url: null;
+                                                is_verified: boolean;
+                                                interop_messaging_user_fbid: number;
+                                                fbid_v2: number;
+                                                has_ig_profile: boolean;
+                                                interop_user_type: number;
+                                                is_using_unified_inbox_for_direct: boolean;
+                                                is_private: boolean;
+                                                is_creator_agent_enabled: boolean;
+                                                is_creator_automated_response_enabled: boolean;
+                                                friendship_status: {
+                                                    blocking: boolean;
+                                                    is_messaging_only_blocking: boolean;
+                                                    is_messaging_pseudo_blocking: boolean;
+                                                    is_unavailable: boolean;
+                                                };
+                                                is_shared_account: boolean;
+                                                is_shared_account_with_messaging_access: boolean;
+                                                ai_agent_banner_type: null;
+                                                is_eligible_for_ai_bot_group_chats: boolean;
+                                            };
+                                            create_mode_attribution: null;
+                                            creative_config: null;
+                                            expiring_media_action_summary: null;
+                                            video_versions: {
+                                                id: null;
+                                                type: number;
+                                                width: number;
+                                                height: number;
+                                                url: null;
+                                                fallback: {
+                                                    url: null;
+                                                };
+                                                url_expiration_timestamp_us: number;
+                                                bandwidth: number;
+                                            }[];
+                                            video_duration: number;
+                                            video_dash_manifest: null;
+                                            is_dash_eligible: number;
+                                        };
+                                        seen_user_ids: null[];
+                                        seen_count: number;
+                                        view_mode: null;
+                                        replay_expiring_at_us: null;
+                                        reply_type: null;
+                                        url_expire_at_secs: number;
+                                        story_app_attribution: null;
+                                        playback_duration_secs: number;
+                                        tap_models: null[];
+                                        expiring_media_action_summary: null;
+                                    };
+                                } | null;
+                                items: ({
                                     item_id: null;
                                     message_id: null;
                                     user_id: number;
@@ -12359,7 +14308,290 @@ export interface paths {
                                     genai_params: Record<string, never>;
                                     is_pinned: boolean;
                                     system_folder: number;
-                                    xma_clip: {
+                                    text?: null;
+                                    processed_business_suggestion?: boolean;
+                                    xma_clip?: {
+                                        xma_template_type: null;
+                                        xma_layout_type: number;
+                                        preview_url: null;
+                                        preview_url_mime_type: null;
+                                        preview_width: number | null;
+                                        preview_height: number | null;
+                                        title_text: null;
+                                        max_title_num_of_lines: number;
+                                        max_subtitle_num_of_lines: number;
+                                        subtitle_text: null;
+                                        subtitle_decoration_type: number;
+                                        default_cta_type: null;
+                                        default_cta_title: null;
+                                        header_icon_url: null;
+                                        header_icon_mime_type: null;
+                                        header_icon_width: number | null;
+                                        header_icon_height: number | null;
+                                        header_title_text: null;
+                                        header_subtitle_text: null;
+                                        header_cta_type: null;
+                                        header_cta_title: null;
+                                        header_icon_layout_type: number;
+                                        header_icons_count: null;
+                                        caption_body_text: null;
+                                        group_name: null;
+                                        preview_media_fbid: number | null;
+                                        target_url: null;
+                                        ig_template_type: null;
+                                        playable_width: number | null;
+                                        playable_height: number | null;
+                                        playable_url: null;
+                                        video_codec: null;
+                                        video_dash_manifest: null;
+                                        playable_url_mime_type: null;
+                                        preview_url_info: {
+                                            url: null;
+                                            fallback: {
+                                                url: null;
+                                            };
+                                            url_expiration_timestamp_us: number;
+                                            width: number;
+                                            height: number;
+                                        };
+                                        header_icon_url_info: {
+                                            url: null;
+                                            fallback: {
+                                                url: null;
+                                            };
+                                            url_expiration_timestamp_us: number;
+                                            width: number;
+                                            height: number;
+                                        };
+                                        header_icons_url_info: {
+                                            url: null;
+                                            fallback: {
+                                                url: null;
+                                            };
+                                            url_expiration_timestamp_us: number;
+                                            width: number;
+                                            height: number;
+                                        }[];
+                                        playable_url_info: null;
+                                        favicon_url_info: null;
+                                        favicon_style: null;
+                                        favicons_url_info: null;
+                                        preview_image_decoration_type: number | null;
+                                        cta_buttons: null;
+                                        is_quoted: null;
+                                        is_borderless: null;
+                                        is_sharable: boolean | null;
+                                        verified_type: number | null;
+                                        sticker_type: null;
+                                        accessibility_summary_text: null;
+                                        accessibility_summary_hint: null;
+                                        collapsible_id: null;
+                                        countdown_timestamp_ms: null;
+                                        presence_source: null;
+                                        should_respect_server_preview_size: null;
+                                        accessory_preview_url_info: null;
+                                        accessory_playable_url_info: null;
+                                        playable_audio_url: null;
+                                        preview_icon_info: null;
+                                        quoted_attribution_text: null;
+                                        quoted_caption_body_text: null;
+                                        quoted_title_text: null;
+                                        quoted_favicon_url_info: null;
+                                        quoted_author_verified_type: null;
+                                        save_icon_state: number;
+                                        should_refresh: boolean;
+                                        audio_segment_start_time_ms: number | null;
+                                        audio_segment_duration_ms: number | null;
+                                        preview_extra_urls_info: null;
+                                        preview_layout_type: number;
+                                        serialized_content_ref: null;
+                                        view_mode?: null;
+                                        view_count?: null;
+                                    }[];
+                                    reactions?: {
+                                        likes: null[];
+                                        likes_count: number;
+                                        emojis: {
+                                            timestamp: number;
+                                            client_context: null;
+                                            sender_id: number;
+                                            emoji: null;
+                                            super_react_type: null;
+                                        }[];
+                                    };
+                                    auxiliary_text?: null;
+                                    xma_story_share?: {
+                                        xma_template_type: null;
+                                        xma_layout_type: number;
+                                        preview_url: null;
+                                        preview_url_mime_type: null;
+                                        preview_width: number | null;
+                                        preview_height: number | null;
+                                        title_text: null;
+                                        max_title_num_of_lines: number;
+                                        max_subtitle_num_of_lines: number;
+                                        subtitle_text: null;
+                                        subtitle_decoration_type: number;
+                                        default_cta_type: null;
+                                        default_cta_title: null;
+                                        header_icon_url: null;
+                                        header_icon_mime_type: null;
+                                        header_icon_width: number | null;
+                                        header_icon_height: number | null;
+                                        header_title_text: null;
+                                        header_subtitle_text: null;
+                                        header_cta_type: null;
+                                        header_cta_title: null;
+                                        header_icon_layout_type?: number;
+                                        header_icons_count: null;
+                                        caption_body_text: null;
+                                        group_name: null;
+                                        preview_media_fbid: number | null;
+                                        target_url: null;
+                                        ig_template_type: null;
+                                        playable_width: number | null;
+                                        playable_height: number | null;
+                                        playable_url: null;
+                                        video_codec: null;
+                                        video_dash_manifest: null;
+                                        playable_url_mime_type: null;
+                                        preview_url_info: {
+                                            url: null;
+                                            fallback: {
+                                                url: null;
+                                            };
+                                            url_expiration_timestamp_us: number;
+                                            width: number;
+                                            height: number;
+                                        } | null;
+                                        header_icon_url_info: {
+                                            url: null;
+                                            fallback: {
+                                                url: null;
+                                            };
+                                            url_expiration_timestamp_us: number;
+                                            width: number;
+                                            height: number;
+                                        } | null;
+                                        header_icons_url_info: {
+                                            url: null;
+                                            fallback: {
+                                                url: null;
+                                            };
+                                            url_expiration_timestamp_us: number;
+                                            width: number;
+                                            height: number;
+                                        }[] | null;
+                                        playable_url_info: null;
+                                        favicon_url_info: null;
+                                        favicon_style: null;
+                                        favicons_url_info: null;
+                                        preview_image_decoration_type: number | null;
+                                        cta_buttons: null;
+                                        is_quoted: boolean | null;
+                                        is_borderless: null;
+                                        is_sharable: boolean;
+                                        verified_type: number | null;
+                                        sticker_type?: null;
+                                        accessibility_summary_text: null;
+                                        accessibility_summary_hint: null;
+                                        collapsible_id: null;
+                                        countdown_timestamp_ms: null;
+                                        presence_source: null;
+                                        should_respect_server_preview_size: null;
+                                        accessory_preview_url_info: null;
+                                        accessory_playable_url_info: null;
+                                        playable_audio_url: null;
+                                        preview_icon_info?: null;
+                                        quoted_attribution_text?: null;
+                                        quoted_caption_body_text?: null;
+                                        quoted_title_text?: null;
+                                        quoted_favicon_url_info?: null;
+                                        quoted_author_verified_type?: null;
+                                        target_expiry_timestamp_ms?: number;
+                                        should_refresh: boolean;
+                                        audio_segment_start_time_ms: number | null;
+                                        audio_segment_duration_ms: number | null;
+                                        preview_extra_urls_info: null;
+                                        preview_layout_type: number;
+                                        serialized_content_ref: null;
+                                        view_mode?: null;
+                                        view_count?: null;
+                                    }[];
+                                    tq_seq_id?: number;
+                                    media?: {
+                                        id: number;
+                                        user: {
+                                            id: null;
+                                            strong_id__: null;
+                                            pk: number;
+                                            pk_id: null;
+                                            full_name: null;
+                                            username: null;
+                                            short_name: null;
+                                            profile_pic_url: null;
+                                            is_verified: boolean;
+                                            interop_messaging_user_fbid: number;
+                                            fbid_v2: number;
+                                            has_ig_profile: boolean;
+                                            interop_user_type: number;
+                                            is_using_unified_inbox_for_direct: boolean;
+                                            is_private: boolean;
+                                            is_creator_agent_enabled: boolean;
+                                            is_creator_automated_response_enabled: boolean;
+                                            friendship_status: {
+                                                blocking: boolean;
+                                                is_messaging_only_blocking: boolean;
+                                                is_messaging_pseudo_blocking: boolean;
+                                                is_unavailable: boolean;
+                                            };
+                                            is_shared_account: boolean;
+                                            is_shared_account_with_messaging_access: boolean;
+                                            ai_agent_banner_type: null;
+                                            is_eligible_for_ai_bot_group_chats: boolean;
+                                        };
+                                        image_versions2: {
+                                            candidates: {
+                                                width: number;
+                                                height: number;
+                                                url: null;
+                                                fallback: {
+                                                    url: null;
+                                                };
+                                                scans_profile: null;
+                                                url_expiration_timestamp_us: number;
+                                            }[];
+                                        };
+                                        video_versions?: {
+                                            id: null;
+                                            type: number;
+                                            width: number;
+                                            height: number;
+                                            url: null;
+                                            fallback: {
+                                                url: null;
+                                            };
+                                            url_expiration_timestamp_us: number;
+                                            bandwidth: number;
+                                        }[];
+                                        original_width: number;
+                                        original_height: number;
+                                        media_type: number;
+                                        video_duration?: number;
+                                        video_dash_manifest?: null;
+                                        is_dash_eligible?: number;
+                                    };
+                                    action_log?: {
+                                        description: null;
+                                        bold: null[];
+                                        text_attributes: null[];
+                                        text_parts: ({
+                                            text: null;
+                                        } | null)[];
+                                        is_reaction_log?: boolean;
+                                    };
+                                    hide_in_thread?: number;
+                                    xma_media_share?: {
                                         xma_template_type: null;
                                         xma_layout_type: number;
                                         preview_url: null;
@@ -12370,7 +14602,7 @@ export interface paths {
                                         max_title_num_of_lines: number;
                                         max_subtitle_num_of_lines: number;
                                         subtitle_text: null;
-                                        subtitle_decoration_type: number;
+                                        subtitle_decoration_type: null;
                                         default_cta_type: null;
                                         default_cta_title: null;
                                         header_icon_url: null;
@@ -12425,7 +14657,7 @@ export interface paths {
                                         favicon_url_info: null;
                                         favicon_style: null;
                                         favicons_url_info: null;
-                                        preview_image_decoration_type: number;
+                                        preview_image_decoration_type: number | null;
                                         cta_buttons: null;
                                         is_quoted: null;
                                         is_borderless: null;
@@ -12455,18 +14687,418 @@ export interface paths {
                                         preview_layout_type: number;
                                         serialized_content_ref: null;
                                     }[];
-                                    reactions: {
-                                        likes: null[];
-                                        likes_count: number;
-                                        emojis: {
-                                            timestamp: number;
-                                            client_context: null;
-                                            sender_id: number;
-                                            emoji: null;
-                                            super_react_type: null;
+                                    replied_to_message?: {
+                                        item_id: null;
+                                        message_id: null;
+                                        user_id: number;
+                                        timestamp: number;
+                                        item_type: null;
+                                        client_context: null;
+                                        show_forward_attribution: boolean;
+                                        forward_score: null;
+                                        is_shh_mode: boolean;
+                                        otid: null;
+                                        is_ae_dual_send: boolean;
+                                        is_ephemeral_exception: boolean;
+                                        is_disappearing: boolean;
+                                        is_superlative: boolean;
+                                        paid_partnership_info: {
+                                            is_paid_partnership: boolean;
+                                        };
+                                        is_replyable_in_bc: boolean;
+                                        skip_bump_thread: boolean;
+                                        send_attribution: null;
+                                        is_sent_by_viewer: boolean;
+                                        uq_seq_id: number;
+                                        latest_snooze_state: number;
+                                        one_click_upsell: null;
+                                        genai_params: Record<string, never>;
+                                        is_pinned: boolean;
+                                        system_folder: number;
+                                        text: null;
+                                        tq_seq_id?: number;
+                                        reactions?: {
+                                            likes: null[];
+                                            likes_count: number;
+                                            emojis: {
+                                                timestamp: number;
+                                                client_context: null;
+                                                sender_id: number;
+                                                emoji: null;
+                                                super_react_type: null;
+                                            }[];
+                                        };
+                                    };
+                                    send_silently?: boolean;
+                                    is_edit_with_ai_eligible?: boolean;
+                                    xma_profile?: {
+                                        xma_layout_type: number;
+                                        preview_layout_type: number;
+                                        header_icon_url_info: {
+                                            url: null;
+                                            fallback: {
+                                                url: null;
+                                            };
+                                            url_expiration_timestamp_us: number;
+                                            width: number;
+                                            height: number;
+                                            mime_type: null;
+                                        };
+                                        header_title_text: null;
+                                        header_subtitle_text: null;
+                                        target_url: null;
+                                        preview_extra_urls_info: {
+                                            url: null;
+                                            fallback: {
+                                                url: null;
+                                            };
+                                        }[];
+                                        verified_type: number;
+                                        is_sharable: boolean;
+                                        preview_url_info: null;
+                                        serialized_content_ref: null;
+                                    }[];
+                                    visual_media?: {
+                                        media: {
+                                            id: null;
+                                            image_versions2: {
+                                                candidates: {
+                                                    width: number;
+                                                    height: number;
+                                                    url: null;
+                                                    scans_profile: null;
+                                                    fallback: {
+                                                        url: null;
+                                                    };
+                                                    url_expiration_timestamp_us: number;
+                                                }[];
+                                            };
+                                            original_width: number;
+                                            original_height: number;
+                                            media_type: number;
+                                            media_id: number;
+                                            organic_tracking_token: null;
+                                            user: {
+                                                id: null;
+                                                strong_id__: null;
+                                                pk: number;
+                                                pk_id: null;
+                                                full_name: null;
+                                                username: null;
+                                                short_name: null;
+                                                profile_pic_url: null;
+                                                is_verified: boolean;
+                                                interop_messaging_user_fbid: number;
+                                                fbid_v2: number;
+                                                has_ig_profile: boolean;
+                                                interop_user_type: number;
+                                                is_using_unified_inbox_for_direct: boolean;
+                                                is_private: boolean;
+                                                is_creator_agent_enabled: boolean;
+                                                is_creator_automated_response_enabled: boolean;
+                                                friendship_status: {
+                                                    blocking: boolean;
+                                                    is_messaging_only_blocking: boolean;
+                                                    is_messaging_pseudo_blocking: boolean;
+                                                    is_unavailable: boolean;
+                                                };
+                                                is_shared_account: boolean;
+                                                is_shared_account_with_messaging_access: boolean;
+                                                ai_agent_banner_type: null;
+                                                is_eligible_for_ai_bot_group_chats: boolean;
+                                            };
+                                            create_mode_attribution: null;
+                                            creative_config: null;
+                                            expiring_media_action_summary: null;
+                                            video_versions: {
+                                                id: null;
+                                                type: number;
+                                                width: number;
+                                                height: number;
+                                                url: null;
+                                                fallback: {
+                                                    url: null;
+                                                };
+                                                url_expiration_timestamp_us: number;
+                                                bandwidth: number;
+                                            }[];
+                                            video_duration: number;
+                                            video_dash_manifest: null;
+                                            is_dash_eligible: number;
+                                        };
+                                        seen_user_ids: null[];
+                                        seen_count: number;
+                                        view_mode: null;
+                                        replay_expiring_at_us: null;
+                                        reply_type: null;
+                                        url_expire_at_secs: number;
+                                        story_app_attribution: null;
+                                        playback_duration_secs: number;
+                                        tap_models: null[];
+                                        expiring_media_action_summary: null;
+                                    };
+                                } | null)[];
+                                thread_image?: {
+                                    media_type: number;
+                                    id: number;
+                                    original_width: number;
+                                    original_height: number;
+                                    image_versions2: {
+                                        candidates: {
+                                            width: number;
+                                            height: number;
+                                            url: null;
+                                            scans_profile: null;
+                                            fallback: {
+                                                url: null;
+                                            };
+                                            url_expiration_timestamp_us: number;
                                         }[];
                                     };
-                                }[];
+                                } | null;
+                                pals_feature_status?: null;
+                                theme_data?: {
+                                    theme_id: number;
+                                    name: null;
+                                    theme_type: number;
+                                    alternative_themes: {
+                                        theme_id: number;
+                                        name: null;
+                                        theme_type: number;
+                                        alternative_themes: null[];
+                                        gradient_colors: null[];
+                                        is_deprecated: boolean;
+                                        corner_radius: number;
+                                        should_use_diagonal_gradient_for_composer_circle_button: boolean;
+                                        should_show_incoming_message_bubble_border: boolean;
+                                        can_display_border_on_visual_message_tombstones: boolean;
+                                        icon_asset: {
+                                            fifty: null;
+                                            seventy_five: null;
+                                            one_hundred: null;
+                                            two_hundred: null;
+                                            icon_images: null[];
+                                        };
+                                        secondary_text_color: null;
+                                        incoming_message_bubble_color: null;
+                                        quoted_incoming_message_bubble_color?: null;
+                                        thread_background_color: null;
+                                        thread_background_asset: {
+                                            four_hundred_eighty: null;
+                                            seven_hundred_twenty: null;
+                                            one_thousand_twenty_four: null;
+                                            two_thousand_forty_eight: null;
+                                            background_images: null[];
+                                        };
+                                        navigation_bar_color: null;
+                                        navigation_bar_title_color: null;
+                                        navigation_bar_subtitle_color: null;
+                                        navigation_bar_icon_color: null;
+                                        solid_composer_background_color: null;
+                                        blurred_composer_background_color: null;
+                                        composer_secondary_button_color: null;
+                                        reaction_pill_color: null;
+                                        emphasized_action_color: null;
+                                        emphasis_colors: null[];
+                                        solid_separator_color: null;
+                                        shh_mode_interleaved_background_color: null;
+                                        blurred_composer_opaque_background_color?: null;
+                                        app_color_mode: null;
+                                        fallback_color: null;
+                                        inbound_message_text_color: null;
+                                        outbound_message_text_color: null;
+                                        composer_send_button_colors: null[];
+                                        composer_input_background_color: null;
+                                        composer_circle_button_colors: null[];
+                                        subtitle?: null;
+                                        composer_placeholder_text_color?: null;
+                                        loading_message_bubble_color?: null;
+                                        bottom_gradient_color?: null;
+                                    }[];
+                                    gradient_colors: null[];
+                                    is_deprecated: boolean;
+                                    corner_radius: number;
+                                    should_use_diagonal_gradient_for_composer_circle_button: boolean;
+                                    should_show_incoming_message_bubble_border: boolean;
+                                    can_display_border_on_visual_message_tombstones: boolean;
+                                    icon_asset: {
+                                        fifty: null;
+                                        seventy_five: null;
+                                        one_hundred: null;
+                                        two_hundred: null;
+                                        icon_images: null[];
+                                    };
+                                    secondary_text_color: null;
+                                    incoming_message_bubble_color: null;
+                                    quoted_incoming_message_bubble_color?: null;
+                                    thread_background_color: null;
+                                    thread_background_asset: {
+                                        four_hundred_eighty: null;
+                                        seven_hundred_twenty: null;
+                                        one_thousand_twenty_four: null;
+                                        two_thousand_forty_eight: null;
+                                        background_images: null[];
+                                    };
+                                    navigation_bar_color: null;
+                                    navigation_bar_title_color: null;
+                                    navigation_bar_subtitle_color: null;
+                                    navigation_bar_icon_color: null;
+                                    solid_composer_background_color: null;
+                                    blurred_composer_background_color: null;
+                                    composer_secondary_button_color: null;
+                                    reaction_pill_color: null;
+                                    emphasized_action_color: null;
+                                    emphasis_colors: null[];
+                                    solid_separator_color: null;
+                                    shh_mode_interleaved_background_color: null;
+                                    blurred_composer_opaque_background_color?: null;
+                                    app_color_mode: null;
+                                    fallback_color: null;
+                                    inbound_message_text_color: null;
+                                    outbound_message_text_color: null;
+                                    composer_send_button_colors: null[];
+                                    composer_input_background_color: null;
+                                    composer_circle_button_colors: null[];
+                                    subtitle?: null;
+                                    composer_placeholder_text_color?: null;
+                                    loading_message_bubble_color?: null;
+                                    bottom_gradient_color?: null;
+                                };
+                                dm_settings?: {
+                                    mode: number;
+                                    ttl_sec: number;
+                                    view_ttl_sec: number;
+                                    last_set_actor_id: null;
+                                    last_set_timestamp_ms: number;
+                                    last_set_action_log_type: null;
+                                    last_set_ttl_sec: number;
+                                    last_set_view_ttl_sec: number;
+                                    e2ee_attribution_timestamp_ms: null;
+                                };
+                                direct_story?: {
+                                    items: {
+                                        item_id: null;
+                                        message_id: null;
+                                        user_id: number;
+                                        timestamp: number;
+                                        item_type: null;
+                                        client_context: null;
+                                        show_forward_attribution: boolean;
+                                        forward_score: null;
+                                        is_shh_mode: boolean;
+                                        otid: null;
+                                        is_ae_dual_send: boolean;
+                                        is_ephemeral_exception: boolean;
+                                        is_disappearing: boolean;
+                                        is_superlative: boolean;
+                                        paid_partnership_info: {
+                                            is_paid_partnership: boolean;
+                                        };
+                                        is_replyable_in_bc: boolean;
+                                        skip_bump_thread: boolean;
+                                        is_sent_by_viewer: boolean;
+                                        uq_seq_id: number;
+                                        tq_seq_id: number;
+                                        latest_snooze_state: number;
+                                        one_click_upsell: null;
+                                        genai_params: Record<string, never>;
+                                        is_pinned: boolean;
+                                        system_folder: number;
+                                        visual_media: {
+                                            media: {
+                                                id: null;
+                                                image_versions2: {
+                                                    candidates: {
+                                                        width: number;
+                                                        height: number;
+                                                        url: null;
+                                                        scans_profile: null;
+                                                        fallback: {
+                                                            url: null;
+                                                        };
+                                                        url_expiration_timestamp_us: number;
+                                                    }[];
+                                                };
+                                                original_width: number;
+                                                original_height: number;
+                                                media_type: number;
+                                                media_id: number;
+                                                organic_tracking_token: null;
+                                                user: {
+                                                    id: null;
+                                                    strong_id__: null;
+                                                    pk: number;
+                                                    pk_id: null;
+                                                    full_name: null;
+                                                    username: null;
+                                                    short_name: null;
+                                                    profile_pic_url: null;
+                                                    is_verified: boolean;
+                                                    interop_messaging_user_fbid: number;
+                                                    fbid_v2: number;
+                                                    has_ig_profile: boolean;
+                                                    interop_user_type: number;
+                                                    is_using_unified_inbox_for_direct: boolean;
+                                                    is_private: boolean;
+                                                    is_creator_agent_enabled: boolean;
+                                                    is_creator_automated_response_enabled: boolean;
+                                                    friendship_status: {
+                                                        blocking: boolean;
+                                                        is_messaging_only_blocking: boolean;
+                                                        is_messaging_pseudo_blocking: boolean;
+                                                        is_unavailable: boolean;
+                                                    };
+                                                    is_shared_account: boolean;
+                                                    is_shared_account_with_messaging_access: boolean;
+                                                    ai_agent_banner_type: null;
+                                                    is_eligible_for_ai_bot_group_chats: boolean;
+                                                };
+                                                create_mode_attribution: null;
+                                                creative_config: null;
+                                                expiring_media_action_summary: null;
+                                                video_versions?: {
+                                                    id: null;
+                                                    type: number;
+                                                    width: number;
+                                                    height: number;
+                                                    url: null;
+                                                    fallback: {
+                                                        url: null;
+                                                    };
+                                                    url_expiration_timestamp_us: number;
+                                                    bandwidth: number;
+                                                }[];
+                                                video_duration?: number;
+                                            };
+                                            seen_user_ids: null[];
+                                            seen_count: number;
+                                            view_mode: null;
+                                            replay_expiring_at_us: null;
+                                            reply_type: null;
+                                            url_expire_at_secs: number;
+                                            story_app_attribution: null;
+                                            playback_duration_secs: number;
+                                            tap_models: null[];
+                                            expiring_media_action_summary: null;
+                                        };
+                                        reactions?: {
+                                            likes: null[];
+                                            likes_count: number;
+                                            emojis: {
+                                                timestamp: number;
+                                                client_context: null;
+                                                sender_id: number;
+                                                emoji: null;
+                                                super_react_type: null;
+                                            }[];
+                                        };
+                                        send_attribution?: null;
+                                    }[];
+                                    newest_cursor: null;
+                                    last_activity_at: number;
+                                    unseen_count: number;
+                                    has_newer: boolean;
+                                };
                             };
                             status: null;
                         };
@@ -12738,7 +15370,114 @@ export interface paths {
                                 genai_params: Record<string, never>;
                                 is_pinned: boolean;
                                 system_folder: number;
-                                xma_media_share: {
+                                xma_clip?: {
+                                    xma_template_type: null;
+                                    xma_layout_type: number;
+                                    preview_url: null;
+                                    preview_url_mime_type: null;
+                                    preview_width: number;
+                                    preview_height: number;
+                                    title_text: null;
+                                    max_title_num_of_lines: number;
+                                    max_subtitle_num_of_lines: number;
+                                    subtitle_text: null;
+                                    subtitle_decoration_type: number;
+                                    default_cta_type: null;
+                                    default_cta_title: null;
+                                    header_icon_url: null;
+                                    header_icon_mime_type: null;
+                                    header_icon_width: number;
+                                    header_icon_height: number;
+                                    header_title_text: null;
+                                    header_subtitle_text: null;
+                                    header_cta_type: null;
+                                    header_cta_title: null;
+                                    header_icon_layout_type: number;
+                                    header_icons_count: null;
+                                    caption_body_text: null;
+                                    group_name: null;
+                                    preview_media_fbid: number;
+                                    target_url: null;
+                                    ig_template_type: null;
+                                    playable_width: number;
+                                    playable_height: number;
+                                    playable_url: null;
+                                    video_codec: null;
+                                    video_dash_manifest: null;
+                                    playable_url_mime_type: null;
+                                    preview_url_info: {
+                                        url: null;
+                                        fallback: {
+                                            url: null;
+                                        };
+                                        url_expiration_timestamp_us: number;
+                                        width: number;
+                                        height: number;
+                                    };
+                                    header_icon_url_info: {
+                                        url: null;
+                                        fallback: {
+                                            url: null;
+                                        };
+                                        url_expiration_timestamp_us: number;
+                                        width: number;
+                                        height: number;
+                                    };
+                                    header_icons_url_info: {
+                                        url: null;
+                                        fallback: {
+                                            url: null;
+                                        };
+                                        url_expiration_timestamp_us: number;
+                                        width: number;
+                                        height: number;
+                                    }[];
+                                    playable_url_info: null;
+                                    favicon_url_info: null;
+                                    favicon_style: null;
+                                    favicons_url_info: null;
+                                    preview_image_decoration_type: number;
+                                    cta_buttons: null;
+                                    is_quoted: null;
+                                    is_borderless: null;
+                                    is_sharable: boolean;
+                                    verified_type: number;
+                                    sticker_type: null;
+                                    accessibility_summary_text: null;
+                                    accessibility_summary_hint: null;
+                                    collapsible_id: null;
+                                    countdown_timestamp_ms: null;
+                                    presence_source: null;
+                                    should_respect_server_preview_size: null;
+                                    accessory_preview_url_info: null;
+                                    accessory_playable_url_info: null;
+                                    playable_audio_url: null;
+                                    preview_icon_info: null;
+                                    quoted_attribution_text: null;
+                                    quoted_caption_body_text: null;
+                                    quoted_title_text: null;
+                                    quoted_favicon_url_info: null;
+                                    quoted_author_verified_type: null;
+                                    save_icon_state: number;
+                                    should_refresh: boolean;
+                                    audio_segment_start_time_ms: null;
+                                    audio_segment_duration_ms: null;
+                                    preview_extra_urls_info: null;
+                                    preview_layout_type: number;
+                                    serialized_content_ref: null;
+                                }[];
+                                reactions: {
+                                    likes: null[];
+                                    likes_count: number;
+                                    emojis: {
+                                        timestamp: number;
+                                        client_context: null;
+                                        sender_id: number;
+                                        emoji: null;
+                                        super_react_type: null;
+                                    }[];
+                                };
+                                xma_media_share?: {
                                     xma_template_type: null;
                                     xma_layout_type: number;
                                     preview_url: null;
@@ -12804,7 +15543,7 @@ export interface paths {
                                     favicon_url_info: null;
                                     favicon_style: null;
                                     favicons_url_info: null;
-                                    preview_image_decoration_type: null;
+                                    preview_image_decoration_type: number | null;
                                     cta_buttons: null;
                                     is_quoted: null;
                                     is_borderless: null;
@@ -12832,6 +15571,130 @@ export interface paths {
                                     audio_segment_duration_ms: null;
                                     preview_extra_urls_info: null;
                                     preview_layout_type: number;
+                                    serialized_content_ref: null;
+                                }[];
+                                auxiliary_text?: null;
+                                xma_story_share?: {
+                                    xma_template_type: null;
+                                    xma_layout_type: number;
+                                    preview_url: null;
+                                    preview_url_mime_type: null;
+                                    preview_width: number;
+                                    preview_height: number;
+                                    title_text: null;
+                                    max_title_num_of_lines: number;
+                                    max_subtitle_num_of_lines: number;
+                                    subtitle_text: null;
+                                    subtitle_decoration_type: number;
+                                    default_cta_type: null;
+                                    default_cta_title: null;
+                                    header_icon_url: null;
+                                    header_icon_mime_type: null;
+                                    header_icon_width: number;
+                                    header_icon_height: number;
+                                    header_title_text: null;
+                                    header_subtitle_text: null;
+                                    header_cta_type: null;
+                                    header_cta_title: null;
+                                    header_icon_layout_type: number;
+                                    header_icons_count: null;
+                                    caption_body_text: null;
+                                    group_name: null;
+                                    preview_media_fbid: number;
+                                    target_url: null;
+                                    ig_template_type: null;
+                                    playable_width: number;
+                                    playable_height: number;
+                                    playable_url: null;
+                                    video_codec: null;
+                                    video_dash_manifest: null;
+                                    playable_url_mime_type: null;
+                                    preview_url_info: {
+                                        url: null;
+                                        fallback: {
+                                            url: null;
+                                        };
+                                        url_expiration_timestamp_us: number;
+                                        width: number;
+                                        height: number;
+                                    };
+                                    header_icon_url_info: {
+                                        url: null;
+                                        fallback: {
+                                            url: null;
+                                        };
+                                        url_expiration_timestamp_us: number;
+                                        width: number;
+                                        height: number;
+                                    };
+                                    header_icons_url_info: {
+                                        url: null;
+                                        fallback: {
+                                            url: null;
+                                        };
+                                        url_expiration_timestamp_us: number;
+                                        width: number;
+                                        height: number;
+                                    }[];
+                                    playable_url_info: null;
+                                    favicon_url_info: null;
+                                    favicon_style: null;
+                                    favicons_url_info: null;
+                                    preview_image_decoration_type: number;
+                                    cta_buttons: null;
+                                    is_quoted: boolean;
+                                    is_borderless: null;
+                                    is_sharable: boolean;
+                                    verified_type: number;
+                                    sticker_type: null;
+                                    accessibility_summary_text: null;
+                                    accessibility_summary_hint: null;
+                                    collapsible_id: null;
+                                    countdown_timestamp_ms: null;
+                                    presence_source: null;
+                                    should_respect_server_preview_size: null;
+                                    accessory_preview_url_info: null;
+                                    accessory_playable_url_info: null;
+                                    playable_audio_url: null;
+                                    preview_icon_info: null;
+                                    quoted_attribution_text: null;
+                                    quoted_caption_body_text: null;
+                                    quoted_title_text: null;
+                                    quoted_favicon_url_info: null;
+                                    quoted_author_verified_type: null;
+                                    should_refresh: boolean;
+                                    audio_segment_start_time_ms: null;
+                                    audio_segment_duration_ms: null;
+                                    preview_extra_urls_info: null;
+                                    preview_layout_type: number;
+                                    serialized_content_ref: null;
+                                    target_expiry_timestamp_ms?: number;
+                                }[];
+                                xma_profile?: {
+                                    xma_layout_type: number;
+                                    preview_layout_type: number;
+                                    header_icon_url_info: {
+                                        url: null;
+                                        fallback: {
+                                            url: null;
+                                        };
+                                        url_expiration_timestamp_us: number;
+                                        width: number;
+                                        height: number;
+                                        mime_type: null;
+                                    };
+                                    header_title_text: null;
+                                    header_subtitle_text: null;
+                                    target_url: null;
+                                    preview_extra_urls_info: {
+                                        url: null;
+                                        fallback: {
+                                            url: null;
+                                        };
+                                    }[];
+                                    verified_type: number;
+                                    is_sharable: boolean;
+                                    preview_url_info: null;
                                     serialized_content_ref: null;
                                 }[];
                             }[];
@@ -13439,22 +16302,89 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            items: {
+                            items: ({
                                 media: {
-                                    pk: number;
-                                    id: null;
-                                    fbid: number;
-                                    device_timestamp: number;
-                                    caption_is_edited: boolean;
-                                    strong_id__: null;
-                                    filter_type: number;
-                                    like_and_view_counts_disabled: boolean;
-                                    subtype_name_for_REST__: null;
-                                    taken_at: number;
-                                    has_tagged_users: boolean;
+                                    original_width: number;
+                                    original_height: number;
                                     media_type: number;
-                                    code: null;
-                                    caption: {
+                                    id: null;
+                                    strong_id__: null;
+                                    video_versions?: {
+                                        height: number;
+                                        width: number;
+                                        url: null;
+                                        type: number;
+                                        fallback?: {
+                                            url: null;
+                                        };
+                                        url_expiration_timestamp_us?: number;
+                                        bandwidth?: number;
+                                        id?: null;
+                                    }[];
+                                    image_versions2: {
+                                        candidates: {
+                                            height: number;
+                                            width: number;
+                                            url: null;
+                                            fallback?: {
+                                                url: null;
+                                            };
+                                            url_expiration_timestamp_us?: number;
+                                            scans_profile?: null;
+                                            estimated_scans_sizes?: number[];
+                                        }[];
+                                        additional_candidates?: {
+                                            first_frame: {
+                                                height: number;
+                                                scans_profile: null;
+                                                url: null;
+                                                width: number;
+                                            };
+                                            igtv_first_frame: {
+                                                height: number;
+                                                scans_profile: null;
+                                                url: null;
+                                                width: number;
+                                            };
+                                            smart_frame: {
+                                                height: number;
+                                                scans_profile: null;
+                                                url: null;
+                                                width: number;
+                                            } | null;
+                                        };
+                                        scrubber_spritesheet_info_candidates?: {
+                                            default: {
+                                                file_size_kb: number;
+                                                max_thumbnails_per_sprite: number;
+                                                rendered_width: number;
+                                                sprite_height: number;
+                                                sprite_urls: null[];
+                                                sprite_width: number;
+                                                thumbnail_duration: number;
+                                                thumbnail_height: number;
+                                                thumbnail_width: number;
+                                                thumbnails_per_row: number;
+                                                total_thumbnail_num_per_sprite: number;
+                                                video_length: number;
+                                            };
+                                        };
+                                    };
+                                    video_duration?: number;
+                                    has_audio?: boolean;
+                                    video_dash_manifest?: null;
+                                    is_dash_eligible?: number;
+                                    pk?: number;
+                                    fbid?: number;
+                                    device_timestamp?: number;
+                                    caption_is_edited?: boolean;
+                                    filter_type?: number;
+                                    like_and_view_counts_disabled?: boolean;
+                                    subtype_name_for_REST__?: null;
+                                    taken_at?: number;
+                                    has_tagged_users?: boolean;
+                                    code?: null;
+                                    caption?: {
                                         bit_flags: number;
                                         created_at: number;
                                         created_at_utc: number;
@@ -13485,24 +16415,41 @@ export interface paths {
                                         };
                                         is_covered: boolean;
                                         private_reply_status: number;
-                                    };
-                                    sharing_friction_info: {
+                                    } | null;
+                                    sharing_friction_info?: {
                                         bloks_app_url: null;
                                         should_have_sharing_friction: boolean;
                                         sharing_friction_payload: null;
                                     };
-                                    has_views_fetching: boolean;
-                                    original_media_has_visual_reply_media: boolean;
-                                    coauthor_producers: null[];
-                                    media_cropping_info: {
-                                        square_crop: {
+                                    has_views_fetching?: boolean;
+                                    original_media_has_visual_reply_media?: boolean;
+                                    coauthor_producers?: ({
+                                        pk: number;
+                                        pk_id: null;
+                                        id: null;
+                                        full_name: null;
+                                        is_private: boolean;
+                                        strong_id__: null;
+                                        username: null;
+                                        is_verified: boolean;
+                                        profile_pic_id: null;
+                                        profile_pic_url: null;
+                                    } | null)[];
+                                    media_cropping_info?: {
+                                        square_crop?: {
+                                            crop_left: number;
+                                            crop_right: number;
+                                            crop_top: number;
+                                            crop_bottom: number;
+                                        };
+                                        four_by_three_crop?: {
                                             crop_left: number;
                                             crop_right: number;
                                             crop_top: number;
                                             crop_bottom: number;
                                         };
                                     };
-                                    user: {
+                                    user?: {
                                         fbid_v2: number;
                                         feed_post_reshare_disabled: boolean;
                                         full_name: null;
@@ -13517,18 +16464,21 @@ export interface paths {
                                         account_type: number;
                                         account_badges: null[];
                                         fan_club_info: {
-                                            autosave_to_exclusive_highlight: null;
-                                            connected_member_count: null;
+                                            autosave_to_exclusive_highlight: boolean | null;
+                                            connected_member_count: number | null;
                                             fan_club_id: null;
                                             fan_club_name: null;
                                             has_created_ssc: null;
                                             has_enough_subscribers_for_ssc: null;
-                                            is_fan_club_gifting_eligible: null;
-                                            is_fan_club_referral_eligible: null;
-                                            is_free_trial_eligible: null;
+                                            is_fan_club_gifting_eligible: boolean | null;
+                                            is_fan_club_referral_eligible: boolean | null;
+                                            is_free_trial_eligible: boolean | null;
                                             largest_public_bc_id: null;
-                                            subscriber_count: null;
-                                            fan_consideration_page_revamp_eligiblity: null;
+                                            subscriber_count: number | null;
+                                            fan_consideration_page_revamp_eligiblity: {
+                                                should_show_social_context: boolean;
+                                                should_show_content_preview: boolean;
+                                            } | null;
                                         };
                                         friendship_status: {
                                             is_muting_reel: boolean;
@@ -13547,71 +16497,64 @@ export interface paths {
                                         transparency_product_enabled: boolean;
                                         username: null;
                                     };
-                                    image_versions2: {
-                                        additional_candidates: {
-                                            first_frame: {
-                                                height: number;
-                                                scans_profile: null;
-                                                url: null;
-                                                width: number;
-                                            };
-                                            igtv_first_frame: {
-                                                height: number;
-                                                scans_profile: null;
-                                                url: null;
-                                                width: number;
-                                            };
-                                            smart_frame: null;
-                                        };
-                                        candidates: {
-                                            height: number;
-                                            scans_profile: null;
-                                            url: null;
-                                            width: number;
-                                        }[];
-                                    };
-                                    original_width: number;
-                                    original_height: number;
-                                    media_reposter_bottomsheet_enabled: boolean;
-                                    product_type: null;
-                                    music_metadata: null;
-                                    organic_tracking_token: null;
-                                    is_third_party_downloads_eligible: boolean;
-                                    cutout_sticker_info: null[];
-                                    report_info: {
+                                    media_reposter_bottomsheet_enabled?: boolean;
+                                    product_type?: null;
+                                    music_metadata?: {
+                                        audio_type: null;
+                                        music_canonical_id: null;
+                                        pinned_media_ids: null;
+                                        music_info: null;
+                                        original_sound_info: null;
+                                    } | null;
+                                    organic_tracking_token?: null;
+                                    is_third_party_downloads_eligible?: boolean;
+                                    cutout_sticker_info?: null[];
+                                    report_info?: {
                                         has_viewer_submitted_report: boolean;
                                     };
-                                    floating_context_items: null[];
-                                    related_ads_pivots_media_info: null;
-                                    hidden_likes_string_variant: number;
-                                    comment_count: number;
-                                    has_liked: boolean;
-                                    like_count: number;
-                                    video_subtitles_locale: null;
-                                    is_dash_eligible: number;
-                                    video_dash_manifest: null;
-                                    number_of_qualities: number;
-                                    video_versions: {
-                                        bandwidth: number;
-                                        height: number;
-                                        id: null;
-                                        type: number;
-                                        url: null;
-                                        width: number;
-                                    }[];
-                                    video_duration: number;
-                                    has_audio: boolean;
-                                    can_viewer_save: boolean;
-                                    can_viewer_reshare: boolean;
+                                    floating_context_items?: null[];
+                                    related_ads_pivots_media_info?: null;
+                                    hidden_likes_string_variant?: number;
+                                    comment_count?: number;
+                                    has_liked?: boolean;
+                                    like_count?: number;
+                                    video_subtitles_locale?: null;
+                                    number_of_qualities?: number;
+                                    can_viewer_save?: boolean;
+                                    can_viewer_reshare?: boolean;
+                                    caption_add_on?: {
+                                        comment_prompt: null;
+                                        poll: {
+                                            color: null;
+                                            finished: boolean;
+                                            id: null;
+                                            is_multi_option_poll: boolean;
+                                            is_shared_result: boolean;
+                                            poll_id: number;
+                                            poll_type: null;
+                                            question: null;
+                                            total_votes: number;
+                                            viewer_can_vote: boolean;
+                                            promotion_tallies: null;
+                                            social_context: null;
+                                            tallies: {
+                                                count: number;
+                                                font_size: number;
+                                                text: null;
+                                            }[];
+                                        };
+                                        quiz: null;
+                                    };
+                                    has_views_fetching_on_search_grid?: boolean;
                                 };
                                 item_id: null;
                                 timestamp: number;
                                 sender_id: number;
                                 client_context: null;
-                            }[];
+                            } | null)[];
                             more_available: boolean;
-                            uq_seq_id: number;
                             status: null;
+                            uq_seq_id?: number;
                         };
                     };
                 };
@@ -16247,15 +19190,385 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            reachability_statuses: {
+                            thread_context_items?: {
+                                type: number;
+                                text: null;
+                            }[];
+                            reachability_statuses?: {
                                 [key: string]: number;
                             };
-                            is_appointment_booking_enabled: boolean;
-                            responsiveness_category: null;
-                            has_reached_message_request_limit: null;
-                            should_show_safety_card: boolean;
-                            lightweight_intervention_appealable_entity_id: null;
+                            is_viewer_unconnected?: boolean;
+                            is_appointment_booking_enabled?: boolean;
+                            users?: {
+                                full_name: null;
+                                is_private: boolean;
+                                pk: number;
+                                strong_id__: null;
+                                date_joined: number;
+                                id: null;
+                                username: null;
+                                profile_pic_url: null;
+                                follower_count: number;
+                                following_count: number;
+                                media_count: number;
+                                mutual_followers_count: number;
+                                pinned_channels_info: {
+                                    has_public_channels: boolean;
+                                    pinned_channels_list: null[];
+                                };
+                                is_creator_agent_enabled: boolean;
+                                interop_messaging_user_fbid: number;
+                            }[];
+                            responsiveness_category?: null;
+                            has_reached_message_request_limit?: boolean | null;
+                            should_show_safety_card?: boolean;
+                            lightweight_intervention_appealable_entity_id?: null;
                             status: null;
+                            thread?: {
+                                has_older: boolean;
+                                has_newer: boolean;
+                                pending: boolean;
+                                items: {
+                                    item_id: null;
+                                    message_id: null;
+                                    user_id: number;
+                                    timestamp: number;
+                                    item_type: null;
+                                    client_context: null;
+                                    show_forward_attribution: boolean;
+                                    forward_score: null;
+                                    is_shh_mode: boolean;
+                                    otid: null;
+                                    is_ae_dual_send: boolean;
+                                    is_ephemeral_exception: boolean;
+                                    is_disappearing: boolean;
+                                    is_superlative: boolean;
+                                    paid_partnership_info: {
+                                        is_paid_partnership: boolean;
+                                    };
+                                    is_replyable_in_bc: boolean;
+                                    skip_bump_thread: boolean;
+                                    send_attribution?: null;
+                                    is_sent_by_viewer: boolean;
+                                    uq_seq_id: number;
+                                    tq_seq_id: number;
+                                    latest_snooze_state: number;
+                                    one_click_upsell: null;
+                                    genai_params: Record<string, never>;
+                                    is_pinned: boolean;
+                                    system_folder: number;
+                                    text?: null;
+                                    action_log?: {
+                                        description: null;
+                                        bold: {
+                                            start: number;
+                                            end: number;
+                                        }[];
+                                        text_attributes: {
+                                            start: number;
+                                            end: number;
+                                            bold: number;
+                                            color: null;
+                                            intent: null;
+                                            semantic_color: null;
+                                        }[];
+                                        text_parts: {
+                                            text: null;
+                                            bold?: number;
+                                            color?: null;
+                                            intent?: null;
+                                            semantic_color?: null;
+                                        }[];
+                                    };
+                                }[];
+                                canonical: boolean;
+                                thread_id: null;
+                                thread_v2_id: null;
+                                users: {
+                                    id: null;
+                                    strong_id__: null;
+                                    pk: number;
+                                    pk_id: null;
+                                    full_name: null;
+                                    username: null;
+                                    short_name: null;
+                                    profile_pic_url: null;
+                                    is_verified: boolean;
+                                    interop_messaging_user_fbid: number;
+                                    fbid_v2: number;
+                                    has_ig_profile: boolean;
+                                    interop_user_type: number;
+                                    is_using_unified_inbox_for_direct: boolean;
+                                    is_private: boolean;
+                                    is_creator_agent_enabled: boolean;
+                                    is_creator_automated_response_enabled: boolean;
+                                    has_highlight_reels: boolean;
+                                    biz_user_inbox_state: number;
+                                    wa_eligibility: number;
+                                    wa_addressable: boolean;
+                                    account_badges: null[];
+                                    is_eligible_for_rp_safety_notice: boolean;
+                                    is_eligible_for_igd_stacks: boolean;
+                                    profile_pic_id: null;
+                                    has_anonymous_profile_picture: boolean;
+                                    date_joined: number;
+                                    friendship_status: {
+                                        following: boolean;
+                                        followed_by: boolean;
+                                        is_bestie: boolean;
+                                        is_feed_favorite: boolean;
+                                        is_restricted: boolean;
+                                        muting: boolean;
+                                        blocking: boolean;
+                                        is_messaging_pseudo_blocking: boolean;
+                                        is_private: boolean;
+                                    };
+                                    is_shared_account: boolean;
+                                    is_shared_account_with_messaging_access: boolean;
+                                    ai_agent_banner_type: null;
+                                    is_eligible_for_ai_bot_group_chats: boolean;
+                                }[];
+                                viewer_id: number;
+                                muted: boolean;
+                                vc_muted: boolean;
+                                encoded_server_data_info: null;
+                                admin_user_ids: number[];
+                                approval_required_for_new_members: boolean;
+                                archived: boolean;
+                                thread_has_audio_only_call: boolean;
+                                pending_user_ids: null[];
+                                oldest_cursor: null;
+                                newest_cursor: null;
+                                last_permanent_item: {
+                                    item_id: null;
+                                    message_id: null;
+                                    user_id: number;
+                                    timestamp: number;
+                                    item_type: null;
+                                    client_context: null;
+                                    show_forward_attribution: boolean;
+                                    forward_score: null;
+                                    is_shh_mode: boolean;
+                                    otid: null;
+                                    is_ae_dual_send: boolean;
+                                    is_ephemeral_exception: boolean;
+                                    is_disappearing: boolean;
+                                    is_superlative: boolean;
+                                    paid_partnership_info: {
+                                        is_paid_partnership: boolean;
+                                    };
+                                    is_replyable_in_bc: boolean;
+                                    skip_bump_thread: boolean;
+                                    send_attribution: null;
+                                    is_sent_by_viewer: boolean;
+                                    uq_seq_id: number;
+                                    tq_seq_id: number;
+                                    latest_snooze_state: number;
+                                    one_click_upsell: null;
+                                    genai_params: Record<string, never>;
+                                    is_pinned: boolean;
+                                    system_folder: number;
+                                    text: null;
+                                };
+                                icebreakers: null;
+                                snippet: Record<string, never>;
+                                dismiss_inbox_nudge: null;
+                                should_upsell_nudge: boolean;
+                                public_chat_metadata: {
+                                    is_public: boolean;
+                                    is_pinnable_to_viewer_profile: boolean;
+                                    is_pinned_to_viewer_profile: boolean;
+                                    is_added_to_inbox: boolean;
+                                    is_subscribed_collaborator: boolean;
+                                    channel_end_source: null;
+                                    is_comments_enabled: boolean;
+                                    hidden_emojis: null;
+                                    channel_end_timestamp: number;
+                                    is_xposting_eligible: boolean;
+                                    is_linked_account_eligible_for_xposting: boolean;
+                                    xposting_available_channel_count: number;
+                                };
+                                is_creator_thread: boolean;
+                                is_business_thread: boolean;
+                                account_warning: null;
+                                event_thread_metadata: null;
+                                group_profile_id: null;
+                                ctd_outcome_upsell_setting: {
+                                    impression_limits: number;
+                                    cooldown_days: number;
+                                    impression_limits_android: number;
+                                    cooldown_days_android: number;
+                                };
+                                takedown_data: null;
+                                is_xac_readonly: boolean;
+                                creator_agent_enabled: boolean;
+                                read_receipts_disabled: number;
+                                live_location_session_id: null;
+                                is_pin: boolean;
+                                pinned_timestamp: null;
+                                instamadillo_cutover_metadata: null;
+                                is_3p_api_user: boolean;
+                                typing_indicator_disabled: number;
+                                locked_status: null;
+                                notification_preview_controls: null;
+                                customer_details: null;
+                                recurring_prompt_type: null;
+                                snoozed_messages_metadata: {
+                                    snoozed_messages_count: number;
+                                    last_snoozed_message_timestamp_ms: number;
+                                    show_snooze_pill: boolean;
+                                };
+                                is_verified_thread: boolean;
+                                last_mentioned_item_timestamp_us: null;
+                                lightweight_intervention_appealable_entity_id: null;
+                                nudge: {
+                                    create_time: null;
+                                    nudge_type: number;
+                                };
+                                nicknames: null[];
+                                reachability_status: null;
+                                nicknames_setting: {
+                                    user_igid: null;
+                                    nickname_setting: null;
+                                }[];
+                                scheduled_message_count: number;
+                                must_show_in_thread_business_disclaimer: boolean;
+                                ai_agent_voice_calling_enabled: boolean;
+                                ai_agent_remixable: boolean;
+                                recent_creation_time: null;
+                                should_show_safety_card: boolean;
+                                is_last_message_story_reply: boolean;
+                                is_new_friend_bump: null;
+                                pinned_activity: null;
+                                ai_agent_visibility_status: null;
+                                hidden_chat_info: null;
+                                thread_title: null;
+                                thread_label: number;
+                                thread_languages: null;
+                                is_group: boolean;
+                                is_spam: boolean;
+                                spam: boolean;
+                                shh_mode_enabled: boolean;
+                                relevancy_score: number;
+                                relevancy_score_expr: number;
+                                is_translation_enabled: boolean;
+                                last_activity_at: number;
+                                last_non_sender_item_at: number;
+                                marked_as_unread: boolean;
+                                assigned_admin_id: number;
+                                thread_image: null;
+                                ongoing_call_timestamp_ms: null;
+                                pinned_messages_metadata: null;
+                                ad_context_data: null;
+                                label_items: null[];
+                                shh_transport_mode: number;
+                                shh_toggler_userid: null;
+                                messaging_thread_key: number;
+                                next_cursor: null;
+                                prev_cursor: null;
+                                policy_violation: null;
+                                theme: {
+                                    id: null;
+                                };
+                                thread_context_items: null[];
+                                professional_metadata: null;
+                                last_seen_at: {
+                                    [key: string]: {
+                                        item_id: null;
+                                        timestamp: null;
+                                        created_at: null;
+                                        shh_seen_state: Record<string, never>;
+                                    };
+                                };
+                                smart_suggestion: null;
+                                system_folder: number;
+                                persistent_menu_icebreakers: {
+                                    persistent_icebreakers: null[];
+                                    are_default_icebreakers: boolean;
+                                };
+                                is_xac_thread: boolean;
+                                is_fanclub_subscriber_thread: boolean;
+                                inviter: {
+                                    id: null;
+                                    strong_id__: null;
+                                    pk: number;
+                                    pk_id: null;
+                                    full_name: null;
+                                    username: null;
+                                    short_name: null;
+                                    profile_pic_url: null;
+                                    is_verified: boolean;
+                                    interop_messaging_user_fbid: number;
+                                    fbid_v2: number;
+                                    has_ig_profile: boolean;
+                                    interop_user_type: number;
+                                    is_using_unified_inbox_for_direct: boolean;
+                                    is_private: boolean;
+                                    is_creator_agent_enabled: boolean;
+                                    is_creator_automated_response_enabled: boolean;
+                                    has_highlight_reels: boolean;
+                                    biz_user_inbox_state: number;
+                                    wa_eligibility: number;
+                                    wa_addressable: boolean;
+                                    account_badges: null[];
+                                    is_eligible_for_rp_safety_notice: boolean;
+                                    is_eligible_for_igd_stacks: boolean;
+                                    profile_pic_id: null;
+                                    has_anonymous_profile_picture: boolean;
+                                    date_joined: number;
+                                    friendship_status: {
+                                        following: boolean;
+                                        followed_by: boolean;
+                                        is_bestie: boolean;
+                                        is_feed_favorite: boolean;
+                                        is_restricted: boolean;
+                                        muting: boolean;
+                                        blocking: boolean;
+                                        is_messaging_pseudo_blocking: boolean;
+                                        is_private: boolean;
+                                    };
+                                    is_shared_account: boolean;
+                                    is_shared_account_with_messaging_access: boolean;
+                                    ai_agent_banner_type: null;
+                                    is_eligible_for_ai_bot_group_chats: boolean;
+                                };
+                                input_mode: number;
+                                has_reached_message_request_limit: null;
+                                last_mentioned_item_id: null;
+                                thread_type: null;
+                                thread_subtype: number;
+                                btv_enabled_map: {
+                                    instamadillo_cutover: number;
+                                    item_type: Record<string, never>;
+                                    ttlc: number;
+                                    proton: number;
+                                    instamadillo_eligible: boolean;
+                                };
+                                translation_banner_impression_count: number;
+                                read_state: number;
+                                business_thread_folder: number;
+                                is_creator_subscriber_thread: boolean;
+                                group_link_joinable_mode: number;
+                                joinable_group_link: null;
+                                folder: number;
+                                e2ee_cutover_status: number;
+                                left_users: null[];
+                                is_appointment_booking_enabled: boolean;
+                                mentions_muted: boolean;
+                                tq_seq_id: number;
+                                named: boolean;
+                                is_close_friend_thread: boolean;
+                                uq_seq_id: number;
+                                video_call_id: null;
+                                bc_partnership: boolean;
+                                shh_replay_enabled: boolean;
+                                pals_feature_status: null;
+                                is_stale: boolean;
+                                ig_thread_capabilities: {
+                                    capabilities_0: number;
+                                    capabilities_1: number;
+                                };
+                            };
                         };
                     };
                 };
@@ -16395,8 +19708,9 @@ export interface paths {
                                         social_context: null;
                                         value: number;
                                         followed_by: boolean;
+                                        is_new_suggestion?: boolean;
                                         uuid: null;
-                                        score: number;
+                                        score?: number;
                                     };
                                 }[];
                                 has_more_suggestions: boolean;
@@ -16563,7 +19877,7 @@ export interface paths {
                                     is_new_suggestion: boolean;
                                     uuid: null;
                                     followed_by: boolean;
-                                    social_context_facepile_users: {
+                                    social_context_facepile_users?: {
                                         pk: number;
                                         pk_id: null;
                                         full_name: null;
@@ -16822,7 +20136,7 @@ export interface paths {
                                 strong_id__: null;
                                 username: null;
                                 is_verified: boolean;
-                                profile_pic_id: null;
+                                profile_pic_id?: null;
                                 profile_pic_url: null;
                                 chaining_info: {
                                     sources: null;
@@ -16975,24 +20289,73 @@ export interface paths {
                                 caption: null;
                                 thumbnail_urls: null[];
                                 large_urls: null[];
-                                media_infos: {
+                                media_infos: ({
                                     id: null;
                                     pk: number;
                                     strong_id__: null;
                                     image_versions2: {
                                         candidates: {
-                                            estimated_scans_sizes: number[];
+                                            estimated_scans_sizes?: number[];
                                             height: number;
                                             scans_profile: null;
                                             url: null;
                                             width: number;
                                         }[];
+                                        additional_candidates?: {
+                                            first_frame: {
+                                                height: number;
+                                                scans_profile: null;
+                                                url: null;
+                                                width: number;
+                                                estimated_scans_sizes?: number[];
+                                            };
+                                            igtv_first_frame: {
+                                                height: number;
+                                                scans_profile: null;
+                                                url: null;
+                                                width: number;
+                                                estimated_scans_sizes?: number[];
+                                            };
+                                            smart_frame: {
+                                                estimated_scans_sizes: number[];
+                                                height: number;
+                                                scans_profile: null;
+                                                url: null;
+                                                width: number;
+                                            } | null;
+                                        };
+                                        scrubber_spritesheet_info_candidates?: {
+                                            default: {
+                                                file_size_kb: number;
+                                                max_thumbnails_per_sprite: number;
+                                                rendered_width: number;
+                                                sprite_height: number;
+                                                sprite_urls: null[];
+                                                sprite_width: number;
+                                                thumbnail_duration: number;
+                                                thumbnail_height: number;
+                                                thumbnail_width: number;
+                                                thumbnails_per_row: number;
+                                                total_thumbnail_num_per_sprite: number;
+                                                video_length: number;
+                                            };
+                                        };
                                     };
                                     media_type: number;
                                     original_height: number;
                                     original_width: number;
                                     product_type: null;
-                                }[];
+                                    has_audio?: boolean;
+                                    video_duration?: number;
+                                    video_versions?: {
+                                        bandwidth: number;
+                                        height: number;
+                                        id: null;
+                                        type: number;
+                                        url: null;
+                                        width: number;
+                                    }[];
+                                } | null)[];
                                 value: number;
                                 is_new_suggestion: boolean;
                                 social_context_facepile_users: {
@@ -17215,7 +20578,7 @@ export interface paths {
                                                         };
                                                         is_covered: boolean;
                                                         private_reply_status: number;
-                                                    };
+                                                    } | null;
                                                     fundraiser_tag: {
                                                         has_standalone_fundraiser: boolean;
                                                     };
@@ -17237,7 +20600,13 @@ export interface paths {
                                                     is_in_profile_grid: boolean;
                                                     profile_grid_control_enabled: boolean;
                                                     media_cropping_info: {
-                                                        square_crop: {
+                                                        four_by_three_crop?: {
+                                                            crop_left: number;
+                                                            crop_right: number;
+                                                            crop_top: number;
+                                                            crop_bottom: number;
+                                                        };
+                                                        square_crop?: {
                                                             crop_left: number;
                                                             crop_right: number;
                                                             crop_top: number;
@@ -17303,7 +20672,12 @@ export interface paths {
                                                                 url: null;
                                                                 width: number;
                                                             };
-                                                            smart_frame: null;
+                                                            smart_frame: {
+                                                                height: number;
+                                                                scans_profile: null;
+                                                                url: null;
+                                                                width: number;
+                                                            } | null;
                                                         };
                                                         candidates: {
                                                             height: number;
@@ -17311,6 +20685,22 @@ export interface paths {
                                                             url: null;
                                                             width: number;
                                                         }[];
+                                                        scrubber_spritesheet_info_candidates?: {
+                                                            default: {
+                                                                file_size_kb: number;
+                                                                max_thumbnails_per_sprite: number;
+                                                                rendered_width: number;
+                                                                sprite_height: number;
+                                                                sprite_urls: null[];
+                                                                sprite_width: number;
+                                                                thumbnail_duration: number;
+                                                                thumbnail_height: number;
+                                                                thumbnail_width: number;
+                                                                thumbnails_per_row: number;
+                                                                total_thumbnail_num_per_sprite: number;
+                                                                video_length: number;
+                                                            };
+                                                        };
                                                     };
                                                     original_width: number;
                                                     original_height: number;
@@ -17338,6 +20728,23 @@ export interface paths {
                                                     boost_unavailable_reason: null;
                                                     boost_unavailable_reason_v2: null;
                                                     subscribe_cta_visible: boolean;
+                                                    creative_config?: {
+                                                        capture_type: null;
+                                                        face_effect_id: null;
+                                                        attribution_user: null;
+                                                        creation_tool_info: {
+                                                            camera_tool: number;
+                                                            duration_selector_seconds: number;
+                                                            speed_selector: number;
+                                                            color_filters: null;
+                                                            appearance_effect: number;
+                                                            timer_selector_seconds: number;
+                                                            magic_cut_start_time: number;
+                                                            magic_cut_end_time: number;
+                                                        }[];
+                                                        effect_configs: null;
+                                                        effect_preview: null;
+                                                    };
                                                     is_cutout_sticker_allowed: boolean;
                                                     cutout_sticker_info: null[];
                                                     recommendation_data: null;
@@ -17376,6 +20783,7 @@ export interface paths {
                                                     has_liked: boolean;
                                                     like_count: number;
                                                     top_likers: null[];
+                                                    video_subtitles_locale?: null;
                                                     video_sticker_locales: null[];
                                                     is_dash_eligible: number;
                                                     video_dash_manifest: null;
@@ -17421,7 +20829,17 @@ export interface paths {
                                                         challenge_info: null;
                                                         content_appreciation_info: {
                                                             enabled: boolean;
-                                                            entry_point_container: null;
+                                                            entry_point_container: {
+                                                                comment: {
+                                                                    action_type: null;
+                                                                };
+                                                                overflow: null;
+                                                                pill: {
+                                                                    action_type: null;
+                                                                    priority: number;
+                                                                };
+                                                                ufi: null;
+                                                            } | null;
                                                         };
                                                         contextual_highlight_info: null;
                                                         cutout_sticker_info: null[];
@@ -17447,7 +20865,79 @@ export interface paths {
                                                         };
                                                         merchandising_pill_info: null;
                                                         music_canonical_id: null;
-                                                        music_info: null;
+                                                        music_info: {
+                                                            music_canonical_id: null;
+                                                            music_asset_info: {
+                                                                allows_saving: boolean;
+                                                                artist_id: null;
+                                                                audio_asset_id: null;
+                                                                audio_cluster_id: null;
+                                                                cover_artwork_thumbnail_uri: null;
+                                                                cover_artwork_uri: null;
+                                                                dark_message: null;
+                                                                dash_manifest: null;
+                                                                display_artist: null;
+                                                                duration_in_ms: number;
+                                                                fast_start_progressive_download_url: null;
+                                                                has_lyrics: boolean;
+                                                                highlight_start_times_in_ms: number[];
+                                                                id: null;
+                                                                ig_username: null;
+                                                                is_eligible_for_audio_effects: boolean;
+                                                                is_eligible_for_vinyl_sticker: boolean;
+                                                                is_explicit: boolean;
+                                                                licensed_music_subtype: null;
+                                                                progressive_download_url: null;
+                                                                reactive_audio_download_url: null;
+                                                                sanitized_title: null;
+                                                                song_monetization_info: null;
+                                                                subtitle: null;
+                                                                title: null;
+                                                                web_30s_preview_download_url: null;
+                                                                lyrics: null;
+                                                                spotify_track_metadata: null;
+                                                            };
+                                                            music_consumption_info: {
+                                                                allow_media_creation_with_music: boolean;
+                                                                music_creation_restriction_reason: null;
+                                                                audio_asset_start_time_in_ms: number;
+                                                                contains_lyrics: null;
+                                                                derived_content_id: null;
+                                                                display_labels: null;
+                                                                formatted_clips_media_count: null;
+                                                                is_bookmarked: boolean;
+                                                                is_trending_in_clips: boolean;
+                                                                overlap_duration_in_ms: number;
+                                                                placeholder_profile_pic_url: null;
+                                                                should_allow_music_editing: boolean;
+                                                                should_mute_audio: boolean;
+                                                                should_mute_audio_reason: null;
+                                                                should_mute_audio_reason_type: null;
+                                                                should_render_soundwave: boolean;
+                                                                trend_rank: null;
+                                                                previous_trend_rank: null;
+                                                                ig_artist: {
+                                                                    pk: number;
+                                                                    pk_id: null;
+                                                                    id: null;
+                                                                    username: null;
+                                                                    full_name: null;
+                                                                    is_private: boolean;
+                                                                    is_verified: boolean;
+                                                                    profile_pic_id: null;
+                                                                    profile_pic_url: null;
+                                                                    strong_id__: null;
+                                                                };
+                                                                audio_filter_infos: null[];
+                                                                audio_muting_info: {
+                                                                    mute_audio: boolean;
+                                                                    mute_reason_str: null;
+                                                                    allow_audio_editing: boolean;
+                                                                    show_muted_audio_toast: boolean;
+                                                                };
+                                                                user_notes: null;
+                                                            };
+                                                        } | null;
                                                         nux_info: null;
                                                         original_sound_info: {
                                                             allow_creator_to_rename: boolean;
@@ -17505,7 +20995,7 @@ export interface paths {
                                                             fb_downstream_use_xpost_metadata: {
                                                                 downstream_use_xpost_deny_reason: null;
                                                             };
-                                                        };
+                                                        } | null;
                                                         originality_info: null;
                                                         reels_on_the_rise_info: null;
                                                         reusable_text_attribute_string: null;
@@ -17544,19 +21034,39 @@ export interface paths {
                                                         confirmation_style: null;
                                                         followup_options: {
                                                             text: null;
-                                                            id: null;
-                                                            show_icon: boolean;
-                                                            data: null;
                                                             style: null;
+                                                            id: null;
+                                                            data: null;
+                                                            show_icon: boolean;
                                                             demotion_control: {
-                                                                confirmation_style: null;
-                                                                confirmation_icon: null;
-                                                                confirmation_body: null;
-                                                                undo_style: null;
+                                                                confirmation_style?: null;
+                                                                confirmation_icon?: null;
+                                                                confirmation_body?: null;
+                                                                undo_style?: null;
                                                             };
                                                         }[];
                                                     };
                                                     is_reuse_allowed: boolean;
+                                                    usertags?: {
+                                                        in: {
+                                                            position: number[];
+                                                            show_category_of_user: boolean;
+                                                            user: {
+                                                                pk: number;
+                                                                pk_id: null;
+                                                                id: null;
+                                                                full_name: null;
+                                                                is_private: boolean;
+                                                                strong_id__: null;
+                                                                username: null;
+                                                                is_verified: boolean;
+                                                                profile_pic_id: null;
+                                                                profile_pic_url: null;
+                                                            };
+                                                        }[];
+                                                    };
+                                                    photo_of_you?: boolean;
+                                                    video_subtitles_uri?: null;
                                                 };
                                             }[];
                                             max_id: null;
@@ -17596,12 +21106,12 @@ export interface paths {
                                                     data: null;
                                                     style: null;
                                                     demotion_control: {
-                                                        confirmation_style: null;
-                                                        confirmation_icon: null;
-                                                        confirmation_title: null;
-                                                        confirmation_body: null;
-                                                        undo_style: null;
-                                                        followup_options: {
+                                                        confirmation_style?: null;
+                                                        confirmation_icon?: null;
+                                                        confirmation_title?: null;
+                                                        confirmation_body?: null;
+                                                        undo_style?: null;
+                                                        followup_options?: {
                                                             text: null;
                                                             id: null;
                                                             style: null;
@@ -17622,6 +21132,7 @@ export interface paths {
                                             integrity_review_decision: null;
                                             client_cache_key: null;
                                             filter_type: number;
+                                            can_modify_carousel?: boolean;
                                             is_visual_reply_commenter_notice_enabled: boolean;
                                             like_and_view_counts_disabled: boolean;
                                             has_privately_liked: boolean;
@@ -17666,7 +21177,7 @@ export interface paths {
                                                 };
                                                 is_covered: boolean;
                                                 private_reply_status: number;
-                                            };
+                                            } | null;
                                             fundraiser_tag: {
                                                 has_standalone_fundraiser: boolean;
                                             };
@@ -17682,25 +21193,21 @@ export interface paths {
                                             fb_user_tags: {
                                                 in: null[];
                                             };
-                                            coauthor_producers: null[];
+                                            coauthor_producers: ({
+                                                pk: number;
+                                                pk_id: null;
+                                                id: null;
+                                                full_name: null;
+                                                is_private: boolean;
+                                                strong_id__: null;
+                                                username: null;
+                                                is_verified: boolean;
+                                                profile_pic_id: null;
+                                                profile_pic_url: null;
+                                            } | null)[];
                                             coauthor_producer_can_see_organic_insights: boolean;
                                             invited_coauthor_producers: null[];
-                                            mashup_info: {
-                                                can_toggle_mashups_allowed: boolean;
-                                                formatted_mashups_count: null;
-                                                has_been_mashed_up: boolean;
-                                                has_nonmimicable_additional_audio: boolean;
-                                                is_creator_requesting_mashup: boolean;
-                                                is_light_weight_check: boolean;
-                                                is_light_weight_reuse_allowed_check: boolean;
-                                                is_pivot_page_available: boolean;
-                                                is_reuse_allowed: boolean;
-                                                mashup_type: null;
-                                                mashups_allowed: boolean;
-                                                non_privacy_filtered_mashups_media_count: number;
-                                                privacy_filtered_mashups_media_count: null;
-                                                original_media: null;
-                                            };
+                                            all_previous_submitters?: null[];
                                             is_in_profile_grid: boolean;
                                             profile_grid_control_enabled: boolean;
                                             user: {
@@ -17718,18 +21225,21 @@ export interface paths {
                                                 account_type: number;
                                                 account_badges: null[];
                                                 fan_club_info: {
-                                                    autosave_to_exclusive_highlight: null;
-                                                    connected_member_count: null;
-                                                    fan_club_id: null;
+                                                    autosave_to_exclusive_highlight: boolean | null;
+                                                    connected_member_count: number | null;
+                                                    fan_club_id: number | null;
                                                     fan_club_name: null;
                                                     has_created_ssc: null;
                                                     has_enough_subscribers_for_ssc: null;
-                                                    is_fan_club_gifting_eligible: null;
-                                                    is_fan_club_referral_eligible: null;
-                                                    is_free_trial_eligible: null;
+                                                    is_fan_club_gifting_eligible: boolean | null;
+                                                    is_fan_club_referral_eligible: boolean | null;
+                                                    is_free_trial_eligible: boolean | null;
                                                     largest_public_bc_id: null;
-                                                    subscriber_count: null;
-                                                    fan_consideration_page_revamp_eligiblity: null;
+                                                    subscriber_count: number | null;
+                                                    fan_consideration_page_revamp_eligiblity: {
+                                                        should_show_social_context: boolean;
+                                                        should_show_content_preview: boolean;
+                                                    } | null;
                                                 };
                                                 friendship_status: {
                                                     is_muting_reel: boolean;
@@ -17770,8 +21280,80 @@ export interface paths {
                                             music_metadata: {
                                                 audio_type: null;
                                                 music_canonical_id: null;
-                                                pinned_media_ids: null;
-                                                music_info: null;
+                                                pinned_media_ids: null[] | null;
+                                                music_info: {
+                                                    music_canonical_id: null;
+                                                    music_asset_info: {
+                                                        allows_saving: boolean;
+                                                        artist_id: null;
+                                                        audio_asset_id: null;
+                                                        audio_cluster_id: null;
+                                                        cover_artwork_thumbnail_uri: null;
+                                                        cover_artwork_uri: null;
+                                                        dark_message: null;
+                                                        dash_manifest: null;
+                                                        display_artist: null;
+                                                        duration_in_ms: number;
+                                                        fast_start_progressive_download_url: null;
+                                                        has_lyrics: boolean;
+                                                        highlight_start_times_in_ms: (number | null)[];
+                                                        id: null;
+                                                        ig_username: null;
+                                                        is_eligible_for_audio_effects: boolean;
+                                                        is_eligible_for_vinyl_sticker: boolean;
+                                                        is_explicit: boolean;
+                                                        licensed_music_subtype: null;
+                                                        progressive_download_url: null;
+                                                        reactive_audio_download_url: null;
+                                                        sanitized_title: null;
+                                                        song_monetization_info: null;
+                                                        subtitle: null;
+                                                        title: null;
+                                                        web_30s_preview_download_url: null;
+                                                        lyrics: null;
+                                                        spotify_track_metadata: null;
+                                                    };
+                                                    music_consumption_info: {
+                                                        allow_media_creation_with_music: boolean;
+                                                        music_creation_restriction_reason: null;
+                                                        audio_asset_start_time_in_ms: number;
+                                                        contains_lyrics: null;
+                                                        derived_content_id: null;
+                                                        display_labels: null;
+                                                        formatted_clips_media_count: null;
+                                                        is_bookmarked: boolean;
+                                                        is_trending_in_clips: boolean;
+                                                        overlap_duration_in_ms: number;
+                                                        placeholder_profile_pic_url: null;
+                                                        should_allow_music_editing: boolean;
+                                                        should_mute_audio: boolean;
+                                                        should_mute_audio_reason: null;
+                                                        should_mute_audio_reason_type: null;
+                                                        should_render_soundwave: boolean;
+                                                        trend_rank: null;
+                                                        previous_trend_rank: null;
+                                                        ig_artist: {
+                                                            pk: number;
+                                                            pk_id: null;
+                                                            id: null;
+                                                            username: null;
+                                                            full_name: null;
+                                                            is_private: boolean;
+                                                            is_verified: boolean;
+                                                            profile_pic_id: null;
+                                                            profile_pic_url: null;
+                                                            strong_id__: null;
+                                                        };
+                                                        audio_filter_infos: null[];
+                                                        audio_muting_info: {
+                                                            mute_audio: boolean;
+                                                            mute_reason_str: null;
+                                                            allow_audio_editing: boolean;
+                                                            show_muted_audio_toast: boolean;
+                                                        };
+                                                        user_notes: null;
+                                                    };
+                                                } | null;
                                                 original_sound_info: null;
                                             };
                                             social_context: null[];
@@ -17817,6 +21399,93 @@ export interface paths {
                                             related_ads_pivots_media_info: null;
                                             is_open_to_public_submission: boolean;
                                             hidden_likes_string_variant: number;
+                                            open_carousel_submission_state?: null;
+                                            carousel_media_count?: number;
+                                            carousel_media?: {
+                                                id: null;
+                                                explore_pivot_grid: boolean;
+                                                carousel_parent_id: null;
+                                                strong_id__: null;
+                                                pk: number;
+                                                commerciality_status: null;
+                                                product_type: null;
+                                                media_type: number;
+                                                image_versions2: {
+                                                    candidates: {
+                                                        estimated_scans_sizes: number[];
+                                                        height: number;
+                                                        scans_profile: null;
+                                                        url: null;
+                                                        width: number;
+                                                    }[];
+                                                    scrubber_spritesheet_info_candidates?: {
+                                                        default: {
+                                                            file_size_kb: number;
+                                                            max_thumbnails_per_sprite: number;
+                                                            rendered_width: number;
+                                                            sprite_height: number;
+                                                            sprite_urls: null[];
+                                                            sprite_width: number;
+                                                            thumbnail_duration: number;
+                                                            thumbnail_height: number;
+                                                            thumbnail_width: number;
+                                                            thumbnails_per_row: number;
+                                                            total_thumbnail_num_per_sprite: number;
+                                                            video_length: number;
+                                                        };
+                                                    };
+                                                };
+                                                original_width: number;
+                                                original_height: number;
+                                                preview: null;
+                                                fb_user_tags: {
+                                                    in: null[];
+                                                };
+                                                shop_routing_user_id: null;
+                                                sharing_friction_info: {
+                                                    bloks_app_url: null;
+                                                    should_have_sharing_friction: boolean;
+                                                    sharing_friction_payload: null;
+                                                };
+                                                taken_at: number;
+                                                product_suggestions: null[];
+                                                video_sticker_locales: null[];
+                                                video_versions?: {
+                                                    bandwidth: number;
+                                                    height: number;
+                                                    id: null;
+                                                    type: number;
+                                                    url: null;
+                                                    width: number;
+                                                }[];
+                                                video_duration?: number;
+                                                has_audio?: boolean;
+                                                is_dash_eligible?: number;
+                                                video_dash_manifest?: null;
+                                                video_codec?: null;
+                                                number_of_qualities?: number;
+                                                usertags?: {
+                                                    in: ({
+                                                        position: number[];
+                                                        show_category_of_user: boolean;
+                                                        user: {
+                                                            pk: number;
+                                                            pk_id: null;
+                                                            id: null;
+                                                            full_name: null;
+                                                            is_private: boolean;
+                                                            strong_id__: null;
+                                                            username: null;
+                                                            is_verified: boolean;
+                                                            profile_pic_id: null;
+                                                            profile_pic_url: null;
+                                                        };
+                                                    } | null)[];
+                                                };
+                                            }[];
+                                            carousel_media_pending_post_count?: number;
+                                            carousel_media_ids?: number[];
+                                            commenting_disabled_for_viewer?: boolean;
                                             preview_comments: null[];
                                             comment_count: number;
                                             hide_view_all_comment_entrypoint: boolean;
@@ -17839,6 +21508,55 @@ export interface paths {
                                             is_organic_product_tagging_eligible: boolean;
                                             igbio_product: null;
                                             product_suggestions: null[];
+                                            mashup_info?: {
+                                                can_toggle_mashups_allowed: boolean;
+                                                formatted_mashups_count: null;
+                                                has_been_mashed_up: boolean;
+                                                has_nonmimicable_additional_audio: boolean;
+                                                is_creator_requesting_mashup: boolean;
+                                                is_light_weight_check: boolean;
+                                                is_light_weight_reuse_allowed_check: boolean;
+                                                is_pivot_page_available: boolean;
+                                                is_reuse_allowed: boolean;
+                                                mashup_type: null;
+                                                mashups_allowed: boolean;
+                                                non_privacy_filtered_mashups_media_count: number;
+                                                privacy_filtered_mashups_media_count: null;
+                                                original_media: null;
+                                            };
+                                            usertags?: {
+                                                in: {
+                                                    position: number[];
+                                                    show_category_of_user: boolean;
+                                                    user: {
+                                                        pk: number;
+                                                        pk_id: null;
+                                                        id: null;
+                                                        full_name: null;
+                                                        is_private: boolean;
+                                                        strong_id__: null;
+                                                        username: null;
+                                                        is_verified: boolean;
+                                                        profile_pic_id: null;
+                                                        profile_pic_url: null;
+                                                    };
+                                                }[];
+                                            };
+                                            photo_of_you?: boolean;
+                                            collab_follow_button_info?: {
+                                                show_follow_button: boolean;
+                                                is_owner_in_author_exp: boolean;
+                                            };
+                                            location?: {
+                                                name: null;
+                                                address: null;
+                                                city: null;
+                                                has_viewer_saved: boolean;
+                                                pk: number;
+                                                short_name: null;
+                                                facebook_places_id: number;
+                                                external_source: null;
+                                            };
                                         };
                                     }[];
                                 };
@@ -17996,7 +21714,7 @@ export interface paths {
                                                 third_party_downloads_enabled: number;
                                                 strong_id__: null;
                                                 id: null;
-                                                profile_pic_id: null;
+                                                profile_pic_id?: null;
                                                 profile_pic_url: null;
                                                 is_verified: boolean;
                                                 username: null;
@@ -18008,7 +21726,6 @@ export interface paths {
                                             social_context: null;
                                             icon: null;
                                             caption: null;
-                                            media_ids: null[];
                                             thumbnail_urls: null[];
                                             large_urls: null[];
                                             media_infos: null[];
@@ -18016,6 +21733,8 @@ export interface paths {
                                             is_new_suggestion: boolean;
                                             uuid: null;
                                             followed_by: boolean;
+                                            interest_topic?: null;
+                                            media_ids?: null[];
                                         }[];
                                     }[];
                                     more_available: boolean;
@@ -18157,6 +21876,7 @@ export interface paths {
                                 id: null;
                                 username: null;
                                 is_verified: boolean;
+                                profile_pic_id?: null;
                                 friendship_status: {
                                     is_muting_reel: boolean;
                                     is_blocking_reel: boolean;
@@ -18365,6 +22085,18 @@ export interface paths {
                                             is_new_suggestion: boolean;
                                             uuid: null;
                                             followed_by: boolean;
+                                            social_context_facepile_users?: {
+                                                pk: number;
+                                                pk_id: null;
+                                                full_name: null;
+                                                is_private: boolean;
+                                                strong_id__: null;
+                                                id: null;
+                                                username: null;
+                                                is_verified: boolean;
+                                                profile_pic_id: null;
+                                                profile_pic_url: null;
+                                            }[];
                                         }[];
                                         insertion_context: null;
                                         id: null;
@@ -18525,7 +22257,401 @@ export interface paths {
                     content: {
                         "application/json": {
                             reels: {
-                                "highlight:18063693676628854": {
+                                "highlight:17925189521855852"?: {
+                                    id: null;
+                                    strong_id__: null;
+                                    latest_reel_media: number;
+                                    seen: null;
+                                    can_reply: boolean;
+                                    can_gif_quick_reply: boolean;
+                                    can_reshare: boolean;
+                                    reel_type: null;
+                                    ad_expiry_timestamp_in_millis: null;
+                                    is_cta_sticker_available: null;
+                                    app_sticker_info: null;
+                                    should_treat_link_sticker_as_cta: null;
+                                    pool_refresh_ttl_in_sec: null;
+                                    can_react_with_avatar: boolean;
+                                    cover_media: {
+                                        cropped_image_version: {
+                                            width: number;
+                                            height: number;
+                                            url: null;
+                                            scans_profile: null;
+                                        };
+                                        crop_rect: number[];
+                                        media_id: null;
+                                        full_image_version: null;
+                                        upload_id: null;
+                                    };
+                                    user: {
+                                        pk: number;
+                                        pk_id: null;
+                                        full_name: null;
+                                        is_private: boolean;
+                                        strong_id__: null;
+                                        id: null;
+                                        username: null;
+                                        is_verified: boolean;
+                                        profile_pic_id: null;
+                                        profile_pic_url: null;
+                                        interop_messaging_user_fbid: number;
+                                        is_creator_agent_enabled: boolean;
+                                        transparency_product_enabled: boolean;
+                                    };
+                                    items: {
+                                        pk: number;
+                                        id: null;
+                                        is_visual_reply_commenter_notice_enabled: boolean;
+                                        like_and_view_counts_disabled: boolean;
+                                        is_post_live_clips_media: boolean;
+                                        is_reshare_of_text_post_app_media_in_ig: boolean;
+                                        is_reel_media: boolean;
+                                        fbid: number;
+                                        device_timestamp: number;
+                                        caption_is_edited: boolean;
+                                        strong_id__: null;
+                                        is_quicksnap_recap: boolean;
+                                        deleted_reason: number;
+                                        mezql_token: null;
+                                        should_request_ads: boolean;
+                                        is_terminal_video_segment: boolean;
+                                        integrity_review_decision: null;
+                                        client_cache_key: null;
+                                        has_privately_liked: boolean;
+                                        filter_type: number;
+                                        taken_at: number;
+                                        commenting_disabled_for_viewer: boolean;
+                                        hide_view_all_comment_entrypoint: boolean;
+                                        is_comments_gif_composer_enabled: boolean;
+                                        has_liked: boolean;
+                                        video_sticker_locales: null[];
+                                        can_viewer_save: boolean;
+                                        shop_routing_user_id: null;
+                                        is_organic_product_tagging_eligible: boolean;
+                                        product_suggestions: null[];
+                                        can_see_insights_as_brand: boolean;
+                                        media_type: number;
+                                        code: null;
+                                        caption: null;
+                                        fundraiser_tag: {
+                                            has_standalone_fundraiser: boolean;
+                                        };
+                                        sharing_friction_info: {
+                                            bloks_app_url: null;
+                                            should_have_sharing_friction: boolean;
+                                            sharing_friction_payload: null;
+                                        };
+                                        timeline_pinned_user_ids: null[];
+                                        has_translation: boolean;
+                                        original_media_has_visual_reply_media: boolean;
+                                        coauthor_producers: null[];
+                                        coauthor_producer_can_see_organic_insights: boolean;
+                                        invited_coauthor_producers: null[];
+                                        is_in_profile_grid: boolean;
+                                        profile_grid_control_enabled: boolean;
+                                        highlights_info: {
+                                            added_to: {
+                                                reel_id: null;
+                                                title: null;
+                                            }[];
+                                        };
+                                        user: {
+                                            pk: number;
+                                            is_private: boolean;
+                                            id: null;
+                                            strong_id__: null;
+                                        };
+                                        image_versions2: {
+                                            candidates: {
+                                                estimated_scans_sizes?: number[];
+                                                height: number;
+                                                scans_profile: null;
+                                                url: null;
+                                                width: number;
+                                            }[];
+                                        };
+                                        original_width: number;
+                                        original_height: number;
+                                        product_type: null;
+                                        is_paid_partnership: boolean;
+                                        music_metadata: null;
+                                        organic_tracking_token: null;
+                                        ig_media_sharing_disabled: boolean;
+                                        crosspost_metadata: {
+                                            fb_downstream_use_xpost_metadata: {
+                                                downstream_use_xpost_deny_reason: null;
+                                            };
+                                        };
+                                        boost_unavailable_identifier: null;
+                                        boost_unavailable_reason: null;
+                                        boost_unavailable_reason_v2: null;
+                                        subscribe_cta_visible: boolean;
+                                        is_cutout_sticker_allowed: boolean;
+                                        cutout_sticker_info: null[];
+                                        can_hype: boolean;
+                                        gen_ai_detection_method: {
+                                            detection_method: null;
+                                        };
+                                        fb_aggregated_like_count: number;
+                                        fb_aggregated_comment_count: number;
+                                        has_high_risk_gen_ai_inform_treatment: boolean;
+                                        open_carousel_show_follow_button: boolean;
+                                        is_tagged_media_shared_to_viewer_profile_grid: boolean;
+                                        should_show_author_pog_for_tagged_media_shared_to_profile_grid: boolean;
+                                        is_open_to_public_submission: boolean;
+                                        media_attributions_data: null[];
+                                        archive_story_deletion_ts: number;
+                                        can_send_prompt: boolean;
+                                        is_first_take: boolean;
+                                        is_from_discovery_surface: boolean;
+                                        is_rollcall_v2: boolean;
+                                        supports_reel_reactions: boolean;
+                                        is_photo_mash_story: boolean;
+                                        can_play_spotify_audio: boolean;
+                                        is_superlative: boolean;
+                                        show_one_tap_fb_share_tooltip: boolean;
+                                        story_feed_media?: {
+                                            end_time_ms: number;
+                                            height: number;
+                                            is_fb_sticker: number;
+                                            is_hidden: number;
+                                            is_pinned: number;
+                                            is_sticker: number;
+                                            media_code: null;
+                                            media_compound_str: null;
+                                            media_id: null;
+                                            product_type: null;
+                                            rotation: number;
+                                            start_time_ms: number;
+                                            uncapped_height_ratio: number;
+                                            uncapped_width_ratio: number;
+                                            width: number;
+                                            x: number;
+                                            y: number;
+                                            z: number;
+                                        }[];
+                                        can_reply: boolean;
+                                        is_viewer_mentioned: boolean;
+                                        can_reshare: boolean;
+                                        is_dash_eligible?: number;
+                                        video_dash_manifest?: null;
+                                        video_codec?: null;
+                                        number_of_qualities?: number;
+                                        video_versions?: {
+                                            bandwidth: number;
+                                            height: number;
+                                            id: null;
+                                            type: number;
+                                            url: null;
+                                            width: number;
+                                        }[];
+                                        video_duration?: number;
+                                        has_audio?: boolean;
+                                        story_music_stickers?: {
+                                            attribution: null;
+                                            display_type: null;
+                                            end_time_ms: number;
+                                            height: number;
+                                            is_fb_sticker: number;
+                                            is_hidden: number;
+                                            is_pinned: number;
+                                            is_sticker: number;
+                                            rotation: number;
+                                            start_time_ms: number;
+                                            width: number;
+                                            x: number;
+                                            y: number;
+                                            z: number;
+                                            music_asset_info: {
+                                                allow_media_creation_with_music: boolean;
+                                                allows_saving: boolean;
+                                                artist_id: null;
+                                                audio_asset_id: null;
+                                                audio_asset_start_time_in_ms: number;
+                                                audio_cluster_id: null;
+                                                contains_lyrics: null;
+                                                cover_artwork_thumbnail_uri: null;
+                                                cover_artwork_uri: null;
+                                                dark_message: null;
+                                                dash_manifest: null;
+                                                derived_content_id: null;
+                                                display_artist: null;
+                                                display_labels: null;
+                                                duration_in_ms: number;
+                                                fast_start_progressive_download_url: null;
+                                                formatted_clips_media_count: null;
+                                                has_lyrics: boolean;
+                                                highlight_start_times_in_ms: number[];
+                                                id: null;
+                                                ig_username: null;
+                                                is_bookmarked: boolean;
+                                                is_eligible_for_audio_effects: null;
+                                                is_eligible_for_vinyl_sticker: boolean;
+                                                is_explicit: boolean;
+                                                is_trending_in_clips: boolean;
+                                                licensed_music_subtype: null;
+                                                music_creation_restriction_reason: null;
+                                                overlap_duration_in_ms: number;
+                                                placeholder_profile_pic_url: null;
+                                                previous_trend_rank: null;
+                                                progressive_download_url: null;
+                                                reactive_audio_download_url: null;
+                                                sanitized_title: null;
+                                                should_allow_music_editing: boolean;
+                                                should_mute_audio: boolean;
+                                                should_mute_audio_reason: null;
+                                                should_mute_audio_reason_type: null;
+                                                should_render_soundwave: boolean;
+                                                song_monetization_info: null;
+                                                subtitle: null;
+                                                title: null;
+                                                trend_rank: null;
+                                                web_30s_preview_download_url: null;
+                                                ig_artist: {
+                                                    pk: number;
+                                                    pk_id: null;
+                                                    id: null;
+                                                    username: null;
+                                                    full_name: null;
+                                                    is_private: boolean;
+                                                    is_verified: boolean;
+                                                    profile_pic_id: null;
+                                                    profile_pic_url: null;
+                                                    strong_id__: null;
+                                                };
+                                                audio_filter_infos: null[];
+                                                audio_muting_info: {
+                                                    mute_audio: boolean;
+                                                    mute_reason_str: null;
+                                                    allow_audio_editing: boolean;
+                                                    show_muted_audio_toast: boolean;
+                                                };
+                                                lyrics: null;
+                                                spotify_track_metadata: null;
+                                                user_notes: null;
+                                            };
+                                        }[];
+                                        story_prompts?: {
+                                            prompt_sticker: {
+                                                id: null;
+                                                text: null;
+                                                facepile_top_participants: {
+                                                    pk: number;
+                                                    pk_id: null;
+                                                    id: null;
+                                                    full_name: null;
+                                                    is_private: boolean;
+                                                    strong_id__: null;
+                                                    username: null;
+                                                    is_verified: boolean;
+                                                    profile_pic_id: null;
+                                                    profile_pic_url: null;
+                                                }[];
+                                                participant_count: number;
+                                                media_id: number;
+                                                disablement_state: number;
+                                                background_color: null;
+                                                sticker_style_str: null;
+                                                is_viewer_original_author: boolean;
+                                                is_speakeasy: boolean;
+                                                has_participated: boolean;
+                                                is_story_trending_prompt: boolean;
+                                                is_before_and_after: boolean;
+                                                prompt_type: number;
+                                                story_template: {
+                                                    is_from_discovery_surface: boolean;
+                                                    is_eligible_for_reels_participation: boolean;
+                                                    is_from_ayt_with_reel: boolean;
+                                                    story_captions: {
+                                                        text: null;
+                                                        x: number;
+                                                        y: number;
+                                                        z_index: number;
+                                                        height: number;
+                                                        width: number;
+                                                        rotation: number;
+                                                        alignment: null;
+                                                        animation: null;
+                                                        font_size: number;
+                                                        scale: number;
+                                                        colors: null;
+                                                        format_type: null;
+                                                        effects: null;
+                                                        secondary_color: null;
+                                                        graphic_effect: null;
+                                                    }[];
+                                                    story_static_overlays: null[];
+                                                    story_avatar_overlays: null[];
+                                                    fillable_stickers: {
+                                                        fillable_gallery_stickers: null;
+                                                        fillable_music_sticker: null;
+                                                    };
+                                                };
+                                                is_icon_disabled: boolean;
+                                                is_trending_prompt: boolean;
+                                                is_from_add_yours_camera_tool: boolean;
+                                                is_created_from_add_yours_browsing: boolean;
+                                                fb_downstream_use_xpost_metadata: {
+                                                    downstream_use_xpost_deny_reason: null;
+                                                };
+                                            };
+                                            x: number;
+                                            y: number;
+                                            z: number;
+                                            width: number;
+                                            height: number;
+                                            rotation: number;
+                                            is_pinned: number;
+                                            is_hidden: number;
+                                            is_sticker: number;
+                                            is_fb_sticker: number;
+                                            start_time_ms: number;
+                                            end_time_ms: number;
+                                        }[];
+                                        reel_mentions?: {
+                                            display_type: null;
+                                            end_time_ms: number;
+                                            height: number;
+                                            is_fb_sticker: number;
+                                            is_hidden: number;
+                                            is_pinned: number;
+                                            is_sticker: number;
+                                            rotation: number;
+                                            start_time_ms: number;
+                                            user: {
+                                                pk: number;
+                                                pk_id: null;
+                                                full_name: null;
+                                                is_private: boolean;
+                                                strong_id__: null;
+                                                id: null;
+                                                username: null;
+                                                is_verified: boolean;
+                                                profile_pic_id: null;
+                                                profile_pic_url: null;
+                                            };
+                                            width: number;
+                                            x: number;
+                                            y: number;
+                                            z: number;
+                                        }[];
+                                    }[];
+                                    is_nux: boolean;
+                                    title: null;
+                                    created_at: number;
+                                    is_pinned_highlight: boolean;
+                                    prefetch_count: number;
+                                    media_count: number;
+                                    media_ids: number[];
+                                    is_cacheable: boolean;
+                                    is_converted_to_clips: boolean;
+                                    disabled_reply_types: null[];
+                                    highlight_reel_type: null;
+                                    is_added_to_main_grid: boolean;
+                                    is_archived: boolean;
+                                };
+                                "highlight:18063693676628854"?: {
                                     id: null;
                                     strong_id__: null;
                                     latest_reel_media: number;
@@ -18594,20 +22720,6 @@ export interface paths {
                                         is_comments_gif_composer_enabled: boolean;
                                         has_liked: boolean;
                                         video_sticker_locales: null[];
-                                        is_dash_eligible: number;
-                                        video_dash_manifest: null;
-                                        video_codec: null;
-                                        number_of_qualities: number;
-                                        video_versions: {
-                                            bandwidth: number;
-                                            height: number;
-                                            id: null;
-                                            type: number;
-                                            url: null;
-                                            width: number;
-                                        }[];
-                                        video_duration: number;
-                                        has_audio: boolean;
                                         can_viewer_save: boolean;
                                         shop_routing_user_id: null;
                                         is_organic_product_tagging_eligible: boolean;
@@ -18646,7 +22758,7 @@ export interface paths {
                                         };
                                         image_versions2: {
                                             candidates: {
-                                                estimated_scans_sizes: number[];
+                                                estimated_scans_sizes?: number[];
                                                 height: number;
                                                 scans_profile: null;
                                                 url: null;
@@ -18696,6 +22808,143 @@ export interface paths {
                                         can_reply: boolean;
                                         is_viewer_mentioned: boolean;
                                         can_reshare: boolean;
+                                        is_dash_eligible?: number;
+                                        video_dash_manifest?: null;
+                                        video_codec?: null;
+                                        number_of_qualities?: number;
+                                        video_versions?: {
+                                            bandwidth: number;
+                                            height: number;
+                                            id: null;
+                                            type: number;
+                                            url: null;
+                                            width: number;
+                                        }[];
+                                        video_duration?: number;
+                                        has_audio?: boolean;
+                                        story_music_stickers?: {
+                                            attribution: null;
+                                            display_type?: null;
+                                            end_time_ms: number;
+                                            height: number;
+                                            is_fb_sticker: number;
+                                            is_hidden: number;
+                                            is_pinned: number;
+                                            is_sticker: number;
+                                            rotation: number;
+                                            start_time_ms: number;
+                                            width: number;
+                                            x: number;
+                                            y: number;
+                                            z: number;
+                                            music_asset_info: {
+                                                allow_media_creation_with_music: boolean;
+                                                allows_saving: boolean;
+                                                artist_id: null;
+                                                audio_asset_id: null;
+                                                audio_asset_start_time_in_ms: number;
+                                                audio_cluster_id: null;
+                                                contains_lyrics: null;
+                                                cover_artwork_thumbnail_uri: null;
+                                                cover_artwork_uri: null;
+                                                dark_message: null;
+                                                dash_manifest: null;
+                                                derived_content_id: null;
+                                                display_artist: null;
+                                                display_labels: null;
+                                                duration_in_ms: number;
+                                                fast_start_progressive_download_url: null;
+                                                formatted_clips_media_count: null;
+                                                has_lyrics: boolean;
+                                                highlight_start_times_in_ms: (number | null)[];
+                                                id: null;
+                                                ig_username: null;
+                                                is_bookmarked: boolean;
+                                                is_eligible_for_audio_effects: boolean | null;
+                                                is_eligible_for_vinyl_sticker: boolean;
+                                                is_explicit: boolean;
+                                                is_trending_in_clips: boolean;
+                                                licensed_music_subtype: null;
+                                                music_creation_restriction_reason: null;
+                                                overlap_duration_in_ms: number;
+                                                placeholder_profile_pic_url: null;
+                                                previous_trend_rank: null;
+                                                progressive_download_url: null;
+                                                reactive_audio_download_url: null;
+                                                sanitized_title: null;
+                                                should_allow_music_editing: boolean;
+                                                should_mute_audio: boolean;
+                                                should_mute_audio_reason: null;
+                                                should_mute_audio_reason_type: null;
+                                                should_render_soundwave: boolean;
+                                                song_monetization_info: null;
+                                                subtitle: null;
+                                                title: null;
+                                                trend_rank: null;
+                                                web_30s_preview_download_url: null;
+                                                ig_artist: {
+                                                    pk: number;
+                                                    pk_id: null;
+                                                    id: null;
+                                                    username: null;
+                                                    full_name: null;
+                                                    is_private: boolean;
+                                                    is_verified: boolean;
+                                                    profile_pic_id: null;
+                                                    profile_pic_url: null;
+                                                    strong_id__: null;
+                                                } | null;
+                                                audio_filter_infos: null[];
+                                                audio_muting_info: {
+                                                    mute_audio: boolean;
+                                                    mute_reason_str: null;
+                                                    allow_audio_editing: boolean;
+                                                    show_muted_audio_toast: boolean;
+                                                };
+                                                lyrics: null;
+                                                spotify_track_metadata: null;
+                                                user_notes: null;
+                                            };
+                                        }[];
+                                        reel_mentions?: {
+                                            display_type: null;
+                                            end_time_ms: number;
+                                            height: number;
+                                            is_fb_sticker: number;
+                                            is_hidden: number;
+                                            is_pinned: number;
+                                            is_sticker: number;
+                                            rotation: number;
+                                            start_time_ms: number;
+                                            user: {
+                                                pk: number;
+                                                pk_id: null;
+                                                full_name: null;
+                                                is_private: boolean;
+                                                strong_id__: null;
+                                                id: null;
+                                                username: null;
+                                                is_verified: boolean;
+                                                profile_pic_id: null;
+                                                profile_pic_url: null;
+                                            };
+                                            width: number;
+                                            x: number;
+                                            y: number;
+                                            z: number;
+                                        }[];
+                                        reshared_story_media_author?: {
+                                            pk: number;
+                                            pk_id: null;
+                                            id: null;
+                                            full_name: null;
+                                            is_private: boolean;
+                                            strong_id__: null;
+                                            username: null;
+                                            is_verified: boolean;
+                                            profile_pic_id: null;
+                                            profile_pic_url: null;
+                                        };
                                     }[];
                                     is_nux: boolean;
                                     title: null;
@@ -18842,7 +23091,69 @@ export interface paths {
                     content: {
                         "application/json": {
                             logging_info_token: null;
-                            tray: null[];
+                            tray: ({
+                                id: number;
+                                strong_id__: null;
+                                latest_reel_media: number;
+                                seen: number;
+                                can_reply: boolean;
+                                can_gif_quick_reply: boolean;
+                                can_reshare: boolean;
+                                reel_type: null;
+                                ad_expiry_timestamp_in_millis: null;
+                                is_cta_sticker_available: null;
+                                app_sticker_info: null;
+                                should_treat_link_sticker_as_cta: null;
+                                pool_refresh_ttl_in_sec: null;
+                                can_react_with_avatar: boolean;
+                                expiring_at: number;
+                                user: {
+                                    pk: number;
+                                    pk_id: null;
+                                    full_name: null;
+                                    is_private: boolean;
+                                    strong_id__: null;
+                                    id: null;
+                                    username: null;
+                                    is_verified: boolean;
+                                    profile_pic_id: null;
+                                    profile_pic_url: null;
+                                    friendship_status: {
+                                        muting: boolean;
+                                        is_muting_reel: boolean;
+                                        following: boolean;
+                                        is_bestie: boolean;
+                                        outgoing_request: boolean;
+                                    };
+                                };
+                                ranked_position: number;
+                                seen_ranked_position: number;
+                                muted: boolean;
+                                prefetch_count: number;
+                                ranker_scores: {
+                                    ptap: number;
+                                    fp: null;
+                                    vm: null;
+                                    ranking_info_token: null;
+                                    delivered_at_timestamp_s: number;
+                                    ranked_at_timestamp_s: number;
+                                };
+                                story_duration_secs: number;
+                                birthday_badge_enabled: boolean;
+                                has_besties_media: boolean;
+                                has_wearables_media: boolean;
+                                latest_wearables_reel_media: number;
+                                latest_wearables_reel_media_long: number;
+                                latest_besties_reel_media: number;
+                                media_count: number;
+                                media_ids: number[];
+                                has_video: boolean;
+                                has_fan_club_media: boolean;
+                                show_fan_club_stories_teaser: boolean;
+                                disabled_reply_types: null[];
+                                hype_commenter_list: null[];
+                                is_archived: boolean;
+                            } | null)[];
                             story_ranking_token: null;
                             story_likes_config: {
                                 is_enabled: boolean;
@@ -18941,8 +23252,8 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-accept-hint"?: string;
                     "x-ig-app-start-request"?: string;
+                    "x-ig-accept-hint"?: string;
                     "x-ig-client-endpoint"?: string;
                 };
                 path?: never;
@@ -19049,7 +23360,954 @@ export interface paths {
                             is_eligible_for_hp1: boolean;
                             is_ifr_eligible: boolean;
                             feed_items: {
-                                media_or_ad: {
+                                explore_story?: {
+                                    id: number;
+                                    source: null;
+                                    media_or_ad: {
+                                        pk: number;
+                                        id: null;
+                                        fbid: number;
+                                        device_timestamp: number;
+                                        caption_is_edited: boolean;
+                                        strong_id__: null;
+                                        deleted_reason: number;
+                                        has_shared_to_fb: number;
+                                        has_delayed_metadata: boolean;
+                                        client_cache_expiration_ts: number;
+                                        is_eof: boolean;
+                                        mezql_token: null;
+                                        share_count_disabled: boolean;
+                                        should_request_ads: boolean;
+                                        is_reshare_of_text_post_app_media_in_ig: boolean;
+                                        integrity_review_decision: null;
+                                        client_cache_key: null;
+                                        filter_type: number;
+                                        is_visual_reply_commenter_notice_enabled: boolean;
+                                        like_and_view_counts_disabled: boolean;
+                                        has_privately_liked: boolean;
+                                        is_post_live_clips_media: boolean;
+                                        subtype_name_for_REST__: null;
+                                        taken_at: number;
+                                        can_see_insights_as_brand: boolean;
+                                        media_type: number;
+                                        code: null;
+                                        caption: {
+                                            bit_flags: number;
+                                            created_at: number;
+                                            created_at_utc: number;
+                                            did_report_as_spam: boolean;
+                                            is_ranked_comment: boolean;
+                                            pk: null;
+                                            share_enabled: boolean;
+                                            content_type: null;
+                                            media_id: number;
+                                            status: null;
+                                            type: number;
+                                            user_id: number;
+                                            strong_id__: null;
+                                            text: null;
+                                            user: {
+                                                pk: number;
+                                                pk_id: null;
+                                                id: null;
+                                                full_name: null;
+                                                is_private: boolean;
+                                                is_unpublished: boolean;
+                                                strong_id__: null;
+                                                fbid_v2: number;
+                                                username: null;
+                                                is_verified: boolean;
+                                                profile_pic_id: null;
+                                                profile_pic_url: null;
+                                            };
+                                            is_covered: boolean;
+                                            private_reply_status: number;
+                                            text_translation?: null;
+                                        } | null;
+                                        fundraiser_tag: {
+                                            has_standalone_fundraiser: boolean;
+                                        };
+                                        sharing_friction_info: {
+                                            bloks_app_url: null;
+                                            should_have_sharing_friction: boolean;
+                                            sharing_friction_payload: null;
+                                        };
+                                        timeline_pinned_user_ids: (number | null)[];
+                                        has_views_fetching: boolean;
+                                        has_views_fetching_on_search_grid?: boolean;
+                                        original_media_has_visual_reply_media: boolean;
+                                        fb_user_tags: {
+                                            in: null[];
+                                        };
+                                        coauthor_producers: ({
+                                            pk: number;
+                                            pk_id: null;
+                                            id: null;
+                                            full_name: null;
+                                            is_private: boolean;
+                                            strong_id__: null;
+                                            username: null;
+                                            is_verified: boolean;
+                                            profile_pic_id: null;
+                                            profile_pic_url: null;
+                                        } | null)[];
+                                        coauthor_producer_can_see_organic_insights: boolean;
+                                        invited_coauthor_producers: null[];
+                                        mashup_info?: {
+                                            can_toggle_mashups_allowed: boolean;
+                                            formatted_mashups_count: null;
+                                            has_been_mashed_up: boolean;
+                                            has_nonmimicable_additional_audio: boolean;
+                                            is_creator_requesting_mashup: boolean;
+                                            is_light_weight_check: boolean;
+                                            is_light_weight_reuse_allowed_check: boolean;
+                                            is_pivot_page_available: boolean;
+                                            is_reuse_allowed: boolean;
+                                            mashup_type: null;
+                                            mashups_allowed: boolean;
+                                            non_privacy_filtered_mashups_media_count: number;
+                                            privacy_filtered_mashups_media_count: null;
+                                            original_media: null;
+                                        };
+                                        preview?: null;
+                                        is_in_profile_grid: boolean;
+                                        profile_grid_control_enabled: boolean;
+                                        user: {
+                                            fbid_v2: number;
+                                            feed_post_reshare_disabled: boolean;
+                                            full_name: null;
+                                            id: null;
+                                            is_private: boolean;
+                                            is_unpublished: boolean;
+                                            pk: number;
+                                            pk_id: null;
+                                            show_account_transparency_details: boolean;
+                                            strong_id__: null;
+                                            third_party_downloads_enabled: number;
+                                            is_active_on_text_post_app: boolean;
+                                            account_type: number;
+                                            account_badges: null[];
+                                            fan_club_info: {
+                                                autosave_to_exclusive_highlight: boolean | null;
+                                                connected_member_count: number | null;
+                                                fan_club_id: null;
+                                                fan_club_name: null;
+                                                has_created_ssc: null;
+                                                has_enough_subscribers_for_ssc: null;
+                                                is_fan_club_gifting_eligible: boolean | null;
+                                                is_fan_club_referral_eligible: boolean | null;
+                                                is_free_trial_eligible: boolean | null;
+                                                largest_public_bc_id: null;
+                                                subscriber_count: number | null;
+                                                fan_consideration_page_revamp_eligiblity: {
+                                                    should_show_social_context: boolean;
+                                                    should_show_content_preview: boolean;
+                                                } | null;
+                                            };
+                                            friendship_status: {
+                                                is_muting_reel: boolean;
+                                                following: boolean;
+                                                is_bestie: boolean;
+                                                is_feed_favorite: boolean;
+                                                is_private: boolean;
+                                                is_restricted: boolean;
+                                            };
+                                            has_anonymous_profile_picture: boolean;
+                                            is_favorite: boolean;
+                                            is_verified: boolean;
+                                            profile_pic_id: null;
+                                            profile_pic_url: null;
+                                            transparency_product_enabled: boolean;
+                                            username: null;
+                                            latest_reel_media: number;
+                                        };
+                                        image_versions2: {
+                                            candidates: {
+                                                estimated_scans_sizes?: number[];
+                                                height: number;
+                                                scans_profile: null;
+                                                url: null;
+                                                width: number;
+                                            }[];
+                                            additional_candidates?: {
+                                                first_frame: {
+                                                    height: number;
+                                                    scans_profile: null;
+                                                    url: null;
+                                                    width: number;
+                                                    estimated_scans_sizes?: number[];
+                                                };
+                                                igtv_first_frame: {
+                                                    height: number;
+                                                    scans_profile: null;
+                                                    url: null;
+                                                    width: number;
+                                                    estimated_scans_sizes?: number[];
+                                                };
+                                                smart_frame: {
+                                                    height: number;
+                                                    scans_profile: null;
+                                                    url: null;
+                                                    width: number;
+                                                    estimated_scans_sizes?: number[];
+                                                } | null;
+                                            };
+                                            scrubber_spritesheet_info_candidates?: {
+                                                default: {
+                                                    file_size_kb: number;
+                                                    max_thumbnails_per_sprite: number;
+                                                    rendered_width: number;
+                                                    sprite_height: number;
+                                                    sprite_urls: null[];
+                                                    sprite_width: number;
+                                                    thumbnail_duration: number;
+                                                    thumbnail_height: number;
+                                                    thumbnail_width: number;
+                                                    thumbnails_per_row: number;
+                                                    total_thumbnail_num_per_sprite: number;
+                                                    video_length: number;
+                                                };
+                                            };
+                                        };
+                                        original_width: number;
+                                        original_height: number;
+                                        media_notes: {
+                                            items: null[];
+                                        };
+                                        media_reposter_bottomsheet_enabled: boolean;
+                                        enable_media_notes_production: boolean;
+                                        product_type: null;
+                                        is_paid_partnership: boolean;
+                                        inventory_source: null;
+                                        music_metadata: {
+                                            audio_type: null;
+                                            music_canonical_id: null;
+                                            pinned_media_ids: (number | null)[];
+                                            music_info: {
+                                                music_canonical_id: null;
+                                                music_asset_info: {
+                                                    allows_saving: boolean;
+                                                    artist_id: null;
+                                                    audio_asset_id: null;
+                                                    audio_cluster_id: null;
+                                                    cover_artwork_thumbnail_uri: null;
+                                                    cover_artwork_uri: null;
+                                                    dark_message: null;
+                                                    dash_manifest: null;
+                                                    display_artist: null;
+                                                    duration_in_ms: number;
+                                                    fast_start_progressive_download_url: null;
+                                                    has_lyrics: boolean;
+                                                    highlight_start_times_in_ms: number[];
+                                                    id: null;
+                                                    ig_username: null;
+                                                    is_eligible_for_audio_effects: boolean;
+                                                    is_eligible_for_vinyl_sticker: boolean;
+                                                    is_explicit: boolean;
+                                                    licensed_music_subtype: null;
+                                                    progressive_download_url: null;
+                                                    reactive_audio_download_url: null;
+                                                    sanitized_title: null;
+                                                    song_monetization_info: null;
+                                                    subtitle: null;
+                                                    title: null;
+                                                    web_30s_preview_download_url: null;
+                                                    lyrics: null;
+                                                    spotify_track_metadata: null;
+                                                };
+                                                music_consumption_info: {
+                                                    allow_media_creation_with_music: boolean;
+                                                    music_creation_restriction_reason: null;
+                                                    audio_asset_start_time_in_ms: number;
+                                                    contains_lyrics: null;
+                                                    derived_content_id: null;
+                                                    display_labels: null;
+                                                    formatted_clips_media_count: null;
+                                                    is_bookmarked: boolean;
+                                                    is_trending_in_clips: boolean;
+                                                    overlap_duration_in_ms: number;
+                                                    placeholder_profile_pic_url: null;
+                                                    should_allow_music_editing: boolean;
+                                                    should_mute_audio: boolean;
+                                                    should_mute_audio_reason: null;
+                                                    should_mute_audio_reason_type: null;
+                                                    should_render_soundwave: boolean;
+                                                    trend_rank: null;
+                                                    previous_trend_rank: null;
+                                                    ig_artist: {
+                                                        pk: number;
+                                                        pk_id: null;
+                                                        id: null;
+                                                        username: null;
+                                                        full_name: null;
+                                                        is_private: boolean;
+                                                        is_verified: boolean;
+                                                        profile_pic_id: null;
+                                                        profile_pic_url: null;
+                                                        strong_id__: null;
+                                                    };
+                                                    audio_filter_infos: null[];
+                                                    audio_muting_info: {
+                                                        mute_audio: boolean;
+                                                        mute_reason_str: null;
+                                                        allow_audio_editing: boolean;
+                                                        show_muted_audio_toast: boolean;
+                                                    };
+                                                    user_notes: null;
+                                                };
+                                            };
+                                            original_sound_info: null;
+                                        } | null;
+                                        social_context: null[];
+                                        organic_tracking_token: null;
+                                        ig_media_sharing_disabled: boolean;
+                                        crosspost_metadata: {
+                                            fb_downstream_use_xpost_metadata: {
+                                                downstream_use_xpost_deny_reason: null;
+                                            };
+                                            is_feedback_aggregated?: boolean;
+                                            unified_feedback_enabled?: boolean;
+                                        };
+                                        explore: {
+                                            explanation: null;
+                                            title: null;
+                                            title_id: null;
+                                        };
+                                        boost_unavailable_identifier: null;
+                                        boost_unavailable_reason: null;
+                                        boost_unavailable_reason_v2: null;
+                                        subscribe_cta_visible: boolean;
+                                        is_cutout_sticker_allowed: boolean;
+                                        cutout_sticker_info: null[];
+                                        score: number;
+                                        ranking_scores: {
+                                            score: number;
+                                        };
+                                        ranking_scores_list: {
+                                            score_name: null;
+                                            value: number;
+                                        }[];
+                                        recommendation_data: null;
+                                        is_seen: boolean;
+                                        feed_delivery_parameters: {
+                                            fsr_quality: number;
+                                            rank_time_s: number;
+                                        };
+                                        gen_ai_detection_method: {
+                                            detection_method: null;
+                                        };
+                                        report_info: {
+                                            has_viewer_submitted_report: boolean;
+                                        };
+                                        fb_aggregated_like_count: number;
+                                        fb_aggregated_comment_count: number;
+                                        feed_recs_demotion_control: {
+                                            title: null;
+                                            enable_word_wrapping: boolean;
+                                            confirmation_icon: null;
+                                            title_style: null;
+                                            confirmation_title: null;
+                                            confirmation_body: null;
+                                            confirmation_title_style: null;
+                                            undo_style: null;
+                                            confirmation_style: null;
+                                            followup_options_set: {
+                                                none: {
+                                                    text: null;
+                                                    style: null;
+                                                    id: null;
+                                                    data: null;
+                                                    show_icon: boolean;
+                                                    demotion_control: {
+                                                        confirmation_style?: null;
+                                                        confirmation_icon?: null;
+                                                        confirmation_body?: null;
+                                                        undo_style?: null;
+                                                        confirmation_title?: null;
+                                                        followup_options?: {
+                                                            text: null;
+                                                            id: null;
+                                                            style: null;
+                                                            show_icon: boolean;
+                                                            data: null;
+                                                            demotion_control: Record<string, never>;
+                                                        }[];
+                                                    };
+                                                }[];
+                                            };
+                                        };
+                                        has_high_risk_gen_ai_inform_treatment: boolean;
+                                        open_carousel_show_follow_button: boolean;
+                                        is_tagged_media_shared_to_viewer_profile_grid: boolean;
+                                        should_show_author_pog_for_tagged_media_shared_to_profile_grid: boolean;
+                                        is_eligible_for_media_note_recs_nux: boolean;
+                                        is_social_ufi_disabled: boolean;
+                                        is_eligible_for_meta_ai_share: boolean;
+                                        meta_ai_suggested_prompts: null[];
+                                        can_reply: boolean;
+                                        floating_context_items: null[];
+                                        is_eligible_content_for_post_roll_ad: boolean;
+                                        is_open_to_public_submission: boolean;
+                                        hidden_likes_string_variant: number;
+                                        preview_comments: null[];
+                                        comment_count: number;
+                                        hide_view_all_comment_entrypoint: boolean;
+                                        inline_composer_display_condition: null;
+                                        inline_composer_imp_trigger_time: number;
+                                        is_comments_gif_composer_enabled: boolean;
+                                        comment_inform_treatment: {
+                                            action_type: null;
+                                            should_have_inform_treatment: boolean;
+                                            text: null;
+                                            url: null;
+                                        };
+                                        has_liked: boolean;
+                                        like_count: number;
+                                        top_likers: null[];
+                                        video_sticker_locales: null[];
+                                        clips_tab_pinned_user_ids: null[];
+                                        can_viewer_save: boolean;
+                                        can_viewer_reshare: boolean;
+                                        reshare_count: number;
+                                        shop_routing_user_id: null;
+                                        is_organic_product_tagging_eligible: boolean;
+                                        igbio_product: null;
+                                        featured_products: null[];
+                                        product_suggestions: null[];
+                                        is_reuse_allowed: boolean;
+                                        enable_waist: boolean;
+                                        enable_feed_waist_in_menu: boolean;
+                                        waist_data: null;
+                                        logging_info_token: null;
+                                        is_lightweight_media?: boolean;
+                                        brs_severity: number;
+                                        brs_content_blocklist_bitmap_obj: null;
+                                        can_modify_carousel?: boolean;
+                                        all_previous_submitters?: null[];
+                                        open_carousel_submission_state?: null;
+                                        carousel_media_count?: number;
+                                        carousel_media?: {
+                                            id: null;
+                                            explore_pivot_grid: boolean;
+                                            carousel_parent_id: null;
+                                            strong_id__: null;
+                                            pk: number;
+                                            commerciality_status: null;
+                                            product_type: null;
+                                            media_type: number;
+                                            image_versions2: {
+                                                candidates: {
+                                                    estimated_scans_sizes: number[];
+                                                    height: number;
+                                                    scans_profile: null;
+                                                    url: null;
+                                                    width: number;
+                                                }[];
+                                                scrubber_spritesheet_info_candidates?: {
+                                                    default: {
+                                                        file_size_kb: number;
+                                                        max_thumbnails_per_sprite: number;
+                                                        rendered_width: number;
+                                                        sprite_height: number;
+                                                        sprite_urls: null[];
+                                                        sprite_width: number;
+                                                        thumbnail_duration: number;
+                                                        thumbnail_height: number;
+                                                        thumbnail_width: number;
+                                                        thumbnails_per_row: number;
+                                                        total_thumbnail_num_per_sprite: number;
+                                                        video_length: number;
+                                                    };
+                                                };
+                                            };
+                                            original_width: number;
+                                            original_height: number;
+                                            preview: null;
+                                            featured_products: null[];
+                                            fb_user_tags: {
+                                                in: null[];
+                                            };
+                                            shop_routing_user_id: null;
+                                            sharing_friction_info: {
+                                                bloks_app_url: null;
+                                                should_have_sharing_friction: boolean;
+                                                sharing_friction_payload: null;
+                                            };
+                                            taken_at: number;
+                                            product_suggestions: null[];
+                                            video_sticker_locales: null[];
+                                            video_versions?: {
+                                                bandwidth: number;
+                                                height: number;
+                                                id: null;
+                                                type: number;
+                                                url: null;
+                                                width: number;
+                                            }[];
+                                            video_duration?: number;
+                                            has_audio?: boolean;
+                                            is_dash_eligible?: number;
+                                            video_dash_manifest?: null;
+                                            video_codec?: null;
+                                            number_of_qualities?: number;
+                                            usertags?: {
+                                                in: {
+                                                    position: number[];
+                                                    show_category_of_user: boolean;
+                                                    user: {
+                                                        pk: number;
+                                                        pk_id: null;
+                                                        id: null;
+                                                        full_name: null;
+                                                        is_private: boolean;
+                                                        strong_id__: null;
+                                                        username: null;
+                                                        is_verified: boolean;
+                                                        profile_pic_id: null;
+                                                        profile_pic_url: null;
+                                                    };
+                                                }[];
+                                            };
+                                        }[];
+                                        carousel_media_pending_post_count?: number;
+                                        carousel_media_ids?: number[];
+                                        has_tagged_users?: boolean;
+                                        creator_viewer_insights?: null[];
+                                        media_cropping_info?: {
+                                            square_crop: {
+                                                crop_left: number;
+                                                crop_right: number;
+                                                crop_top: number;
+                                                crop_bottom: number;
+                                            };
+                                            four_by_three_crop?: {
+                                                crop_left: number;
+                                                crop_right: number;
+                                                crop_top: number;
+                                                crop_bottom: number;
+                                            };
+                                        };
+                                        is_artist_pick?: boolean;
+                                        is_third_party_downloads_eligible?: boolean;
+                                        are_remixes_crosspostable?: boolean;
+                                        creative_config?: {
+                                            capture_type: null;
+                                            face_effect_id: null;
+                                            attribution_user: null;
+                                            creation_tool_info: null[];
+                                            effect_configs: null;
+                                            effect_preview: null;
+                                        };
+                                        avatar_stickers?: null[];
+                                        fb_like_count?: number;
+                                        video_subtitles_uri?: null;
+                                        video_subtitles_locale?: null;
+                                        is_dash_eligible?: number;
+                                        video_dash_manifest?: null;
+                                        video_codec?: null;
+                                        number_of_qualities?: number;
+                                        video_versions?: {
+                                            bandwidth: number;
+                                            height: number;
+                                            id: null;
+                                            type: number;
+                                            url: null;
+                                            width: number;
+                                        }[];
+                                        video_duration?: number;
+                                        has_audio?: boolean;
+                                        clips_on_impression_control?: {
+                                            negative_confirmation_body: null;
+                                            negative_confirmation_cta_text: null;
+                                            negative_confirmation_icon: null;
+                                            negative_confirmation_title: null;
+                                            negative_icon: null;
+                                            negative_text: null;
+                                            positive_confirmation_icon: null;
+                                            positive_confirmation_title: null;
+                                            positive_icon: null;
+                                            positive_text: null;
+                                            style: null;
+                                        };
+                                        clips_metadata?: {
+                                            clips_creation_entry_point: null;
+                                            featured_label: null;
+                                            is_public_chat_welcome_video: boolean;
+                                            professional_clips_upsell_type: number;
+                                            show_tips: null;
+                                            achievements_info: {
+                                                num_earned_achievements: null;
+                                                show_achievements: boolean;
+                                            };
+                                            additional_audio_info: {
+                                                additional_audio_username: null;
+                                                audio_reattribution_info: {
+                                                    should_allow_restore: boolean;
+                                                };
+                                            };
+                                            asset_recommendation_info: null;
+                                            audio_ranking_info: {
+                                                best_audio_cluster_id: null;
+                                            };
+                                            audio_type: null;
+                                            branded_content_tag_info: {
+                                                can_add_tag: boolean;
+                                            };
+                                            breaking_content_info: null;
+                                            breaking_creator_info: null;
+                                            challenge_info: null;
+                                            content_appreciation_info: {
+                                                enabled: boolean;
+                                                entry_point_container: {
+                                                    comment: {
+                                                        action_type: null;
+                                                    };
+                                                    overflow: null;
+                                                    pill: {
+                                                        action_type: null;
+                                                        priority: number;
+                                                    };
+                                                    ufi: null;
+                                                } | null;
+                                            };
+                                            contextual_highlight_info: null;
+                                            cutout_sticker_info: null[];
+                                            disable_use_in_clips_client_cache: boolean;
+                                            external_media_info: null;
+                                            is_fan_club_promo_video: boolean;
+                                            is_shared_to_fb: boolean;
+                                            mashup_info: {
+                                                can_toggle_mashups_allowed: boolean;
+                                                formatted_mashups_count: null;
+                                                has_been_mashed_up: boolean;
+                                                has_nonmimicable_additional_audio: boolean;
+                                                is_creator_requesting_mashup: boolean;
+                                                is_light_weight_check: boolean;
+                                                is_light_weight_reuse_allowed_check: boolean;
+                                                is_pivot_page_available: boolean;
+                                                is_reuse_allowed: boolean;
+                                                mashup_type: null;
+                                                mashups_allowed: boolean;
+                                                non_privacy_filtered_mashups_media_count: number;
+                                                privacy_filtered_mashups_media_count: null;
+                                                original_media: null;
+                                            };
+                                            merchandising_pill_info: null;
+                                            music_canonical_id: null;
+                                            music_info: {
+                                                music_canonical_id: null;
+                                                music_asset_info: {
+                                                    allows_saving: boolean;
+                                                    artist_id: null;
+                                                    audio_asset_id: null;
+                                                    audio_cluster_id: null;
+                                                    cover_artwork_thumbnail_uri: null;
+                                                    cover_artwork_uri: null;
+                                                    dark_message: null;
+                                                    dash_manifest: null;
+                                                    display_artist: null;
+                                                    duration_in_ms: number;
+                                                    fast_start_progressive_download_url: null;
+                                                    has_lyrics: boolean;
+                                                    highlight_start_times_in_ms: (number | null)[];
+                                                    id: null;
+                                                    ig_username: null;
+                                                    is_eligible_for_audio_effects: boolean;
+                                                    is_eligible_for_vinyl_sticker: boolean;
+                                                    is_explicit: boolean;
+                                                    licensed_music_subtype: null;
+                                                    progressive_download_url: null;
+                                                    reactive_audio_download_url: null;
+                                                    sanitized_title: null;
+                                                    song_monetization_info: null;
+                                                    subtitle: null;
+                                                    title: null;
+                                                    web_30s_preview_download_url: null;
+                                                    lyrics: null;
+                                                    spotify_track_metadata: null;
+                                                };
+                                                music_consumption_info: {
+                                                    allow_media_creation_with_music: boolean;
+                                                    music_creation_restriction_reason: null;
+                                                    audio_asset_start_time_in_ms: number;
+                                                    contains_lyrics: null;
+                                                    derived_content_id: null;
+                                                    display_labels: null;
+                                                    formatted_clips_media_count: null;
+                                                    is_bookmarked: boolean;
+                                                    is_trending_in_clips: boolean;
+                                                    overlap_duration_in_ms: number;
+                                                    placeholder_profile_pic_url: null;
+                                                    should_allow_music_editing: boolean;
+                                                    should_mute_audio: boolean;
+                                                    should_mute_audio_reason: null;
+                                                    should_mute_audio_reason_type: null;
+                                                    should_render_soundwave: boolean;
+                                                    trend_rank: null;
+                                                    previous_trend_rank: null;
+                                                    ig_artist: {
+                                                        pk: number;
+                                                        pk_id: null;
+                                                        id: null;
+                                                        username: null;
+                                                        full_name: null;
+                                                        is_private: boolean;
+                                                        is_verified: boolean;
+                                                        profile_pic_id: null;
+                                                        profile_pic_url: null;
+                                                        strong_id__: null;
+                                                    };
+                                                    audio_filter_infos: null[];
+                                                    audio_muting_info: {
+                                                        mute_audio: boolean;
+                                                        mute_reason_str: null;
+                                                        allow_audio_editing: boolean;
+                                                        show_muted_audio_toast: boolean;
+                                                    };
+                                                    user_notes: null;
+                                                };
+                                            } | null;
+                                            nux_info: null;
+                                            original_sound_info: {
+                                                allow_creator_to_rename: boolean;
+                                                audio_asset_id: number;
+                                                attributed_custom_audio_asset_id: null;
+                                                can_remix_be_shared_to_fb: boolean;
+                                                can_remix_be_shared_to_fb_expansion: boolean;
+                                                dash_manifest: null;
+                                                duration_in_ms: number;
+                                                formatted_clips_media_count: null;
+                                                hide_remixing: boolean;
+                                                is_audio_automatically_attributed: boolean;
+                                                is_eligible_for_audio_effects: boolean;
+                                                is_eligible_for_vinyl_sticker: boolean;
+                                                is_explicit: boolean;
+                                                is_original_audio_download_eligible: boolean;
+                                                is_reuse_disabled: boolean;
+                                                is_xpost_from_fb: boolean;
+                                                music_canonical_id: null;
+                                                oa_owner_is_music_artist: boolean;
+                                                original_audio_subtype: null;
+                                                original_audio_title: null;
+                                                original_media_id: number;
+                                                progressive_download_url: null;
+                                                should_mute_audio: boolean;
+                                                time_created: number;
+                                                trend_rank: null;
+                                                previous_trend_rank: null;
+                                                overlap_duration_in_ms: null;
+                                                audio_asset_start_time_in_ms: null;
+                                                ig_artist: {
+                                                    pk: number;
+                                                    pk_id: null;
+                                                    id: null;
+                                                    username: null;
+                                                    full_name: null;
+                                                    is_private: boolean;
+                                                    is_verified: boolean;
+                                                    profile_pic_id: null;
+                                                    profile_pic_url: null;
+                                                    strong_id__: null;
+                                                };
+                                                audio_filter_infos: null[];
+                                                audio_parts: ({
+                                                    music_canonical_id: null;
+                                                    audio_type: null;
+                                                    display_artist: null;
+                                                    ig_artist: {
+                                                        pk: number;
+                                                        pk_id: null;
+                                                        id: null;
+                                                        username: null;
+                                                        full_name: null;
+                                                        is_private: boolean;
+                                                        is_verified: boolean;
+                                                        profile_pic_id: null;
+                                                        profile_pic_url: null;
+                                                        strong_id__: null;
+                                                    };
+                                                    display_title: null;
+                                                    thumbnail_uri: null;
+                                                    is_bookmarked: boolean;
+                                                    is_explicit: boolean;
+                                                    parent_start_time_in_ms: number;
+                                                    audio_start_time_in_ms: number;
+                                                    duration_in_ms: number;
+                                                    is_eligible_for_audio_effects: boolean;
+                                                } | null)[];
+                                                audio_parts_by_filter: ({
+                                                    music_canonical_id: null;
+                                                    audio_type: null;
+                                                    display_artist: null;
+                                                    ig_artist: {
+                                                        pk: number;
+                                                        pk_id: null;
+                                                        id: null;
+                                                        username: null;
+                                                        full_name: null;
+                                                        is_private: boolean;
+                                                        is_verified: boolean;
+                                                        profile_pic_id: null;
+                                                        profile_pic_url: null;
+                                                        strong_id__: null;
+                                                    };
+                                                    display_title: null;
+                                                    thumbnail_uri: null;
+                                                    is_bookmarked: boolean;
+                                                    is_explicit: boolean;
+                                                    parent_start_time_in_ms: number;
+                                                    audio_start_time_in_ms: number;
+                                                    duration_in_ms: number;
+                                                    is_eligible_for_audio_effects: boolean;
+                                                } | null)[];
+                                                consumption_info: {
+                                                    display_media_id: null;
+                                                    is_bookmarked: boolean;
+                                                    is_trending_in_clips: boolean;
+                                                    should_mute_audio_reason: null;
+                                                    should_mute_audio_reason_type: null;
+                                                    user_notes: null;
+                                                };
+                                                xpost_fb_creator_info: null;
+                                                fb_downstream_use_xpost_metadata: {
+                                                    downstream_use_xpost_deny_reason: null;
+                                                };
+                                            } | null;
+                                            originality_info: null;
+                                            reels_on_the_rise_info: null;
+                                            reusable_text_attribute_string: null;
+                                            reusable_text_info: {
+                                                alignment: null;
+                                                end_time_ms: number;
+                                                font_size: number;
+                                                height: number;
+                                                id: null;
+                                                is_animated: number;
+                                                offset_x: number;
+                                                offset_y: number;
+                                                rotation_degree: number;
+                                                scale: number;
+                                                start_time_ms: number;
+                                                text: null;
+                                                text_emphasis_mode: null;
+                                                text_format_type: null;
+                                                width: number;
+                                                z_index: number;
+                                                colors: {
+                                                    count: number;
+                                                    hex_rgba_color: null;
+                                                }[];
+                                            }[] | null;
+                                            shopping_info: null;
+                                            show_achievements: boolean;
+                                            template_info: null;
+                                            may_have_template_info: null;
+                                            viewer_interaction_settings: null;
+                                        };
+                                        commerce_integrity_review_decision?: null;
+                                        view_state_item_type?: number;
+                                        feed_on_impression_control?: {
+                                            dismiss_icon: null;
+                                            negative_confirmation_body: null;
+                                            negative_confirmation_cta_text: null;
+                                            negative_confirmation_icon: null;
+                                            negative_confirmation_title: null;
+                                            negative_icon: null;
+                                            negative_text: null;
+                                            positive_confirmation_body: null;
+                                            positive_confirmation_icon: null;
+                                            positive_icon: null;
+                                            positive_text: null;
+                                            style: null;
+                                            text: null;
+                                        };
+                                        location?: {
+                                            name: null;
+                                            address: null;
+                                            city: null;
+                                            has_viewer_saved: boolean;
+                                            pk: number;
+                                            short_name: null;
+                                            facebook_places_id: number;
+                                            external_source: null;
+                                            lng: number;
+                                            lat: number;
+                                        };
+                                        lng?: number;
+                                        lat?: number;
+                                        fb_comment_count?: number;
+                                        translated_video_subtitles?: {
+                                            language: null;
+                                            uri: null;
+                                        }[];
+                                        usertags?: {
+                                            in: {
+                                                position: number[];
+                                                show_category_of_user: boolean;
+                                                user: {
+                                                    pk: number;
+                                                    pk_id: null;
+                                                    id: null;
+                                                    full_name: null;
+                                                    is_private: boolean;
+                                                    strong_id__: null;
+                                                    username: null;
+                                                    is_verified: boolean;
+                                                    profile_pic_id: null;
+                                                    profile_pic_url: null;
+                                                };
+                                            }[];
+                                        };
+                                        photo_of_you?: boolean;
+                                        collab_follow_button_info?: {
+                                            show_follow_button: boolean;
+                                            is_owner_in_author_exp: boolean;
+                                        };
+                                        clips_text?: null[];
+                                        wearable_attribution_info?: {
+                                            attribution_cta_action_url: null;
+                                            attribution_cta_text: null;
+                                            attribution_icon_url: null;
+                                            attribution_subtitle: null;
+                                            attribution_title: null;
+                                            attribution_top_icon_url: null;
+                                            attribution_type: null;
+                                            iconic_current_presence: null;
+                                            iconic_horizon_world_deeplink: null;
+                                            iconic_horizon_world_id: null;
+                                            iconic_horizon_world_name: null;
+                                            is_wearable_media_producer: boolean;
+                                            pivot_page_cta_label: null;
+                                            pivot_page_cta_url: null;
+                                            pivot_page_description: null;
+                                            pivot_page_image_url: null;
+                                            pivot_page_micro_user_dict: {
+                                                pk: number;
+                                                pk_id: null;
+                                                full_name: null;
+                                                is_private: boolean;
+                                                strong_id__: null;
+                                                id: null;
+                                                username: null;
+                                                is_verified: boolean;
+                                                profile_pic_id: null;
+                                                profile_pic_url: null;
+                                            };
+                                            pivot_page_title: null;
+                                            reels_pill_attribution_title: null;
+                                            world_location_pages_info: null;
+                                        };
+                                    };
+                                    mezql_token: null;
+                                    inventory_source: null;
+                                    is_eof: boolean;
+                                    is_seen: boolean;
+                                    view_state_item_type: number;
+                                    ranking_weight: number;
+                                    brs_severity: number;
+                                    brs_content_blocklist_bitmap_obj: null;
+                                };
+                                media_or_ad?: {
                                     pk: number;
                                     id: null;
                                     fbid: number;
@@ -19091,6 +24349,7 @@ export interface paths {
                                         type: number;
                                         user_id: number;
                                         strong_id__: null;
+                                        has_translation?: boolean;
                                         text: null;
                                         user: {
                                             pk: number;
@@ -19217,7 +24476,7 @@ export interface paths {
                                     should_show_author_pog_for_tagged_media_shared_to_profile_grid: boolean;
                                     is_eligible_for_media_note_recs_nux: boolean;
                                     is_social_ufi_disabled: boolean;
-                                    reminder_info: {
+                                    reminder_info?: {
                                         is_reminder_set: boolean;
                                         trigger: null;
                                     };
@@ -19229,7 +24488,7 @@ export interface paths {
                                         media_eligibility_result: null;
                                     };
                                     is_open_to_public_submission: boolean;
-                                    preview_comments: null[];
+                                    preview_comments?: null[];
                                     comment_count: number;
                                     hide_view_all_comment_entrypoint: boolean;
                                     is_comments_gif_composer_enabled: boolean;
@@ -19405,7 +24664,7 @@ export interface paths {
                                         lead_gen_new_experience_ineligible: boolean;
                                         media_id: number;
                                         optimization_goal_name: null;
-                                        pac_ad_media_ids: null;
+                                        pac_ad_media_ids: number[] | null;
                                         page_id: number;
                                         phone_number: null;
                                         should_show_secondary_cta_on_profile: boolean;
@@ -19442,7 +24701,7 @@ export interface paths {
                                                 extra_data: {
                                                     trigger_condition: null;
                                                 };
-                                            };
+                                            } | null;
                                             interests_reco_info: null;
                                             feed_repetition_info: null;
                                             iab_dwell_afi_info: null;
@@ -19481,10 +24740,10 @@ export interface paths {
                                             iabAutofillAdsPersonalizationPostClickDataExtension: null;
                                             paypalCheckoutPostClickDataExtension: null;
                                         };
-                                        ig_feed_video_watch_and_browse_info: {
-                                            ig_ads_feed_video_watch_and_browse_viewer_min_screen_threshold: number;
+                                        ig_feed_video_watch_and_browse_info?: {
                                             ig_ads_feed_video_watch_and_browse_viewer_type: null;
                                             destination_type: null;
+                                            ig_ads_feed_video_watch_and_browse_viewer_min_screen_threshold?: number;
                                         };
                                         igra_personalization_info: {
                                             is_feed_collection_product_tile_tap_target_expanded: boolean;
@@ -19494,6 +24753,11 @@ export interface paths {
                                             local_surface: {
                                                 instruction: {
                                                     signal: null;
+                                                    conditions?: {
+                                                        comparator: null;
+                                                        lhs: null;
+                                                        rhs: number;
+                                                    }[];
                                                 };
                                             }[];
                                         };
@@ -19504,6 +24768,11 @@ export interface paths {
                                         show_ad_choices: boolean;
                                         sponsored_ad_disclaimer: null;
                                         page_type_code: number;
+                                        ad_disclaimer_info?: {
+                                            text: null;
+                                            title: null;
+                                            url: null;
+                                        };
                                     };
                                     is_dash_eligible: number;
                                     item_client_gap_rules: {
@@ -19561,6 +24830,1003 @@ export interface paths {
                                         url: null;
                                         width: number;
                                     }[];
+                                    media_level_comment_controls?: null;
+                                    commenting_disabled_for_viewer?: boolean;
+                                    comments_disabled?: boolean;
+                                    view_count?: number;
+                                    ad_tag?: {
+                                        ad_id: number;
+                                        subtitle: null;
+                                        title: null;
+                                    };
+                                };
+                                bloks_netego?: {
+                                    layout: {
+                                        bloks_payload: {
+                                            data: {
+                                                id: null;
+                                                type: null;
+                                                data: {
+                                                    key?: null;
+                                                    mode?: null;
+                                                    initial_lispy: null;
+                                                };
+                                            }[];
+                                            tree: {
+                                                "\u3408": {
+                                                    " ": {
+                                                        "\u3408": {
+                                                            ")"?: null;
+                                                            $?: null;
+                                                            " "?: {
+                                                                "\u3408": {
+                                                                    ")"?: null;
+                                                                    ","?: null;
+                                                                    $?: null;
+                                                                    " "?: {
+                                                                        "\u3408": {
+                                                                            ")"?: null;
+                                                                            $?: null;
+                                                                            " ": {
+                                                                                "\u3408"?: {
+                                                                                    "&"?: {
+                                                                                        "\u3402": {
+                                                                                            ".": null;
+                                                                                            "(": null;
+                                                                                            "+": boolean;
+                                                                                            "&": {
+                                                                                                "\u3435": {
+                                                                                                    $: null;
+                                                                                                    "#": null;
+                                                                                                };
+                                                                                            };
+                                                                                        };
+                                                                                    };
+                                                                                    ")"?: null;
+                                                                                    ","?: null;
+                                                                                    $?: null;
+                                                                                    " "?: {
+                                                                                        "\u340B"?: {
+                                                                                            ")": null;
+                                                                                            "(": null;
+                                                                                        };
+                                                                                        "\u3444"?: {
+                                                                                            ")": null;
+                                                                                            $: null;
+                                                                                            "#": null;
+                                                                                            "*": null;
+                                                                                            "(": {
+                                                                                                "\u3435": {
+                                                                                                    $: null;
+                                                                                                    "#": null;
+                                                                                                };
+                                                                                            };
+                                                                                        };
+                                                                                    }[];
+                                                                                    "\u0084"?: {
+                                                                                        "\u3438": {
+                                                                                            D?: null;
+                                                                                            "*"?: null;
+                                                                                            A?: number;
+                                                                                        };
+                                                                                    };
+                                                                                    "-"?: null;
+                                                                                    "\u0085"?: {
+                                                                                        "\u3401": {
+                                                                                            "#": boolean;
+                                                                                            $: null;
+                                                                                            "&": null;
+                                                                                        };
+                                                                                    }[];
+                                                                                    "\u0087"?: null;
+                                                                                    "\u008F"?: {
+                                                                                        "\u3408": {
+                                                                                            "#": null;
+                                                                                            ",": null;
+                                                                                            $: null;
+                                                                                            " ": {
+                                                                                                "\u3408": {
+                                                                                                    "#": null;
+                                                                                                    ",": null;
+                                                                                                    $: null;
+                                                                                                    " ": {
+                                                                                                        "\u3408": {
+                                                                                                            "#": null;
+                                                                                                            ",": null;
+                                                                                                            $: null;
+                                                                                                            " ": {
+                                                                                                                "\u3408": {
+                                                                                                                    "&": {
+                                                                                                                        "\u3402": {
+                                                                                                                            ".": null;
+                                                                                                                            "(": null;
+                                                                                                                            "+": boolean;
+                                                                                                                            "&": {
+                                                                                                                                "\u3435": {
+                                                                                                                                    $: null;
+                                                                                                                                    "#": null;
+                                                                                                                                };
+                                                                                                                            };
+                                                                                                                        };
+                                                                                                                    };
+                                                                                                                    "\u0084": {
+                                                                                                                        "\u3438": {
+                                                                                                                            D: null;
+                                                                                                                            "*": null;
+                                                                                                                            A: number;
+                                                                                                                        };
+                                                                                                                    };
+                                                                                                                };
+                                                                                                            }[];
+                                                                                                            "\u0084": {
+                                                                                                                "\u3438": {
+                                                                                                                    0: null;
+                                                                                                                    D: null;
+                                                                                                                    "*": null;
+                                                                                                                    ".": null;
+                                                                                                                };
+                                                                                                            };
+                                                                                                        };
+                                                                                                    }[];
+                                                                                                    "\u0084": {
+                                                                                                        "\u3438": {
+                                                                                                            "*": null;
+                                                                                                        };
+                                                                                                    };
+                                                                                                };
+                                                                                            }[];
+                                                                                        };
+                                                                                    }[];
+                                                                                    "!"?: number;
+                                                                                };
+                                                                                "\u3417"?: {
+                                                                                    0: {
+                                                                                        "\u3435": {
+                                                                                            $: null;
+                                                                                            "#": null;
+                                                                                        };
+                                                                                    };
+                                                                                    ")": null;
+                                                                                    "-": null;
+                                                                                    ".": null;
+                                                                                    "#": null;
+                                                                                    $: number;
+                                                                                    "\u0085": {
+                                                                                        "\u3401": {
+                                                                                            "#": boolean;
+                                                                                            "&": null;
+                                                                                        };
+                                                                                    }[];
+                                                                                    "("?: null;
+                                                                                };
+                                                                            }[];
+                                                                            "\u0084"?: {
+                                                                                "\u3438": {
+                                                                                    A?: number;
+                                                                                    D?: null;
+                                                                                    "*"?: null;
+                                                                                    ":"?: null;
+                                                                                };
+                                                                            };
+                                                                            "&"?: {
+                                                                                "\u3402": {
+                                                                                    "#": {
+                                                                                        "\u341C": {
+                                                                                            "#": {
+                                                                                                "\u3435": {
+                                                                                                    $: null;
+                                                                                                    "#": null;
+                                                                                                };
+                                                                                            };
+                                                                                        };
+                                                                                    };
+                                                                                };
+                                                                            };
+                                                                            ","?: null;
+                                                                        };
+                                                                        "\u3405"?: {
+                                                                            1: null;
+                                                                            6: null;
+                                                                            7: null;
+                                                                            8: null;
+                                                                            "*": null;
+                                                                            ",": null;
+                                                                            " ": {
+                                                                                "\u3408": {
+                                                                                    ")": null;
+                                                                                    " ": {
+                                                                                        "\u3408": {
+                                                                                            "\u0084": {
+                                                                                                "\u3438": {
+                                                                                                    5?: null;
+                                                                                                    "*"?: null;
+                                                                                                    D?: null;
+                                                                                                };
+                                                                                            };
+                                                                                            " "?: {
+                                                                                                "\u3408": {
+                                                                                                    "&"?: {
+                                                                                                        "\u3402": {
+                                                                                                            ".": null;
+                                                                                                            "(": null;
+                                                                                                            "+": boolean;
+                                                                                                            "#": {
+                                                                                                                "\u341C": {
+                                                                                                                    "#": {
+                                                                                                                        "\u3435": {
+                                                                                                                            $: null;
+                                                                                                                            "#": null;
+                                                                                                                        };
+                                                                                                                    };
+                                                                                                                };
+                                                                                                            };
+                                                                                                            "&": {
+                                                                                                                "\u3435": {
+                                                                                                                    $: null;
+                                                                                                                    "#": null;
+                                                                                                                };
+                                                                                                            };
+                                                                                                        };
+                                                                                                    };
+                                                                                                    ")"?: null;
+                                                                                                    $: null;
+                                                                                                    "-"?: null;
+                                                                                                    " ": {
+                                                                                                        "\u3408": {
+                                                                                                            ")"?: null;
+                                                                                                            ","?: null;
+                                                                                                            $?: null;
+                                                                                                            " ": {
+                                                                                                                "\u3408"?: {
+                                                                                                                    $?: null;
+                                                                                                                    " ": {
+                                                                                                                        "\u3408": {
+                                                                                                                            "&"?: {
+                                                                                                                                "\u3402": {
+                                                                                                                                    0?: null;
+                                                                                                                                    3?: number;
+                                                                                                                                    4?: {
+                                                                                                                                        "\u3435": {
+                                                                                                                                            $: null;
+                                                                                                                                            "#": null;
+                                                                                                                                        };
+                                                                                                                                    };
+                                                                                                                                    ".": null;
+                                                                                                                                    "("?: null;
+                                                                                                                                    "+"?: boolean;
+                                                                                                                                    "&"?: {
+                                                                                                                                        "\u3435": {
+                                                                                                                                            $: null;
+                                                                                                                                            "#": null;
+                                                                                                                                        };
+                                                                                                                                    };
+                                                                                                                                    "#"?: {
+                                                                                                                                        "\u3414": {
+                                                                                                                                            "#": {
+                                                                                                                                                "\u3415": {
+                                                                                                                                                    $: null;
+                                                                                                                                                    "#": {
+                                                                                                                                                        "\u341C": {
+                                                                                                                                                            "#": {
+                                                                                                                                                                "\u3435": {
+                                                                                                                                                                    $: null;
+                                                                                                                                                                    "#": null;
+                                                                                                                                                                };
+                                                                                                                                                            };
+                                                                                                                                                        };
+                                                                                                                                                    };
+                                                                                                                                                };
+                                                                                                                                            }[];
+                                                                                                                                        };
+                                                                                                                                    };
+                                                                                                                                };
+                                                                                                                            };
+                                                                                                                            ")"?: null;
+                                                                                                                            ","?: null;
+                                                                                                                            $?: null;
+                                                                                                                            " "?: {
+                                                                                                                                "\u340B"?: {
+                                                                                                                                    ")": null;
+                                                                                                                                    "(": null;
+                                                                                                                                };
+                                                                                                                                "\u3417"?: {
+                                                                                                                                    0: {
+                                                                                                                                        "\u3435": {
+                                                                                                                                            $: null;
+                                                                                                                                            "#": null;
+                                                                                                                                        };
+                                                                                                                                    };
+                                                                                                                                    ")": null;
+                                                                                                                                    "-": null;
+                                                                                                                                    ".": null;
+                                                                                                                                    "*"?: null;
+                                                                                                                                    "#": null;
+                                                                                                                                    $: number;
+                                                                                                                                    "&": number;
+                                                                                                                                };
+                                                                                                                                "\u3444"?: {
+                                                                                                                                    ")": null;
+                                                                                                                                    $: null;
+                                                                                                                                    "#": null;
+                                                                                                                                    "*": null;
+                                                                                                                                    "(": {
+                                                                                                                                        "\u3435": {
+                                                                                                                                            $: null;
+                                                                                                                                            "#": null;
+                                                                                                                                        };
+                                                                                                                                    };
+                                                                                                                                    "\u0084"?: {
+                                                                                                                                        "\u3438": {
+                                                                                                                                            "-": null;
+                                                                                                                                        };
+                                                                                                                                    };
+                                                                                                                                };
+                                                                                                                                "\u3408"?: {
+                                                                                                                                    1?: null;
+                                                                                                                                    "&"?: {
+                                                                                                                                        "\u3402": {
+                                                                                                                                            0: null;
+                                                                                                                                            3: number;
+                                                                                                                                            4: {
+                                                                                                                                                "\u3435": {
+                                                                                                                                                    $: null;
+                                                                                                                                                    "#": null;
+                                                                                                                                                };
+                                                                                                                                            };
+                                                                                                                                            ".": null;
+                                                                                                                                            "#": {
+                                                                                                                                                "\u3414": {
+                                                                                                                                                    "#": {
+                                                                                                                                                        "\u3415": {
+                                                                                                                                                            $: null;
+                                                                                                                                                            "#": {
+                                                                                                                                                                "\u341C": {
+                                                                                                                                                                    "#": {
+                                                                                                                                                                        "\u3435": {
+                                                                                                                                                                            $: null;
+                                                                                                                                                                            "#": null;
+                                                                                                                                                                        };
+                                                                                                                                                                    };
+                                                                                                                                                                };
+                                                                                                                                                            };
+                                                                                                                                                        };
+                                                                                                                                                    }[];
+                                                                                                                                                };
+                                                                                                                                            };
+                                                                                                                                            "("?: null;
+                                                                                                                                            "+"?: boolean;
+                                                                                                                                            "&"?: {
+                                                                                                                                                "\u3435": {
+                                                                                                                                                    $: null;
+                                                                                                                                                    "#": null;
+                                                                                                                                                };
+                                                                                                                                            };
+                                                                                                                                        };
+                                                                                                                                    };
+                                                                                                                                    "("?: boolean;
+                                                                                                                                    ","?: null;
+                                                                                                                                    $?: null;
+                                                                                                                                    "-"?: null;
+                                                                                                                                    " ": {
+                                                                                                                                        "\u3444"?: {
+                                                                                                                                            ")": null;
+                                                                                                                                            $: null;
+                                                                                                                                            "#": null;
+                                                                                                                                            "*": null;
+                                                                                                                                            "(": {
+                                                                                                                                                "\u3435": {
+                                                                                                                                                    $: null;
+                                                                                                                                                    "#": null;
+                                                                                                                                                };
+                                                                                                                                            };
+                                                                                                                                            "\u0084": {
+                                                                                                                                                "\u3438": {
+                                                                                                                                                    "-": null;
+                                                                                                                                                };
+                                                                                                                                            };
+                                                                                                                                        };
+                                                                                                                                        "\u3408"?: {
+                                                                                                                                            1: null;
+                                                                                                                                            " ": {
+                                                                                                                                                "\u3411"?: {
+                                                                                                                                                    0: number;
+                                                                                                                                                    " ": {
+                                                                                                                                                        "\u341B": {
+                                                                                                                                                            "&"?: null;
+                                                                                                                                                            "*"?: null;
+                                                                                                                                                            "+"?: null;
+                                                                                                                                                            ","?: {
+                                                                                                                                                                "\u3435": {
+                                                                                                                                                                    $: null;
+                                                                                                                                                                    "#": null;
+                                                                                                                                                                };
+                                                                                                                                                            };
+                                                                                                                                                            "#"?: null;
+                                                                                                                                                        };
+                                                                                                                                                    }[];
+                                                                                                                                                    "*": null;
+                                                                                                                                                    "&": number;
+                                                                                                                                                    ".": number;
+                                                                                                                                                };
+                                                                                                                                                "\u3408"?: {
+                                                                                                                                                    "&": {
+                                                                                                                                                        "\u3402": {
+                                                                                                                                                            ".": null;
+                                                                                                                                                            "(": null;
+                                                                                                                                                            "+": boolean;
+                                                                                                                                                            "#": {
+                                                                                                                                                                "\u341C": {
+                                                                                                                                                                    "#": {
+                                                                                                                                                                        "\u3435": {
+                                                                                                                                                                            $: null;
+                                                                                                                                                                            "#": null;
+                                                                                                                                                                        };
+                                                                                                                                                                    };
+                                                                                                                                                                };
+                                                                                                                                                            };
+                                                                                                                                                            "&": {
+                                                                                                                                                                "\u3435": {
+                                                                                                                                                                    $: null;
+                                                                                                                                                                    "#": null;
+                                                                                                                                                                };
+                                                                                                                                                            };
+                                                                                                                                                        };
+                                                                                                                                                    };
+                                                                                                                                                    ",": null;
+                                                                                                                                                    $: null;
+                                                                                                                                                    " ": {
+                                                                                                                                                        "\u3408": {
+                                                                                                                                                            "&": {
+                                                                                                                                                                "\u3402": {
+                                                                                                                                                                    ".": null;
+                                                                                                                                                                    "+": boolean;
+                                                                                                                                                                    "#": {
+                                                                                                                                                                        "\u341C": {
+                                                                                                                                                                            "#": {
+                                                                                                                                                                                "\u3435": {
+                                                                                                                                                                                    $: null;
+                                                                                                                                                                                    "#": null;
+                                                                                                                                                                                };
+                                                                                                                                                                            };
+                                                                                                                                                                        };
+                                                                                                                                                                    };
+                                                                                                                                                                };
+                                                                                                                                                            };
+                                                                                                                                                            " ": {
+                                                                                                                                                                "\u340B": {
+                                                                                                                                                                    ")": null;
+                                                                                                                                                                    "(": null;
+                                                                                                                                                                };
+                                                                                                                                                            }[];
+                                                                                                                                                            "\u0084": {
+                                                                                                                                                                "\u3438": {
+                                                                                                                                                                    D: null;
+                                                                                                                                                                    "*": null;
+                                                                                                                                                                };
+                                                                                                                                                            };
+                                                                                                                                                        };
+                                                                                                                                                    }[];
+                                                                                                                                                    "\u0084": {
+                                                                                                                                                        "\u3438": {
+                                                                                                                                                            D: null;
+                                                                                                                                                            "*": null;
+                                                                                                                                                        };
+                                                                                                                                                    };
+                                                                                                                                                };
+                                                                                                                                            }[];
+                                                                                                                                            "\u0086": null;
+                                                                                                                                            "&"?: {
+                                                                                                                                                "\u3402": {
+                                                                                                                                                    "#": {
+                                                                                                                                                        "\u341C": {
+                                                                                                                                                            "#": {
+                                                                                                                                                                "\u3435": {
+                                                                                                                                                                    $: null;
+                                                                                                                                                                    "#": null;
+                                                                                                                                                                };
+                                                                                                                                                            };
+                                                                                                                                                        };
+                                                                                                                                                    };
+                                                                                                                                                };
+                                                                                                                                            };
+                                                                                                                                            "\u0084"?: {
+                                                                                                                                                "\u3438": {
+                                                                                                                                                    D: null;
+                                                                                                                                                    "*": null;
+                                                                                                                                                };
+                                                                                                                                            };
+                                                                                                                                        };
+                                                                                                                                        "\u3411"?: {
+                                                                                                                                            0: number;
+                                                                                                                                            " ": {
+                                                                                                                                                "\u341B": {
+                                                                                                                                                    "&"?: null;
+                                                                                                                                                    "*"?: null;
+                                                                                                                                                    "+"?: null;
+                                                                                                                                                    ","?: {
+                                                                                                                                                        "\u3435": {
+                                                                                                                                                            $: null;
+                                                                                                                                                            "#": null;
+                                                                                                                                                        };
+                                                                                                                                                    };
+                                                                                                                                                    "#"?: null;
+                                                                                                                                                };
+                                                                                                                                            }[];
+                                                                                                                                            "*": null;
+                                                                                                                                            "&": number;
+                                                                                                                                            ".": number;
+                                                                                                                                        };
+                                                                                                                                        "\u340B"?: {
+                                                                                                                                            ")": null;
+                                                                                                                                            "(": null;
+                                                                                                                                            "\u0084": {
+                                                                                                                                                "\u3438": {
+                                                                                                                                                    D: null;
+                                                                                                                                                    "*": null;
+                                                                                                                                                };
+                                                                                                                                            };
+                                                                                                                                        };
+                                                                                                                                        "\u36E6"?: {
+                                                                                                                                            ",": {
+                                                                                                                                                "ig.elements.alien_object.media": {
+                                                                                                                                                    id: null;
+                                                                                                                                                    video_dash_manifest: null;
+                                                                                                                                                    video_duration: number;
+                                                                                                                                                    original_width: number;
+                                                                                                                                                    original_height: number;
+                                                                                                                                                    is_dash_eligible: number;
+                                                                                                                                                    has_audio: boolean;
+                                                                                                                                                    number_of_qualities: number;
+                                                                                                                                                    pk: number;
+                                                                                                                                                    media_type: number;
+                                                                                                                                                    video_versions: {
+                                                                                                                                                        bandwidth: number;
+                                                                                                                                                        height: number;
+                                                                                                                                                        id: null;
+                                                                                                                                                        type: number;
+                                                                                                                                                        url: null;
+                                                                                                                                                        width: number;
+                                                                                                                                                    }[];
+                                                                                                                                                    image_versions2: {
+                                                                                                                                                        candidates: {
+                                                                                                                                                            estimated_scans_sizes: number[];
+                                                                                                                                                            height: number;
+                                                                                                                                                            scans_profile: null;
+                                                                                                                                                            url: null;
+                                                                                                                                                            width: number;
+                                                                                                                                                        }[];
+                                                                                                                                                    };
+                                                                                                                                                    user: {
+                                                                                                                                                        pk: number;
+                                                                                                                                                        pk_id: null;
+                                                                                                                                                        full_name: null;
+                                                                                                                                                        is_private: boolean;
+                                                                                                                                                        strong_id__: null;
+                                                                                                                                                        id: null;
+                                                                                                                                                        username: null;
+                                                                                                                                                        is_verified: boolean;
+                                                                                                                                                    };
+                                                                                                                                                    video_codec: null;
+                                                                                                                                                };
+                                                                                                                                            };
+                                                                                                                                            "#": null;
+                                                                                                                                            "\u0084": {
+                                                                                                                                                "\u3438": {
+                                                                                                                                                    D: null;
+                                                                                                                                                    "*": null;
+                                                                                                                                                };
+                                                                                                                                            };
+                                                                                                                                        };
+                                                                                                                                    }[];
+                                                                                                                                    "\u0087"?: null;
+                                                                                                                                    "!"?: number;
+                                                                                                                                    "\u0085"?: ({
+                                                                                                                                        "\u3401": {
+                                                                                                                                            "#": boolean;
+                                                                                                                                            $: null;
+                                                                                                                                            "&": null;
+                                                                                                                                            "+": boolean;
+                                                                                                                                        };
+                                                                                                                                    } | null)[];
+                                                                                                                                    "\u0084"?: {
+                                                                                                                                        "\u3438": {
+                                                                                                                                            2?: null;
+                                                                                                                                            8?: null;
+                                                                                                                                            D: null;
+                                                                                                                                            "*": null;
+                                                                                                                                            ";"?: null;
+                                                                                                                                            "."?: null;
+                                                                                                                                            ")"?: number;
+                                                                                                                                            "#"?: null;
+                                                                                                                                            ">"?: null;
+                                                                                                                                        };
+                                                                                                                                    };
+                                                                                                                                    "\u0086"?: null;
+                                                                                                                                };
+                                                                                                                            }[];
+                                                                                                                            "\u0084"?: {
+                                                                                                                                "\u3438": {
+                                                                                                                                    7?: null;
+                                                                                                                                    8?: null;
+                                                                                                                                    9?: null;
+                                                                                                                                    D?: null;
+                                                                                                                                    "*"?: null;
+                                                                                                                                    A?: number;
+                                                                                                                                    "."?: null;
+                                                                                                                                    "="?: null;
+                                                                                                                                    ";"?: null;
+                                                                                                                                    ">"?: null;
+                                                                                                                                };
+                                                                                                                            };
+                                                                                                                            "-"?: null;
+                                                                                                                            "\u0085"?: {
+                                                                                                                                "\u3401": {
+                                                                                                                                    "#": boolean;
+                                                                                                                                    $: null;
+                                                                                                                                    "&": null;
+                                                                                                                                    "+"?: boolean;
+                                                                                                                                };
+                                                                                                                            }[];
+                                                                                                                            "("?: boolean;
+                                                                                                                        };
+                                                                                                                        "\u3411"?: {
+                                                                                                                            " ": {
+                                                                                                                                "\u341B": {
+                                                                                                                                    "&": null;
+                                                                                                                                    "*": null;
+                                                                                                                                    "+": null;
+                                                                                                                                    ",": {
+                                                                                                                                        "\u3435": {
+                                                                                                                                            $: null;
+                                                                                                                                            "#": null;
+                                                                                                                                        };
+                                                                                                                                    };
+                                                                                                                                    "#": null;
+                                                                                                                                };
+                                                                                                                            }[];
+                                                                                                                            "(": number;
+                                                                                                                            ",": {
+                                                                                                                                "\u341B": {
+                                                                                                                                    "&": null;
+                                                                                                                                    "*": null;
+                                                                                                                                    "+": null;
+                                                                                                                                    ",": {
+                                                                                                                                        "\u3435": {
+                                                                                                                                            $: null;
+                                                                                                                                            "#": null;
+                                                                                                                                        };
+                                                                                                                                    };
+                                                                                                                                    "#": null;
+                                                                                                                                    $?: null;
+                                                                                                                                };
+                                                                                                                            }[];
+                                                                                                                        };
+                                                                                                                    }[];
+                                                                                                                    ","?: null;
+                                                                                                                    "\u0084"?: {
+                                                                                                                        "\u3438": {
+                                                                                                                            2?: null;
+                                                                                                                            7?: null;
+                                                                                                                            D: null;
+                                                                                                                            "#"?: null;
+                                                                                                                            "="?: null;
+                                                                                                                            ")"?: number;
+                                                                                                                            "*"?: null;
+                                                                                                                            A?: number;
+                                                                                                                        };
+                                                                                                                    };
+                                                                                                                    ")"?: null;
+                                                                                                                    "\u0085"?: null[];
+                                                                                                                };
+                                                                                                                "\u3411"?: {
+                                                                                                                    " ": {
+                                                                                                                        "\u341B": {
+                                                                                                                            "&": null;
+                                                                                                                            "*": null;
+                                                                                                                            "+": null;
+                                                                                                                            ",": {
+                                                                                                                                "\u3435": {
+                                                                                                                                    $: null;
+                                                                                                                                    "#": null;
+                                                                                                                                };
+                                                                                                                            };
+                                                                                                                            "#": null;
+                                                                                                                        };
+                                                                                                                    }[];
+                                                                                                                    "(": number;
+                                                                                                                    ",": {
+                                                                                                                        "\u341B": {
+                                                                                                                            "&": null;
+                                                                                                                            "*": null;
+                                                                                                                            "+": null;
+                                                                                                                            ",": {
+                                                                                                                                "\u3435": {
+                                                                                                                                    $: null;
+                                                                                                                                    "#": null;
+                                                                                                                                };
+                                                                                                                            };
+                                                                                                                            "#": null;
+                                                                                                                            $?: null;
+                                                                                                                        };
+                                                                                                                    }[];
+                                                                                                                };
+                                                                                                            }[];
+                                                                                                            "\u0084": {
+                                                                                                                "\u3438": {
+                                                                                                                    7?: null;
+                                                                                                                    9?: null;
+                                                                                                                    D?: null;
+                                                                                                                    "*"?: null;
+                                                                                                                    A?: number;
+                                                                                                                    "#"?: null;
+                                                                                                                    "="?: null;
+                                                                                                                    ")"?: number;
+                                                                                                                    ":"?: null;
+                                                                                                                };
+                                                                                                            };
+                                                                                                            "&"?: {
+                                                                                                                "\u3402": {
+                                                                                                                    ".": null;
+                                                                                                                    "+": boolean;
+                                                                                                                    "#": {
+                                                                                                                        "\u341C": {
+                                                                                                                            "#": {
+                                                                                                                                "\u3435": {
+                                                                                                                                    $: null;
+                                                                                                                                    "#": null;
+                                                                                                                                };
+                                                                                                                            };
+                                                                                                                        };
+                                                                                                                    };
+                                                                                                                };
+                                                                                                            };
+                                                                                                        };
+                                                                                                        "\u3411"?: {
+                                                                                                            " ": {
+                                                                                                                "\u341B": {
+                                                                                                                    "&": null;
+                                                                                                                    "*": null;
+                                                                                                                    "+": null;
+                                                                                                                    ",": {
+                                                                                                                        "\u3435": {
+                                                                                                                            $: null;
+                                                                                                                            "#": null;
+                                                                                                                        };
+                                                                                                                    };
+                                                                                                                };
+                                                                                                            }[];
+                                                                                                        };
+                                                                                                    }[];
+                                                                                                    "\u0085"?: {
+                                                                                                        "\u3452": {
+                                                                                                            "#": null;
+                                                                                                            $: null;
+                                                                                                            "&": null;
+                                                                                                            "(": null;
+                                                                                                        };
+                                                                                                    }[];
+                                                                                                    "\u0084": {
+                                                                                                        "\u3438": {
+                                                                                                            0?: null;
+                                                                                                            2?: null;
+                                                                                                            7?: null;
+                                                                                                            9?: null;
+                                                                                                            D: null;
+                                                                                                            "="?: null;
+                                                                                                            ":"?: null;
+                                                                                                            C?: null;
+                                                                                                            "+"?: null;
+                                                                                                            ">"?: null;
+                                                                                                            "."?: null;
+                                                                                                            ","?: null;
+                                                                                                        };
+                                                                                                    };
+                                                                                                    ","?: null;
+                                                                                                };
+                                                                                            }[];
+                                                                                            "!"?: number;
+                                                                                            "&"?: {
+                                                                                                "\u3402": {
+                                                                                                    [key: string]: {
+                                                                                                        "\u3414": {
+                                                                                                            "#": {
+                                                                                                                "\u3415": {
+                                                                                                                    $: null;
+                                                                                                                    "#": {
+                                                                                                                        "\u341C": {
+                                                                                                                            "#": {
+                                                                                                                                "\u3435": {
+                                                                                                                                    $: null;
+                                                                                                                                    "#": null;
+                                                                                                                                };
+                                                                                                                            };
+                                                                                                                        };
+                                                                                                                    };
+                                                                                                                };
+                                                                                                            }[];
+                                                                                                        };
+                                                                                                    };
+                                                                                                };
+                                                                                            };
+                                                                                            "("?: boolean;
+                                                                                            ","?: null;
+                                                                                            $?: null;
+                                                                                            "-"?: null;
+                                                                                            "\u0085"?: {
+                                                                                                "\u3401": {
+                                                                                                    "#": boolean;
+                                                                                                    $: null;
+                                                                                                    "&": null;
+                                                                                                    "+": boolean;
+                                                                                                };
+                                                                                            }[];
+                                                                                        };
+                                                                                        "\u3417"?: {
+                                                                                            0: {
+                                                                                                "\u3435": {
+                                                                                                    $: null;
+                                                                                                    "#": null;
+                                                                                                };
+                                                                                            };
+                                                                                            ")": null;
+                                                                                            "-": null;
+                                                                                            ".": null;
+                                                                                            "*": null;
+                                                                                            "#": null;
+                                                                                            $: number;
+                                                                                        };
+                                                                                    }[];
+                                                                                    "\u0085"?: {
+                                                                                        "\u3401": {
+                                                                                            "#": boolean;
+                                                                                            $: null;
+                                                                                            "&": null;
+                                                                                        };
+                                                                                    }[];
+                                                                                    "\u0084": {
+                                                                                        "\u3436"?: {
+                                                                                            ")": null;
+                                                                                        };
+                                                                                        "\u3438"?: {
+                                                                                            7: null;
+                                                                                            9: null;
+                                                                                            D: null;
+                                                                                            "=": null;
+                                                                                            ":": null;
+                                                                                        };
+                                                                                    };
+                                                                                    "&"?: {
+                                                                                        "\u3402": {
+                                                                                            ".": null;
+                                                                                            "(": null;
+                                                                                            "#": {
+                                                                                                "\u341C": {
+                                                                                                    "#": {
+                                                                                                        "\u3435": {
+                                                                                                            $: null;
+                                                                                                            "#": null;
+                                                                                                        };
+                                                                                                    };
+                                                                                                };
+                                                                                            };
+                                                                                            "&": {
+                                                                                                "\u3435": {
+                                                                                                    $: null;
+                                                                                                    "#": null;
+                                                                                                };
+                                                                                            };
+                                                                                        };
+                                                                                    };
+                                                                                    ","?: null;
+                                                                                    $?: null;
+                                                                                    "-"?: null;
+                                                                                };
+                                                                            }[];
+                                                                            ")": {
+                                                                                "\u3435": {
+                                                                                    $: null;
+                                                                                    "#": null;
+                                                                                };
+                                                                            };
+                                                                            "?": boolean;
+                                                                            c: null;
+                                                                            d: null;
+                                                                            "\u0084": {
+                                                                                "\u3438": {
+                                                                                    5: null;
+                                                                                    D: null;
+                                                                                    "*": null;
+                                                                                };
+                                                                            };
+                                                                        };
+                                                                        "\u3417"?: {
+                                                                            0: {
+                                                                                "\u3435": {
+                                                                                    $: null;
+                                                                                    "#": null;
+                                                                                };
+                                                                            };
+                                                                            ")": null;
+                                                                            "-": null;
+                                                                            ".": null;
+                                                                            "#": null;
+                                                                            "(": null;
+                                                                            $: number;
+                                                                            "\u0085": {
+                                                                                "\u3401": {
+                                                                                    "#": boolean;
+                                                                                    "&": null;
+                                                                                };
+                                                                            }[];
+                                                                        };
+                                                                    }[];
+                                                                    "\u0084"?: {
+                                                                        "\u3438": {
+                                                                            0?: null;
+                                                                            2?: null;
+                                                                            7?: null;
+                                                                            9?: null;
+                                                                            D?: null;
+                                                                            ":"?: null;
+                                                                            "*"?: null;
+                                                                            "."?: null;
+                                                                            ","?: null;
+                                                                            "="?: null;
+                                                                        };
+                                                                    };
+                                                                    "&"?: {
+                                                                        "\u3402": {
+                                                                            ".": null;
+                                                                            "#": {
+                                                                                "\u341C": {
+                                                                                    "#": {
+                                                                                        "\u3435": {
+                                                                                            $: null;
+                                                                                            "#": null;
+                                                                                        };
+                                                                                    };
+                                                                                };
+                                                                            };
+                                                                        };
+                                                                    };
+                                                                };
+                                                            }[];
+                                                            "\u0087": null;
+                                                            "!": number;
+                                                            "\u0084": {
+                                                                "\u3438": {
+                                                                    7?: null;
+                                                                    "="?: null;
+                                                                    D?: null;
+                                                                    "*"?: null;
+                                                                    ">"?: null;
+                                                                };
+                                                            };
+                                                            "\u0085"?: {
+                                                                "\u3452": {
+                                                                    "#": null;
+                                                                    $: null;
+                                                                };
+                                                            }[];
+                                                        };
+                                                    }[];
+                                                    "\u0085": {
+                                                        "\u3452": {
+                                                            "#": null;
+                                                            $: null;
+                                                        };
+                                                    }[];
+                                                };
+                                            };
+                                            embedded_payloads: null[];
+                                            error_attribution: {
+                                                logging_id: null;
+                                                source_map_id: null;
+                                            };
+                                        };
+                                    };
+                                    id: number;
+                                    netego_type: null;
                                 };
                             }[];
                             feed_items_media_info: null[];
@@ -20016,6 +26282,7 @@ export interface paths {
                                     has_privately_liked: boolean;
                                     filter_type: number;
                                     taken_at: number;
+                                    commenting_disabled_for_viewer?: boolean;
                                     hide_view_all_comment_entrypoint: boolean;
                                     is_comments_gif_composer_enabled: boolean;
                                     has_liked: boolean;
@@ -20059,10 +26326,19 @@ export interface paths {
                                     is_in_profile_grid: boolean;
                                     profile_grid_control_enabled: boolean;
                                     user: {
-                                        pk: number;
-                                        is_private: boolean;
+                                        fbid_v2?: number;
+                                        full_name?: null;
                                         id: null;
+                                        is_private: boolean;
+                                        pk: number;
+                                        pk_id?: null;
                                         strong_id__: null;
+                                        account_type?: number;
+                                        account_badges?: null[];
+                                        is_verified?: boolean;
+                                        profile_pic_id?: null;
+                                        profile_pic_url?: null;
+                                        username?: null;
                                     };
                                     image_versions2: {
                                         candidates: {
@@ -20112,7 +26388,147 @@ export interface paths {
                                     is_photo_mash_story: boolean;
                                     can_play_spotify_audio: boolean;
                                     is_superlative: boolean;
-                                    reel_mentions: {
+                                    show_one_tap_fb_share_tooltip: boolean;
+                                    story_music_stickers: {
+                                        attribution: null;
+                                        display_type: null;
+                                        end_time_ms: number;
+                                        height: number;
+                                        is_fb_sticker: number;
+                                        is_hidden: number;
+                                        is_pinned: number;
+                                        is_sticker: number;
+                                        rotation: number;
+                                        start_time_ms: number;
+                                        width: number;
+                                        x: number;
+                                        y: number;
+                                        z: number;
+                                        music_asset_info: {
+                                            allow_media_creation_with_music: boolean;
+                                            allows_saving: boolean;
+                                            artist_id: null;
+                                            audio_asset_id: null;
+                                            audio_asset_start_time_in_ms: number;
+                                            audio_cluster_id: null;
+                                            contains_lyrics: null;
+                                            cover_artwork_thumbnail_uri: null;
+                                            cover_artwork_uri: null;
+                                            dark_message: null;
+                                            dash_manifest: null;
+                                            derived_content_id: null;
+                                            display_artist: null;
+                                            display_labels: null;
+                                            duration_in_ms: number;
+                                            fast_start_progressive_download_url: null;
+                                            formatted_clips_media_count: null;
+                                            has_lyrics: boolean;
+                                            highlight_start_times_in_ms: (number | null)[];
+                                            id: null;
+                                            ig_username: null;
+                                            is_bookmarked: boolean;
+                                            is_eligible_for_audio_effects: null;
+                                            is_eligible_for_vinyl_sticker: boolean;
+                                            is_explicit: boolean;
+                                            is_trending_in_clips: boolean;
+                                            licensed_music_subtype: null;
+                                            music_creation_restriction_reason: null;
+                                            overlap_duration_in_ms: number;
+                                            placeholder_profile_pic_url: null;
+                                            previous_trend_rank: null;
+                                            progressive_download_url: null;
+                                            reactive_audio_download_url: null;
+                                            sanitized_title: null;
+                                            should_allow_music_editing: boolean;
+                                            should_mute_audio: boolean;
+                                            should_mute_audio_reason: null;
+                                            should_mute_audio_reason_type: null;
+                                            should_render_soundwave: boolean;
+                                            song_monetization_info: null;
+                                            subtitle: null;
+                                            title: null;
+                                            trend_rank: null;
+                                            web_30s_preview_download_url: null;
+                                            ig_artist: {
+                                                pk: number;
+                                                pk_id: null;
+                                                id: null;
+                                                username: null;
+                                                full_name: null;
+                                                is_private: boolean;
+                                                is_verified: boolean;
+                                                profile_pic_id: null;
+                                                profile_pic_url: null;
+                                                strong_id__: null;
+                                            };
+                                            audio_filter_infos: null[];
+                                            audio_muting_info: {
+                                                mute_audio: boolean;
+                                                mute_reason_str: null;
+                                                allow_audio_editing: boolean;
+                                                show_muted_audio_toast: boolean;
+                                            };
+                                            lyrics: null;
+                                            spotify_track_metadata: null;
+                                            user_notes: null;
+                                        };
+                                    }[];
+                                    can_reply: boolean;
+                                    is_viewer_mentioned: boolean;
+                                    can_reshare: boolean;
+                                    story_comments?: {
+                                        pk: null;
+                                        user_id: number;
+                                        type: number;
+                                        did_report_as_spam: boolean;
+                                        created_at: number;
+                                        created_at_utc: number;
+                                        created_at_for_fb_app: number;
+                                        content_type: null;
+                                        status: null;
+                                        bit_flags: number;
+                                        share_enabled: boolean;
+                                        is_ranked_comment: boolean;
+                                        media_id: number;
+                                        strong_id__: null;
+                                        text: null;
+                                        is_covered: boolean;
+                                        user: {
+                                            pk: number;
+                                            pk_id: null;
+                                            id: null;
+                                            full_name: null;
+                                            is_private: boolean;
+                                            strong_id__: null;
+                                            fbid_v2: number;
+                                            username: null;
+                                            is_verified: boolean;
+                                            profile_pic_id: null;
+                                            profile_pic_url: null;
+                                        };
+                                    }[];
+                                    story_feed_media?: {
+                                        end_time_ms: number;
+                                        height: number;
+                                        is_fb_sticker: number;
+                                        is_hidden: number;
+                                        is_pinned: number;
+                                        is_sticker: number;
+                                        media_code: null;
+                                        media_compound_str: null;
+                                        media_id: null;
+                                        product_type: null;
+                                        rotation: number;
+                                        start_time_ms: number;
+                                        tap_landing_id: null;
+                                        uncapped_height_ratio: number;
+                                        uncapped_width_ratio: number;
+                                        width: number;
+                                        x: number;
+                                        y: number;
+                                        z: number;
+                                    }[];
+                                    reel_mentions?: {
                                         display_type: null;
                                         end_time_ms: number;
                                         height: number;
@@ -20139,7 +26555,7 @@ export interface paths {
                                         y: number;
                                         z: number;
                                     }[];
-                                    reshared_story_media_author: {
+                                    reshared_story_media_author?: {
                                         pk: number;
                                         pk_id: null;
                                         id: null;
@@ -20151,10 +26567,6 @@ export interface paths {
                                         profile_pic_id: null;
                                         profile_pic_url: null;
                                     };
-                                    show_one_tap_fb_share_tooltip: boolean;
-                                    can_reply: boolean;
-                                    is_viewer_mentioned: boolean;
-                                    can_reshare: boolean;
                                 }[];
                                 is_nux: boolean;
                                 prefetch_count: number;
@@ -20165,7 +26577,7 @@ export interface paths {
                                 show_fan_club_stories_teaser: boolean;
                                 disabled_reply_types: null[];
                                 is_archived: boolean;
-                            };
+                            } | null;
                             status: null;
                         };
                     };
@@ -21358,6 +27770,7 @@ export interface paths {
                         "application/json": {
                             friendship_statuses: {
                                 [key: string]: {
+                                    followed_by?: boolean;
                                     following: boolean;
                                     incoming_request: boolean;
                                     is_bestie: boolean;
@@ -21627,7 +28040,7 @@ export interface paths {
                                 third_party_downloads_enabled: number;
                                 strong_id__: null;
                                 id: null;
-                                profile_pic_id: null;
+                                profile_pic_id?: null;
                                 profile_pic_url: null;
                                 is_verified: boolean;
                                 username: null;
@@ -21635,8 +28048,24 @@ export interface paths {
                                 account_badges: null[];
                                 mutual_followers_count: number;
                                 profile_context: null;
-                                profile_context_links_with_user_ids: null[];
-                                profile_context_facepile_users: null[];
+                                profile_context_links_with_user_ids: ({
+                                    end: number;
+                                    start: number;
+                                    username: null;
+                                } | null)[];
+                                profile_context_facepile_users: ({
+                                    pk: number;
+                                    pk_id: null;
+                                    id: null;
+                                    full_name: null;
+                                    is_private: boolean;
+                                    strong_id__: null;
+                                    username: null;
+                                    is_verified: boolean;
+                                    profile_pic_id: null;
+                                    profile_pic_url: null;
+                                } | null)[];
+                                profile_context_mutual_follow_ids?: number[];
                             }[];
                             status: null;
                         };
@@ -23031,7 +29460,11 @@ export interface paths {
                                 [key: string]: {
                                     fields: {
                                         k: number;
-                                        bln: number;
+                                        str?: null;
+                                        bln?: number;
+                                        i64?: number;
+                                        dbl?: number;
+                                        li?: null;
                                     }[];
                                     hash: null;
                                 };
@@ -23531,9 +29964,6 @@ export interface paths {
                                 share_enabled: boolean;
                                 media_id: null;
                                 carousel_child_mentions: null[];
-                                parent_comment_id: null;
-                                child_comment_index: number;
-                                replied_to_comment_id: null;
                                 distinct_emojis_used: null[];
                                 e2ee_mentioned_user_list: null[];
                                 media_code: null;
@@ -23553,6 +29983,9 @@ export interface paths {
                                     is_mentionable: boolean;
                                     _is__IGCommentDefaultCommenterUserFieldsFragment: null;
                                 };
+                                parent_comment_id?: null;
+                                child_comment_index?: number;
+                                replied_to_comment_id?: null;
                             };
                             comment_creation_key: null;
                             _is__TOnXIGCommentCreateMutationSuccessResponse0: null;
@@ -23817,6 +30250,7 @@ export interface paths {
                                     is_mentionable: boolean;
                                     is_private: boolean;
                                     is_verified: boolean;
+                                    latest_reel_media?: number;
                                     pk: number;
                                     pk_id: null;
                                     profile_pic_id: null;
@@ -24948,13 +31382,58 @@ export interface paths {
                     content: {
                         "application/json": {
                             counts: {
-                                requests: number;
+                                requests?: number;
                             };
                             last_checked: number;
                             friend_request_stories: null[];
-                            priority_stories: null[];
-                            new_stories: null[];
-                            old_stories: {
+                            priority_stories: ({
+                                story_type: number;
+                                notif_name: null;
+                                type: number;
+                                args: {
+                                    destination: null;
+                                    extra_actions: null[];
+                                    rich_text: null;
+                                    profile_id: number;
+                                    profile_name: null;
+                                    profile_image: null;
+                                    inline_follow: {
+                                        user_info: {
+                                            id: number;
+                                            username: null;
+                                            is_private: boolean;
+                                            profile_pic_url: null;
+                                        };
+                                        following: boolean;
+                                        outgoing_request: boolean;
+                                        incoming_request: boolean;
+                                    };
+                                    logging_context: {
+                                        mentioned_user_ids: number[];
+                                        mentioned_content_ids: null;
+                                        content_id: null;
+                                    };
+                                    actions: null[];
+                                    inline_controls: {
+                                        action_type: null;
+                                        action_text?: null;
+                                        confirmation_text?: null;
+                                        controls?: {
+                                            notification_type: number;
+                                        };
+                                    }[];
+                                    content_version_id: null;
+                                    aggregation_type: null;
+                                    timestamp: number;
+                                    tuuid: null;
+                                    clicked: boolean;
+                                    af_candidate_id: number;
+                                };
+                                counts: Record<string, never>;
+                                pk: null;
+                                ndid: null;
+                            } | null)[];
+                            new_stories: ({
                                 story_type: number;
                                 notif_name: null;
                                 type: number;
@@ -24991,11 +31470,55 @@ export interface paths {
                                     tuuid: null;
                                     clicked: boolean;
                                     af_candidate_id: number;
+                                    latest_reel_media?: number;
                                 };
                                 counts: Record<string, never>;
                                 pk: null;
                                 ndid: null;
-                            }[];
+                            } | null)[];
+                            old_stories: ({
+                                story_type: number;
+                                notif_name: null;
+                                type: number;
+                                args: {
+                                    destination: null;
+                                    extra_actions: null[];
+                                    rich_text: null;
+                                    profile_id: number;
+                                    profile_name: null;
+                                    profile_image: null;
+                                    inline_follow: {
+                                        user_info: {
+                                            id: number;
+                                            username: null;
+                                            is_private: boolean;
+                                            profile_pic_url: null;
+                                        };
+                                        following: boolean;
+                                        outgoing_request: boolean;
+                                        incoming_request: boolean;
+                                    };
+                                    logging_context: {
+                                        mentioned_user_ids: number[];
+                                        mentioned_content_ids: null;
+                                        content_id: null;
+                                    };
+                                    actions: null[];
+                                    inline_controls: {
+                                        action_type: null;
+                                    }[];
+                                    content_version_id: null;
+                                    aggregation_type: null;
+                                    timestamp: number;
+                                    tuuid: null;
+                                    clicked: boolean;
+                                    af_candidate_id: number;
+                                    latest_reel_media: number;
+                                };
+                                counts: Record<string, never>;
+                                pk: null;
+                                ndid: null;
+                            } | null)[];
                             continuation_token: number;
                             subscription: null;
                             is_last_page: boolean;
@@ -25004,8 +31527,6 @@ export interface paths {
                                 name: null;
                                 empty_state_str: null;
                             }[];
-                            next_max_id: null;
-                            auto_load_more_enabled: boolean;
                             filters: {
                                 section_header: null;
                                 selector_type: null;
@@ -25016,6 +31537,50 @@ export interface paths {
                                 }[];
                             }[];
                             status: null;
+                            next_max_id?: null;
+                            auto_load_more_enabled?: boolean;
+                            ads_manager?: {
+                                pending_count: number;
+                                error: null;
+                                coupon_data: null;
+                                notif_name: null;
+                                is_pinned_row: boolean;
+                            };
+                            story_mentions?: {
+                                mentions_count_string: null;
+                                reels: null[];
+                                notif_name: null;
+                                is_pinned_row: boolean;
+                                product_stories_count: null;
+                                product_stories_reels: null[];
+                            };
+                            last_updated?: null;
+                            is_first_page?: boolean;
+                            badging_info?: {
+                                total_badge_count: number;
+                                badge_count_breakdown: {
+                                    badge_use_case_id: null;
+                                    count: number;
+                                }[];
+                            };
+                            unaggregated_badging_info?: {
+                                total_badge_count: number;
+                                badge_count_breakdown: ({
+                                    badge_use_case_id: null;
+                                    count: number;
+                                } | null)[];
+                            };
+                            ui_config?: {
+                                new_timebucket_enabled: boolean;
+                            };
+                            partition?: {
+                                time_bucket: {
+                                    headers: null[];
+                                    indices: number[];
+                                };
+                            };
+                            pagination_first_record_timestamp?: number;
+                            page_num?: null;
                         };
                     };
                 };
@@ -25268,9 +31833,12 @@ export interface paths {
                                     title: null;
                                     ui_type: null;
                                     content_type: null;
-                                    icon: null;
+                                    setting_value: null;
+                                    checked: boolean | null;
+                                    icon?: null;
                                 }[];
-                                content_type: null;
+                                footer?: null;
+                                content_type?: null;
                             }[];
                             status: null;
                         };
@@ -25398,6 +31966,7 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
+                            m21_media_ids?: null[];
                             status: null;
                         };
                     };
@@ -26162,7 +32731,7 @@ export interface paths {
                                 strong_id__: null;
                                 is_using_unified_inbox_for_direct: boolean;
                                 id: null;
-                                profile_pic_id: null;
+                                profile_pic_id?: null;
                                 profile_pic_url: null;
                                 is_verified: boolean;
                                 username: null;
@@ -26174,10 +32743,12 @@ export interface paths {
                                 is_taggable: boolean;
                             }[];
                             surfaces: {
+                                scores: {
+                                    [key: string]: number;
+                                };
                                 rank_token: null;
                                 ttl_secs: number;
                                 name: null;
-                                scores: Record<string, never>;
                             }[];
                             status: null;
                         };

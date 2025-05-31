@@ -329,11 +329,6 @@ export function mergeSchemas(
     return;
   }
 
-  if (existingSchema.type === newSchema.type) {
-    Object.assign(existingSchema, newSchema);
-    return;
-  }
-
   if (existingSchema.oneOf && newSchema.type) {
     const existingOneOf = existingSchema.oneOf.find(
       (schema) => isNotRef(schema) && schema.type === newSchema.type,
@@ -375,16 +370,19 @@ export function mergeSchemas(
           existingSchema.properties[key] = value;
         }
       });
-    }
 
-    if (existingSchema.required && newSchema.required) {
-      Object.entries(newSchema.required).forEach(([key]) => {
-        assert(existingSchema.required, "Expected required to be present");
-        assert(newSchema.required, "Expected required to be present");
-        if (!existingSchema.required.includes(key)) {
-          existingSchema.required.push(key);
-        }
-      });
+      if (existingSchema.required) {
+        Object.entries(existingSchema.properties).forEach(([key]) => {
+          assert(existingSchema.required, "Expected required to be present");
+          assert(newSchema.properties, "Expected properties to be present");
+          if (!newSchema.properties[key]) {
+            const requiredIndex = existingSchema.required.indexOf(key);
+            if (requiredIndex !== -1 && requiredIndex !== undefined) {
+              existingSchema.required.splice(requiredIndex, 1);
+            }
+          }
+        });
+      }
     }
 
     if (existingSchema.additionalProperties && newSchema.additionalProperties) {
@@ -422,6 +420,11 @@ export function mergeSchemas(
 
     mergeSchemas(existingSchema.items, newSchema.items);
 
+    return;
+  }
+
+  if (existingSchema.type === newSchema.type) {
+    Object.assign(existingSchema, newSchema);
     return;
   }
 }
