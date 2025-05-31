@@ -1,4 +1,4 @@
-jsondump.*out
+jsondump*.out
 flows*
 
 __pycache__

@@ -221,6 +221,7 @@ export function schemaFromValue(
     ) {
       schema.example = value;
     }
+    return schema;
   }
 
   if (typeof value === "number") {
@@ -294,51 +295,72 @@ export function schemaFromValue(
     };
 
     Object.entries(value).forEach(([key, value]) => {
-      schema.properties![key] = schemaFromValue(
+      assert(schema.required, "Expected required to be present");
+      assert(schema.properties, "Expected properties to be present");
+      schema.properties[key] = schemaFromValue(
         config,
         filterContext,
         key,
         value,
       );
-      schema.required!.push(key);
+      schema.required.push(key);
     });
 
     return schema;
   }
 
-  return { type: "null" };
+  throw new Error(`Unexpected value type: ${value} (${typeof value})`);
+}
+
+function mergeSchemaIntoOneOf(
+  oneOfList: Required<SchemaObject>["oneOf"],
+  newSchema: SchemaObject,
+): void {
+  assert(isNotRef(newSchema), "Reference object not expected");
+
+  const existingOneOf = oneOfList.find(
+    (schema) => isNotRef(schema) && schema.type === newSchema.type,
+  );
+  assert(isNotRef(existingOneOf), "Reference object not expected");
+  if (existingOneOf) {
+    mergeSchemas(existingOneOf, newSchema);
+  } else {
+    oneOfList.push(newSchema);
+  }
 }
 
 export function mergeSchemas(
   existingSchema: SchemaObject,
   newSchema: SchemaObject,
 ): void {
-  assert(
-    existingSchema.type || newSchema.type,
-    "Both schemas are missing a type",
-  );
+  if (existingSchema.oneOf && newSchema.oneOf) {
+    newSchema.oneOf.forEach((newOneOf) => {
+      assert(existingSchema.oneOf, "Expected oneOf to be present");
+      assert(isNotRef(newOneOf), "Reference object not expected");
+      mergeSchemaIntoOneOf(existingSchema.oneOf, newOneOf);
+    });
+    return;
+  }
+  if (existingSchema.oneOf && newSchema.type) {
+    mergeSchemaIntoOneOf(existingSchema.oneOf, newSchema);
+    return;
+  }
+  if (existingSchema.type && newSchema.oneOf) {
+    mergeSchemaIntoOneOf(newSchema.oneOf, existingSchema);
+    existingSchema.oneOf = newSchema.oneOf;
+    return;
+  }
+
+  if (!existingSchema.type && !newSchema.type) {
+    throw new Error("Both schemas are missing a type");
+  }
 
   if (existingSchema.type === "null" && newSchema.type !== "null") {
-    Object.assign(existingSchema, newSchema);
     existingSchema.nullable = true;
     return;
   }
-
   if (existingSchema.type !== "null" && newSchema.type === "null") {
     existingSchema.nullable = true;
-    return;
-  }
-
-  if (existingSchema.oneOf && newSchema.type) {
-    const existingOneOf = existingSchema.oneOf.find(
-      (schema) => isNotRef(schema) && schema.type === newSchema.type,
-    );
-    assert(isNotRef(existingOneOf), "Reference object not expected");
-    if (existingOneOf) {
-      mergeSchemas(existingOneOf, newSchema);
-    } else {
-      existingSchema.oneOf.push(newSchema);
-    }
     return;
   }
 
@@ -375,7 +397,7 @@ export function mergeSchemas(
         Object.entries(existingSchema.properties).forEach(([key]) => {
           assert(existingSchema.required, "Expected required to be present");
           assert(newSchema.properties, "Expected properties to be present");
-          if (!newSchema.properties[key]) {
+          if (!(key in newSchema.properties)) {
             const requiredIndex = existingSchema.required.indexOf(key);
             if (requiredIndex !== -1 && requiredIndex !== undefined) {
               existingSchema.required.splice(requiredIndex, 1);
