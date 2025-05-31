@@ -18671,7 +18671,7 @@ export interface paths {
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
                     "x-ig-nav-chain"?: string;
-                    "x-ig-client-endpoint": string;
+                    "x-ig-client-endpoint"?: string;
                 };
                 path?: never;
                 cookie?: never;

@@ -252,13 +252,22 @@ export function schemaFromValue(
   }
 
   if (Array.isArray(value)) {
-    const firstItem = value[0];
+    const [firstItem, ...restItems] = value;
     if (firstItem === undefined) {
       return { type: "array", items: { type: "null" } };
     }
+
+    const baseSchema = schemaFromValue(config, filterContext, 0, firstItem);
+    restItems.forEach((item, index) =>
+      mergeSchemas(
+        baseSchema,
+        schemaFromValue(config, filterContext, index + 1, item),
+      ),
+    );
+
     return {
       type: "array",
-      items: schemaFromValue(config, filterContext, 0, firstItem),
+      items: baseSchema,
     };
   }
 
@@ -309,6 +318,17 @@ export function mergeSchemas(
     "Both schemas are missing a type",
   );
 
+  if (existingSchema.type === "null" && newSchema.type !== "null") {
+    Object.assign(existingSchema, newSchema);
+    existingSchema.nullable = true;
+    return;
+  }
+
+  if (existingSchema.type !== "null" && newSchema.type === "null") {
+    existingSchema.nullable = true;
+    return;
+  }
+
   if (existingSchema.type === newSchema.type) {
     Object.assign(existingSchema, newSchema);
     return;
@@ -358,9 +378,11 @@ export function mergeSchemas(
     }
 
     if (existingSchema.required && newSchema.required) {
-      Object.entries(newSchema.required!).forEach(([key]) => {
-        if (!existingSchema.required!.includes(key)) {
-          existingSchema.required!.push(key);
+      Object.entries(newSchema.required).forEach(([key]) => {
+        assert(existingSchema.required, "Expected required to be present");
+        assert(newSchema.required, "Expected required to be present");
+        if (!existingSchema.required.includes(key)) {
+          existingSchema.required.push(key);
         }
       });
     }
@@ -400,17 +422,6 @@ export function mergeSchemas(
 
     mergeSchemas(existingSchema.items, newSchema.items);
 
-    return;
-  }
-
-  if (existingSchema.type === "null" && newSchema.type !== "null") {
-    Object.assign(existingSchema, newSchema);
-    existingSchema.nullable = true;
-    return;
-  }
-
-  if (existingSchema.type !== "null" && newSchema.type === "null") {
-    existingSchema.nullable = true;
     return;
   }
 }

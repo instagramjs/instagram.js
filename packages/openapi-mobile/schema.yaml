@@ -58770,12 +58770,12 @@ paths:
           required: true
           schema:
             type: string
-        - name: x-ig-accept-hint
+        - name: x-ig-app-start-request
           in: header
           required: false
           schema:
             type: string
-        - name: x-ig-app-start-request
+        - name: x-ig-accept-hint
           in: header
           required: false
           schema:
