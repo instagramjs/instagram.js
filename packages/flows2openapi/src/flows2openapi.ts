@@ -316,5 +316,10 @@ export async function flows2OpenAPI(
     }),
   );
 
+  assert(schema.paths, "Expected paths to be present");
+  schema.paths = Object.fromEntries(
+    Object.entries(schema.paths).sort(([a], [b]) => a.localeCompare(b)),
+  );
+
   return schema;
 }
