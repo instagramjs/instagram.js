@@ -462,6 +462,9 @@ export function mergeSchemas(
 
   if (existingSchema.type === "null" && newSchema.type !== "null") {
     existingSchema.nullable = true;
+    for (const [key, value] of Object.entries(newSchema)) {
+      existingSchema[key as keyof typeof existingSchema] = value;
+    }
     return;
   }
   if (existingSchema.type !== "null" && newSchema.type === "null") {
@@ -538,19 +541,32 @@ export function mergeSchemas(
     );
     assert(
       !Array.isArray(existingSchema.items),
-      "Expected existing schema items to be array",
+      "Expected existing schema items to not be an array",
     );
     assert(newSchema.items !== undefined, "Expected items in new schema");
     assert(
       !Array.isArray(newSchema.items),
-      "Expected new schema items to be array",
+      "Expected new schema items to not be an array",
     );
 
-    mergeSchemas(
+    const existingItemsSchema = getObjectOrRef(
       def,
-      getObjectOrRef(def, "schema", existingSchema.items),
-      getObjectOrRef(def, "schema", newSchema.items),
+      "schema",
+      existingSchema.items,
     );
+    const newItemsSchema = getObjectOrRef(def, "schema", newSchema.items);
+
+    mergeSchemas(def, existingItemsSchema, newItemsSchema);
+
+    if (
+      existingItemsSchema.type !== "null" &&
+      existingItemsSchema.nullable === true
+    ) {
+      delete existingItemsSchema.nullable;
+    }
+    if (newItemsSchema.type !== "null" && newItemsSchema.nullable === true) {
+      delete newItemsSchema.nullable;
+    }
 
     return;
   }
