@@ -1,4 +1,7 @@
-import { flows2OpenAPI } from "@instagramjs/flows2openapi";
+import {
+  type Flow2OpenAPIConfig,
+  flows2OpenAPI,
+} from "@instagramjs/flows2openapi";
 import fs from "fs";
 import openapiTS, { astToString, type OpenAPI3 } from "openapi-typescript";
 import path from "path";
@@ -19,6 +22,7 @@ type GeneratorConfig = {
   apiPrefix: string;
   openapiDir: string;
   srcDir: string;
+  flowsConfig?: Partial<Flow2OpenAPIConfig>;
 };
 
 const GENERATOR_CONFIGS: GeneratorConfig[] = [
@@ -26,16 +30,27 @@ const GENERATOR_CONFIGS: GeneratorConfig[] = [
     apiPrefix: "https://i.instagram.com/api",
     openapiDir: path.join(BASE_OPENAPI_DIR, "instagram"),
     srcDir: path.join(BASE_SRC_DIR, "instagram"),
+    flowsConfig: {
+      filterExample: () => false,
+      filterResponse: ({ request }) => !request.path.includes("bloks"),
+      filterSchema: () => true,
+    },
   },
   {
     apiPrefix: "https://graph.instagram.com",
     openapiDir: path.join(BASE_OPENAPI_DIR, "instagram-graph"),
     srcDir: path.join(BASE_SRC_DIR, "instagram-graph"),
+    flowsConfig: {
+      filterExample: () => false,
+    },
   },
   {
     apiPrefix: "https://graph.facebook.com",
     openapiDir: path.join(BASE_OPENAPI_DIR, "facebook-graph"),
     srcDir: path.join(BASE_SRC_DIR, "facebook-graph"),
+    flowsConfig: {
+      filterExample: () => false,
+    },
   },
 ];
 
@@ -67,9 +82,7 @@ async function generate(config: GeneratorConfig, jsonDump: string) {
 
   const def = await flows2OpenAPI(jsonDump, existingDef, {
     apiPrefix: config.apiPrefix,
-
-    filterExample: () => false,
-    filterResponse: ({ request }) => !request.path.includes("bloks"),
+    ...config.flowsConfig,
   });
 
   await fs.promises.writeFile(openapiDefFile, yaml.stringify(def));

@@ -12,13 +12,8 @@ export type RequestFilterContext = {
   };
 };
 
-export type HeaderFilterContext = RequestFilterContext & {
-  name: string;
-  value: string;
-};
-
-export type ExampleFilterContext = RequestFilterContext & {
-  key: string | number;
+export type PathFilterContext = RequestFilterContext & {
+  path: string;
   value: unknown;
 };
 
@@ -26,10 +21,10 @@ export type Flow2OpenAPIConfig = {
   apiPrefix: string;
 
   filterRequest?: (context: RequestFilterContext) => boolean;
-  filterRequestBody?: (context: RequestFilterContext) => boolean;
   filterResponse?: (context: RequestFilterContext) => boolean;
-  filterHeader?: (context: HeaderFilterContext) => boolean;
-  filterExample?: (context: ExampleFilterContext) => boolean;
+  filterParameter?: (context: PathFilterContext) => boolean;
+  filterExample?: (context: PathFilterContext) => boolean;
+  filterSchema?: (context: PathFilterContext) => boolean;
 };
 
 export function filterRequest(
@@ -39,13 +34,6 @@ export function filterRequest(
   return config.filterRequest?.(context) ?? true;
 }
 
-export function filterRequestBody(
-  config: Flow2OpenAPIConfig,
-  context: RequestFilterContext,
-) {
-  return config.filterRequestBody?.(context) ?? true;
-}
-
 export function filterResponse(
   config: Flow2OpenAPIConfig,
   context: RequestFilterContext,
@@ -53,16 +41,23 @@ export function filterResponse(
   return config.filterResponse?.(context) ?? true;
 }
 
-export function filterHeader(
+export function filterParameter(
   config: Flow2OpenAPIConfig,
-  context: HeaderFilterContext,
+  context: PathFilterContext,
 ) {
-  return config.filterHeader?.(context) ?? true;
+  return config.filterParameter?.(context) ?? true;
 }
 
 export function filterExample(
   config: Flow2OpenAPIConfig,
-  context: ExampleFilterContext,
+  context: PathFilterContext,
 ) {
   return config.filterExample?.(context) ?? true;
+}
+
+export function filterSchema(
+  config: Flow2OpenAPIConfig,
+  context: PathFilterContext,
+) {
+  return config.filterSchema?.(context) ?? true;
 }

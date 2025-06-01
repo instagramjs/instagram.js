@@ -15,7 +15,8 @@ import { gunzip, inflate, zstdDecompress } from "zlib";
 
 import {
   filterExample,
-  filterHeader,
+  filterParameter,
+  filterSchema,
   type Flow2OpenAPIConfig,
   type RequestFilterContext,
 } from "./config";
@@ -127,6 +128,7 @@ export function normalizedPath(path: string): string {
 export function parametersFromPathParameters(
   config: Flow2OpenAPIConfig,
   filterContext: RequestFilterContext,
+  filterPath: string,
   pathParameters: PathParameter[],
 ): ParameterObject[] {
   const parameters: ParameterObject[] = [];
@@ -143,7 +145,7 @@ export function parametersFromPathParameters(
     if (
       filterExample(config, {
         ...filterContext,
-        key: pathParameterName,
+        path: `${filterPath}.path.${pathParameterName}`,
         value: pathParameterValue,
       })
     ) {
@@ -158,10 +160,15 @@ export function parametersFromPathParameters(
 export function parametersFromHeaders(
   config: Flow2OpenAPIConfig,
   filterContext: RequestFilterContext,
+  filterPath: string,
   headers: Record<string, string>,
 ): ParameterObject[] {
   const filteredHeaders = Object.entries(headers).filter(([key, value]) =>
-    filterHeader(config, { ...filterContext, name: key, value }),
+    filterParameter(config, {
+      ...filterContext,
+      path: `${filterPath}.headers.${key}`,
+      value,
+    }),
   );
 
   const parameters: ParameterObject[] = [];
@@ -175,7 +182,7 @@ export function parametersFromHeaders(
     if (
       filterExample(config, {
         ...filterContext,
-        key: headerName,
+        path: `${filterPath}.headers.${headerName}`,
         value: headerValue,
       })
     ) {
@@ -190,6 +197,7 @@ export function parametersFromHeaders(
 export function parametersFromSearchParams(
   config: Flow2OpenAPIConfig,
   filterContext: RequestFilterContext,
+  filterPath: string,
   searchParams: URLSearchParams,
 ): ParameterObject[] {
   const parameters: ParameterObject[] = [];
@@ -203,7 +211,7 @@ export function parametersFromSearchParams(
     if (
       filterExample(config, {
         ...filterContext,
-        key: key,
+        path: `${filterPath}.query.${key}`,
         value: value,
       })
     ) {
@@ -218,8 +226,19 @@ export function parametersFromSearchParams(
 export function schemaFromSearchParams(
   config: Flow2OpenAPIConfig,
   filterContext: RequestFilterContext,
+  filterPath: string,
   searchParams: URLSearchParams,
 ): SchemaObject {
+  if (
+    !filterSchema(config, {
+      ...filterContext,
+      path: filterPath,
+      value: searchParams,
+    })
+  ) {
+    return { type: "null" };
+  }
+
   const schema: SchemaObject = {
     type: "object",
     required: [],
@@ -228,14 +247,22 @@ export function schemaFromSearchParams(
   assert(schema.required !== undefined, "Expected required to be present");
   assert(schema.properties !== undefined, "Expected properties to be present");
 
-  for (const [searchParamName, searchParamValue] of searchParams.entries()) {
+  const filteredSearchParams = searchParams.entries().filter(([key, value]) =>
+    filterSchema(config, {
+      ...filterContext,
+      path: `${filterPath}.${key}`,
+      value: value,
+    }),
+  );
+
+  for (const [searchParamName, searchParamValue] of filteredSearchParams) {
     const schemaProperty: SchemaObject = {
       type: "string",
     };
     if (
       filterExample(config, {
         ...filterContext,
-        key: searchParamName,
+        path: `${filterPath}.query.${searchParamName}`,
         value: searchParamValue,
       })
     ) {
@@ -274,13 +301,23 @@ function objectIsRecord(
 }
 
 export function schemaFromValue(
+  def: OpenAPI3,
   config: Flow2OpenAPIConfig,
   filterContext: RequestFilterContext,
-  def: OpenAPI3,
-  key: string | number,
+  filterPath: string,
   value: unknown,
 ): SchemaObject {
   if (value === undefined || value === null) {
+    return { type: "null" };
+  }
+
+  if (
+    !filterSchema(config, {
+      ...filterContext,
+      path: filterPath,
+      value: value,
+    })
+  ) {
     return { type: "null" };
   }
 
@@ -289,7 +326,7 @@ export function schemaFromValue(
     if (
       filterExample(config, {
         ...filterContext,
-        key,
+        path: filterPath,
         value: value,
       })
     ) {
@@ -303,7 +340,7 @@ export function schemaFromValue(
     if (
       filterExample(config, {
         ...filterContext,
-        key,
+        path: filterPath,
         value: value,
       })
     ) {
@@ -317,7 +354,7 @@ export function schemaFromValue(
     if (
       filterExample(config, {
         ...filterContext,
-        key,
+        path: filterPath,
         value: value,
       })
     ) {
@@ -333,17 +370,23 @@ export function schemaFromValue(
     }
 
     const baseSchema = schemaFromValue(
+      def,
       config,
       filterContext,
-      def,
-      0,
+      filterPath,
       firstItem,
     );
     for (const [itemIndex, itemValue] of restItems.entries()) {
       mergeSchemas(
         def,
         baseSchema,
-        schemaFromValue(config, filterContext, def, itemIndex + 1, itemValue),
+        schemaFromValue(
+          def,
+          config,
+          filterContext,
+          `${filterPath}.${itemIndex}`,
+          itemValue,
+        ),
       );
     }
 
@@ -357,23 +400,24 @@ export function schemaFromValue(
     if (objectIsRecord(value)) {
       const [firstEntry, ...restEntries] = Object.entries(value);
       assert(firstEntry !== undefined, "Expected first entry to be present");
+      const [firstEntryKey, firstEntryValue] = firstEntry;
 
       const valueSchema = schemaFromValue(
+        def,
         config,
         filterContext,
-        def,
-        firstEntry[0],
-        firstEntry[1],
+        `${filterPath}.${firstEntryKey}`,
+        firstEntryValue,
       );
       for (const [restEntryKey, restEntryValue] of restEntries) {
         mergeSchemas(
           def,
           valueSchema,
           schemaFromValue(
+            def,
             config,
             filterContext,
-            def,
-            restEntryKey,
+            `${filterPath}.${restEntryKey}`,
             restEntryValue,
           ),
         );
@@ -400,10 +444,10 @@ export function schemaFromValue(
 
     for (const [key, objectValue] of Object.entries(value)) {
       schema.properties[key] = schemaFromValue(
+        def,
         config,
         filterContext,
-        def,
-        key,
+        `${filterPath}.${key}`,
         objectValue,
       );
       schema.required.push(key);
@@ -649,10 +693,15 @@ export function mergeExamples(
 export function headerMapFromHeaders(
   config: Flow2OpenAPIConfig,
   filterContext: RequestFilterContext,
+  filterPath: string,
   headers: Record<string, string>,
 ): Record<string, HeaderObject> {
   const filteredHeaders = Object.entries(headers).filter(([key, value]) =>
-    filterHeader(config, { ...filterContext, name: key, value }),
+    filterParameter(config, {
+      ...filterContext,
+      path: `${filterPath}.headers.${key}`,
+      value,
+    }),
   );
 
   const headerMap: Record<string, HeaderObject> = {};
@@ -664,7 +713,7 @@ export function headerMapFromHeaders(
     if (
       filterExample(config, {
         ...filterContext,
-        key: key,
+        path: `${filterPath}.headers.${key}`,
         value: value,
       })
     ) {

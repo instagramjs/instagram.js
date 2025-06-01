@@ -11,7 +11,6 @@ import { z } from "zod";
 import {
   filterExample,
   filterRequest,
-  filterRequestBody,
   filterResponse,
   type Flow2OpenAPIConfig,
   type RequestFilterContext,
@@ -150,14 +149,25 @@ async function processDump(
   );
 
   const newParameters: ParameterObject[] = [
-    ...parametersFromHeaders(config, filterContext, dump.request.headers),
-    ...parametersFromPathParameters(config, filterContext, pathParameters),
+    ...parametersFromHeaders(
+      config,
+      filterContext,
+      "request",
+      dump.request.headers,
+    ),
+    ...parametersFromPathParameters(
+      config,
+      filterContext,
+      "request",
+      pathParameters,
+    ),
   ];
   if (requestUrl.searchParams.size > 0) {
     newParameters.push(
       ...parametersFromSearchParams(
         config,
         filterContext,
+        "request",
         requestUrl.searchParams,
       ),
     );
@@ -166,11 +176,7 @@ async function processDump(
   mergeParameters(def, methodSchema.parameters, newParameters);
 
   const requestBodyType = dump.request.headers["content-type"]?.split(";")[0];
-  if (
-    requestBody &&
-    requestBodyType &&
-    filterRequestBody(config, filterContext)
-  ) {
+  if (requestBody && requestBodyType) {
     let requestBodySchema;
     if (methodSchema.requestBody) {
       requestBodySchema = getObjectOrRef(
@@ -212,10 +218,10 @@ async function processDump(
       }
 
       const jsonSchema = schemaFromValue(
+        def,
         config,
         filterContext,
-        def,
-        "_root",
+        "request.body",
         jsonBody,
       );
       if (mediaTypeSchema.schema) {
@@ -245,6 +251,7 @@ async function processDump(
       const formDataSchema = schemaFromSearchParams(
         config,
         filterContext,
+        "request.body",
         parsedFormData,
       );
       mediaTypeSchema.schema = formDataSchema;
@@ -287,6 +294,7 @@ async function processDump(
   const newHeaders = headerMapFromHeaders(
     config,
     filterContext,
+    "response",
     dump.response.headers,
   );
   mergeHeaderMaps(responseSchema.headers, newHeaders);
@@ -305,7 +313,7 @@ async function processDump(
     if (
       filterExample(config, {
         ...filterContext,
-        key: "_root",
+        path: "response.body",
         value: responseBody,
       })
     ) {
@@ -319,7 +327,13 @@ async function processDump(
     if (responseBodyType.startsWith("application/json")) {
       try {
         const jsonBody = JSON.parse(responseBody);
-        schema = schemaFromValue(config, filterContext, def, "_root", jsonBody);
+        schema = schemaFromValue(
+          def,
+          config,
+          filterContext,
+          "response.body",
+          jsonBody,
+        );
       } catch {
         // ignore
       }

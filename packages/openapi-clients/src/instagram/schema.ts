@@ -24700,7 +24700,7 @@ export interface paths {
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
                     priority: string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                 };
                 path?: never;
                 cookie?: never;
