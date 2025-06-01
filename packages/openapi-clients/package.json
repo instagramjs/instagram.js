@@ -1,5 +1,5 @@
 {
-  "name": "@instagramjs/openapi-instagram",
+  "name": "@instagramjs/openapi-clients",
   "version": "0.0.1",
   "private": true,
   "type": "module",
