@@ -207,6 +207,7 @@ paths:
                 - format
                 - ffdb_token
                 - compressed
+                - multi_batch
                 - sent_time
                 - message
               properties:
@@ -217,6 +218,8 @@ paths:
                 ffdb_token:
                   type: string
                 compressed:
+                  type: string
+                multi_batch:
                   type: string
                 sent_time:
                   type: string

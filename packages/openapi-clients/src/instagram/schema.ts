@@ -22541,6 +22541,141 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/direct_v2/threads/broadcast/reels_audio_share/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    "x-ig-app-locale": string;
+                    "x-ig-device-locale": string;
+                    "x-ig-mapped-locale": string;
+                    "x-pigeon-session-id": string;
+                    "x-pigeon-rawclienttime": string;
+                    "x-ig-bandwidth-speed-kbps": string;
+                    "x-ig-bandwidth-totalbytes-b": string;
+                    "x-ig-bandwidth-totaltime-ms": string;
+                    "x-bloks-version-id": string;
+                    "x-ig-www-claim": string;
+                    "x-bloks-prism-button-version": string;
+                    "x-bloks-prism-colors-enabled": string;
+                    "x-bloks-prism-ax-base-colors-enabled": string;
+                    "x-bloks-prism-font-enabled": string;
+                    "x-bloks-is-layout-rtl": string;
+                    "x-ig-device-id": string;
+                    "x-ig-family-device-id": string;
+                    "x-ig-android-id": string;
+                    "x-ig-timezone-offset": string;
+                    "x-ig-nav-chain": string;
+                    "x-ig-salt-ids": string;
+                    "x-fb-connection-type": string;
+                    "x-ig-connection-type": string;
+                    "x-ig-capabilities": string;
+                    "x-ig-app-id": string;
+                    priority: string;
+                    "user-agent": string;
+                    "accept-language": string;
+                    authorization: string;
+                    "x-mid": string;
+                    "ig-u-ds-user-id": string;
+                    "ig-u-rur": string;
+                    "ig-intended-user-id": string;
+                    "content-type": string;
+                    "content-length": string;
+                    "accept-encoding": string;
+                    "x-fb-http-engine": string;
+                    "x-fb-client-ip": string;
+                    "x-fb-server-cluster": string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/x-www-form-urlencoded": {
+                        action: string;
+                        is_shh_mode: string;
+                        thread_ids: string;
+                        client_context: string;
+                        device_id: string;
+                        mutation_token: string;
+                        _uuid: string;
+                        nav_chain: string;
+                        audio_id: string;
+                        offline_threading_id: string;
+                    };
+                };
+            };
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            action: string;
+                            status_code: string;
+                            payload: {
+                                client_context: string;
+                                item_id: string;
+                                timestamp: string;
+                                thread_id: string;
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/direct_v2/threads/broadcast/story_share/": {
         parameters: {
             query?: never;
@@ -24565,6 +24700,7 @@ export interface paths {
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
                     priority: string;
+                    "x-ig-salt-ids": string;
                 };
                 path?: never;
                 cookie?: never;
@@ -24688,6 +24824,8 @@ export interface paths {
                                                         };
                                                         is_covered: boolean;
                                                         private_reply_status: number;
+                                                        has_translation?: boolean;
+                                                        text_translation?: string;
                                                     } | null;
                                                     fundraiser_tag: {
                                                         has_standalone_fundraiser: boolean;
@@ -25288,6 +25426,7 @@ export interface paths {
                                                         is_original_author_in_author_exp: boolean;
                                                     };
                                                     fb_comment_count?: number;
+                                                    commerce_integrity_review_decision?: string;
                                                 };
                                             }[];
                                             max_id: string;
@@ -25815,6 +25954,8 @@ export interface paths {
                                                 short_name: string;
                                                 facebook_places_id: number;
                                                 external_source: string;
+                                                lng?: number;
+                                                lat?: number;
                                             };
                                             community_notes_info?: {
                                                 has_viewer_submitted_note: boolean;
@@ -26135,6 +26276,8 @@ export interface paths {
                                             tallest_media_aspect_ratio?: number;
                                             comments_disabled?: boolean;
                                             fb_like_count?: number;
+                                            lng?: number;
+                                            lat?: number;
                                         };
                                     }[];
                                 };
@@ -29510,13 +29653,13 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/x-www-form-urlencoded": {
-                        supported_capabilities_new: string;
                         reason: string;
                         timezone_offset: string;
                         tray_session_id: string;
                         request_id: string;
                         _uuid: string;
                         page_size: string;
+                        reel_tray_impressions: string;
                     };
                 };
             };
@@ -29625,7 +29768,12 @@ export interface paths {
                                 has_fan_club_media: boolean;
                                 show_fan_club_stories_teaser: boolean;
                                 disabled_reply_types: string[];
-                                hype_commenter_list: null[];
+                                hype_commenter_list: {
+                                    pk: number;
+                                    id: string;
+                                    strong_id__: string;
+                                    profile_pic_url: string;
+                                }[];
                                 is_archived: boolean;
                                 hide_from_feed_unit?: boolean;
                                 items?: {
@@ -30101,15 +30249,17 @@ export interface paths {
                         feed_view_info: string;
                         organic_realtime_information: string;
                         phone_id: string;
+                        max_id: string;
                         client_view_state_media_list: string;
                         reason: string;
-                        last_head_load_time_ms: string;
                         battery_level: string;
                         timezone_offset: string;
+                        feed_comment_button_tap_info: string;
                         device_id: string;
                         request_id: string;
                         is_pull_to_refresh: string;
                         _uuid: string;
+                        feed_reshare_info: string;
                         is_charging: string;
                         is_dark_mode: string;
                         will_sound_on: string;
@@ -31176,6 +31326,29 @@ export interface paths {
                                             profile_pic_url: string;
                                         }[];
                                         commenting_disabled_for_viewer?: boolean;
+                                        caption_add_on?: {
+                                            comment_prompt: null;
+                                            poll: {
+                                                color: string;
+                                                finished: boolean;
+                                                id: string;
+                                                is_multi_option_poll: boolean;
+                                                is_shared_result: boolean;
+                                                poll_id: number;
+                                                poll_type: string;
+                                                question: string;
+                                                total_votes: number;
+                                                viewer_can_vote: boolean;
+                                                promotion_tallies: null;
+                                                social_context: null;
+                                                tallies: {
+                                                    count: number;
+                                                    font_size: number;
+                                                    text: string;
+                                                }[];
+                                            };
+                                            quiz: null;
+                                        };
                                     };
                                     mezql_token?: string;
                                     inventory_source: string;
@@ -32278,7 +32451,7 @@ export interface paths {
                                                     full_name: string;
                                                     is_private: boolean;
                                                     is_verified: boolean;
-                                                    profile_pic_id: string;
+                                                    profile_pic_id?: string;
                                                     profile_pic_url: string;
                                                     strong_id__: string;
                                                 };
@@ -40685,7 +40858,33 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": string;
+                        "application/json": string | {
+                            can_view_more_preview_comments: boolean;
+                            caption_is_edited: boolean;
+                            comment_count: number;
+                            comment_cover_pos: string;
+                            comment_filter_param: string;
+                            comment_likes_enabled: boolean;
+                            comments: null[];
+                            has_more_comments: boolean;
+                            has_more_headload_comments: boolean;
+                            initiate_at_top: boolean;
+                            insert_new_comment_to_top: boolean;
+                            is_ranked: boolean;
+                            liked_by_media_owner_badge_enabled: boolean;
+                            media_header_display: string;
+                            quick_response_emojis: {
+                                unicode: string;
+                            }[];
+                            scroll_behavior: number;
+                            threading_enabled: boolean;
+                            filter_options: null[];
+                            sort_options: null[];
+                            preview_comments: null[];
+                            should_render_upsell: boolean;
+                            should_show_scam_content_warning: boolean;
+                            status: string;
+                        };
                     };
                 };
             };
@@ -41364,6 +41563,520 @@ export interface paths {
         };
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/music/bookmark_music/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    "x-ig-app-locale": string;
+                    "x-ig-device-locale": string;
+                    "x-ig-mapped-locale": string;
+                    "x-pigeon-session-id": string;
+                    "x-pigeon-rawclienttime": string;
+                    "x-ig-bandwidth-speed-kbps": string;
+                    "x-ig-bandwidth-totalbytes-b": string;
+                    "x-ig-bandwidth-totaltime-ms": string;
+                    "x-bloks-version-id": string;
+                    "x-ig-www-claim": string;
+                    "x-bloks-prism-button-version": string;
+                    "x-bloks-prism-colors-enabled": string;
+                    "x-bloks-prism-ax-base-colors-enabled": string;
+                    "x-bloks-prism-font-enabled": string;
+                    "x-bloks-is-layout-rtl": string;
+                    "x-ig-device-id": string;
+                    "x-ig-family-device-id": string;
+                    "x-ig-android-id": string;
+                    "x-ig-timezone-offset": string;
+                    "x-ig-nav-chain": string;
+                    "x-ig-salt-ids": string;
+                    "x-fb-connection-type": string;
+                    "x-ig-connection-type": string;
+                    "x-ig-capabilities": string;
+                    "x-ig-app-id": string;
+                    priority: string;
+                    "user-agent": string;
+                    "accept-language": string;
+                    authorization: string;
+                    "x-mid": string;
+                    "ig-u-ds-user-id": string;
+                    "ig-u-rur": string;
+                    "ig-intended-user-id": string;
+                    "content-type": string;
+                    "content-length": string;
+                    "accept-encoding": string;
+                    "x-fb-http-engine": string;
+                    "x-fb-client-ip": string;
+                    "x-fb-server-cluster": string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/x-www-form-urlencoded": {
+                        _uuid: string;
+                        surface_requested_from: string;
+                        audio_cluster_id: string;
+                    };
+                };
+            };
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            success: boolean;
+                            status: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/music/top_trends/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    "x-ig-app-locale": string;
+                    "x-ig-device-locale": string;
+                    "x-ig-mapped-locale": string;
+                    "x-pigeon-session-id": string;
+                    "x-pigeon-rawclienttime": string;
+                    "x-ig-bandwidth-speed-kbps": string;
+                    "x-ig-bandwidth-totalbytes-b": string;
+                    "x-ig-bandwidth-totaltime-ms": string;
+                    "x-bloks-version-id": string;
+                    "x-ig-www-claim": string;
+                    "x-bloks-prism-button-version": string;
+                    "x-bloks-prism-colors-enabled": string;
+                    "x-bloks-prism-ax-base-colors-enabled": string;
+                    "x-bloks-prism-font-enabled": string;
+                    "x-bloks-is-layout-rtl": string;
+                    "x-ig-device-id": string;
+                    "x-ig-family-device-id": string;
+                    "x-ig-android-id": string;
+                    "x-ig-timezone-offset": string;
+                    "x-ig-nav-chain": string;
+                    "x-ig-salt-ids": string;
+                    "x-fb-connection-type": string;
+                    "x-ig-connection-type": string;
+                    "x-ig-capabilities": string;
+                    "x-ig-app-id": string;
+                    priority: string;
+                    "user-agent": string;
+                    "accept-language": string;
+                    authorization: string;
+                    "x-mid": string;
+                    "ig-u-ds-user-id": string;
+                    "ig-u-rur": string;
+                    "ig-intended-user-id": string;
+                    "content-type": string;
+                    "content-length": string;
+                    "accept-encoding": string;
+                    "x-fb-http-engine": string;
+                    "x-fb-client-ip": string;
+                    "x-fb-server-cluster": string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/x-www-form-urlencoded": {
+                        max_id: string;
+                        _uuid: string;
+                        page_size: string;
+                    };
+                };
+            };
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            items: {
+                                original_sound?: {
+                                    audio_asset_id: number;
+                                    attributed_custom_audio_asset_id: null;
+                                    music_canonical_id: null;
+                                    progressive_download_url: string;
+                                    duration_in_ms: number;
+                                    dash_manifest: string;
+                                    ig_artist: {
+                                        pk: number;
+                                        pk_id: string;
+                                        id: string;
+                                        full_name: string;
+                                        is_private: boolean;
+                                        strong_id__: string;
+                                        username: string;
+                                        is_verified: boolean;
+                                        profile_pic_id: string;
+                                        profile_pic_url: string;
+                                    };
+                                    should_mute_audio: boolean;
+                                    hide_remixing: boolean;
+                                    original_media_id: number;
+                                    time_created: number;
+                                    original_audio_title: string;
+                                    consumption_info: {
+                                        is_bookmarked: boolean;
+                                        should_mute_audio_reason: string;
+                                        is_trending_in_clips: boolean;
+                                        should_mute_audio_reason_type: null;
+                                        display_media_id: null;
+                                        user_notes: null;
+                                    };
+                                    can_remix_be_shared_to_fb: boolean;
+                                    can_remix_be_shared_to_fb_expansion: boolean;
+                                    formatted_clips_media_count: string;
+                                    allow_creator_to_rename: boolean;
+                                    audio_parts: {
+                                        music_canonical_id: string;
+                                        audio_type: string;
+                                        display_artist: string;
+                                        ig_artist?: {
+                                            pk: number;
+                                            pk_id: string;
+                                            id: string;
+                                            full_name: string;
+                                            is_private: boolean;
+                                            strong_id__: string;
+                                            username: string;
+                                            is_verified: boolean;
+                                            profile_pic_id: string;
+                                            profile_pic_url: string;
+                                        };
+                                        display_title: string;
+                                        thumbnail_uri: string;
+                                        is_bookmarked: boolean;
+                                        is_explicit: boolean;
+                                        parent_start_time_in_ms: number;
+                                        audio_start_time_in_ms: number;
+                                        duration_in_ms: number;
+                                        is_eligible_for_audio_effects: boolean;
+                                    }[];
+                                    audio_parts_by_filter: {
+                                        music_canonical_id: string;
+                                        audio_type: string;
+                                        display_artist: string;
+                                        ig_artist?: {
+                                            pk: number;
+                                            pk_id: string;
+                                            id: string;
+                                            full_name: string;
+                                            is_private: boolean;
+                                            strong_id__: string;
+                                            username: string;
+                                            is_verified: boolean;
+                                            profile_pic_id: string;
+                                            profile_pic_url: string;
+                                        };
+                                        display_title: string;
+                                        thumbnail_uri: string;
+                                        is_bookmarked: boolean;
+                                        is_explicit: boolean;
+                                        parent_start_time_in_ms: number;
+                                        audio_start_time_in_ms: number;
+                                        duration_in_ms: number;
+                                        is_eligible_for_audio_effects: boolean;
+                                    }[];
+                                    is_explicit: boolean;
+                                    original_audio_subtype: string;
+                                    is_audio_automatically_attributed: boolean;
+                                    is_reuse_disabled: boolean;
+                                    is_xpost_from_fb: boolean;
+                                    xpost_fb_creator_info: null;
+                                    is_original_audio_download_eligible: boolean;
+                                    trend_rank: number;
+                                    previous_trend_rank: number | null;
+                                    audio_filter_infos: null;
+                                    oa_owner_is_music_artist: boolean;
+                                    is_eligible_for_audio_effects: boolean;
+                                    is_eligible_for_vinyl_sticker: boolean;
+                                    audio_asset_start_time_in_ms: null;
+                                    overlap_duration_in_ms: null;
+                                    fb_downstream_use_xpost_metadata: {
+                                        downstream_use_xpost_deny_reason: string;
+                                    };
+                                };
+                                track?: {
+                                    audio_cluster_id: string;
+                                    id: string;
+                                    title: string;
+                                    sanitized_title: null;
+                                    subtitle: string;
+                                    display_artist: string;
+                                    artist_id: null;
+                                    cover_artwork_uri: string;
+                                    cover_artwork_thumbnail_uri: string;
+                                    progressive_download_url: string;
+                                    fast_start_progressive_download_url: string;
+                                    web_30s_preview_download_url: null;
+                                    reactive_audio_download_url: null;
+                                    highlight_start_times_in_ms: number[];
+                                    is_explicit: boolean;
+                                    dash_manifest: string;
+                                    has_lyrics: boolean;
+                                    audio_asset_id: string;
+                                    duration_in_ms: number;
+                                    dark_message: null;
+                                    allows_saving: boolean;
+                                    ig_username: string | null;
+                                    is_eligible_for_audio_effects: boolean;
+                                    is_eligible_for_vinyl_sticker: boolean;
+                                    lyrics: null;
+                                    licensed_music_subtype: string;
+                                    spotify_track_metadata: null;
+                                    song_monetization_info: string;
+                                };
+                                metadata?: {
+                                    is_bookmarked: boolean;
+                                    allow_media_creation_with_music: boolean;
+                                    is_trending_in_clips: boolean;
+                                    trend_rank: number;
+                                    previous_trend_rank: number;
+                                    formatted_clips_media_count: string;
+                                };
+                            }[];
+                            page_info: {
+                                next_max_id: string | null;
+                                more_available: boolean;
+                            };
+                            alacorn_session_id: null;
+                            music_reels: null;
+                            dark_banner_message: null;
+                            status: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/music/unbookmark_music/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    "x-ig-app-locale": string;
+                    "x-ig-device-locale": string;
+                    "x-ig-mapped-locale": string;
+                    "x-pigeon-session-id": string;
+                    "x-pigeon-rawclienttime": string;
+                    "x-ig-bandwidth-speed-kbps": string;
+                    "x-ig-bandwidth-totalbytes-b": string;
+                    "x-ig-bandwidth-totaltime-ms": string;
+                    "x-bloks-version-id": string;
+                    "x-ig-www-claim": string;
+                    "x-bloks-prism-button-version": string;
+                    "x-bloks-prism-colors-enabled": string;
+                    "x-bloks-prism-ax-base-colors-enabled": string;
+                    "x-bloks-prism-font-enabled": string;
+                    "x-bloks-is-layout-rtl": string;
+                    "x-ig-device-id": string;
+                    "x-ig-family-device-id": string;
+                    "x-ig-android-id": string;
+                    "x-ig-timezone-offset": string;
+                    "x-ig-nav-chain": string;
+                    "x-ig-salt-ids": string;
+                    "x-fb-connection-type": string;
+                    "x-ig-connection-type": string;
+                    "x-ig-capabilities": string;
+                    "x-ig-app-id": string;
+                    priority: string;
+                    "user-agent": string;
+                    "accept-language": string;
+                    authorization: string;
+                    "x-mid": string;
+                    "ig-u-ds-user-id": string;
+                    "ig-u-rur": string;
+                    "ig-intended-user-id": string;
+                    "content-type": string;
+                    "content-length": string;
+                    "accept-encoding": string;
+                    "x-fb-http-engine": string;
+                    "x-fb-client-ip": string;
+                    "x-fb-server-cluster": string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/x-www-form-urlencoded": {
+                        _uuid: string;
+                        surface_requested_from: string;
+                        audio_cluster_id: string;
+                    };
+                };
+            };
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            success: boolean;
+                            status: string;
+                        };
+                    };
+                };
+            };
+        };
         delete?: never;
         options?: never;
         head?: never;
