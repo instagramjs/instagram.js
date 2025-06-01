@@ -18,8 +18,9 @@ import {
 } from "./config";
 import {
   decodeRawContent,
+  getObjectOrRef,
   headerMapFromHeaders,
-  isNotRef,
+  isRef,
   mergeHeaderMaps,
   mergeParameters,
   mergeSchemas,
@@ -62,10 +63,10 @@ type FlowDump = z.infer<typeof flowDumpSchema>;
 
 async function processDump(
   config: Flow2OpenAPIConfig,
-  schema: OpenAPI3,
+  def: OpenAPI3,
   dump: FlowDump,
 ) {
-  assert(schema.paths, "Schema is missing paths");
+  assert(def.paths, "Schema is missing paths");
 
   if (dump.type !== "http" || !dump.response) {
     return;
@@ -118,12 +119,14 @@ async function processDump(
     return;
   }
 
-  let pathSchema = schema.paths[parameterizedPath];
-  if (!pathSchema) {
+  let pathSchema;
+  if (def.paths[parameterizedPath]) {
+    pathSchema = def.paths[parameterizedPath];
+  } else {
     pathSchema = {};
-    schema.paths![parameterizedPath] = pathSchema;
+    def.paths[parameterizedPath] = pathSchema;
   }
-  assert(isNotRef(pathSchema), "Reference object not expected");
+  assert(!isRef(pathSchema), "Reference object not expected");
 
   const methodKey = dump.request.method.toLowerCase() as keyof PathItemObject;
   let methodSchema = pathSchema[methodKey] as OperationObject | undefined;
@@ -134,6 +137,14 @@ async function processDump(
     };
     pathSchema[methodKey] = methodSchema;
   }
+  assert(
+    methodSchema.responses !== undefined,
+    "Missing responses in method schema",
+  );
+  assert(
+    methodSchema.parameters !== undefined,
+    "Missing parameters in method schema",
+  );
 
   const newParameters: ParameterObject[] = [
     ...parametersFromHeaders(config, filterContext, dump.request.headers),
@@ -149,13 +160,7 @@ async function processDump(
     );
   }
 
-  assert(methodSchema.parameters, "Missing parameters in method schema");
-  assert(
-    methodSchema.parameters.every(isNotRef),
-    "Reference objects not expected",
-  );
-
-  mergeParameters(methodSchema.parameters, newParameters);
+  mergeParameters(def, methodSchema.parameters, newParameters);
 
   const requestBodyType = dump.request.headers["content-type"]?.split(";")[0];
   if (
@@ -163,22 +168,35 @@ async function processDump(
     requestBodyType &&
     filterRequestBody(config, filterContext)
   ) {
-    let requestBodySchema = methodSchema.requestBody;
-    if (!requestBodySchema) {
+    let requestBodySchema;
+    if (methodSchema.requestBody) {
+      requestBodySchema = getObjectOrRef(
+        def,
+        "requestBody",
+        methodSchema.requestBody,
+      );
+    } else {
       requestBodySchema = {
         required: true,
         content: {},
       };
       methodSchema.requestBody = requestBodySchema;
     }
-    assert(isNotRef(requestBodySchema), "Reference object not expected");
+    assert(
+      requestBodySchema.required !== undefined,
+      "Missing required in request body schema",
+    );
+    assert(
+      requestBodySchema.content !== undefined,
+      "Missing content in request body schema",
+    );
 
     let mediaTypeSchema = requestBodySchema.content[requestBodyType];
     if (!mediaTypeSchema) {
       mediaTypeSchema = {};
       requestBodySchema.content[requestBodyType] = mediaTypeSchema;
     }
-    assert(isNotRef(mediaTypeSchema), "Reference object not expected");
+    assert(!isRef(mediaTypeSchema), "Reference object not expected");
 
     if (requestBodyType.startsWith("application/json")) {
       let jsonBody: unknown;
@@ -193,11 +211,16 @@ async function processDump(
       const jsonSchema = schemaFromValue(
         config,
         filterContext,
+        def,
         "_root",
         jsonBody,
       );
-      if (mediaTypeSchema.schema && isNotRef(mediaTypeSchema.schema)) {
-        mergeSchemas(mediaTypeSchema.schema, jsonSchema);
+      if (mediaTypeSchema.schema) {
+        mergeSchemas(
+          def,
+          getObjectOrRef(def, "schema", mediaTypeSchema.schema),
+          jsonSchema,
+        );
       } else {
         mediaTypeSchema.schema = jsonSchema;
       }
@@ -230,17 +253,33 @@ async function processDump(
   }
 
   const statusCodeKey = dump.response.status_code.toString();
-  let responseSchema = methodSchema.responses![statusCodeKey];
-  if (!responseSchema) {
+  let responseSchema;
+  if (methodSchema.responses[statusCodeKey]) {
+    responseSchema = getObjectOrRef(
+      def,
+      "response",
+      methodSchema.responses[statusCodeKey],
+    );
+  } else {
     responseSchema = {
       description: "",
       headers: {},
       content: {},
     };
-    methodSchema.responses![statusCodeKey] = responseSchema;
+    methodSchema.responses[statusCodeKey] = responseSchema;
   }
-  assert(isNotRef(responseSchema), "Reference object not expected");
-  assert(responseSchema.headers, "Missing headers in response schema");
+  assert(
+    responseSchema.description !== undefined,
+    "Missing description in response schema",
+  );
+  assert(
+    responseSchema.headers !== undefined,
+    "Missing headers in response schema",
+  );
+  assert(
+    responseSchema.content !== undefined,
+    "Missing content in response schema",
+  );
 
   const newHeaders = headerMapFromHeaders(
     config,
@@ -251,19 +290,20 @@ async function processDump(
 
   const responseBodyType = dump.response.headers["content-type"]?.split(";")[0];
   if (responseBody && responseBodyType) {
-    let responseBodySchema = responseSchema.content![responseBodyType];
-    if (!responseBodySchema) {
+    let responseBodySchema;
+    if (responseSchema.content[responseBodyType]) {
+      responseBodySchema = responseSchema.content[responseBodyType];
+    } else {
       responseBodySchema = {};
-      responseSchema.content![responseBodyType] = responseBodySchema;
+      responseSchema.content[responseBodyType] = responseBodySchema;
     }
-    assert(isNotRef(responseBodySchema), "Reference object not expected");
 
     let schema: SchemaObject | null = null;
 
     if (responseBodyType.startsWith("application/json")) {
       try {
         const jsonBody = JSON.parse(responseBody);
-        schema = schemaFromValue(config, filterContext, "_root", jsonBody);
+        schema = schemaFromValue(config, filterContext, def, "_root", jsonBody);
       } catch {
         schema = { type: "string" };
         if (
@@ -279,8 +319,12 @@ async function processDump(
     }
 
     if (schema) {
-      if (responseBodySchema.schema && isNotRef(responseBodySchema.schema)) {
-        mergeSchemas(responseBodySchema.schema, schema);
+      if (responseBodySchema.schema) {
+        mergeSchemas(
+          def,
+          getObjectOrRef(def, "schema", responseBodySchema.schema),
+          schema,
+        );
       } else {
         responseBodySchema.schema = schema;
       }
@@ -309,6 +353,7 @@ export async function flows2OpenAPI(
     ],
     paths: {},
   };
+  assert(schema.paths !== undefined, "Expected paths to be present");
 
   const dumps = jsonDump.split("\n").filter(Boolean);
   await Promise.all(
@@ -318,7 +363,6 @@ export async function flows2OpenAPI(
     }),
   );
 
-  assert(schema.paths, "Expected paths to be present");
   schema.paths = Object.fromEntries(
     Object.entries(schema.paths).sort(([a], [b]) => a.localeCompare(b)),
   );

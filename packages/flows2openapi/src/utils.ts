@@ -1,8 +1,13 @@
 import assert from "assert";
 import {
+  type ComponentsObject,
+  type ExampleObject,
   type HeaderObject,
+  type OpenAPI3,
   type ParameterObject,
   type ReferenceObject,
+  type RequestBodyObject,
+  type ResponseObject,
   type SchemaObject,
 } from "openapi-typescript";
 import { promisify } from "util";
@@ -19,18 +24,62 @@ const gunzipAsync = promisify(gunzip);
 const zstdDecompressAsync = promisify(zstdDecompress);
 const inflateAsync = promisify(inflate);
 
-export function isNotRef<T extends object | undefined>(
+export function isRef<T extends object | undefined>(
   value: T,
-): value is Exclude<T, ReferenceObject> {
-  return value !== undefined && !("$ref" in value!);
+): value is T & ReferenceObject {
+  return value !== undefined && "$ref" in value;
 }
 
-export function isSchemaObject(value: unknown): value is SchemaObject {
+type ObjectRefType =
+  | "schema"
+  | "parameter"
+  | "response"
+  | "example"
+  | "requestBody";
+type ObjectRefTypeToObjectType = {
+  schema: SchemaObject;
+  parameter: ParameterObject;
+  response: ResponseObject;
+  example: ExampleObject;
+  requestBody: RequestBodyObject;
+};
+const objectRefTypeToComponentsKey: Record<
+  ObjectRefType,
+  keyof ComponentsObject
+> = {
+  schema: "schemas",
+  parameter: "parameters",
+  response: "responses",
+  example: "examples",
+  requestBody: "requestBodies",
+};
+
+export function getObjectOrRef<
+  T extends ObjectRefTypeToObjectType[K],
+  K extends ObjectRefType,
+>(def: OpenAPI3, type: K, obj: T | ReferenceObject): T {
+  if (isRef(obj)) {
+    const refKey = obj.$ref.split("/").pop();
+    assert(refKey !== undefined, "Expected refKey to be present");
+    const refObj =
+      def.components?.[objectRefTypeToComponentsKey[type]]?.[refKey] ?? null;
+
+    if (!refObj) {
+      throw new Error(`Reference object not found: ${obj.$ref}`);
+    }
+    return refObj;
+  }
+
+  return obj;
+}
+
+export function isSchemaObjectOrRef(
+  value: unknown,
+): value is SchemaObject | ReferenceObject {
   return (
     typeof value === "object" &&
     value !== null &&
-    "type" in value &&
-    typeof value.type === "string"
+    ("type" in value || "$ref" in value)
   );
 }
 
@@ -169,8 +218,8 @@ export function schemaFromSearchParams(
     required: [],
     properties: {},
   };
-  assert(schema.required, "Expected required to be present");
-  assert(schema.properties, "Expected properties to be present");
+  assert(schema.required !== undefined, "Expected required to be present");
+  assert(schema.properties !== undefined, "Expected properties to be present");
 
   for (const [searchParamName, searchParamValue] of searchParams.entries()) {
     const schemaProperty: SchemaObject = {
@@ -220,6 +269,7 @@ function objectIsRecord(
 export function schemaFromValue(
   config: Flow2OpenAPIConfig,
   filterContext: RequestFilterContext,
+  def: OpenAPI3,
   key: string | number,
   value: unknown,
 ): SchemaObject {
@@ -275,11 +325,18 @@ export function schemaFromValue(
       return { type: "array", items: { type: "null" } };
     }
 
-    const baseSchema = schemaFromValue(config, filterContext, 0, firstItem);
+    const baseSchema = schemaFromValue(
+      config,
+      filterContext,
+      def,
+      0,
+      firstItem,
+    );
     for (const [itemIndex, itemValue] of restItems.entries()) {
       mergeSchemas(
+        def,
         baseSchema,
-        schemaFromValue(config, filterContext, itemIndex + 1, itemValue),
+        schemaFromValue(config, filterContext, def, itemIndex + 1, itemValue),
       );
     }
 
@@ -292,18 +349,26 @@ export function schemaFromValue(
   if (typeof value === "object" && value !== null) {
     if (objectIsRecord(value)) {
       const [firstEntry, ...restEntries] = Object.entries(value);
-      assert(firstEntry, "Expected first entry to be present");
+      assert(firstEntry !== undefined, "Expected first entry to be present");
 
       const valueSchema = schemaFromValue(
         config,
         filterContext,
+        def,
         firstEntry[0],
         firstEntry[1],
       );
       for (const [restEntryKey, restEntryValue] of restEntries) {
         mergeSchemas(
+          def,
           valueSchema,
-          schemaFromValue(config, filterContext, restEntryKey, restEntryValue),
+          schemaFromValue(
+            config,
+            filterContext,
+            def,
+            restEntryKey,
+            restEntryValue,
+          ),
         );
       }
 
@@ -320,13 +385,17 @@ export function schemaFromValue(
       properties: {},
       required: [],
     };
-    assert(schema.required, "Expected required to be present");
-    assert(schema.properties, "Expected properties to be present");
+    assert(schema.required !== undefined, "Expected required to be present");
+    assert(
+      schema.properties !== undefined,
+      "Expected properties to be present",
+    );
 
     for (const [key, objectValue] of Object.entries(value)) {
       schema.properties[key] = schemaFromValue(
         config,
         filterContext,
+        def,
         key,
         objectValue,
       );
@@ -340,40 +409,42 @@ export function schemaFromValue(
 }
 
 function mergeSchemaIntoOneOf(
+  def: OpenAPI3,
   oneOfList: Required<SchemaObject>["oneOf"],
   newSchema: SchemaObject,
 ): void {
-  assert(isNotRef(newSchema), "Reference object not expected");
-
   const existingOneOf = oneOfList.find(
-    (schema) => isNotRef(schema) && schema.type === newSchema.type,
+    (schema) => getObjectOrRef(def, "schema", schema).type === newSchema.type,
   );
-  assert(isNotRef(existingOneOf), "Reference object not expected");
 
   if (existingOneOf) {
-    mergeSchemas(existingOneOf, newSchema);
+    mergeSchemas(def, getObjectOrRef(def, "schema", existingOneOf), newSchema);
   } else {
     oneOfList.push(newSchema);
   }
 }
 
 export function mergeSchemas(
+  def: OpenAPI3,
   existingSchema: SchemaObject,
   newSchema: SchemaObject,
 ): void {
   if (existingSchema.oneOf && newSchema.oneOf) {
     for (const newOneOf of newSchema.oneOf) {
-      assert(isNotRef(newOneOf), "Reference object not expected");
-      mergeSchemaIntoOneOf(existingSchema.oneOf, newOneOf);
+      mergeSchemaIntoOneOf(
+        def,
+        existingSchema.oneOf,
+        getObjectOrRef(def, "schema", newOneOf),
+      );
     }
     return;
   }
   if (existingSchema.oneOf && newSchema.type) {
-    mergeSchemaIntoOneOf(existingSchema.oneOf, newSchema);
+    mergeSchemaIntoOneOf(def, existingSchema.oneOf, newSchema);
     return;
   }
   if (existingSchema.type && newSchema.oneOf) {
-    mergeSchemaIntoOneOf(newSchema.oneOf, existingSchema);
+    mergeSchemaIntoOneOf(def, newSchema.oneOf, existingSchema);
     existingSchema.oneOf = newSchema.oneOf;
     return;
   }
@@ -408,13 +479,11 @@ export function mergeSchemas(
     if (existingSchema.properties && newSchema.properties) {
       for (const [newKey, newValue] of Object.entries(newSchema.properties)) {
         if (existingSchema.properties[newKey]) {
-          assert(
-            isNotRef(existingSchema.properties[newKey]),
-            "Reference object not expected",
+          mergeSchemas(
+            def,
+            getObjectOrRef(def, "schema", existingSchema.properties[newKey]),
+            getObjectOrRef(def, "schema", newValue),
           );
-          assert(isNotRef(newValue), "Reference object not expected");
-
-          mergeSchemas(existingSchema.properties[newKey], newValue);
         } else {
           existingSchema.properties[newKey] = newValue;
         }
@@ -437,17 +506,18 @@ export function mergeSchemas(
 
     if (existingSchema.additionalProperties && newSchema.additionalProperties) {
       assert(
-        isSchemaObject(existingSchema.additionalProperties),
+        isSchemaObjectOrRef(existingSchema.additionalProperties),
         "Expected existing additionalProperties to be a schema",
       );
       assert(
-        isSchemaObject(newSchema.additionalProperties),
+        isSchemaObjectOrRef(newSchema.additionalProperties),
         "Expected new additionalProperties to be a schema",
       );
 
       mergeSchemas(
-        existingSchema.additionalProperties,
-        newSchema.additionalProperties,
+        def,
+        getObjectOrRef(def, "schema", existingSchema.additionalProperties),
+        getObjectOrRef(def, "schema", newSchema.additionalProperties),
       );
     }
 
@@ -455,20 +525,25 @@ export function mergeSchemas(
   }
 
   if (existingSchema.type === "array" && newSchema.type === "array") {
-    assert(existingSchema.items, "Expected items in existing schema");
+    assert(
+      existingSchema.items !== undefined,
+      "Expected items in existing schema",
+    );
     assert(
       !Array.isArray(existingSchema.items),
       "Expected existing schema items to be array",
     );
-    assert(isNotRef(existingSchema.items), "Reference object not expected");
-    assert(newSchema.items, "Expected items in new schema");
+    assert(newSchema.items !== undefined, "Expected items in new schema");
     assert(
       !Array.isArray(newSchema.items),
       "Expected new schema items to be array",
     );
-    assert(isNotRef(newSchema.items), "Reference object not expected");
 
-    mergeSchemas(existingSchema.items, newSchema.items);
+    mergeSchemas(
+      def,
+      getObjectOrRef(def, "schema", existingSchema.items),
+      getObjectOrRef(def, "schema", newSchema.items),
+    );
 
     return;
   }
@@ -482,35 +557,47 @@ export function mergeSchemas(
 }
 
 export function mergeParameters(
-  existingParameters: ParameterObject[],
-  newParameters: ParameterObject[],
+  def: OpenAPI3,
+  maybeExistingParameters: (ParameterObject | ReferenceObject)[],
+  maybeNewParameters: (ParameterObject | ReferenceObject)[],
 ): void {
-  const existingByNameAndIn = new Map<string, ParameterObject>(
-    existingParameters.map((param) => [`${param.name}:${param.in}`, param]),
+  const existingByNameAndIn = new Map<
+    string,
+    ParameterObject | ReferenceObject
+  >(
+    maybeExistingParameters.map((param) => {
+      const obj = getObjectOrRef(def, "parameter", param);
+      return [`${obj.name}:${obj.in}`, obj];
+    }),
   );
-  const newByNameAndIn = new Map<string, ParameterObject>(
-    newParameters.map((param) => [`${param.name}:${param.in}`, param]),
+  const newByNameAndIn = new Map<string, ParameterObject | ReferenceObject>(
+    maybeNewParameters.map((param) => {
+      const obj = getObjectOrRef(def, "parameter", param);
+      return [`${obj.name}:${obj.in}`, obj];
+    }),
   );
 
-  for (const newParam of newParameters) {
+  for (const newParam of maybeNewParameters) {
+    const newParamObj = getObjectOrRef(def, "parameter", newParam);
     const existingParam = existingByNameAndIn.get(
-      `${newParam.name}:${newParam.in}`,
+      `${newParamObj.name}:${newParamObj.in}`,
     );
 
     if (existingParam) {
       mergeExamples(existingParam, newParam);
     } else {
-      existingParameters.push(newParam);
+      maybeExistingParameters.push(newParam);
     }
   }
 
-  for (const existingParam of existingParameters) {
+  for (const existingParam of maybeExistingParameters) {
+    const existingParamObj = getObjectOrRef(def, "parameter", existingParam);
     const newParam = newByNameAndIn.get(
-      `${existingParam.name}:${existingParam.in}`,
+      `${existingParamObj.name}:${existingParamObj.in}`,
     );
 
     if (!newParam) {
-      existingParam.required = false;
+      existingParamObj.required = false;
     }
   }
 }
