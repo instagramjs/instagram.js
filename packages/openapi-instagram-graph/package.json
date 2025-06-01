@@ -1,5 +1,5 @@
 {
-  "name": "@instagramjs/openapi-mobile",
+  "name": "@instagramjs/openapi-instagram-graph",
   "version": "0.0.1",
   "private": true,
   "type": "module",

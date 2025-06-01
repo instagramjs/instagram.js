@@ -117,6 +117,13 @@ export function parameterizePath(path: string): [string, PathParameter[]] {
   return [parameterizedPath, parameters];
 }
 
+export function normalizedPath(path: string): string {
+  if (path.startsWith("/")) {
+    return path;
+  }
+  return "/" + path;
+}
+
 export function parametersFromPathParameters(
   config: Flow2OpenAPIConfig,
   filterContext: RequestFilterContext,

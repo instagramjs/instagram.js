@@ -301,7 +301,105 @@ importers:
         specifier: ^8.33.0
         version: 8.33.0(eslint@9.28.0)(typescript@5.8.3)
 
-  packages/openapi-mobile:
+  packages/openapi-facebook-graph:
+    dependencies:
+      openapi-fetch:
+        specifier: ^0.14.0
+        version: 0.14.0
+    devDependencies:
+      '@instagramjs/eslint-config':
+        specifier: workspace:*
+        version: link:../../tooling/eslint
+      '@instagramjs/flows2openapi':
+        specifier: workspace:*
+        version: link:../flows2openapi
+      '@instagramjs/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/tsconfig
+      '@mongodb-js/zstd':
+        specifier: ^2.0.1
+        version: 2.0.1
+      '@types/eslint':
+        specifier: ^9.6.1
+        version: 9.6.1
+      '@types/node':
+        specifier: ^22.15.29
+        version: 22.15.29
+      eslint:
+        specifier: ^9.28.0
+        version: 9.28.0
+      openapi-typescript:
+        specifier: ^7.8.0
+        version: 7.8.0(typescript@5.8.3)
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.0(@swc/core@1.11.29)(tsx@4.19.4)(typescript@5.8.3)(yaml@2.8.0)
+      tsx:
+        specifier: ^4.19.4
+        version: 4.19.4
+      typescript:
+        specifier: ^5.8.3
+        version: 5.8.3
+      typescript-eslint:
+        specifier: ^8.33.0
+        version: 8.33.0(eslint@9.28.0)(typescript@5.8.3)
+      yaml:
+        specifier: ^2.8.0
+        version: 2.8.0
+      zod:
+        specifier: ^3.25.42
+        version: 3.25.42
+
+  packages/openapi-instagram:
+    dependencies:
+      openapi-fetch:
+        specifier: ^0.14.0
+        version: 0.14.0
+    devDependencies:
+      '@instagramjs/eslint-config':
+        specifier: workspace:*
+        version: link:../../tooling/eslint
+      '@instagramjs/flows2openapi':
+        specifier: workspace:*
+        version: link:../flows2openapi
+      '@instagramjs/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/tsconfig
+      '@mongodb-js/zstd':
+        specifier: ^2.0.1
+        version: 2.0.1
+      '@types/eslint':
+        specifier: ^9.6.1
+        version: 9.6.1
+      '@types/node':
+        specifier: ^22.15.29
+        version: 22.15.29
+      eslint:
+        specifier: ^9.28.0
+        version: 9.28.0
+      openapi-typescript:
+        specifier: ^7.8.0
+        version: 7.8.0(typescript@5.8.3)
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.0(@swc/core@1.11.29)(tsx@4.19.4)(typescript@5.8.3)(yaml@2.8.0)
+      tsx:
+        specifier: ^4.19.4
+        version: 4.19.4
+      typescript:
+        specifier: ^5.8.3
+        version: 5.8.3
+      typescript-eslint:
+        specifier: ^8.33.0
+        version: 8.33.0(eslint@9.28.0)(typescript@5.8.3)
+      yaml:
+        specifier: ^2.8.0
+        version: 2.8.0
+      zod:
+        specifier: ^3.25.42
+        version: 3.25.42
+
+  packages/openapi-instagram-graph:
     dependencies:
       openapi-fetch:
         specifier: ^0.14.0

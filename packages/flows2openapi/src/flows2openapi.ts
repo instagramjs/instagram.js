@@ -24,6 +24,7 @@ import {
   mergeHeaderMaps,
   mergeParameters,
   mergeSchemas,
+  normalizedPath,
   parameterizePath,
   parametersFromHeaders,
   parametersFromPathParameters,
@@ -82,7 +83,9 @@ async function processDump(
   ) {
     return;
   }
-  const pathname = requestUrl.pathname.slice(prefixUrl.pathname.length);
+  const pathname = normalizedPath(
+    requestUrl.pathname.slice(prefixUrl.pathname.length),
+  );
   const [parameterizedPath, pathParameters] = parameterizePath(pathname);
 
   let requestBody: string | null = null;
@@ -298,36 +301,38 @@ async function processDump(
       responseSchema.content[responseBodyType] = responseBodySchema;
     }
 
-    let schema: SchemaObject | null = null;
+    let schema: SchemaObject = { type: "string" };
+    if (
+      filterExample(config, {
+        ...filterContext,
+        key: "_root",
+        value: responseBody,
+      })
+    ) {
+      schema.example = responseBody;
+    }
+
+    if (responseBodyType.startsWith("application/octet-stream")) {
+      schema = { type: "string", format: "binary" };
+    }
 
     if (responseBodyType.startsWith("application/json")) {
       try {
         const jsonBody = JSON.parse(responseBody);
         schema = schemaFromValue(config, filterContext, def, "_root", jsonBody);
       } catch {
-        schema = { type: "string" };
-        if (
-          filterExample(config, {
-            ...filterContext,
-            key: "_root",
-            value: responseBody,
-          })
-        ) {
-          schema.example = responseBody;
-        }
+        // ignore
       }
     }
 
-    if (schema) {
-      if (responseBodySchema.schema) {
-        mergeSchemas(
-          def,
-          getObjectOrRef(def, "schema", responseBodySchema.schema),
-          schema,
-        );
-      } else {
-        responseBodySchema.schema = schema;
-      }
+    if (responseBodySchema.schema) {
+      mergeSchemas(
+        def,
+        getObjectOrRef(def, "schema", responseBodySchema.schema),
+        schema,
+      );
+    } else {
+      responseBodySchema.schema = schema;
     }
   }
 }
@@ -359,12 +364,10 @@ export async function flows2OpenAPI(
   assert(def.paths !== undefined, "Expected paths to be present");
 
   const dumps = jsonDump.split("\n").filter(Boolean);
-  await Promise.all(
-    dumps.map((dump) => {
-      const flowDump = flowDumpSchema.parse(JSON.parse(dump));
-      return processDump(config, def, flowDump);
-    }),
-  );
+  for (const line of dumps) {
+    const parsedDump = flowDumpSchema.parse(JSON.parse(line));
+    await processDump(config, def, parsedDump);
+  }
 
   def.paths = Object.fromEntries(
     Object.entries(def.paths).sort(([a], [b]) => a.localeCompare(b)),
