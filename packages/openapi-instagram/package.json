@@ -16,8 +16,7 @@
     "typecheck": "tsc --noEmit",
     "dev": "pnpm build --watch",
     "build": "tsup src/index.ts --format cjs,esm --dts --clean --no-splitting",
-    "gen:flows2openapi": "tsx ./scripts/flows2openapi.ts",
-    "gen:openapi": "openapi-typescript ./schema.yaml -o ./src/schema.ts"
+    "gen:openapi": "tsx ./scripts/gen-openapi.ts"
   },
   "devDependencies": {
     "@instagramjs/eslint-config": "workspace:*",

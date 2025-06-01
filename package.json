@@ -12,6 +12,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "dev:packages": "turbo run dev --filter=./packages/*",
+    "gen:openapi": "turbo run gen:openapi",
     "test": "turbo run test",
     "release": "pnpm build && pnpm changeset publish"
   },

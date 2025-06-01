@@ -188,12 +188,12 @@ paths:
             type: string
         - name: x-fb-exp-tag
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: priority
           in: header
-          required: true
+          required: false
           schema:
             type: string
       requestBody:
@@ -395,6 +395,6 @@ paths:
             type: string
         - name: prev_token
           in: query
-          required: true
+          required: false
           schema:
             type: string

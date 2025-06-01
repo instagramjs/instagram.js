@@ -34,6 +34,10 @@
     "push": {
       "cache": false,
       "interactive": true
+    },
+    "gen:openapi": {
+      "dependsOn": ["^build"],
+      "outputs": ["schema.ts", "openapi.yaml"]
     }
   }
 }
