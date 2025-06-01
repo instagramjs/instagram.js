@@ -1,5 +1,6 @@
 import { flows2OpenAPI } from "@instagramjs/flows2openapi";
 import fs from "fs";
+import { type OpenAPI3 } from "openapi-typescript";
 import yaml from "yaml";
 
 const JSON_DUMP_FILE = "jsondump.out";
@@ -15,7 +16,14 @@ async function main() {
   }
   const jsonDump = await fs.promises.readFile(JSON_DUMP_FILE, "utf-8");
 
-  const schema = await flows2OpenAPI(jsonDump, {
+  let existingDef: OpenAPI3 | null = null;
+  try {
+    existingDef = yaml.parse(await fs.promises.readFile(OPENAPI_FILE, "utf-8"));
+  } catch {
+    // ignore
+  }
+
+  const schema = await flows2OpenAPI(jsonDump, existingDef, {
     apiPrefix: API_PREFIX,
 
     filterExample: ({ request }) => request.path.includes("login"),

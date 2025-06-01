@@ -3658,8 +3658,8 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-pigeon-session-id": string;
-                    "x-ig-client-endpoint": string;
+                    "x-pigeon-session-id"?: string;
+                    "x-ig-client-endpoint"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -3971,7 +3971,7 @@ export interface paths {
                         "x-fb-server-cluster-forwarded": string;
                         "alt-svc": string;
                         "x-fb-connection-quality": string;
-                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-request-elapsed-time-ms"?: string;
                         [name: string]: unknown;
                     };
                     content: {
@@ -5095,8 +5095,8 @@ export interface paths {
                     show_without_media?: string;
                     thread_id?: string;
                     count: string;
-                    collection_types: string;
-                    media_id: string;
+                    collection_types?: string;
+                    media_id?: string;
                 };
                 header: {
                     "x-ig-app-locale": string;
@@ -5138,7 +5138,7 @@ export interface paths {
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
                     "x-ig-client-endpoint"?: string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -5183,7 +5183,7 @@ export interface paths {
                         "x-fb-server-cluster-forwarded": string;
                         "alt-svc": string;
                         "x-fb-connection-quality": string;
-                        "content-encoding": string;
+                        "content-encoding"?: string;
                         [name: string]: unknown;
                     };
                     content: {
@@ -5484,7 +5484,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-client-endpoint": string;
+                    "x-ig-client-endpoint"?: string;
                     "x-ig-salt-ids"?: string;
                 };
                 path?: never;
@@ -6256,7 +6256,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -6386,8 +6386,8 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-pigeon-session-id": string;
-                    "x-ig-client-endpoint": string;
+                    "x-pigeon-session-id"?: string;
+                    "x-ig-client-endpoint"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -6754,7 +6754,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -7144,10 +7144,10 @@ export interface paths {
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
                     "x-ig-salt-ids"?: string;
-                    authorization: string;
-                    "ig-u-ds-user-id": string;
-                    "ig-u-rur": string;
-                    "x-ig-client-endpoint": string;
+                    authorization?: string;
+                    "ig-u-ds-user-id"?: string;
+                    "ig-u-rur"?: string;
+                    "x-ig-client-endpoint"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -7835,7 +7835,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-client-endpoint": string;
+                    "x-ig-client-endpoint"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -7995,8 +7995,8 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-client-endpoint": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-client-endpoint"?: string;
+                    "x-ig-salt-ids"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -8448,7 +8448,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -8839,7 +8839,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -9301,1068 +9301,8 @@ export interface paths {
                                 };
                                 oldest_cursor: string | null;
                                 newest_cursor: string | null;
-                                last_permanent_item: {
-                                    item_id: string;
-                                    message_id: string;
-                                    user_id: number;
-                                    timestamp: number;
-                                    item_type: string;
-                                    client_context: string;
-                                    show_forward_attribution: boolean;
-                                    forward_score: null;
-                                    is_shh_mode: boolean;
-                                    otid: string;
-                                    is_ae_dual_send: boolean;
-                                    is_ephemeral_exception: boolean;
-                                    is_disappearing: boolean;
-                                    is_superlative: boolean;
-                                    paid_partnership_info: {
-                                        is_paid_partnership: boolean;
-                                    };
-                                    is_replyable_in_bc: boolean;
-                                    skip_bump_thread: boolean;
-                                    send_attribution?: string;
-                                    is_sent_by_viewer: boolean;
-                                    uq_seq_id: number;
-                                    latest_snooze_state: number;
-                                    one_click_upsell: null;
-                                    genai_params: Record<string, never>;
-                                    is_pinned: boolean;
-                                    system_folder: number;
-                                    text?: string;
-                                    tq_seq_id?: number;
-                                    media?: {
-                                        id: number;
-                                        user: {
-                                            id: string;
-                                            strong_id__: string;
-                                            pk: number;
-                                            pk_id: string;
-                                            full_name: string;
-                                            username: string;
-                                            short_name: string;
-                                            profile_pic_url: string;
-                                            is_verified: boolean;
-                                            interop_messaging_user_fbid: number;
-                                            fbid_v2: number;
-                                            has_ig_profile: boolean;
-                                            interop_user_type: number;
-                                            is_using_unified_inbox_for_direct: boolean;
-                                            is_private: boolean;
-                                            is_creator_agent_enabled: boolean;
-                                            is_creator_automated_response_enabled: boolean;
-                                            friendship_status: {
-                                                blocking: boolean;
-                                                is_messaging_only_blocking: boolean;
-                                                is_messaging_pseudo_blocking: boolean;
-                                                is_unavailable: boolean;
-                                            };
-                                            is_shared_account: boolean;
-                                            is_shared_account_with_messaging_access: boolean;
-                                            ai_agent_banner_type: null;
-                                            is_eligible_for_ai_bot_group_chats: boolean;
-                                        };
-                                        image_versions2: {
-                                            candidates: {
-                                                width: number;
-                                                height: number;
-                                                url: string;
-                                                fallback: {
-                                                    url: string;
-                                                };
-                                                scans_profile: null | null;
-                                                url_expiration_timestamp_us: number;
-                                            }[];
-                                        };
-                                        video_versions?: {
-                                            id: string;
-                                            type: number;
-                                            width: number;
-                                            height: number;
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            bandwidth: number;
-                                        }[];
-                                        original_width: number;
-                                        original_height: number;
-                                        media_type: number;
-                                        video_duration?: number;
-                                        video_dash_manifest?: string;
-                                        is_dash_eligible?: number;
-                                    };
-                                    xma_clip?: {
-                                        xma_template_type: null;
-                                        xma_layout_type: number;
-                                        preview_url: string;
-                                        preview_url_mime_type: string;
-                                        preview_width: number;
-                                        preview_height: number;
-                                        title_text: null;
-                                        max_title_num_of_lines: number;
-                                        max_subtitle_num_of_lines: number;
-                                        subtitle_text: null;
-                                        subtitle_decoration_type: number;
-                                        default_cta_type: null;
-                                        default_cta_title: null;
-                                        header_icon_url: string;
-                                        header_icon_mime_type: null;
-                                        header_icon_width: number;
-                                        header_icon_height: number;
-                                        header_title_text: string;
-                                        header_subtitle_text: null;
-                                        header_cta_type: null;
-                                        header_cta_title: null;
-                                        header_icon_layout_type: number;
-                                        header_icons_count: null;
-                                        caption_body_text: null;
-                                        group_name: null;
-                                        preview_media_fbid: number;
-                                        target_url: string;
-                                        ig_template_type: null;
-                                        playable_width: number;
-                                        playable_height: number;
-                                        playable_url: null;
-                                        video_codec: null;
-                                        video_dash_manifest: null;
-                                        playable_url_mime_type: null;
-                                        preview_url_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            width: number;
-                                            height: number;
-                                        };
-                                        header_icon_url_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            width: number;
-                                            height: number;
-                                        };
-                                        header_icons_url_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            width: number;
-                                            height: number;
-                                        }[];
-                                        playable_url_info: null;
-                                        favicon_url_info: null;
-                                        favicon_style: null;
-                                        favicons_url_info: null;
-                                        preview_image_decoration_type: number;
-                                        cta_buttons: null;
-                                        is_quoted: null;
-                                        is_borderless: null;
-                                        is_sharable: boolean;
-                                        verified_type: number;
-                                        sticker_type: null;
-                                        accessibility_summary_text: null;
-                                        accessibility_summary_hint: null;
-                                        collapsible_id: null;
-                                        countdown_timestamp_ms: null;
-                                        presence_source: null;
-                                        should_respect_server_preview_size: null;
-                                        accessory_preview_url_info: null;
-                                        accessory_playable_url_info: null;
-                                        playable_audio_url: null;
-                                        preview_icon_info: null;
-                                        quoted_attribution_text: null;
-                                        quoted_caption_body_text: null;
-                                        quoted_title_text: null;
-                                        quoted_favicon_url_info: null;
-                                        quoted_author_verified_type: null;
-                                        save_icon_state: number;
-                                        should_refresh: boolean;
-                                        audio_segment_start_time_ms: null;
-                                        audio_segment_duration_ms: null;
-                                        preview_extra_urls_info: null;
-                                        preview_layout_type: number;
-                                        serialized_content_ref: string;
-                                    }[];
-                                    xma_media_share?: {
-                                        xma_template_type: null;
-                                        xma_layout_type: number;
-                                        preview_url: string;
-                                        preview_url_mime_type: string;
-                                        preview_width: number;
-                                        preview_height: number;
-                                        title_text: null | null;
-                                        max_title_num_of_lines: number;
-                                        max_subtitle_num_of_lines: number;
-                                        subtitle_text: null;
-                                        subtitle_decoration_type: null;
-                                        default_cta_type: null;
-                                        default_cta_title: null;
-                                        header_icon_url: string;
-                                        header_icon_mime_type: null;
-                                        header_icon_width: number;
-                                        header_icon_height: number;
-                                        header_title_text: string;
-                                        header_subtitle_text: null;
-                                        header_cta_type: null;
-                                        header_cta_title: null;
-                                        header_icon_layout_type: number;
-                                        header_icons_count: null;
-                                        caption_body_text: null;
-                                        group_name: null;
-                                        preview_media_fbid: number;
-                                        target_url: string;
-                                        ig_template_type: null;
-                                        playable_width: number;
-                                        playable_height: number;
-                                        playable_url: null;
-                                        video_codec: null;
-                                        video_dash_manifest: null;
-                                        playable_url_mime_type: null;
-                                        preview_url_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            width: number;
-                                            height: number;
-                                        };
-                                        header_icon_url_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            width: number;
-                                            height: number;
-                                        };
-                                        header_icons_url_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            width: number;
-                                            height: number;
-                                        }[];
-                                        playable_url_info: null;
-                                        favicon_url_info: null;
-                                        favicon_style: null;
-                                        favicons_url_info: null;
-                                        preview_image_decoration_type: null;
-                                        cta_buttons: null;
-                                        is_quoted: null;
-                                        is_borderless: null;
-                                        is_sharable: boolean;
-                                        verified_type: number;
-                                        sticker_type: null;
-                                        accessibility_summary_text: null;
-                                        accessibility_summary_hint: null;
-                                        collapsible_id: null;
-                                        countdown_timestamp_ms: null;
-                                        presence_source: null;
-                                        should_respect_server_preview_size: null;
-                                        accessory_preview_url_info: null;
-                                        accessory_playable_url_info: null;
-                                        playable_audio_url: null;
-                                        preview_icon_info: null;
-                                        quoted_attribution_text: null;
-                                        quoted_caption_body_text: null;
-                                        quoted_title_text: null;
-                                        quoted_favicon_url_info: null;
-                                        quoted_author_verified_type: null;
-                                        save_icon_state: number;
-                                        should_refresh: boolean;
-                                        audio_segment_start_time_ms: null;
-                                        audio_segment_duration_ms: null;
-                                        preview_extra_urls_info: null;
-                                        preview_layout_type: number;
-                                        serialized_content_ref: string;
-                                    }[];
-                                    is_edit_with_ai_eligible?: boolean;
-                                    auxiliary_text?: string;
-                                    xma_story_share?: {
-                                        xma_template_type: null;
-                                        xma_layout_type: number;
-                                        preview_url: string;
-                                        preview_url_mime_type: string;
-                                        preview_width: number;
-                                        preview_height: number;
-                                        title_text: null;
-                                        max_title_num_of_lines: number;
-                                        max_subtitle_num_of_lines: number;
-                                        subtitle_text: null;
-                                        subtitle_decoration_type: number;
-                                        default_cta_type: null;
-                                        default_cta_title: null;
-                                        header_icon_url: string;
-                                        header_icon_mime_type: null;
-                                        header_icon_width: number;
-                                        header_icon_height: number;
-                                        header_title_text: string;
-                                        header_subtitle_text: null;
-                                        header_cta_type: null;
-                                        header_cta_title: null;
-                                        header_icon_layout_type: number;
-                                        header_icons_count: null;
-                                        caption_body_text: null;
-                                        group_name: null;
-                                        preview_media_fbid: number;
-                                        target_url: string;
-                                        ig_template_type: null;
-                                        playable_width: number;
-                                        playable_height: number;
-                                        playable_url: null;
-                                        video_codec: null;
-                                        video_dash_manifest: null;
-                                        playable_url_mime_type: null;
-                                        preview_url_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            width: number;
-                                            height: number;
-                                        };
-                                        header_icon_url_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            width: number;
-                                            height: number;
-                                        };
-                                        header_icons_url_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            width: number;
-                                            height: number;
-                                        }[];
-                                        playable_url_info: null;
-                                        favicon_url_info: null;
-                                        favicon_style: null;
-                                        favicons_url_info: null;
-                                        preview_image_decoration_type: number;
-                                        cta_buttons: null;
-                                        is_quoted: boolean;
-                                        is_borderless: null;
-                                        is_sharable: boolean;
-                                        verified_type: number;
-                                        sticker_type: null;
-                                        accessibility_summary_text: null;
-                                        accessibility_summary_hint: null;
-                                        collapsible_id: null;
-                                        countdown_timestamp_ms: null;
-                                        presence_source: null;
-                                        should_respect_server_preview_size: null;
-                                        accessory_preview_url_info: null;
-                                        accessory_playable_url_info: null;
-                                        playable_audio_url: null;
-                                        preview_icon_info: null;
-                                        quoted_attribution_text: null;
-                                        quoted_caption_body_text: null;
-                                        quoted_title_text: null;
-                                        quoted_favicon_url_info: null;
-                                        quoted_author_verified_type: null;
-                                        target_expiry_timestamp_ms: number;
-                                        should_refresh: boolean;
-                                        audio_segment_start_time_ms: null;
-                                        audio_segment_duration_ms: null;
-                                        preview_extra_urls_info: null;
-                                        preview_layout_type: number;
-                                        serialized_content_ref: string;
-                                    }[];
-                                    replied_to_message?: {
-                                        item_id: string;
-                                        message_id: string;
-                                        user_id: number;
-                                        timestamp: number;
-                                        item_type: string;
-                                        client_context: string;
-                                        show_forward_attribution: boolean;
-                                        forward_score: null;
-                                        is_shh_mode: boolean;
-                                        otid: string;
-                                        is_ae_dual_send: boolean;
-                                        is_ephemeral_exception: boolean;
-                                        is_disappearing: boolean;
-                                        is_superlative: boolean;
-                                        paid_partnership_info: {
-                                            is_paid_partnership: boolean;
-                                        };
-                                        is_replyable_in_bc: boolean;
-                                        skip_bump_thread: boolean;
-                                        send_attribution: string;
-                                        is_sent_by_viewer: boolean;
-                                        uq_seq_id: number;
-                                        tq_seq_id: number;
-                                        latest_snooze_state: number;
-                                        one_click_upsell: null;
-                                        genai_params: Record<string, never>;
-                                        is_pinned: boolean;
-                                        system_folder: number;
-                                        text: string;
-                                    };
-                                    reactions?: {
-                                        likes: null[];
-                                        likes_count: number;
-                                        emojis: {
-                                            timestamp: number;
-                                            client_context: string;
-                                            sender_id: number;
-                                            emoji: string;
-                                            super_react_type: string;
-                                        }[];
-                                    };
-                                    visual_media?: {
-                                        media: {
-                                            id: string;
-                                            image_versions2: {
-                                                candidates: {
-                                                    width: number;
-                                                    height: number;
-                                                    url: string;
-                                                    scans_profile: string;
-                                                    fallback: {
-                                                        url: string;
-                                                    };
-                                                    url_expiration_timestamp_us: number;
-                                                }[];
-                                            };
-                                            original_width: number;
-                                            original_height: number;
-                                            media_type: number;
-                                            media_id: number;
-                                            organic_tracking_token: string;
-                                            user: {
-                                                id: string;
-                                                strong_id__: string;
-                                                pk: number;
-                                                pk_id: string;
-                                                full_name: string;
-                                                username: string;
-                                                short_name: string;
-                                                profile_pic_url: string;
-                                                is_verified: boolean;
-                                                interop_messaging_user_fbid: number;
-                                                fbid_v2: number;
-                                                has_ig_profile: boolean;
-                                                interop_user_type: number;
-                                                is_using_unified_inbox_for_direct: boolean;
-                                                is_private: boolean;
-                                                is_creator_agent_enabled: boolean;
-                                                is_creator_automated_response_enabled: boolean;
-                                                friendship_status: {
-                                                    blocking: boolean;
-                                                    is_messaging_only_blocking: boolean;
-                                                    is_messaging_pseudo_blocking: boolean;
-                                                    is_unavailable: boolean;
-                                                };
-                                                is_shared_account: boolean;
-                                                is_shared_account_with_messaging_access: boolean;
-                                                ai_agent_banner_type: null;
-                                                is_eligible_for_ai_bot_group_chats: boolean;
-                                            };
-                                            create_mode_attribution: null;
-                                            creative_config: null;
-                                            expiring_media_action_summary: null;
-                                            video_versions: {
-                                                id: string;
-                                                type: number;
-                                                width: number;
-                                                height: number;
-                                                url: string;
-                                                fallback: {
-                                                    url: string;
-                                                };
-                                                url_expiration_timestamp_us: number;
-                                                bandwidth: number;
-                                            }[];
-                                            video_duration: number;
-                                            video_dash_manifest: string;
-                                            is_dash_eligible: number;
-                                        };
-                                        seen_user_ids: null[];
-                                        seen_count: number;
-                                        view_mode: string;
-                                        replay_expiring_at_us: null;
-                                        reply_type: null;
-                                        url_expire_at_secs: number;
-                                        story_app_attribution: null;
-                                        playback_duration_secs: number;
-                                        tap_models: null[];
-                                        expiring_media_action_summary: null;
-                                    };
-                                } | null;
-                                items: ({
-                                    item_id: string;
-                                    message_id: string;
-                                    user_id: number;
-                                    timestamp: number;
-                                    item_type: string;
-                                    client_context: string;
-                                    show_forward_attribution: boolean;
-                                    forward_score: null;
-                                    is_shh_mode: boolean;
-                                    otid: string;
-                                    is_ae_dual_send: boolean;
-                                    is_ephemeral_exception: boolean;
-                                    is_disappearing: boolean;
-                                    is_superlative: boolean;
-                                    paid_partnership_info: {
-                                        is_paid_partnership: boolean;
-                                    };
-                                    is_replyable_in_bc: boolean;
-                                    skip_bump_thread: boolean;
-                                    send_attribution: string;
-                                    is_sent_by_viewer: boolean;
-                                    uq_seq_id: number;
-                                    latest_snooze_state: number;
-                                    one_click_upsell: null;
-                                    genai_params: Record<string, never>;
-                                    is_pinned: boolean;
-                                    system_folder: number;
-                                    text?: string;
-                                    processed_business_suggestion?: boolean;
-                                    xma_clip?: {
-                                        xma_template_type: null;
-                                        xma_layout_type: number;
-                                        preview_url: string | null;
-                                        preview_url_mime_type: string | null;
-                                        preview_width: number | null;
-                                        preview_height: number | null;
-                                        title_text: null | null;
-                                        max_title_num_of_lines: number;
-                                        max_subtitle_num_of_lines: number;
-                                        subtitle_text: null;
-                                        subtitle_decoration_type: number;
-                                        default_cta_type: null;
-                                        default_cta_title: null;
-                                        header_icon_url: string;
-                                        header_icon_mime_type: null;
-                                        header_icon_width: number | null;
-                                        header_icon_height: number | null;
-                                        header_title_text: string | null;
-                                        header_subtitle_text: null;
-                                        header_cta_type: null;
-                                        header_cta_title: null;
-                                        header_icon_layout_type: number;
-                                        header_icons_count: null;
-                                        caption_body_text: null | null;
-                                        group_name: null;
-                                        preview_media_fbid: number | null;
-                                        target_url: string | null;
-                                        ig_template_type: null | null;
-                                        playable_width: number | null;
-                                        playable_height: number | null;
-                                        playable_url: null;
-                                        video_codec: null;
-                                        video_dash_manifest: null;
-                                        playable_url_mime_type: null;
-                                        preview_url_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            width: number;
-                                            height: number;
-                                        };
-                                        header_icon_url_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            width: number;
-                                            height: number;
-                                        };
-                                        header_icons_url_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            width: number;
-                                            height: number;
-                                        }[];
-                                        playable_url_info: null;
-                                        favicon_url_info: null;
-                                        favicon_style: null;
-                                        favicons_url_info: null;
-                                        preview_image_decoration_type: number | null;
-                                        cta_buttons: null;
-                                        is_quoted: null;
-                                        is_borderless: null;
-                                        is_sharable: boolean | null;
-                                        verified_type: number | null;
-                                        sticker_type: null;
-                                        accessibility_summary_text: null;
-                                        accessibility_summary_hint: null;
-                                        collapsible_id: null;
-                                        countdown_timestamp_ms: null;
-                                        presence_source: null;
-                                        should_respect_server_preview_size: null;
-                                        accessory_preview_url_info: null;
-                                        accessory_playable_url_info: null;
-                                        playable_audio_url: null;
-                                        preview_icon_info: null;
-                                        quoted_attribution_text: null;
-                                        quoted_caption_body_text: null;
-                                        quoted_title_text: null;
-                                        quoted_favicon_url_info: null;
-                                        quoted_author_verified_type: null;
-                                        save_icon_state: number;
-                                        should_refresh: boolean;
-                                        audio_segment_start_time_ms: null | null;
-                                        audio_segment_duration_ms: null | null;
-                                        preview_extra_urls_info: null;
-                                        preview_layout_type: number;
-                                        serialized_content_ref: string;
-                                        view_mode?: null;
-                                        view_count?: null;
-                                    }[];
-                                    reactions?: {
-                                        likes: null[];
-                                        likes_count: number;
-                                        emojis: {
-                                            timestamp: number;
-                                            client_context: string;
-                                            sender_id: number;
-                                            emoji: string;
-                                            super_react_type: string;
-                                        }[];
-                                    };
-                                    auxiliary_text?: string;
-                                    xma_story_share?: {
-                                        xma_template_type: null;
-                                        xma_layout_type: number;
-                                        preview_url: string | null;
-                                        preview_url_mime_type: string | null;
-                                        preview_width: number | null;
-                                        preview_height: number | null;
-                                        title_text: null;
-                                        max_title_num_of_lines: number;
-                                        max_subtitle_num_of_lines: number;
-                                        subtitle_text: null;
-                                        subtitle_decoration_type: number;
-                                        default_cta_type: null;
-                                        default_cta_title: null;
-                                        header_icon_url: string;
-                                        header_icon_mime_type: null;
-                                        header_icon_width: number | null;
-                                        header_icon_height: number | null;
-                                        header_title_text: string | null;
-                                        header_subtitle_text: null;
-                                        header_cta_type: null;
-                                        header_cta_title: null;
-                                        header_icon_layout_type?: number;
-                                        header_icons_count: null;
-                                        caption_body_text: null | null;
-                                        group_name: null;
-                                        preview_media_fbid: number | null;
-                                        target_url: string | null;
-                                        ig_template_type: null | null;
-                                        playable_width: number | null;
-                                        playable_height: number | null;
-                                        playable_url: null;
-                                        video_codec: null;
-                                        video_dash_manifest: null;
-                                        playable_url_mime_type: null;
-                                        preview_url_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            width: number;
-                                            height: number;
-                                        } | null;
-                                        header_icon_url_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            width: number;
-                                            height: number;
-                                        } | null;
-                                        header_icons_url_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            width: number;
-                                            height: number;
-                                        }[] | null;
-                                        playable_url_info: null;
-                                        favicon_url_info: null;
-                                        favicon_style: null;
-                                        favicons_url_info: null;
-                                        preview_image_decoration_type: number | null;
-                                        cta_buttons: null;
-                                        is_quoted: boolean | null;
-                                        is_borderless: null;
-                                        is_sharable: boolean;
-                                        verified_type: number | null;
-                                        sticker_type?: null;
-                                        accessibility_summary_text: null;
-                                        accessibility_summary_hint: null;
-                                        collapsible_id: null;
-                                        countdown_timestamp_ms: null;
-                                        presence_source: null;
-                                        should_respect_server_preview_size: null;
-                                        accessory_preview_url_info: null;
-                                        accessory_playable_url_info: null;
-                                        playable_audio_url: null;
-                                        preview_icon_info?: null;
-                                        quoted_attribution_text?: null;
-                                        quoted_caption_body_text?: null;
-                                        quoted_title_text?: null;
-                                        quoted_favicon_url_info?: null;
-                                        quoted_author_verified_type?: null;
-                                        target_expiry_timestamp_ms?: number;
-                                        should_refresh: boolean;
-                                        audio_segment_start_time_ms: null | null;
-                                        audio_segment_duration_ms: null | null;
-                                        preview_extra_urls_info: null;
-                                        preview_layout_type: number;
-                                        serialized_content_ref: string;
-                                        view_mode?: null;
-                                        view_count?: null;
-                                    }[];
-                                    tq_seq_id?: number;
-                                    media?: {
-                                        id: number;
-                                        user: {
-                                            id: string;
-                                            strong_id__: string;
-                                            pk: number;
-                                            pk_id: string;
-                                            full_name: string;
-                                            username: string;
-                                            short_name: string;
-                                            profile_pic_url: string;
-                                            is_verified: boolean;
-                                            interop_messaging_user_fbid: number;
-                                            fbid_v2: number;
-                                            has_ig_profile: boolean;
-                                            interop_user_type: number;
-                                            is_using_unified_inbox_for_direct: boolean;
-                                            is_private: boolean;
-                                            is_creator_agent_enabled: boolean;
-                                            is_creator_automated_response_enabled: boolean;
-                                            friendship_status: {
-                                                blocking: boolean;
-                                                is_messaging_only_blocking: boolean;
-                                                is_messaging_pseudo_blocking: boolean;
-                                                is_unavailable: boolean;
-                                            };
-                                            is_shared_account: boolean;
-                                            is_shared_account_with_messaging_access: boolean;
-                                            ai_agent_banner_type: null;
-                                            is_eligible_for_ai_bot_group_chats: boolean;
-                                        };
-                                        image_versions2: {
-                                            candidates: {
-                                                width: number;
-                                                height: number;
-                                                url: string;
-                                                fallback: {
-                                                    url: string;
-                                                };
-                                                scans_profile: null | null;
-                                                url_expiration_timestamp_us: number;
-                                            }[];
-                                        };
-                                        video_versions?: {
-                                            id: string;
-                                            type: number;
-                                            width: number;
-                                            height: number;
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            bandwidth: number;
-                                        }[];
-                                        original_width: number;
-                                        original_height: number;
-                                        media_type: number;
-                                        video_duration?: number;
-                                        video_dash_manifest?: string | null;
-                                        is_dash_eligible?: number;
-                                    };
-                                    action_log?: {
-                                        description: string;
-                                        bold: null[];
-                                        text_attributes: null[];
-                                        text_parts: ({
-                                            text: string;
-                                        } | null)[];
-                                        is_reaction_log?: boolean;
-                                    };
-                                    hide_in_thread?: number;
-                                    xma_media_share?: {
-                                        xma_template_type: null;
-                                        xma_layout_type: number;
-                                        preview_url: string;
-                                        preview_url_mime_type: string;
-                                        preview_width: number;
-                                        preview_height: number;
-                                        title_text: string | null;
-                                        max_title_num_of_lines: number;
-                                        max_subtitle_num_of_lines: number;
-                                        subtitle_text: null;
-                                        subtitle_decoration_type: null;
-                                        default_cta_type: null;
-                                        default_cta_title: null;
-                                        header_icon_url: string;
-                                        header_icon_mime_type: null;
-                                        header_icon_width: number;
-                                        header_icon_height: number;
-                                        header_title_text: string;
-                                        header_subtitle_text: null;
-                                        header_cta_type: null;
-                                        header_cta_title: null;
-                                        header_icon_layout_type: number;
-                                        header_icons_count: null;
-                                        caption_body_text: null;
-                                        group_name: null;
-                                        preview_media_fbid: number;
-                                        target_url: string;
-                                        ig_template_type: null;
-                                        playable_width: number;
-                                        playable_height: number;
-                                        playable_url: null;
-                                        video_codec: null;
-                                        video_dash_manifest: null;
-                                        playable_url_mime_type: null;
-                                        preview_url_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            width: number;
-                                            height: number;
-                                        };
-                                        header_icon_url_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            width: number;
-                                            height: number;
-                                        };
-                                        header_icons_url_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            width: number;
-                                            height: number;
-                                        }[];
-                                        playable_url_info: null;
-                                        favicon_url_info: null;
-                                        favicon_style: null;
-                                        favicons_url_info: null;
-                                        preview_image_decoration_type: null | null;
-                                        cta_buttons: null;
-                                        is_quoted: null;
-                                        is_borderless: null;
-                                        is_sharable: boolean;
-                                        verified_type: number;
-                                        sticker_type: null;
-                                        accessibility_summary_text: null;
-                                        accessibility_summary_hint: null;
-                                        collapsible_id: null;
-                                        countdown_timestamp_ms: null;
-                                        presence_source: null;
-                                        should_respect_server_preview_size: null;
-                                        accessory_preview_url_info: null;
-                                        accessory_playable_url_info: null;
-                                        playable_audio_url: null;
-                                        preview_icon_info: null;
-                                        quoted_attribution_text: null;
-                                        quoted_caption_body_text: null;
-                                        quoted_title_text: null;
-                                        quoted_favicon_url_info: null;
-                                        quoted_author_verified_type: null;
-                                        save_icon_state: number;
-                                        should_refresh: boolean;
-                                        audio_segment_start_time_ms: null;
-                                        audio_segment_duration_ms: null;
-                                        preview_extra_urls_info: null;
-                                        preview_layout_type: number;
-                                        serialized_content_ref: string;
-                                    }[];
-                                    replied_to_message?: {
-                                        item_id: string;
-                                        message_id: string;
-                                        user_id: number;
-                                        timestamp: number;
-                                        item_type: string;
-                                        client_context: string;
-                                        show_forward_attribution: boolean;
-                                        forward_score: null;
-                                        is_shh_mode: boolean;
-                                        otid: string;
-                                        is_ae_dual_send: boolean;
-                                        is_ephemeral_exception: boolean;
-                                        is_disappearing: boolean;
-                                        is_superlative: boolean;
-                                        paid_partnership_info: {
-                                            is_paid_partnership: boolean;
-                                        };
-                                        is_replyable_in_bc: boolean;
-                                        skip_bump_thread: boolean;
-                                        send_attribution: string;
-                                        is_sent_by_viewer: boolean;
-                                        uq_seq_id: number;
-                                        latest_snooze_state: number;
-                                        one_click_upsell: null;
-                                        genai_params: Record<string, never>;
-                                        is_pinned: boolean;
-                                        system_folder: number;
-                                        text: string;
-                                        tq_seq_id?: number;
-                                        reactions?: {
-                                            likes: null[];
-                                            likes_count: number;
-                                            emojis: {
-                                                timestamp: number;
-                                                client_context: string;
-                                                sender_id: number;
-                                                emoji: string;
-                                                super_react_type: string;
-                                            }[];
-                                        };
-                                    };
-                                    send_silently?: boolean;
-                                    is_edit_with_ai_eligible?: boolean;
-                                    xma_profile?: {
-                                        xma_layout_type: number;
-                                        preview_layout_type: number;
-                                        header_icon_url_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                            url_expiration_timestamp_us: number;
-                                            width: number;
-                                            height: number;
-                                            mime_type: string;
-                                        };
-                                        header_title_text: string;
-                                        header_subtitle_text: string;
-                                        target_url: string;
-                                        preview_extra_urls_info: {
-                                            url: string;
-                                            fallback: {
-                                                url: string;
-                                            };
-                                        }[];
-                                        verified_type: number;
-                                        is_sharable: boolean;
-                                        preview_url_info: null;
-                                        serialized_content_ref: string;
-                                    }[];
-                                    visual_media?: {
-                                        media: {
-                                            id: string;
-                                            image_versions2: {
-                                                candidates: {
-                                                    width: number;
-                                                    height: number;
-                                                    url: string;
-                                                    scans_profile: string;
-                                                    fallback: {
-                                                        url: string;
-                                                    };
-                                                    url_expiration_timestamp_us: number;
-                                                }[];
-                                            };
-                                            original_width: number;
-                                            original_height: number;
-                                            media_type: number;
-                                            media_id: number;
-                                            organic_tracking_token: string;
-                                            user: {
-                                                id: string;
-                                                strong_id__: string;
-                                                pk: number;
-                                                pk_id: string;
-                                                full_name: string;
-                                                username: string;
-                                                short_name: string;
-                                                profile_pic_url: string;
-                                                is_verified: boolean;
-                                                interop_messaging_user_fbid: number;
-                                                fbid_v2: number;
-                                                has_ig_profile: boolean;
-                                                interop_user_type: number;
-                                                is_using_unified_inbox_for_direct: boolean;
-                                                is_private: boolean;
-                                                is_creator_agent_enabled: boolean;
-                                                is_creator_automated_response_enabled: boolean;
-                                                friendship_status: {
-                                                    blocking: boolean;
-                                                    is_messaging_only_blocking: boolean;
-                                                    is_messaging_pseudo_blocking: boolean;
-                                                    is_unavailable: boolean;
-                                                };
-                                                is_shared_account: boolean;
-                                                is_shared_account_with_messaging_access: boolean;
-                                                ai_agent_banner_type: null;
-                                                is_eligible_for_ai_bot_group_chats: boolean;
-                                            };
-                                            create_mode_attribution: null;
-                                            creative_config: null;
-                                            expiring_media_action_summary: null;
-                                            video_versions: {
-                                                id: string;
-                                                type: number;
-                                                width: number;
-                                                height: number;
-                                                url: string;
-                                                fallback: {
-                                                    url: string;
-                                                };
-                                                url_expiration_timestamp_us: number;
-                                                bandwidth: number;
-                                            }[];
-                                            video_duration: number;
-                                            video_dash_manifest: string;
-                                            is_dash_eligible: number;
-                                        };
-                                        seen_user_ids: null[];
-                                        seen_count: number;
-                                        view_mode: string;
-                                        replay_expiring_at_us: null;
-                                        reply_type: null;
-                                        url_expire_at_secs: number;
-                                        story_app_attribution: null;
-                                        playback_duration_secs: number;
-                                        tap_models: null[];
-                                        expiring_media_action_summary: null;
-                                    };
-                                } | null)[];
+                                last_permanent_item: components["schemas"]["ThreadItem"];
+                                items: components["schemas"]["ThreadItem"][];
                                 thread_image?: null | null;
                                 pals_feature_status?: string;
                                 theme_data?: {
@@ -10850,362 +9790,7 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            items: {
-                                item_id: string;
-                                message_id: string;
-                                user_id: number;
-                                timestamp: number;
-                                item_type: string;
-                                client_context: string;
-                                show_forward_attribution: boolean;
-                                forward_score: null;
-                                is_shh_mode: boolean;
-                                otid: string;
-                                is_ae_dual_send: boolean;
-                                is_ephemeral_exception: boolean;
-                                is_disappearing: boolean;
-                                is_superlative: boolean;
-                                paid_partnership_info: {
-                                    is_paid_partnership: boolean;
-                                };
-                                is_replyable_in_bc: boolean;
-                                skip_bump_thread: boolean;
-                                send_attribution: string;
-                                is_sent_by_viewer: boolean;
-                                uq_seq_id: number;
-                                latest_snooze_state: number;
-                                one_click_upsell: null;
-                                genai_params: Record<string, never>;
-                                is_pinned: boolean;
-                                system_folder: number;
-                                xma_clip?: {
-                                    xma_template_type: null;
-                                    xma_layout_type: number;
-                                    preview_url: string;
-                                    preview_url_mime_type: string;
-                                    preview_width: number;
-                                    preview_height: number;
-                                    title_text: null;
-                                    max_title_num_of_lines: number;
-                                    max_subtitle_num_of_lines: number;
-                                    subtitle_text: null;
-                                    subtitle_decoration_type: number;
-                                    default_cta_type: null;
-                                    default_cta_title: null;
-                                    header_icon_url: string;
-                                    header_icon_mime_type: null;
-                                    header_icon_width: number;
-                                    header_icon_height: number;
-                                    header_title_text: string;
-                                    header_subtitle_text: null;
-                                    header_cta_type: null;
-                                    header_cta_title: null;
-                                    header_icon_layout_type: number;
-                                    header_icons_count: null;
-                                    caption_body_text: null;
-                                    group_name: null;
-                                    preview_media_fbid: number;
-                                    target_url: string;
-                                    ig_template_type: null;
-                                    playable_width: number;
-                                    playable_height: number;
-                                    playable_url: null;
-                                    video_codec: null;
-                                    video_dash_manifest: null;
-                                    playable_url_mime_type: null;
-                                    preview_url_info: {
-                                        url: string;
-                                        fallback: {
-                                            url: string;
-                                        };
-                                        url_expiration_timestamp_us: number;
-                                        width: number;
-                                        height: number;
-                                    };
-                                    header_icon_url_info: {
-                                        url: string;
-                                        fallback: {
-                                            url: string;
-                                        };
-                                        url_expiration_timestamp_us: number;
-                                        width: number;
-                                        height: number;
-                                    };
-                                    header_icons_url_info: {
-                                        url: string;
-                                        fallback: {
-                                            url: string;
-                                        };
-                                        url_expiration_timestamp_us: number;
-                                        width: number;
-                                        height: number;
-                                    }[];
-                                    playable_url_info: null;
-                                    favicon_url_info: null;
-                                    favicon_style: null;
-                                    favicons_url_info: null;
-                                    preview_image_decoration_type: number;
-                                    cta_buttons: null;
-                                    is_quoted: null;
-                                    is_borderless: null;
-                                    is_sharable: boolean;
-                                    verified_type: number;
-                                    sticker_type: null;
-                                    accessibility_summary_text: null;
-                                    accessibility_summary_hint: null;
-                                    collapsible_id: null;
-                                    countdown_timestamp_ms: null;
-                                    presence_source: null;
-                                    should_respect_server_preview_size: null;
-                                    accessory_preview_url_info: null;
-                                    accessory_playable_url_info: null;
-                                    playable_audio_url: null;
-                                    preview_icon_info: null;
-                                    quoted_attribution_text: null;
-                                    quoted_caption_body_text: null;
-                                    quoted_title_text: null;
-                                    quoted_favicon_url_info: null;
-                                    quoted_author_verified_type: null;
-                                    save_icon_state: number;
-                                    should_refresh: boolean;
-                                    audio_segment_start_time_ms: null;
-                                    audio_segment_duration_ms: null;
-                                    preview_extra_urls_info: null;
-                                    preview_layout_type: number;
-                                    serialized_content_ref: string;
-                                }[];
-                                reactions: {
-                                    likes: null[];
-                                    likes_count: number;
-                                    emojis: {
-                                        timestamp: number;
-                                        client_context: string;
-                                        sender_id: number;
-                                        emoji: string;
-                                        super_react_type: string;
-                                    }[];
-                                };
-                                xma_media_share?: {
-                                    xma_template_type: null;
-                                    xma_layout_type: number;
-                                    preview_url: string;
-                                    preview_url_mime_type: string;
-                                    preview_width: number;
-                                    preview_height: number;
-                                    title_text: string | null;
-                                    max_title_num_of_lines: number;
-                                    max_subtitle_num_of_lines: number;
-                                    subtitle_text: null;
-                                    subtitle_decoration_type: null;
-                                    default_cta_type: null;
-                                    default_cta_title: null;
-                                    header_icon_url: string;
-                                    header_icon_mime_type: null;
-                                    header_icon_width: number;
-                                    header_icon_height: number;
-                                    header_title_text: string;
-                                    header_subtitle_text: null;
-                                    header_cta_type: null;
-                                    header_cta_title: null;
-                                    header_icon_layout_type: number;
-                                    header_icons_count: null;
-                                    caption_body_text: null;
-                                    group_name: null;
-                                    preview_media_fbid: number;
-                                    target_url: string;
-                                    ig_template_type: null;
-                                    playable_width: number;
-                                    playable_height: number;
-                                    playable_url: null;
-                                    video_codec: null;
-                                    video_dash_manifest: null;
-                                    playable_url_mime_type: null;
-                                    preview_url_info: {
-                                        url: string;
-                                        fallback: {
-                                            url: string;
-                                        };
-                                        url_expiration_timestamp_us: number;
-                                        width: number;
-                                        height: number;
-                                    };
-                                    header_icon_url_info: {
-                                        url: string;
-                                        fallback: {
-                                            url: string;
-                                        };
-                                        url_expiration_timestamp_us: number;
-                                        width: number;
-                                        height: number;
-                                    };
-                                    header_icons_url_info: {
-                                        url: string;
-                                        fallback: {
-                                            url: string;
-                                        };
-                                        url_expiration_timestamp_us: number;
-                                        width: number;
-                                        height: number;
-                                    }[];
-                                    playable_url_info: null;
-                                    favicon_url_info: null;
-                                    favicon_style: null;
-                                    favicons_url_info: null;
-                                    preview_image_decoration_type: null | null;
-                                    cta_buttons: null;
-                                    is_quoted: null;
-                                    is_borderless: null;
-                                    is_sharable: boolean;
-                                    verified_type: number;
-                                    sticker_type: null;
-                                    accessibility_summary_text: null;
-                                    accessibility_summary_hint: null;
-                                    collapsible_id: null;
-                                    countdown_timestamp_ms: null;
-                                    presence_source: null;
-                                    should_respect_server_preview_size: null;
-                                    accessory_preview_url_info: null;
-                                    accessory_playable_url_info: null;
-                                    playable_audio_url: null;
-                                    preview_icon_info: null;
-                                    quoted_attribution_text: null;
-                                    quoted_caption_body_text: null;
-                                    quoted_title_text: null;
-                                    quoted_favicon_url_info: null;
-                                    quoted_author_verified_type: null;
-                                    save_icon_state: number;
-                                    should_refresh: boolean;
-                                    audio_segment_start_time_ms: null;
-                                    audio_segment_duration_ms: null;
-                                    preview_extra_urls_info: null;
-                                    preview_layout_type: number;
-                                    serialized_content_ref: string;
-                                }[];
-                                auxiliary_text?: string;
-                                xma_story_share?: {
-                                    xma_template_type: null;
-                                    xma_layout_type: number;
-                                    preview_url: string;
-                                    preview_url_mime_type: string;
-                                    preview_width: number;
-                                    preview_height: number;
-                                    title_text: null;
-                                    max_title_num_of_lines: number;
-                                    max_subtitle_num_of_lines: number;
-                                    subtitle_text: null;
-                                    subtitle_decoration_type: number;
-                                    default_cta_type: null;
-                                    default_cta_title: null;
-                                    header_icon_url: string;
-                                    header_icon_mime_type: null;
-                                    header_icon_width: number;
-                                    header_icon_height: number;
-                                    header_title_text: string;
-                                    header_subtitle_text: null;
-                                    header_cta_type: null;
-                                    header_cta_title: null;
-                                    header_icon_layout_type: number;
-                                    header_icons_count: null;
-                                    caption_body_text: null;
-                                    group_name: null;
-                                    preview_media_fbid: number;
-                                    target_url: string;
-                                    ig_template_type: null;
-                                    playable_width: number;
-                                    playable_height: number;
-                                    playable_url: null;
-                                    video_codec: null;
-                                    video_dash_manifest: null;
-                                    playable_url_mime_type: null;
-                                    preview_url_info: {
-                                        url: string;
-                                        fallback: {
-                                            url: string;
-                                        };
-                                        url_expiration_timestamp_us: number;
-                                        width: number;
-                                        height: number;
-                                    };
-                                    header_icon_url_info: {
-                                        url: string;
-                                        fallback: {
-                                            url: string;
-                                        };
-                                        url_expiration_timestamp_us: number;
-                                        width: number;
-                                        height: number;
-                                    };
-                                    header_icons_url_info: {
-                                        url: string;
-                                        fallback: {
-                                            url: string;
-                                        };
-                                        url_expiration_timestamp_us: number;
-                                        width: number;
-                                        height: number;
-                                    }[];
-                                    playable_url_info: null;
-                                    favicon_url_info: null;
-                                    favicon_style: null;
-                                    favicons_url_info: null;
-                                    preview_image_decoration_type: number;
-                                    cta_buttons: null;
-                                    is_quoted: boolean;
-                                    is_borderless: null;
-                                    is_sharable: boolean;
-                                    verified_type: number;
-                                    sticker_type: null;
-                                    accessibility_summary_text: null;
-                                    accessibility_summary_hint: null;
-                                    collapsible_id: null;
-                                    countdown_timestamp_ms: null;
-                                    presence_source: null;
-                                    should_respect_server_preview_size: null;
-                                    accessory_preview_url_info: null;
-                                    accessory_playable_url_info: null;
-                                    playable_audio_url: null;
-                                    preview_icon_info: null;
-                                    quoted_attribution_text: null;
-                                    quoted_caption_body_text: null;
-                                    quoted_title_text: null;
-                                    quoted_favicon_url_info: null;
-                                    quoted_author_verified_type: null;
-                                    should_refresh: boolean;
-                                    audio_segment_start_time_ms: null;
-                                    audio_segment_duration_ms: null;
-                                    preview_extra_urls_info: null;
-                                    preview_layout_type: number;
-                                    serialized_content_ref: string;
-                                    target_expiry_timestamp_ms?: number;
-                                }[];
-                                xma_profile?: {
-                                    xma_layout_type: number;
-                                    preview_layout_type: number;
-                                    header_icon_url_info: {
-                                        url: string;
-                                        fallback: {
-                                            url: string;
-                                        };
-                                        url_expiration_timestamp_us: number;
-                                        width: number;
-                                        height: number;
-                                        mime_type: string;
-                                    };
-                                    header_title_text: string;
-                                    header_subtitle_text: string;
-                                    target_url: string;
-                                    preview_extra_urls_info: {
-                                        url: string;
-                                        fallback: {
-                                            url: string;
-                                        };
-                                    }[];
-                                    verified_type: number;
-                                    is_sharable: boolean;
-                                    preview_url_info: null;
-                                    serialized_content_ref: string;
-                                }[];
-                            }[];
+                            items: components["schemas"]["ThreadItem"][];
                             status: string;
                             status_code: string;
                         };
@@ -11717,7 +10302,7 @@ export interface paths {
                     igd_request_log_tracking_id: string;
                     limit: string;
                     media_type: string;
-                    max_timestamp: string;
+                    max_timestamp?: string;
                 };
                 header: {
                     "x-ig-app-locale": string;
@@ -11758,8 +10343,8 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-client-endpoint": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-client-endpoint"?: string;
+                    "x-ig-salt-ids"?: string;
                 };
                 path: {
                     1: string;
@@ -11805,7 +10390,7 @@ export interface paths {
                         "x-fb-server-cluster-forwarded": string;
                         "alt-svc": string;
                         "x-fb-connection-quality": string;
-                        "content-encoding": string;
+                        "content-encoding"?: string;
                         [name: string]: unknown;
                     };
                     content: {
@@ -12238,7 +10823,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-client-endpoint": string;
+                    "x-ig-client-endpoint"?: string;
                 };
                 path: {
                     1: string;
@@ -13849,8 +12434,8 @@ export interface paths {
         put?: never;
         post: {
             parameters: {
-                query: {
-                    video: string;
+                query?: {
+                    video?: string;
                 };
                 header: {
                     "x-ig-app-locale": string;
@@ -14487,59 +13072,7 @@ export interface paths {
                                 has_older: boolean;
                                 has_newer: boolean;
                                 pending: boolean;
-                                items: {
-                                    item_id: string;
-                                    message_id: string;
-                                    user_id: number;
-                                    timestamp: number;
-                                    item_type: string;
-                                    client_context: string;
-                                    show_forward_attribution: boolean;
-                                    forward_score: null;
-                                    is_shh_mode: boolean;
-                                    otid: string;
-                                    is_ae_dual_send: boolean;
-                                    is_ephemeral_exception: boolean;
-                                    is_disappearing: boolean;
-                                    is_superlative: boolean;
-                                    paid_partnership_info: {
-                                        is_paid_partnership: boolean;
-                                    };
-                                    is_replyable_in_bc: boolean;
-                                    skip_bump_thread: boolean;
-                                    send_attribution?: string;
-                                    is_sent_by_viewer: boolean;
-                                    uq_seq_id: number;
-                                    tq_seq_id: number;
-                                    latest_snooze_state: number;
-                                    one_click_upsell: null;
-                                    genai_params: Record<string, never>;
-                                    is_pinned: boolean;
-                                    system_folder: number;
-                                    text?: string;
-                                    action_log?: {
-                                        description: string;
-                                        bold: {
-                                            start: number;
-                                            end: number;
-                                        }[];
-                                        text_attributes: {
-                                            start: number;
-                                            end: number;
-                                            bold: number;
-                                            color: string;
-                                            intent: string;
-                                            semantic_color: string;
-                                        }[];
-                                        text_parts: {
-                                            text: string;
-                                            bold?: number;
-                                            color?: string;
-                                            intent?: string;
-                                            semantic_color?: string;
-                                        }[];
-                                    };
-                                }[];
+                                items: components["schemas"]["ThreadItem"][];
                                 canonical: boolean;
                                 thread_id: string;
                                 thread_v2_id: string;
@@ -16716,7 +15249,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-client-endpoint": string;
+                    "x-ig-client-endpoint"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -16879,7 +15412,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-client-endpoint": string;
+                    "x-ig-client-endpoint"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -18097,7 +16630,7 @@ export interface paths {
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
                     "x-ig-nav-chain"?: string;
-                    "x-ig-client-endpoint": string;
+                    "x-ig-client-endpoint"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -20825,7 +19358,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                 };
                 path: {
                     1: string;
@@ -21013,7 +19546,7 @@ export interface paths {
                         "x-fb-server-cluster-forwarded": string;
                         "alt-svc": string;
                         "x-fb-connection-quality": string;
-                        "content-encoding": string;
+                        "content-encoding"?: string;
                         [name: string]: unknown;
                     };
                     content: {
@@ -23470,7 +22003,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                 };
                 path: {
                     1: string;
@@ -23824,9 +22357,9 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    authorization: string;
-                    "ig-u-ds-user-id": string;
-                    "ig-u-rur": string;
+                    authorization?: string;
+                    "ig-u-ds-user-id"?: string;
+                    "ig-u-rur"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -25500,7 +24033,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -25633,7 +24166,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -25944,7 +24477,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-client-endpoint": string;
+                    "x-ig-client-endpoint"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -25998,8 +24531,8 @@ export interface paths {
                         "x-fb-server-cluster-forwarded": string;
                         "alt-svc": string;
                         "x-fb-connection-quality": string;
-                        "x-instagram-trace-enabled": string;
-                        "x-instagram-trace-token": string;
+                        "x-instagram-trace-enabled"?: string;
+                        "x-instagram-trace-token"?: string;
                         [name: string]: unknown;
                     };
                     content: {
@@ -26969,7 +25502,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-client-endpoint": string;
+                    "x-ig-client-endpoint"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -27711,7 +26244,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                 };
                 path: {
                     1: string;
@@ -28309,7 +26842,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -28846,7 +27379,580 @@ export interface paths {
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: never;
+    schemas: {
+        ThreadItem: {
+            item_id: string;
+            message_id: string;
+            user_id: number;
+            timestamp: number;
+            item_type: string;
+            client_context: string;
+            show_forward_attribution: boolean;
+            forward_score: null;
+            is_shh_mode: boolean;
+            otid: string;
+            is_ae_dual_send: boolean;
+            is_ephemeral_exception: boolean;
+            is_disappearing: boolean;
+            is_superlative: boolean;
+            paid_partnership_info: {
+                is_paid_partnership: boolean;
+            };
+            is_replyable_in_bc: boolean;
+            skip_bump_thread: boolean;
+            send_attribution?: string;
+            is_sent_by_viewer: boolean;
+            uq_seq_id: number;
+            latest_snooze_state: number;
+            one_click_upsell: null;
+            genai_params: Record<string, never>;
+            is_pinned: boolean;
+            system_folder: number;
+            text?: string;
+            tq_seq_id?: number;
+            media?: {
+                id: number;
+                user: {
+                    id: string;
+                    strong_id__: string;
+                    pk: number;
+                    pk_id: string;
+                    full_name: string;
+                    username: string;
+                    short_name: string;
+                    profile_pic_url: string;
+                    is_verified: boolean;
+                    interop_messaging_user_fbid: number;
+                    fbid_v2: number;
+                    has_ig_profile: boolean;
+                    interop_user_type: number;
+                    is_using_unified_inbox_for_direct: boolean;
+                    is_private: boolean;
+                    is_creator_agent_enabled: boolean;
+                    is_creator_automated_response_enabled: boolean;
+                    friendship_status: {
+                        blocking: boolean;
+                        is_messaging_only_blocking: boolean;
+                        is_messaging_pseudo_blocking: boolean;
+                        is_unavailable: boolean;
+                    };
+                    is_shared_account: boolean;
+                    is_shared_account_with_messaging_access: boolean;
+                    ai_agent_banner_type: null;
+                    is_eligible_for_ai_bot_group_chats: boolean;
+                };
+                image_versions2: {
+                    candidates: {
+                        width: number;
+                        height: number;
+                        url: string;
+                        fallback: {
+                            url: string;
+                        };
+                        scans_profile: null | null;
+                        url_expiration_timestamp_us: number;
+                    }[];
+                };
+                video_versions?: {
+                    id: string;
+                    type: number;
+                    width: number;
+                    height: number;
+                    url: string;
+                    fallback: {
+                        url: string;
+                    };
+                    url_expiration_timestamp_us: number;
+                    bandwidth: number;
+                }[];
+                original_width: number;
+                original_height: number;
+                media_type: number;
+                video_duration?: number;
+                video_dash_manifest?: string | null;
+                is_dash_eligible?: number;
+            };
+            xma_clip?: {
+                xma_template_type: null;
+                xma_layout_type: number;
+                preview_url: string | null;
+                preview_url_mime_type: string | null;
+                preview_width: number | null;
+                preview_height: number | null;
+                title_text: null | null;
+                max_title_num_of_lines: number;
+                max_subtitle_num_of_lines: number;
+                subtitle_text: null;
+                subtitle_decoration_type: number;
+                default_cta_type: null;
+                default_cta_title: null;
+                header_icon_url: string;
+                header_icon_mime_type: null;
+                header_icon_width: number | null;
+                header_icon_height: number | null;
+                header_title_text: string | null;
+                header_subtitle_text: null;
+                header_cta_type: null;
+                header_cta_title: null;
+                header_icon_layout_type: number;
+                header_icons_count: null;
+                caption_body_text: null | null;
+                group_name: null;
+                preview_media_fbid: number | null;
+                target_url: string | null;
+                ig_template_type: null | null;
+                playable_width: number | null;
+                playable_height: number | null;
+                playable_url: null;
+                video_codec: null;
+                video_dash_manifest: null;
+                playable_url_mime_type: null;
+                preview_url_info: {
+                    url: string;
+                    fallback: {
+                        url: string;
+                    };
+                    url_expiration_timestamp_us: number;
+                    width: number;
+                    height: number;
+                };
+                header_icon_url_info: {
+                    url: string;
+                    fallback: {
+                        url: string;
+                    };
+                    url_expiration_timestamp_us: number;
+                    width: number;
+                    height: number;
+                };
+                header_icons_url_info: {
+                    url: string;
+                    fallback: {
+                        url: string;
+                    };
+                    url_expiration_timestamp_us: number;
+                    width: number;
+                    height: number;
+                }[];
+                playable_url_info: null;
+                favicon_url_info: null;
+                favicon_style: null;
+                favicons_url_info: null;
+                preview_image_decoration_type: number | null;
+                cta_buttons: null;
+                is_quoted: null;
+                is_borderless: null;
+                is_sharable: boolean | null;
+                verified_type: number | null;
+                sticker_type: null;
+                accessibility_summary_text: null;
+                accessibility_summary_hint: null;
+                collapsible_id: null;
+                countdown_timestamp_ms: null;
+                presence_source: null;
+                should_respect_server_preview_size: null;
+                accessory_preview_url_info: null;
+                accessory_playable_url_info: null;
+                playable_audio_url: null;
+                preview_icon_info: null;
+                quoted_attribution_text: null;
+                quoted_caption_body_text: null;
+                quoted_title_text: null;
+                quoted_favicon_url_info: null;
+                quoted_author_verified_type: null;
+                save_icon_state: number;
+                should_refresh: boolean;
+                audio_segment_start_time_ms: null | null;
+                audio_segment_duration_ms: null | null;
+                preview_extra_urls_info: null;
+                preview_layout_type: number;
+                serialized_content_ref: string;
+                view_mode?: null;
+                view_count?: null;
+            }[];
+            xma_media_share?: {
+                xma_template_type: null;
+                xma_layout_type: number;
+                preview_url: string;
+                preview_url_mime_type: string;
+                preview_width: number;
+                preview_height: number;
+                title_text: null | null;
+                max_title_num_of_lines: number;
+                max_subtitle_num_of_lines: number;
+                subtitle_text: null;
+                subtitle_decoration_type: null;
+                default_cta_type: null;
+                default_cta_title: null;
+                header_icon_url: string;
+                header_icon_mime_type: null;
+                header_icon_width: number;
+                header_icon_height: number;
+                header_title_text: string;
+                header_subtitle_text: null;
+                header_cta_type: null;
+                header_cta_title: null;
+                header_icon_layout_type: number;
+                header_icons_count: null;
+                caption_body_text: null;
+                group_name: null;
+                preview_media_fbid: number;
+                target_url: string;
+                ig_template_type: null;
+                playable_width: number;
+                playable_height: number;
+                playable_url: null;
+                video_codec: null;
+                video_dash_manifest: null;
+                playable_url_mime_type: null;
+                preview_url_info: {
+                    url: string;
+                    fallback: {
+                        url: string;
+                    };
+                    url_expiration_timestamp_us: number;
+                    width: number;
+                    height: number;
+                };
+                header_icon_url_info: {
+                    url: string;
+                    fallback: {
+                        url: string;
+                    };
+                    url_expiration_timestamp_us: number;
+                    width: number;
+                    height: number;
+                };
+                header_icons_url_info: {
+                    url: string;
+                    fallback: {
+                        url: string;
+                    };
+                    url_expiration_timestamp_us: number;
+                    width: number;
+                    height: number;
+                }[];
+                playable_url_info: null;
+                favicon_url_info: null;
+                favicon_style: null;
+                favicons_url_info: null;
+                preview_image_decoration_type: null | null;
+                cta_buttons: null;
+                is_quoted: null;
+                is_borderless: null;
+                is_sharable: boolean;
+                verified_type: number;
+                sticker_type: null;
+                accessibility_summary_text: null;
+                accessibility_summary_hint: null;
+                collapsible_id: null;
+                countdown_timestamp_ms: null;
+                presence_source: null;
+                should_respect_server_preview_size: null;
+                accessory_preview_url_info: null;
+                accessory_playable_url_info: null;
+                playable_audio_url: null;
+                preview_icon_info: null;
+                quoted_attribution_text: null;
+                quoted_caption_body_text: null;
+                quoted_title_text: null;
+                quoted_favicon_url_info: null;
+                quoted_author_verified_type: null;
+                save_icon_state: number;
+                should_refresh: boolean;
+                audio_segment_start_time_ms: null;
+                audio_segment_duration_ms: null;
+                preview_extra_urls_info: null;
+                preview_layout_type: number;
+                serialized_content_ref: string;
+            }[];
+            is_edit_with_ai_eligible?: boolean;
+            auxiliary_text?: string;
+            xma_story_share?: {
+                xma_template_type: null;
+                xma_layout_type: number;
+                preview_url: string | null;
+                preview_url_mime_type: string | null;
+                preview_width: number | null;
+                preview_height: number | null;
+                title_text: null;
+                max_title_num_of_lines: number;
+                max_subtitle_num_of_lines: number;
+                subtitle_text: null;
+                subtitle_decoration_type: number;
+                default_cta_type: null;
+                default_cta_title: null;
+                header_icon_url: string;
+                header_icon_mime_type: null;
+                header_icon_width: number | null;
+                header_icon_height: number | null;
+                header_title_text: string | null;
+                header_subtitle_text: null;
+                header_cta_type: null;
+                header_cta_title: null;
+                header_icon_layout_type?: number;
+                header_icons_count: null;
+                caption_body_text: null | null;
+                group_name: null;
+                preview_media_fbid: number | null;
+                target_url: string | null;
+                ig_template_type: null | null;
+                playable_width: number | null;
+                playable_height: number | null;
+                playable_url: null;
+                video_codec: null;
+                video_dash_manifest: null;
+                playable_url_mime_type: null;
+                preview_url_info: {
+                    url: string;
+                    fallback: {
+                        url: string;
+                    };
+                    url_expiration_timestamp_us: number;
+                    width: number;
+                    height: number;
+                } | null;
+                header_icon_url_info: {
+                    url: string;
+                    fallback: {
+                        url: string;
+                    };
+                    url_expiration_timestamp_us: number;
+                    width: number;
+                    height: number;
+                } | null;
+                header_icons_url_info: {
+                    url: string;
+                    fallback: {
+                        url: string;
+                    };
+                    url_expiration_timestamp_us: number;
+                    width: number;
+                    height: number;
+                }[] | null;
+                playable_url_info: null;
+                favicon_url_info: null;
+                favicon_style: null;
+                favicons_url_info: null;
+                preview_image_decoration_type: number | null;
+                cta_buttons: null;
+                is_quoted: boolean | null;
+                is_borderless: null;
+                is_sharable: boolean;
+                verified_type: number | null;
+                sticker_type?: null;
+                accessibility_summary_text: null;
+                accessibility_summary_hint: null;
+                collapsible_id: null;
+                countdown_timestamp_ms: null;
+                presence_source: null;
+                should_respect_server_preview_size: null;
+                accessory_preview_url_info: null;
+                accessory_playable_url_info: null;
+                playable_audio_url: null;
+                preview_icon_info?: null;
+                quoted_attribution_text?: null;
+                quoted_caption_body_text?: null;
+                quoted_title_text?: null;
+                quoted_favicon_url_info?: null;
+                quoted_author_verified_type?: null;
+                target_expiry_timestamp_ms?: number;
+                should_refresh: boolean;
+                audio_segment_start_time_ms: null | null;
+                audio_segment_duration_ms: null | null;
+                preview_extra_urls_info: null;
+                preview_layout_type: number;
+                serialized_content_ref: string;
+                view_mode?: null;
+                view_count?: null;
+            }[];
+            replied_to_message?: {
+                item_id: string;
+                message_id: string;
+                user_id: number;
+                timestamp: number;
+                item_type: string;
+                client_context: string;
+                show_forward_attribution: boolean;
+                forward_score: null;
+                is_shh_mode: boolean;
+                otid: string;
+                is_ae_dual_send: boolean;
+                is_ephemeral_exception: boolean;
+                is_disappearing: boolean;
+                is_superlative: boolean;
+                paid_partnership_info: {
+                    is_paid_partnership: boolean;
+                };
+                is_replyable_in_bc: boolean;
+                skip_bump_thread: boolean;
+                send_attribution: string;
+                is_sent_by_viewer: boolean;
+                uq_seq_id: number;
+                tq_seq_id?: number;
+                latest_snooze_state: number;
+                one_click_upsell: null;
+                genai_params: Record<string, never>;
+                is_pinned: boolean;
+                system_folder: number;
+                text: string;
+                reactions?: {
+                    likes: null[];
+                    likes_count: number;
+                    emojis: {
+                        timestamp: number;
+                        client_context: string;
+                        sender_id: number;
+                        emoji: string;
+                        super_react_type: string;
+                    }[];
+                };
+            };
+            reactions?: {
+                likes: null[];
+                likes_count: number;
+                emojis: {
+                    timestamp: number;
+                    client_context: string;
+                    sender_id: number;
+                    emoji: string;
+                    super_react_type: string;
+                }[];
+            };
+            visual_media?: {
+                media: {
+                    id: string;
+                    image_versions2: {
+                        candidates: {
+                            width: number;
+                            height: number;
+                            url: string;
+                            scans_profile: string;
+                            fallback: {
+                                url: string;
+                            };
+                            url_expiration_timestamp_us: number;
+                        }[];
+                    };
+                    original_width: number;
+                    original_height: number;
+                    media_type: number;
+                    media_id: number;
+                    organic_tracking_token: string;
+                    user: {
+                        id: string;
+                        strong_id__: string;
+                        pk: number;
+                        pk_id: string;
+                        full_name: string;
+                        username: string;
+                        short_name: string;
+                        profile_pic_url: string;
+                        is_verified: boolean;
+                        interop_messaging_user_fbid: number;
+                        fbid_v2: number;
+                        has_ig_profile: boolean;
+                        interop_user_type: number;
+                        is_using_unified_inbox_for_direct: boolean;
+                        is_private: boolean;
+                        is_creator_agent_enabled: boolean;
+                        is_creator_automated_response_enabled: boolean;
+                        friendship_status: {
+                            blocking: boolean;
+                            is_messaging_only_blocking: boolean;
+                            is_messaging_pseudo_blocking: boolean;
+                            is_unavailable: boolean;
+                        };
+                        is_shared_account: boolean;
+                        is_shared_account_with_messaging_access: boolean;
+                        ai_agent_banner_type: null;
+                        is_eligible_for_ai_bot_group_chats: boolean;
+                    };
+                    create_mode_attribution: null;
+                    creative_config: null;
+                    expiring_media_action_summary: null;
+                    video_versions: {
+                        id: string;
+                        type: number;
+                        width: number;
+                        height: number;
+                        url: string;
+                        fallback: {
+                            url: string;
+                        };
+                        url_expiration_timestamp_us: number;
+                        bandwidth: number;
+                    }[];
+                    video_duration: number;
+                    video_dash_manifest: string;
+                    is_dash_eligible: number;
+                };
+                seen_user_ids: null[];
+                seen_count: number;
+                view_mode: string;
+                replay_expiring_at_us: null;
+                reply_type: null;
+                url_expire_at_secs: number;
+                story_app_attribution: null;
+                playback_duration_secs: number;
+                tap_models: null[];
+                expiring_media_action_summary: null;
+            };
+            processed_business_suggestion?: boolean;
+            action_log?: {
+                description: string;
+                bold: ({
+                    start: number;
+                    end: number;
+                } | null)[];
+                text_attributes: ({
+                    start: number;
+                    end: number;
+                    bold: number;
+                    color: string;
+                    intent: string;
+                    semantic_color: string;
+                } | null)[];
+                text_parts: ({
+                    text: string;
+                    bold?: number;
+                    color?: string;
+                    intent?: string;
+                    semantic_color?: string;
+                } | null)[];
+                is_reaction_log?: boolean;
+            };
+            hide_in_thread?: number;
+            send_silently?: boolean;
+            xma_profile?: {
+                xma_layout_type: number;
+                preview_layout_type: number;
+                header_icon_url_info: {
+                    url: string;
+                    fallback: {
+                        url: string;
+                    };
+                    url_expiration_timestamp_us: number;
+                    width: number;
+                    height: number;
+                    mime_type: string;
+                };
+                header_title_text: string;
+                header_subtitle_text: string;
+                target_url: string;
+                preview_extra_urls_info: {
+                    url: string;
+                    fallback: {
+                        url: string;
+                    };
+                }[];
+                verified_type: number;
+                is_sharable: boolean;
+                preview_url_info: null;
+                serialized_content_ref: string;
+            }[];
+        } | null;
+    };
     responses: never;
     parameters: never;
     requestBodies: never;
