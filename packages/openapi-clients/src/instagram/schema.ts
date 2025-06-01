@@ -3606,7 +3606,92 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    ft: null;
+                                    data: {
+                                        id: string;
+                                        type: string;
+                                        data: {
+                                            key?: string;
+                                            mode?: string;
+                                            initial: boolean | number;
+                                        };
+                                    }[];
+                                    embedded_payloads: {
+                                        id: string;
+                                        payload: {
+                                            layout: {
+                                                bloks_payload: {
+                                                    tree: null;
+                                                    ft?: null;
+                                                    referenced?: string[];
+                                                    referenced_embedded_payloads?: string[];
+                                                    templates?: null;
+                                                };
+                                            };
+                                        };
+                                    }[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    tree: null;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -3677,7 +3762,77 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    ft: null;
+                                    data: {
+                                        id: string;
+                                        type: string;
+                                        data: {
+                                            initial: number;
+                                        };
+                                    }[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    templates: null;
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    tree: null;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -3748,7 +3903,115 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    ft: null;
+                                    data: {
+                                        id: string;
+                                        type: string;
+                                        data: {
+                                            key?: string;
+                                            mode?: string;
+                                            initial: {
+                                                id: string;
+                                                profiles: {
+                                                    id: {
+                                                        user_id: string;
+                                                        name: string;
+                                                        profile_picture_url: string;
+                                                        small_profile_picture_url: null;
+                                                        notification_count: number;
+                                                        credential_type: string;
+                                                        token: string;
+                                                        last_access_time: number;
+                                                        is_derived: boolean;
+                                                        username: string;
+                                                        password: string;
+                                                        has_smartlock: boolean;
+                                                        account_center_id: string;
+                                                        account_source: string;
+                                                        credentials: null[];
+                                                        nta_eligibility_reason: null;
+                                                        from_accurate_privacy_result: boolean;
+                                                        dbln_validated: boolean;
+                                                    };
+                                                };
+                                            }[] | boolean | string | number;
+                                        };
+                                    }[];
+                                    embedded_payloads: {
+                                        id: string;
+                                        payload: {
+                                            layout: {
+                                                bloks_payload: {
+                                                    ft: null;
+                                                    referenced: string[];
+                                                    tree: null;
+                                                };
+                                            };
+                                        };
+                                    }[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    templates: null;
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    tree: null;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -3819,7 +4082,79 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    ft: null;
+                                    data: {
+                                        id: string;
+                                        type: string;
+                                        data: {
+                                            key?: string;
+                                            mode?: string;
+                                            initial: boolean | number;
+                                        };
+                                    }[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    templates: null;
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    tree: null;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -3888,7 +4223,69 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    data: null[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    tree: null;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -3957,7 +4354,69 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    data: null[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    tree: null;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -4032,7 +4491,118 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-prefetch-request": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    ft: null;
+                                    data: {
+                                        id: string;
+                                        type: string;
+                                        data: {
+                                            initial_lispy?: string;
+                                            initial?: number | string | Record<string, never> | boolean | null[] | null;
+                                            key?: string;
+                                            mode?: string;
+                                            variables?: Record<string, never>;
+                                            variables_expr?: null;
+                                            data?: string;
+                                            metadata?: {
+                                                graphql: {
+                                                    query_name: string;
+                                                };
+                                            };
+                                        };
+                                    }[];
+                                    embedded_payloads: {
+                                        id: string;
+                                        payload: {
+                                            layout: {
+                                                bloks_payload: {
+                                                    ft?: null;
+                                                    referenced?: string[];
+                                                    templates?: null;
+                                                    tree: null;
+                                                    props?: {
+                                                        id: string;
+                                                        name: string;
+                                                    }[];
+                                                };
+                                            };
+                                        };
+                                    }[];
+                                    templates: null;
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    tree: null;
+                                    component_queries: {
+                                        id: string;
+                                        targets: {
+                                            genNavbarComponent?: string;
+                                            genMenuButtonComponent?: string;
+                                            genSearchButton?: string;
+                                            genCustomTitle?: string;
+                                            genTrigger?: string;
+                                            component?: string;
+                                            genComponent?: string;
+                                        };
+                                        app_id_expr: string;
+                                        params?: string;
+                                        client_params: string;
+                                        cache_ttl_expr: string;
+                                        is_scoped: boolean;
+                                    }[];
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -4101,7 +4671,71 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        "x-instagram-trace-enabled"?: string;
+                        "x-instagram-trace-token"?: string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    data: null[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    tree: null;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -4281,7 +4915,70 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    ft: null;
+                                    data: null[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    tree: null;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -4357,7 +5054,80 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    ft: null;
+                                    data: {
+                                        id: string;
+                                        type: string;
+                                        data: {
+                                            key?: string;
+                                            mode?: string;
+                                            initial?: boolean | string | number;
+                                            initial_lispy?: string;
+                                        };
+                                    }[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    templates: null;
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    tree: null;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -4434,7 +5204,102 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-prefetch-request": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    ft: null;
+                                    data: {
+                                        id: string;
+                                        type: string;
+                                        data: {
+                                            key?: string;
+                                            mode?: string;
+                                            initial: boolean | string | number | {
+                                                profile: {
+                                                    profile_identifier: string;
+                                                    display_name: string;
+                                                    profile_picture_url: string;
+                                                    platform: number;
+                                                };
+                                                session_count_text: string;
+                                                session_to_show: {
+                                                    device_name: string;
+                                                };
+                                            }[];
+                                        };
+                                    }[];
+                                    embedded_payloads: {
+                                        id: string;
+                                        payload: {
+                                            layout: {
+                                                bloks_payload: {
+                                                    ft: null;
+                                                    referenced: string[];
+                                                    tree: null;
+                                                };
+                                            };
+                                        };
+                                    }[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    templates: null;
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    tree: null;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -4510,7 +5375,91 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    ft: null;
+                                    data: {
+                                        id: string;
+                                        type: string;
+                                        data: {
+                                            key?: string;
+                                            mode?: string;
+                                            initial: boolean | string | number;
+                                        };
+                                    }[];
+                                    embedded_payloads: {
+                                        id: string;
+                                        payload: {
+                                            layout: {
+                                                bloks_payload: {
+                                                    ft: null;
+                                                    referenced: string[];
+                                                    tree: null;
+                                                };
+                                            };
+                                        };
+                                    }[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    templates: null;
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    tree: null;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -4586,7 +5535,93 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    ft: null;
+                                    data: {
+                                        id: string;
+                                        type: string;
+                                        data: {
+                                            key?: string;
+                                            mode?: string;
+                                            initial?: boolean | string | number;
+                                            initial_lispy?: string;
+                                        };
+                                    }[];
+                                    embedded_payloads: {
+                                        id: string;
+                                        payload: {
+                                            layout: {
+                                                bloks_payload: {
+                                                    ft: null;
+                                                    referenced: string[];
+                                                    tree: null;
+                                                    templates?: null;
+                                                };
+                                            };
+                                        };
+                                    }[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    templates: null;
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    tree: null;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -4662,7 +5697,96 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        "x-instagram-trace-enabled"?: string;
+                        "x-instagram-trace-token"?: string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    ft: null;
+                                    data: {
+                                        id: string;
+                                        type: string;
+                                        data: {
+                                            key?: string;
+                                            mode?: string;
+                                            initial: {
+                                                [key: string]: string;
+                                            } | boolean | null[] | string | number;
+                                        };
+                                    }[];
+                                    embedded_payloads: {
+                                        id: string;
+                                        payload: {
+                                            layout: {
+                                                bloks_payload: {
+                                                    ft: null;
+                                                    referenced: string[];
+                                                    tree: null;
+                                                    templates?: null;
+                                                };
+                                            };
+                                        };
+                                    }[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    templates: null;
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    tree: null;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -4738,7 +5862,94 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    ft: null;
+                                    data: {
+                                        id: string;
+                                        type: string;
+                                        data: {
+                                            key?: string;
+                                            mode?: string;
+                                            initial?: string[] | {
+                                                [key: string]: string;
+                                            } | boolean | number | string;
+                                            initial_lispy?: string;
+                                        };
+                                    }[];
+                                    embedded_payloads: {
+                                        id: string;
+                                        payload: {
+                                            layout: {
+                                                bloks_payload: {
+                                                    ft: null;
+                                                    referenced: string[];
+                                                    tree: null;
+                                                };
+                                            };
+                                        };
+                                    }[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    templates: null;
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    tree: null;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -4814,7 +6025,79 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    ft: null;
+                                    data: {
+                                        id: string;
+                                        type: string;
+                                        data: {
+                                            key?: string;
+                                            mode?: string;
+                                            initial: string | boolean | number;
+                                        };
+                                    }[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    templates: null;
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    tree: null;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -5126,7 +6409,66 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    data: null[];
+                                    tree: null;
+                                    embedded_payloads: null[];
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -5212,7 +6554,66 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    data: null[];
+                                    tree: null;
+                                    embedded_payloads: null[];
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -5283,7 +6684,116 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    ft: null;
+                                    data: {
+                                        id: string;
+                                        type: string;
+                                        data: {
+                                            key?: string;
+                                            mode?: string;
+                                            initial: {
+                                                id: string;
+                                                profiles: {
+                                                    id: {
+                                                        user_id: string;
+                                                        name: string;
+                                                        profile_picture_url: string;
+                                                        small_profile_picture_url: null;
+                                                        notification_count: number;
+                                                        credential_type: string;
+                                                        token: string;
+                                                        last_access_time: number;
+                                                        is_derived: boolean;
+                                                        username: string;
+                                                        password: string;
+                                                        has_smartlock: boolean;
+                                                        account_center_id: string;
+                                                        account_source: string;
+                                                        credentials: null[];
+                                                        nta_eligibility_reason: null;
+                                                        from_accurate_privacy_result: boolean;
+                                                        dbln_validated: boolean;
+                                                    };
+                                                };
+                                            }[] | boolean | string | number | Record<string, never>;
+                                        };
+                                    }[];
+                                    embedded_payloads: {
+                                        id: string;
+                                        payload: {
+                                            layout: {
+                                                bloks_payload: {
+                                                    ft?: null;
+                                                    referenced?: string[];
+                                                    tree: null;
+                                                    referenced_embedded_payloads?: string[];
+                                                    templates?: null;
+                                                };
+                                            };
+                                        };
+                                    }[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    action: string;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -5467,7 +6977,70 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    ft: null;
+                                    data: null[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    action: string;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -5647,7 +7220,69 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    data: null[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    action: string;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -5718,7 +7353,69 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    data: null[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    action: string;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -5905,7 +7602,88 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    ft: null;
+                                    data: {
+                                        id: string;
+                                        type: string;
+                                        data: {
+                                            initial: number;
+                                        };
+                                    }[];
+                                    embedded_payloads: {
+                                        id: string;
+                                        payload: {
+                                            layout: {
+                                                bloks_payload: {
+                                                    ft: null;
+                                                    referenced: string[];
+                                                    tree: null;
+                                                };
+                                            };
+                                        };
+                                    }[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    action: string;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -5981,7 +7759,69 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    data: null[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    action: string;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -6057,7 +7897,69 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    data: null[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    action: string;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -6133,7 +8035,91 @@ export interface paths {
                     };
                 };
             };
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            layout: {
+                                bloks_payload: {
+                                    data: {
+                                        id: string;
+                                        type: string;
+                                        data: {
+                                            key?: string;
+                                            mode?: string;
+                                            initial: boolean | string | number;
+                                        };
+                                    }[];
+                                    embedded_payloads: {
+                                        id: string;
+                                        payload: {
+                                            layout: {
+                                                bloks_payload: {
+                                                    ft: null;
+                                                    referenced: string[];
+                                                    tree: null;
+                                                    referenced_embedded_payloads?: string[];
+                                                    templates?: null;
+                                                };
+                                            };
+                                        };
+                                    }[];
+                                    props: {
+                                        id: string;
+                                        name: string;
+                                    }[];
+                                    error_attribution: {
+                                        logging_id: string;
+                                        source_map_id: string;
+                                    };
+                                    action: string;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         delete?: never;
         options?: never;
@@ -6201,7 +8187,73 @@ export interface paths {
                 cookie?: never;
             };
             requestBody?: never;
-            responses: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-prefetch-request": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            component_query_responses: {
+                                payload: string;
+                                consumed_params: {
+                                    __infra__container_config_id?: string;
+                                    caller_name?: string;
+                                };
+                                app_id: string;
+                                resources?: {
+                                    acq: {
+                                        app_id: string;
+                                        cache_ttl: number;
+                                        consumed_params?: {
+                                            caller_name: string;
+                                        };
+                                        cache_keys?: string[];
+                                    }[];
+                                };
+                            }[];
+                            status: string;
+                        };
+                    };
+                };
+            };
         };
         put?: never;
         post?: never;
@@ -43731,7 +45783,7 @@ export interface paths {
                                                                         };
                                                                     };
                                                                 };
-                                                            };
+                                                            } | null;
                                                         };
                                                     }[];
                                                     is_server_force_pass: boolean;

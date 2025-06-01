@@ -32,8 +32,18 @@ const GENERATOR_CONFIGS: GeneratorConfig[] = [
     srcDir: path.join(BASE_SRC_DIR, "instagram"),
     flowsConfig: {
       filterExample: () => false,
-      filterResponse: ({ request }) => !request.path.includes("bloks"),
-      filterSchema: () => true,
+      filterResponse: () => true,
+      filterSchema: ({ path }) => {
+        if (
+          path.endsWith("bloks_payload.layout") ||
+          path.endsWith("bloks_payload.tree") ||
+          path.endsWith("bloks_payload.templates") ||
+          path.endsWith("bloks_payload.ft")
+        ) {
+          return false;
+        }
+        return true;
+      },
     },
   },
   {
