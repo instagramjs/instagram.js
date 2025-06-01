@@ -1,2 +1,2 @@
 openapi*.yaml
-src/schema.ts
+src/**/schema.ts
