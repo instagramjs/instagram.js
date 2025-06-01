@@ -132,6 +132,9 @@ importers:
       openapi-fetch:
         specifier: ^0.14.0
         version: 0.14.0
+      zod:
+        specifier: ^3.25.42
+        version: 3.25.42
     devDependencies:
       '@instagramjs/eslint-config':
         specifier: workspace:*
