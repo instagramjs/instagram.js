@@ -44,16 +44,18 @@ export function parameterizePath(path: string): [string, PathParameter[]] {
   const parameters: PathParameter[] = [];
   let paramIndex = 1;
 
-  const parameterizedSegments = segments.map((segment) => {
+  const parameterizedSegments: string[] = [];
+  for (const segment of segments) {
     if (/^\d+$/.test(segment) || /^[\d_]+$/.test(segment)) {
       parameters.push({
         name: String(paramIndex),
         value: String(segment),
       });
-      return `{${paramIndex++}}`;
+      parameterizedSegments.push(`{${paramIndex++}}`);
+    } else {
+      parameterizedSegments.push(segment);
     }
-    return segment;
-  });
+  }
 
   let parameterizedPath = parameterizedSegments.join("/");
   if (path.startsWith("/")) {
@@ -71,9 +73,13 @@ export function parametersFromPathParameters(
   filterContext: RequestFilterContext,
   pathParameters: PathParameter[],
 ): ParameterObject[] {
-  return pathParameters.map(({ name, value }) => {
+  const parameters: ParameterObject[] = [];
+  for (const {
+    name: pathParameterName,
+    value: pathParameterValue,
+  } of pathParameters) {
     const parameter: ParameterObject = {
-      name,
+      name: pathParameterName,
       in: "path",
       required: true,
       schema: { type: "string" },
@@ -81,14 +87,16 @@ export function parametersFromPathParameters(
     if (
       filterExample(config, {
         ...filterContext,
-        key: name,
-        value: value,
+        key: pathParameterName,
+        value: pathParameterValue,
       })
     ) {
-      parameter.example = value;
+      parameter.example = pathParameterValue;
     }
-    return parameter;
-  });
+    parameters.push(parameter);
+  }
+
+  return parameters;
 }
 
 export function parametersFromHeaders(
@@ -96,28 +104,31 @@ export function parametersFromHeaders(
   filterContext: RequestFilterContext,
   headers: Record<string, string>,
 ): ParameterObject[] {
-  return Object.entries(headers)
-    .filter(([key, value]) =>
-      filterHeader(config, { ...filterContext, name: key, value }),
-    )
-    .map(([key, value]) => {
-      const parameter: ParameterObject = {
-        name: key,
-        in: "header",
-        required: true,
-        schema: { type: "string" },
-      };
-      if (
-        filterExample(config, {
-          ...filterContext,
-          key: key,
-          value: value,
-        })
-      ) {
-        parameter.example = value;
-      }
-      return parameter;
-    });
+  const filteredHeaders = Object.entries(headers).filter(([key, value]) =>
+    filterHeader(config, { ...filterContext, name: key, value }),
+  );
+
+  const parameters: ParameterObject[] = [];
+  for (const [headerName, headerValue] of filteredHeaders) {
+    const parameter: ParameterObject = {
+      name: headerName,
+      in: "header",
+      required: true,
+      schema: { type: "string" },
+    };
+    if (
+      filterExample(config, {
+        ...filterContext,
+        key: headerName,
+        value: headerValue,
+      })
+    ) {
+      parameter.example = headerValue;
+    }
+    parameters.push(parameter);
+  }
+
+  return parameters;
 }
 
 export function parametersFromSearchParams(
@@ -125,7 +136,8 @@ export function parametersFromSearchParams(
   filterContext: RequestFilterContext,
   searchParams: URLSearchParams,
 ): ParameterObject[] {
-  return Array.from(searchParams.entries()).map(([key, value]) => {
+  const parameters: ParameterObject[] = [];
+  for (const [key, value] of searchParams.entries()) {
     const parameter: ParameterObject = {
       name: key,
       in: "query",
@@ -141,8 +153,10 @@ export function parametersFromSearchParams(
     ) {
       parameter.example = value;
     }
-    return parameter;
-  });
+    parameters.push(parameter);
+  }
+
+  return parameters;
 }
 
 export function schemaFromSearchParams(
@@ -155,22 +169,25 @@ export function schemaFromSearchParams(
     required: [],
     properties: {},
   };
+  assert(schema.required, "Expected required to be present");
+  assert(schema.properties, "Expected properties to be present");
 
-  searchParams.forEach((value, key) => {
-    schema.properties![key] = {
+  for (const [searchParamName, searchParamValue] of searchParams.entries()) {
+    const schemaProperty: SchemaObject = {
       type: "string",
     };
     if (
       filterExample(config, {
         ...filterContext,
-        key: key,
-        value: value,
+        key: searchParamName,
+        value: searchParamValue,
       })
     ) {
-      schema.properties![key].example = value;
+      schemaProperty.example = searchParamValue;
     }
-    schema.required!.push(key);
-  });
+    schema.properties[searchParamName] = schemaProperty;
+    schema.required.push(searchParamName);
+  }
 
   return schema;
 }
@@ -259,12 +276,12 @@ export function schemaFromValue(
     }
 
     const baseSchema = schemaFromValue(config, filterContext, 0, firstItem);
-    restItems.forEach((item, index) =>
+    for (const [itemIndex, itemValue] of restItems.entries()) {
       mergeSchemas(
         baseSchema,
-        schemaFromValue(config, filterContext, index + 1, item),
-      ),
-    );
+        schemaFromValue(config, filterContext, itemIndex + 1, itemValue),
+      );
+    }
 
     return {
       type: "array",
@@ -274,11 +291,21 @@ export function schemaFromValue(
 
   if (typeof value === "object" && value !== null) {
     if (objectIsRecord(value)) {
-      const [firstValue, ...restValues] = Object.values(value);
-      const valueSchema = schemaFromValue(config, filterContext, 0, firstValue);
-      restValues.forEach((v) =>
-        mergeSchemas(valueSchema, schemaFromValue(config, filterContext, 0, v)),
+      const [firstEntry, ...restEntries] = Object.entries(value);
+      assert(firstEntry, "Expected first entry to be present");
+
+      const valueSchema = schemaFromValue(
+        config,
+        filterContext,
+        firstEntry[0],
+        firstEntry[1],
       );
+      for (const [restEntryKey, restEntryValue] of restEntries) {
+        mergeSchemas(
+          valueSchema,
+          schemaFromValue(config, filterContext, restEntryKey, restEntryValue),
+        );
+      }
 
       const schema: SchemaObject = {
         type: "object",
@@ -293,18 +320,18 @@ export function schemaFromValue(
       properties: {},
       required: [],
     };
+    assert(schema.required, "Expected required to be present");
+    assert(schema.properties, "Expected properties to be present");
 
-    Object.entries(value).forEach(([key, value]) => {
-      assert(schema.required, "Expected required to be present");
-      assert(schema.properties, "Expected properties to be present");
+    for (const [key, objectValue] of Object.entries(value)) {
       schema.properties[key] = schemaFromValue(
         config,
         filterContext,
         key,
-        value,
+        objectValue,
       );
       schema.required.push(key);
-    });
+    }
 
     return schema;
   }
@@ -322,6 +349,7 @@ function mergeSchemaIntoOneOf(
     (schema) => isNotRef(schema) && schema.type === newSchema.type,
   );
   assert(isNotRef(existingOneOf), "Reference object not expected");
+
   if (existingOneOf) {
     mergeSchemas(existingOneOf, newSchema);
   } else {
@@ -334,11 +362,10 @@ export function mergeSchemas(
   newSchema: SchemaObject,
 ): void {
   if (existingSchema.oneOf && newSchema.oneOf) {
-    newSchema.oneOf.forEach((newOneOf) => {
-      assert(existingSchema.oneOf, "Expected oneOf to be present");
+    for (const newOneOf of newSchema.oneOf) {
       assert(isNotRef(newOneOf), "Reference object not expected");
       mergeSchemaIntoOneOf(existingSchema.oneOf, newOneOf);
-    });
+    }
     return;
   }
   if (existingSchema.oneOf && newSchema.type) {
@@ -370,40 +397,41 @@ export function mergeSchemas(
     existingSchema.type !== newSchema.type
   ) {
     const existingClone = structuredClone(existingSchema);
-    Object.keys(existingSchema).forEach(
-      (key) => delete existingSchema[key as keyof SchemaObject],
-    );
+    for (const key of Object.keys(existingSchema)) {
+      delete existingSchema[key as keyof typeof existingSchema];
+    }
     existingSchema.oneOf = [existingClone, newSchema];
     return;
   }
 
   if (existingSchema.type === "object" && newSchema.type === "object") {
     if (existingSchema.properties && newSchema.properties) {
-      Object.entries(newSchema.properties).forEach(([key, value]) => {
-        assert(existingSchema.properties, "Expected properties to be present");
-        if (existingSchema.properties[key]) {
+      for (const [newKey, newValue] of Object.entries(newSchema.properties)) {
+        if (existingSchema.properties[newKey]) {
           assert(
-            isNotRef(existingSchema.properties[key]),
+            isNotRef(existingSchema.properties[newKey]),
             "Reference object not expected",
           );
-          assert(isNotRef(value), "Reference object not expected");
-          mergeSchemas(existingSchema.properties[key], value);
+          assert(isNotRef(newValue), "Reference object not expected");
+
+          mergeSchemas(existingSchema.properties[newKey], newValue);
         } else {
-          existingSchema.properties[key] = value;
+          existingSchema.properties[newKey] = newValue;
         }
-      });
+      }
 
       if (existingSchema.required) {
-        Object.entries(existingSchema.properties).forEach(([key]) => {
-          assert(existingSchema.required, "Expected required to be present");
-          assert(newSchema.properties, "Expected properties to be present");
-          if (!(key in newSchema.properties)) {
-            const requiredIndex = existingSchema.required.indexOf(key);
-            if (requiredIndex !== -1 && requiredIndex !== undefined) {
-              existingSchema.required.splice(requiredIndex, 1);
-            }
+        const newKeysSet = new Set(Object.keys(newSchema.properties));
+        const missingKeys = Object.keys(existingSchema.properties).filter(
+          (existingKey) => !newKeysSet.has(existingKey),
+        );
+
+        for (const missingKey of missingKeys) {
+          const requiredIndex = existingSchema.required.indexOf(missingKey);
+          if (requiredIndex !== -1 && requiredIndex !== undefined) {
+            existingSchema.required.splice(requiredIndex, 1);
           }
-        });
+        }
       }
     }
 
@@ -446,7 +474,9 @@ export function mergeSchemas(
   }
 
   if (existingSchema.type === newSchema.type) {
-    Object.assign(existingSchema, newSchema);
+    for (const [key, value] of Object.entries(newSchema)) {
+      existingSchema[key as keyof typeof existingSchema] = value;
+    }
     return;
   }
 }
@@ -462,25 +492,27 @@ export function mergeParameters(
     newParameters.map((param) => [`${param.name}:${param.in}`, param]),
   );
 
-  newParameters.forEach((newParam) => {
+  for (const newParam of newParameters) {
     const existingParam = existingByNameAndIn.get(
       `${newParam.name}:${newParam.in}`,
     );
+
     if (existingParam) {
       mergeExamples(existingParam, newParam);
     } else {
       existingParameters.push(newParam);
     }
-  });
+  }
 
-  existingParameters.forEach((existingParam) => {
+  for (const existingParam of existingParameters) {
     const newParam = newByNameAndIn.get(
       `${existingParam.name}:${existingParam.in}`,
     );
+
     if (!newParam) {
       existingParam.required = false;
     }
-  });
+  }
 }
 
 export function mergeExamples(
@@ -494,10 +526,12 @@ export function mergeExamples(
         value: newObj.example,
       };
     }
+
     const exampleCount = Object.keys(newExamples).length;
     newExamples[exampleCount.toString()] = {
       value: newObj.example,
     };
+
     delete oldObj.example;
   }
 }
@@ -507,51 +541,50 @@ export function headerMapFromHeaders(
   filterContext: RequestFilterContext,
   headers: Record<string, string>,
 ): Record<string, HeaderObject> {
-  return Object.entries(headers)
-    .filter(([key, value]) =>
-      filterHeader(config, { ...filterContext, name: key, value }),
-    )
-    .reduce(
-      (acc, [key, value]) => {
-        acc[key] = {
-          schema: { type: "string" },
-          required: true,
-        };
-        if (
-          filterExample(config, {
-            ...filterContext,
-            key: key,
-            value: value,
-          })
-        ) {
-          acc[key].example = value;
-        }
-        return acc;
-      },
-      {} as Record<string, HeaderObject>,
-    );
+  const filteredHeaders = Object.entries(headers).filter(([key, value]) =>
+    filterHeader(config, { ...filterContext, name: key, value }),
+  );
+
+  const headerMap: Record<string, HeaderObject> = {};
+  for (const [key, value] of filteredHeaders) {
+    headerMap[key] = {
+      schema: { type: "string" },
+      required: true,
+    };
+    if (
+      filterExample(config, {
+        ...filterContext,
+        key: key,
+        value: value,
+      })
+    ) {
+      headerMap[key].example = value;
+    }
+  }
+
+  return headerMap;
 }
 
 export function mergeHeaderMaps(
   existingHeaders: Record<string, HeaderObject>,
   newHeaders: Record<string, HeaderObject>,
 ) {
-  Object.entries(newHeaders).forEach(([key, value]) => {
+  for (const [key, value] of Object.entries(newHeaders)) {
     if (existingHeaders[key]) {
       mergeExamples(existingHeaders[key], value);
     } else {
       existingHeaders[key] = value;
     }
-  });
+  }
 
-  Object.entries(existingHeaders).forEach(([key, value]) => {
+  for (const [key, value] of Object.entries(existingHeaders)) {
     if (!newHeaders[key]) {
       value.required = false;
     }
-  });
+  }
 }
 
-export async function decodeContent(
+export async function decodeRawContent(
   content: string,
   encoding?: string,
 ): Promise<string> {

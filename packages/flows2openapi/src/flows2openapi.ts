@@ -17,7 +17,7 @@ import {
   type RequestFilterContext,
 } from "./config";
 import {
-  decodeContent,
+  decodeRawContent,
   headerMapFromHeaders,
   isNotRef,
   mergeHeaderMaps,
@@ -84,18 +84,20 @@ async function processDump(
   const pathname = requestUrl.pathname.slice(prefixUrl.pathname.length);
   const [parameterizedPath, pathParameters] = parameterizePath(pathname);
 
-  const rawRequestBody = dump.request.content;
-  const requestBodyEncoding = dump.request.headers["content-encoding"];
   let requestBody: string | null = null;
-  if (rawRequestBody) {
-    requestBody = await decodeContent(rawRequestBody, requestBodyEncoding);
+  if (dump.request.content) {
+    requestBody = await decodeRawContent(
+      dump.request.content,
+      dump.request.headers["content-encoding"],
+    );
   }
 
-  const rawResponseBody = dump.response.content;
-  const responseBodyEncoding = dump.response.headers["content-encoding"];
   let responseBody: string | null = null;
-  if (rawResponseBody) {
-    responseBody = await decodeContent(rawResponseBody, responseBodyEncoding);
+  if (dump.response.content) {
+    responseBody = await decodeRawContent(
+      dump.response.content,
+      dump.response.headers["content-encoding"],
+    );
   }
 
   const filterContext: RequestFilterContext = {

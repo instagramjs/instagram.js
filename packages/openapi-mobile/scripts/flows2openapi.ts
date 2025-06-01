@@ -18,7 +18,8 @@ async function main() {
   const schema = await flows2OpenAPI(jsonDump, {
     apiPrefix: API_PREFIX,
 
-    filterExample: () => false,
+    filterExample: ({ request }) => request.path.includes("login"),
+    filterResponse: ({ request }) => !request.path.includes("bloks"),
   });
 
   await fs.promises.writeFile(OPENAPI_FILE, yaml.stringify(schema));

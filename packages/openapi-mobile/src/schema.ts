@@ -2406,42 +2406,79 @@ export interface paths {
             parameters: {
                 query?: never;
                 header: {
+                    /** @example en_US */
                     "x-ig-app-locale": string;
+                    /** @example en_US */
                     "x-ig-device-locale": string;
+                    /** @example en_US */
                     "x-ig-mapped-locale": string;
+                    /** @example UFS-47c5c5fc-fda5-482b-9ffb-4ea9074f622d-0 */
                     "x-pigeon-session-id": string;
+                    /** @example 1748652239.079 */
                     "x-pigeon-rawclienttime": string;
+                    /** @example 1042.000 */
                     "x-ig-bandwidth-speed-kbps": string;
+                    /** @example 213190 */
                     "x-ig-bandwidth-totalbytes-b": string;
+                    /** @example 194 */
                     "x-ig-bandwidth-totaltime-ms": string;
+                    /** @example 16e9197b928710eafdf1e803935ed8c450a1a2e3eb696bff1184df088b900bcf */
                     "x-bloks-version-id": string;
+                    /** @example 0 */
                     "x-ig-www-claim": string;
+                    /** @example INDIGO_PRIMARY_BORDERED_SECONDARY */
                     "x-bloks-prism-button-version": string;
+                    /** @example true */
                     "x-bloks-prism-colors-enabled": string;
+                    /** @example false */
                     "x-bloks-prism-ax-base-colors-enabled": string;
+                    /** @example false */
                     "x-bloks-prism-font-enabled": string;
+                    /** @example false */
                     "x-bloks-is-layout-rtl": string;
+                    /** @example 3ce30cbc-5663-4f98-bbfb-582457400887 */
                     "x-ig-device-id": string;
+                    /** @example 3181b53f-d6ae-40ea-880c-9b334041f778 */
                     "x-ig-family-device-id": string;
+                    /** @example android-8f9a1062a223ba71 */
                     "x-ig-android-id": string;
+                    /** @example 28800 */
                     "x-ig-timezone-offset": string;
+                    /** @example SelfFragment:self_profile:2:main_profile:1748652214.49:::1748652214.49,SettingsScreenFragment:main_settings_screen:3:button:1748652215.804:::1748652215.804,com.bloks.www.caa.login.aymh_single_profile_screen_entry:com.bloks.www.caa.login.aymh_single_profile_screen_entry:4:button:1748652231.987:::1748652231.987 */
                     "x-ig-nav-chain": string;
+                    /** @example nid=9fvZ/OEP2PM1;nc=1;fc=1;bc=0; */
                     "x-fb-session-id": string;
+                    /** @example oW/B5gKOk240 */
                     "x-fb-session-private": string;
+                    /** @example WIFI */
                     "x-fb-connection-type": string;
+                    /** @example WIFI */
                     "x-ig-connection-type": string;
+                    /** @example dhcpServerAddr=192.168.0.1;LocalAddrs=/fe80::5c64:adff:fef9:db76,/192.168.0.79,/2600:8807:c192:d000:5c64:adff:fef9:db76,/2600:8807:c192:d000:2073:c339:bf7a:86a3,; */
                     "x-fb-network-properties": string;
+                    /** @example 3brTv10= */
                     "x-ig-capabilities": string;
+                    /** @example 567067343352427 */
                     "x-ig-app-id": string;
+                    /** @example Instagram 361.0.0.46.88 Android (33/13; 280dpi; 720x1471; samsung; SM-S134DL; a03su; mt6765; en_US; 674674275) */
                     "user-agent": string;
+                    /** @example en-US */
                     "accept-language": string;
+                    /** @example aDlwaAABAAFDk7N685XYzU53scUI */
                     "x-mid": string;
+                    /** @example 0 */
                     "ig-intended-user-id": string;
+                    /** @example application/x-www-form-urlencoded; charset=UTF-8 */
                     "content-type": string;
+                    /** @example 1227 */
                     "content-length": string;
+                    /** @example zstd, gzip, deflate */
                     "accept-encoding": string;
+                    /** @example Liger */
                     "x-fb-http-engine": string;
+                    /** @example True */
                     "x-fb-client-ip": string;
+                    /** @example True */
                     "x-fb-server-cluster": string;
                 };
                 path?: never;
@@ -2450,59 +2487,16 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/x-www-form-urlencoded": {
+                        /** @example {"client_input_params":{"prefilled_username":"dl.tool","show_internal_settings":0,"should_show_nested_nta_from_aymh":1,"lois_settings":{"lois_token":""},"sim_phone_numbers":[]},"server_params":{"is_from_logged_out":1,"device_id":"android-8f9a1062a223ba71","waterfall_id":"4aa3a7f4-c3a7-4374-996c-db97f268cb56","should_show_logged_in_aymh_ui":0,"is_platform_login":0,"is_caa_perf_enabled":1,"family_device_id":"3181b53f-d6ae-40ea-880c-9b334041f778","is_from_aymh":1,"offline_experiment_group":"caa_iteration_v3_perf_ig_4","INTERNAL_INFRA_screen_id":"CAA_LOGIN_HOME_PAGE","left_nav_button_action":"BACK","access_flow_version":"F2_FLOW","qe_device_id":"3ce30cbc-5663-4f98-bbfb-582457400887","flow_source":"aymh_single_profile_native_integration_point"}} */
                         params: string;
+                        /** @example {"bloks_version":"16e9197b928710eafdf1e803935ed8c450a1a2e3eb696bff1184df088b900bcf","styles_id":"instagram"} */
                         bk_client_context: string;
+                        /** @example 16e9197b928710eafdf1e803935ed8c450a1a2e3eb696bff1184df088b900bcf */
                         bloks_versioning_id: string;
                     };
                 };
             };
-            responses: {
-                200: {
-                    headers: {
-                        "content-type": string;
-                        date: string;
-                        vary: string;
-                        "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
-                        "x-frame-options": string;
-                        "content-security-policy": string;
-                        "cross-origin-embedder-policy-report-only": string;
-                        "report-to": string;
-                        "cross-origin-resource-policy": string;
-                        "cross-origin-opener-policy": string;
-                        "x-content-type-options": string;
-                        "x-xss-protection": string;
-                        "x-ig-push-state": string;
-                        "x-ig-cache-control": string;
-                        "x-aed": string;
-                        "x-ig-request-elapsed-time-ms": string;
-                        "x-ig-peak-v2": string;
-                        "x-ig-peak-time": string;
-                        "x-ig-capacity-level": string;
-                        "content-encoding": string;
-                        "x-stack": string;
-                        "ig-set-ig-u-ig-direct-region-hint": string;
-                        "ig-set-ig-u-shbid": string;
-                        "ig-set-ig-u-shbts": string;
-                        "ig-set-ig-u-rur": string;
-                        "ig-set-ig-u-ds-user-id": string;
-                        "x-perf-stats": string;
-                        "content-length": string;
-                        "x-ig-origin-region": string;
-                        "x-fb-client-ip-forwarded": string;
-                        "x-fb-server-cluster-forwarded": string;
-                        "alt-svc": string;
-                        "x-fb-connection-quality": string;
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": string;
-                    };
-                };
-            };
+            responses: never;
         };
         delete?: never;
         options?: never;
@@ -2577,203 +2571,7 @@ export interface paths {
                     };
                 };
             };
-            responses: {
-                200: {
-                    headers: {
-                        "content-type": string;
-                        date: string;
-                        vary: string;
-                        "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
-                        "x-frame-options": string;
-                        "content-security-policy": string;
-                        "cross-origin-embedder-policy-report-only": string;
-                        "report-to": string;
-                        "cross-origin-resource-policy": string;
-                        "cross-origin-opener-policy": string;
-                        "x-content-type-options": string;
-                        "x-xss-protection": string;
-                        "x-ig-push-state": string;
-                        "x-ig-cache-control": string;
-                        "x-aed": string;
-                        "x-ig-request-elapsed-time-ms": string;
-                        "x-ig-peak-v2": string;
-                        "x-ig-peak-time": string;
-                        "x-ig-capacity-level": string;
-                        "content-encoding": string;
-                        "x-stack": string;
-                        "ig-set-ig-u-ig-direct-region-hint": string;
-                        "ig-set-ig-u-shbid": string;
-                        "ig-set-ig-u-shbts": string;
-                        "ig-set-ig-u-rur": string;
-                        "ig-set-ig-u-ds-user-id": string;
-                        "x-perf-stats": string;
-                        "content-length": string;
-                        "x-ig-origin-region": string;
-                        "x-fb-client-ip-forwarded": string;
-                        "x-fb-server-cluster-forwarded": string;
-                        "alt-svc": string;
-                        "x-fb-connection-quality": string;
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            layout: {
-                                bloks_payload: {
-                                    data: {
-                                        id: string;
-                                        type: string;
-                                        data: {
-                                            key: string;
-                                            mode: string;
-                                            initial_lispy: string;
-                                        };
-                                    }[];
-                                    tree: {
-                                        "\u3408": {
-                                            " ": {
-                                                "\u369E": {
-                                                    "#": {
-                                                        "\u3408": {
-                                                            ")": string;
-                                                            " ": {
-                                                                "\u3408": {
-                                                                    ")"?: string;
-                                                                    " ": {
-                                                                        "\u3408": {
-                                                                            ")"?: string;
-                                                                            ","?: string;
-                                                                            " ": {
-                                                                                "\u3408"?: {
-                                                                                    " ": {
-                                                                                        "\u340B"?: {
-                                                                                            ")": string;
-                                                                                            "(": string;
-                                                                                            $: string;
-                                                                                            "\u0084": {
-                                                                                                "\u3438": {
-                                                                                                    D: string;
-                                                                                                    "*": string;
-                                                                                                };
-                                                                                            };
-                                                                                        };
-                                                                                        "\u3417"?: {
-                                                                                            0: {
-                                                                                                "\u3435": {
-                                                                                                    $: string;
-                                                                                                    "#": string;
-                                                                                                };
-                                                                                            };
-                                                                                            ")": string;
-                                                                                            "-": string;
-                                                                                            ".": string;
-                                                                                            "*": string;
-                                                                                            "\u0084": {
-                                                                                                "\u3438": {
-                                                                                                    ",": string;
-                                                                                                };
-                                                                                            };
-                                                                                        };
-                                                                                    }[];
-                                                                                    "\u0084"?: {
-                                                                                        "\u3438": {
-                                                                                            ",": string;
-                                                                                            "#": string;
-                                                                                        };
-                                                                                    };
-                                                                                    ")"?: string;
-                                                                                    "\u0085"?: {
-                                                                                        "\u3401": {
-                                                                                            "#": boolean;
-                                                                                            $: string;
-                                                                                            "&": string;
-                                                                                        };
-                                                                                    }[];
-                                                                                };
-                                                                                "\u3411"?: {
-                                                                                    " ": {
-                                                                                        "\u341B": {
-                                                                                            "&": string;
-                                                                                            "*": string;
-                                                                                            ",": {
-                                                                                                "\u3435": {
-                                                                                                    $: string;
-                                                                                                    "#": string;
-                                                                                                };
-                                                                                            };
-                                                                                        };
-                                                                                    }[];
-                                                                                    "*": string;
-                                                                                    "\u0085": {
-                                                                                        "\u3401": {
-                                                                                            "#": boolean;
-                                                                                            "&": string;
-                                                                                        };
-                                                                                    }[];
-                                                                                };
-                                                                                "\u340B"?: Record<string, never>;
-                                                                            }[];
-                                                                            "\u0084"?: {
-                                                                                "\u3438": {
-                                                                                    7: string;
-                                                                                    9: string;
-                                                                                    D: string;
-                                                                                    "=": string;
-                                                                                    ":": string;
-                                                                                };
-                                                                            };
-                                                                            "!"?: number;
-                                                                            "\u0085"?: {
-                                                                                "\u3452": {
-                                                                                    "#": string;
-                                                                                    $: string;
-                                                                                };
-                                                                            }[];
-                                                                        };
-                                                                    }[];
-                                                                    "\u0084": {
-                                                                        "\u3438": {
-                                                                            D?: string;
-                                                                            "*": string;
-                                                                            C?: string;
-                                                                            "+"?: string;
-                                                                            ">"?: string;
-                                                                        };
-                                                                    };
-                                                                    "!"?: number;
-                                                                };
-                                                            }[];
-                                                            "\u0085": {
-                                                                "\u34FE": {
-                                                                    "#": string;
-                                                                };
-                                                            }[];
-                                                        };
-                                                    };
-                                                };
-                                            }[];
-                                            "\u0085": {
-                                                "\u3558": {
-                                                    "#": string;
-                                                };
-                                            }[];
-                                        };
-                                    };
-                                    embedded_payloads: null[];
-                                    error_attribution: {
-                                        logging_id: string;
-                                        source_map_id: string;
-                                    };
-                                };
-                            };
-                            status: string;
-                        };
-                    };
-                };
-            };
+            responses: never;
         };
         delete?: never;
         options?: never;
@@ -2848,203 +2646,7 @@ export interface paths {
                     };
                 };
             };
-            responses: {
-                200: {
-                    headers: {
-                        "content-type": string;
-                        date: string;
-                        vary: string;
-                        "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
-                        "x-frame-options": string;
-                        "content-security-policy": string;
-                        "cross-origin-embedder-policy-report-only": string;
-                        "report-to": string;
-                        "cross-origin-resource-policy": string;
-                        "cross-origin-opener-policy": string;
-                        "x-content-type-options": string;
-                        "x-xss-protection": string;
-                        "x-ig-push-state": string;
-                        "x-ig-cache-control": string;
-                        "x-aed": string;
-                        "x-ig-request-elapsed-time-ms": string;
-                        "x-ig-peak-v2": string;
-                        "x-ig-peak-time": string;
-                        "x-ig-capacity-level": string;
-                        "content-encoding": string;
-                        "x-stack": string;
-                        "ig-set-ig-u-ig-direct-region-hint": string;
-                        "ig-set-ig-u-shbid": string;
-                        "ig-set-ig-u-shbts": string;
-                        "ig-set-ig-u-rur": string;
-                        "ig-set-ig-u-ds-user-id": string;
-                        "x-perf-stats": string;
-                        "content-length": string;
-                        "x-ig-origin-region": string;
-                        "x-fb-client-ip-forwarded": string;
-                        "x-fb-server-cluster-forwarded": string;
-                        "alt-svc": string;
-                        "x-fb-connection-quality": string;
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            layout: {
-                                bloks_payload: {
-                                    data: {
-                                        id: string;
-                                        type: string;
-                                        data: {
-                                            key: string;
-                                            mode: string;
-                                            initial_lispy: string;
-                                        };
-                                    }[];
-                                    tree: {
-                                        "\u3408": {
-                                            " ": {
-                                                "\u369E": {
-                                                    "#": {
-                                                        "\u3408": {
-                                                            ")": string;
-                                                            " ": {
-                                                                "\u3408": {
-                                                                    ")"?: string;
-                                                                    " ": {
-                                                                        "\u3408": {
-                                                                            ")"?: string;
-                                                                            ","?: string;
-                                                                            " ": {
-                                                                                "\u3408"?: {
-                                                                                    " ": {
-                                                                                        "\u340B"?: {
-                                                                                            ")": string;
-                                                                                            "(": string;
-                                                                                            $: string;
-                                                                                            "\u0084": {
-                                                                                                "\u3438": {
-                                                                                                    D: string;
-                                                                                                    "*": string;
-                                                                                                };
-                                                                                            };
-                                                                                        };
-                                                                                        "\u3417"?: {
-                                                                                            0: {
-                                                                                                "\u3435": {
-                                                                                                    $: string;
-                                                                                                    "#": string;
-                                                                                                };
-                                                                                            };
-                                                                                            ")": string;
-                                                                                            "-": string;
-                                                                                            ".": string;
-                                                                                            "*": string;
-                                                                                            "\u0084": {
-                                                                                                "\u3438": {
-                                                                                                    ",": string;
-                                                                                                };
-                                                                                            };
-                                                                                        };
-                                                                                    }[];
-                                                                                    "\u0084"?: {
-                                                                                        "\u3438": {
-                                                                                            ",": string;
-                                                                                            "#": string;
-                                                                                        };
-                                                                                    };
-                                                                                    ")"?: string;
-                                                                                    "\u0085"?: {
-                                                                                        "\u3401": {
-                                                                                            "#": boolean;
-                                                                                            $: string;
-                                                                                            "&": string;
-                                                                                        };
-                                                                                    }[];
-                                                                                };
-                                                                                "\u3411"?: {
-                                                                                    " ": {
-                                                                                        "\u341B": {
-                                                                                            "&": string;
-                                                                                            "*": string;
-                                                                                            ",": {
-                                                                                                "\u3435": {
-                                                                                                    $: string;
-                                                                                                    "#": string;
-                                                                                                };
-                                                                                            };
-                                                                                        };
-                                                                                    }[];
-                                                                                    "*": string;
-                                                                                    "\u0085": {
-                                                                                        "\u3401": {
-                                                                                            "#": boolean;
-                                                                                            "&": string;
-                                                                                        };
-                                                                                    }[];
-                                                                                };
-                                                                                "\u340B"?: Record<string, never>;
-                                                                            }[];
-                                                                            "\u0084"?: {
-                                                                                "\u3438": {
-                                                                                    7: string;
-                                                                                    9: string;
-                                                                                    D: string;
-                                                                                    "=": string;
-                                                                                    ":": string;
-                                                                                };
-                                                                            };
-                                                                            "!"?: number;
-                                                                            "\u0085"?: {
-                                                                                "\u3452": {
-                                                                                    "#": string;
-                                                                                    $: string;
-                                                                                };
-                                                                            }[];
-                                                                        };
-                                                                    }[];
-                                                                    "\u0084": {
-                                                                        "\u3438": {
-                                                                            D?: string;
-                                                                            "*": string;
-                                                                            C?: string;
-                                                                            "+"?: string;
-                                                                            ">"?: string;
-                                                                        };
-                                                                    };
-                                                                    "!"?: number;
-                                                                };
-                                                            }[];
-                                                            "\u0085": {
-                                                                "\u34FE": {
-                                                                    "#": string;
-                                                                };
-                                                            }[];
-                                                        };
-                                                    };
-                                                };
-                                            }[];
-                                            "\u0085": {
-                                                "\u3558": {
-                                                    "#": string;
-                                                };
-                                            }[];
-                                        };
-                                    };
-                                    embedded_payloads: null[];
-                                    error_attribution: {
-                                        logging_id: string;
-                                        source_map_id: string;
-                                    };
-                                };
-                            };
-                            status: string;
-                        };
-                    };
-                };
-            };
+            responses: never;
         };
         delete?: never;
         options?: never;
@@ -3120,340 +2722,7 @@ export interface paths {
                     };
                 };
             };
-            responses: {
-                200: {
-                    headers: {
-                        "content-type": string;
-                        date: string;
-                        vary: string;
-                        "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
-                        "x-frame-options": string;
-                        "content-security-policy": string;
-                        "cross-origin-embedder-policy-report-only": string;
-                        "report-to": string;
-                        "cross-origin-resource-policy": string;
-                        "cross-origin-opener-policy": string;
-                        "x-content-type-options": string;
-                        "x-xss-protection": string;
-                        "x-ig-push-state": string;
-                        "x-ig-cache-control": string;
-                        "x-aed": string;
-                        "x-ig-request-elapsed-time-ms": string;
-                        "x-ig-peak-v2": string;
-                        "x-ig-peak-time": string;
-                        "x-ig-capacity-level": string;
-                        "content-encoding": string;
-                        "x-stack": string;
-                        "ig-set-ig-u-ig-direct-region-hint": string;
-                        "ig-set-ig-u-shbid": string;
-                        "ig-set-ig-u-shbts": string;
-                        "ig-set-ig-u-rur": string;
-                        "ig-set-ig-u-ds-user-id": string;
-                        "x-perf-stats": string;
-                        "content-length": string;
-                        "x-ig-origin-region": string;
-                        "x-fb-client-ip-forwarded": string;
-                        "x-fb-server-cluster-forwarded": string;
-                        "alt-svc": string;
-                        "x-fb-connection-quality": string;
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            layout: {
-                                bloks_payload: {
-                                    data: {
-                                        id: string;
-                                        type: string;
-                                        data: {
-                                            initial?: string;
-                                            initial_lispy?: string;
-                                        };
-                                    }[];
-                                    tree: {
-                                        "\u3408": {
-                                            " ": {
-                                                "\u369E": {
-                                                    "#": {
-                                                        "\u3408": {
-                                                            ")": string;
-                                                            " ": {
-                                                                "\u3408": {
-                                                                    " ": {
-                                                                        "\u3408"?: Record<string, never>;
-                                                                        "\u3405"?: {
-                                                                            "*": string;
-                                                                            " ": {
-                                                                                "\u3408": {
-                                                                                    ")": string;
-                                                                                    " ": {
-                                                                                        "\u3408": {
-                                                                                            ")": string;
-                                                                                            " ": {
-                                                                                                "\u3408": {
-                                                                                                    ")": string;
-                                                                                                    " ": {
-                                                                                                        "\u3408": {
-                                                                                                            "&"?: {
-                                                                                                                "\u3402": {
-                                                                                                                    "#": {
-                                                                                                                        "\u3414": {
-                                                                                                                            "#": {
-                                                                                                                                "\u3415": {
-                                                                                                                                    $: string;
-                                                                                                                                    "#": {
-                                                                                                                                        "\u341C": {
-                                                                                                                                            "#": {
-                                                                                                                                                "\u3435": {
-                                                                                                                                                    $: string;
-                                                                                                                                                    "#": string;
-                                                                                                                                                };
-                                                                                                                                            };
-                                                                                                                                        };
-                                                                                                                                    };
-                                                                                                                                };
-                                                                                                                            }[];
-                                                                                                                        };
-                                                                                                                    };
-                                                                                                                };
-                                                                                                            };
-                                                                                                            ")"?: string;
-                                                                                                            " ": {
-                                                                                                                "\u3408": {
-                                                                                                                    ")": string;
-                                                                                                                    $?: string;
-                                                                                                                    " ": {
-                                                                                                                        "\u3408": {
-                                                                                                                            ")": string;
-                                                                                                                            " ": {
-                                                                                                                                "\u3408": {
-                                                                                                                                    " ": {
-                                                                                                                                        "\u3411"?: {
-                                                                                                                                            0: number;
-                                                                                                                                            " ": {
-                                                                                                                                                "\u341B": {
-                                                                                                                                                    "&"?: string;
-                                                                                                                                                    "*"?: string;
-                                                                                                                                                    "+"?: string;
-                                                                                                                                                    ","?: {
-                                                                                                                                                        "\u3435": {
-                                                                                                                                                            $: string;
-                                                                                                                                                            "#": string;
-                                                                                                                                                        };
-                                                                                                                                                    };
-                                                                                                                                                    "#"?: string;
-                                                                                                                                                };
-                                                                                                                                            }[];
-                                                                                                                                            "&": number;
-                                                                                                                                            ".": number;
-                                                                                                                                        };
-                                                                                                                                        "\u3408"?: {
-                                                                                                                                            " ": {
-                                                                                                                                                "\u3411": {
-                                                                                                                                                    0: number;
-                                                                                                                                                    " ": {
-                                                                                                                                                        "\u341B": {
-                                                                                                                                                            "&"?: string;
-                                                                                                                                                            "*"?: string;
-                                                                                                                                                            "+"?: string;
-                                                                                                                                                            ","?: {
-                                                                                                                                                                "\u3435": {
-                                                                                                                                                                    $: string;
-                                                                                                                                                                    "#": string;
-                                                                                                                                                                };
-                                                                                                                                                            };
-                                                                                                                                                            "#"?: string;
-                                                                                                                                                            "\u0087"?: string;
-                                                                                                                                                            "!"?: number;
-                                                                                                                                                        };
-                                                                                                                                                    }[];
-                                                                                                                                                    "&": number;
-                                                                                                                                                    ".": number;
-                                                                                                                                                };
-                                                                                                                                            }[];
-                                                                                                                                        };
-                                                                                                                                    }[];
-                                                                                                                                    ")"?: string;
-                                                                                                                                    "\u0084"?: {
-                                                                                                                                        "\u3438": {
-                                                                                                                                            ")": number;
-                                                                                                                                        };
-                                                                                                                                    };
-                                                                                                                                };
-                                                                                                                                "\u344F"?: {
-                                                                                                                                    $: string;
-                                                                                                                                    "#": string;
-                                                                                                                                    "&": boolean;
-                                                                                                                                    "\u0086": string;
-                                                                                                                                    "\u0087": string;
-                                                                                                                                    "!": number;
-                                                                                                                                };
-                                                                                                                            }[];
-                                                                                                                            "\u0084": {
-                                                                                                                                "\u3438": {
-                                                                                                                                    ")": number;
-                                                                                                                                    D?: string;
-                                                                                                                                    A?: number;
-                                                                                                                                    ";"?: string;
-                                                                                                                                };
-                                                                                                                            };
-                                                                                                                            $?: string;
-                                                                                                                            "\u0085"?: {
-                                                                                                                                "\u3401": {
-                                                                                                                                    "#": boolean;
-                                                                                                                                    $: string;
-                                                                                                                                    "&": string;
-                                                                                                                                    "+": boolean;
-                                                                                                                                };
-                                                                                                                            }[];
-                                                                                                                        };
-                                                                                                                        "\u3444"?: {
-                                                                                                                            ")": string;
-                                                                                                                            $: string;
-                                                                                                                            "#": string;
-                                                                                                                            "*": string;
-                                                                                                                            "(": {
-                                                                                                                                "\u3435": {
-                                                                                                                                    $: string;
-                                                                                                                                    "#": string;
-                                                                                                                                };
-                                                                                                                            };
-                                                                                                                        };
-                                                                                                                    }[];
-                                                                                                                    "\u0085"?: {
-                                                                                                                        "\u3401": {
-                                                                                                                            "#": boolean;
-                                                                                                                            $: string;
-                                                                                                                            "&": string;
-                                                                                                                            "+": boolean;
-                                                                                                                        };
-                                                                                                                        "\u34E2"?: {
-                                                                                                                            "&": string;
-                                                                                                                            "#": string;
-                                                                                                                        };
-                                                                                                                    }[];
-                                                                                                                    "\u0084": {
-                                                                                                                        "\u3438": {
-                                                                                                                            5?: string;
-                                                                                                                            7?: string;
-                                                                                                                            9?: string;
-                                                                                                                            D: string;
-                                                                                                                            ")"?: number;
-                                                                                                                            A?: number;
-                                                                                                                            ";"?: string;
-                                                                                                                            "="?: string;
-                                                                                                                            ":"?: string;
-                                                                                                                        };
-                                                                                                                    };
-                                                                                                                    "&"?: {
-                                                                                                                        "\u3402": {
-                                                                                                                            "#": {
-                                                                                                                                "\u3414": {
-                                                                                                                                    "#": {
-                                                                                                                                        "\u3415": {
-                                                                                                                                            $: string;
-                                                                                                                                            "#": {
-                                                                                                                                                "\u341C": {
-                                                                                                                                                    "#": {
-                                                                                                                                                        "\u3435": {
-                                                                                                                                                            $: string;
-                                                                                                                                                            "#": string;
-                                                                                                                                                        };
-                                                                                                                                                    };
-                                                                                                                                                };
-                                                                                                                                            };
-                                                                                                                                        };
-                                                                                                                                    }[];
-                                                                                                                                };
-                                                                                                                            };
-                                                                                                                        };
-                                                                                                                    };
-                                                                                                                };
-                                                                                                            }[];
-                                                                                                            "\u0084"?: {
-                                                                                                                "\u3438": {
-                                                                                                                    5: string;
-                                                                                                                    7: string;
-                                                                                                                    9: string;
-                                                                                                                    D: string;
-                                                                                                                    "=": string;
-                                                                                                                    ":": string;
-                                                                                                                };
-                                                                                                            };
-                                                                                                            "-"?: string;
-                                                                                                        };
-                                                                                                    }[];
-                                                                                                };
-                                                                                            }[];
-                                                                                        };
-                                                                                    }[];
-                                                                                    "\u0085": {
-                                                                                        "\u34E2": {
-                                                                                            "&": string;
-                                                                                            "#": string;
-                                                                                        };
-                                                                                    }[];
-                                                                                };
-                                                                            }[];
-                                                                            "\u0084": {
-                                                                                "\u3438": {
-                                                                                    D: string;
-                                                                                    "*": string;
-                                                                                    ")": number;
-                                                                                };
-                                                                            };
-                                                                        };
-                                                                    }[];
-                                                                    "\u0084": {
-                                                                        "\u3438": {
-                                                                            D: string;
-                                                                            A?: number;
-                                                                            "*"?: string;
-                                                                            ")"?: number;
-                                                                        };
-                                                                    };
-                                                                };
-                                                            }[];
-                                                            "\u0085": null[];
-                                                            "\u0084": {
-                                                                "\u3438": {
-                                                                    D: string;
-                                                                    "*": string;
-                                                                    ")": number;
-                                                                };
-                                                            };
-                                                        };
-                                                    };
-                                                    $: {
-                                                        "\u35D9": {
-                                                            $: string;
-                                                        };
-                                                    };
-                                                };
-                                            }[];
-                                            "\u0085": {
-                                                "\u3558": {
-                                                    "#": string;
-                                                };
-                                            }[];
-                                        };
-                                    };
-                                    embedded_payloads: null[];
-                                    error_attribution: {
-                                        logging_id: string;
-                                        source_map_id: string;
-                                    };
-                                };
-                            };
-                            status: string;
-                        };
-                    };
-                };
-            };
+            responses: never;
         };
         delete?: never;
         options?: never;
@@ -3539,70 +2808,7 @@ export interface paths {
                     };
                 };
             };
-            responses: {
-                200: {
-                    headers: {
-                        "content-type": string;
-                        date: string;
-                        vary: string;
-                        "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
-                        "x-frame-options": string;
-                        "content-security-policy": string;
-                        "cross-origin-embedder-policy-report-only": string;
-                        "report-to": string;
-                        "cross-origin-resource-policy": string;
-                        "cross-origin-opener-policy": string;
-                        "x-content-type-options": string;
-                        "x-xss-protection": string;
-                        "x-ig-push-state": string;
-                        "x-ig-cache-control": string;
-                        "x-aed": string;
-                        "x-ig-request-elapsed-time-ms": string;
-                        "x-ig-peak-v2": string;
-                        "x-ig-peak-time": string;
-                        "x-ig-capacity-level": string;
-                        "content-encoding": string;
-                        "x-stack": string;
-                        "ig-set-ig-u-ig-direct-region-hint": string;
-                        "ig-set-ig-u-shbid": string;
-                        "ig-set-ig-u-shbts": string;
-                        "ig-set-ig-u-rur": string;
-                        "ig-set-ig-u-ds-user-id": string;
-                        "x-perf-stats": string;
-                        "content-length": string;
-                        "x-ig-origin-region": string;
-                        "x-fb-client-ip-forwarded": string;
-                        "x-fb-server-cluster-forwarded": string;
-                        "alt-svc": string;
-                        "x-fb-connection-quality": string;
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            layout: {
-                                bloks_payload: {
-                                    data: null[];
-                                    tree: {
-                                        "\u341F": {
-                                            "#": string;
-                                        };
-                                    };
-                                    embedded_payloads: null[];
-                                    error_attribution: {
-                                        logging_id: string;
-                                        source_map_id: string;
-                                    };
-                                };
-                            };
-                            status: string;
-                        };
-                    };
-                };
-            };
+            responses: never;
         };
         delete?: never;
         options?: never;
@@ -3688,159 +2894,7 @@ export interface paths {
                     };
                 };
             };
-            responses: {
-                200: {
-                    headers: {
-                        "content-type": string;
-                        date: string;
-                        vary: string;
-                        "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
-                        "x-frame-options": string;
-                        "content-security-policy": string;
-                        "cross-origin-embedder-policy-report-only": string;
-                        "report-to": string;
-                        "cross-origin-resource-policy": string;
-                        "cross-origin-opener-policy": string;
-                        "x-content-type-options": string;
-                        "x-xss-protection": string;
-                        "x-ig-push-state": string;
-                        "x-ig-cache-control": string;
-                        "x-aed": string;
-                        "x-ig-request-elapsed-time-ms": string;
-                        "x-ig-peak-v2": string;
-                        "x-ig-peak-time": string;
-                        "x-ig-capacity-level": string;
-                        "content-encoding": string;
-                        "x-stack": string;
-                        "ig-set-ig-u-ig-direct-region-hint": string;
-                        "ig-set-ig-u-shbid": string;
-                        "ig-set-ig-u-shbts": string;
-                        "ig-set-ig-u-rur": string;
-                        "ig-set-ig-u-ds-user-id": string;
-                        "x-perf-stats": string;
-                        "content-length": string;
-                        "x-ig-origin-region": string;
-                        "x-fb-client-ip-forwarded": string;
-                        "x-fb-server-cluster-forwarded": string;
-                        "alt-svc": string;
-                        "x-fb-connection-quality": string;
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            layout: {
-                                bloks_payload: {
-                                    data: null[];
-                                    tree: {
-                                        "\u3408": {
-                                            " ": {
-                                                "\u3408": {
-                                                    ")": string;
-                                                    " ": {
-                                                        "\u3405": {
-                                                            "*": string;
-                                                            " ": {
-                                                                "\u3408": {
-                                                                    " ": {
-                                                                        "\u3411": {
-                                                                            0: number;
-                                                                            " ": {
-                                                                                "\u341B": {
-                                                                                    "&": string;
-                                                                                    "*": string;
-                                                                                    "+": string;
-                                                                                    ",": {
-                                                                                        "\u3435": {
-                                                                                            $: string;
-                                                                                            "#": string;
-                                                                                        };
-                                                                                    };
-                                                                                    $?: string;
-                                                                                };
-                                                                            }[];
-                                                                            "*": string;
-                                                                            "&": number;
-                                                                            ".": number;
-                                                                            "\u0084"?: {
-                                                                                "\u3438": {
-                                                                                    D: string;
-                                                                                };
-                                                                            };
-                                                                        };
-                                                                        "\u3408"?: {
-                                                                            "&": {
-                                                                                "\u3402": {
-                                                                                    ".": string;
-                                                                                    "(": string;
-                                                                                    "+": boolean;
-                                                                                    "&": {
-                                                                                        "\u3435": {
-                                                                                            $: string;
-                                                                                            "#": string;
-                                                                                        };
-                                                                                    };
-                                                                                };
-                                                                            };
-                                                                            ",": string;
-                                                                            $: string;
-                                                                            "\u0084": {
-                                                                                "\u3438": {
-                                                                                    0: string;
-                                                                                    D: string;
-                                                                                    "*": string;
-                                                                                    A: number;
-                                                                                };
-                                                                            };
-                                                                        };
-                                                                    }[];
-                                                                    "\u0084": {
-                                                                        "\u3438": {
-                                                                            7: string;
-                                                                            9: string;
-                                                                            "=": string;
-                                                                            ":": string;
-                                                                            A: number;
-                                                                        };
-                                                                    };
-                                                                    ")"?: string;
-                                                                    $?: string;
-                                                                };
-                                                            }[];
-                                                            "?": boolean;
-                                                            c: string;
-                                                        };
-                                                    }[];
-                                                    "\u0085": {
-                                                        "\u3452": {
-                                                            "#": string;
-                                                            $: string;
-                                                        };
-                                                    }[];
-                                                };
-                                            }[];
-                                            "\u0085": {
-                                                "\u3558": {
-                                                    "#": string;
-                                                };
-                                            }[];
-                                        };
-                                    };
-                                    embedded_payloads: null[];
-                                    error_attribution: {
-                                        logging_id: string;
-                                        source_map_id: string;
-                                    };
-                                };
-                            };
-                            status: string;
-                        };
-                    };
-                };
-            };
+            responses: never;
         };
         delete?: never;
         options?: never;
@@ -3861,43 +2915,81 @@ export interface paths {
             parameters: {
                 query?: never;
                 header: {
+                    /** @example en_US */
                     "x-ig-app-locale": string;
+                    /** @example en_US */
                     "x-ig-device-locale": string;
+                    /** @example en_US */
                     "x-ig-mapped-locale": string;
+                    /** @example UFS-47c5c5fc-fda5-482b-9ffb-4ea9074f622d-0 */
                     "x-pigeon-session-id": string;
+                    /** @example 1748652300.972 */
                     "x-pigeon-rawclienttime": string;
+                    /** @example 1042.000 */
                     "x-ig-bandwidth-speed-kbps": string;
+                    /** @example 213190 */
                     "x-ig-bandwidth-totalbytes-b": string;
+                    /** @example 194 */
                     "x-ig-bandwidth-totaltime-ms": string;
+                    /** @example 16e9197b928710eafdf1e803935ed8c450a1a2e3eb696bff1184df088b900bcf */
                     "x-bloks-version-id": string;
+                    /** @example 0 */
                     "x-ig-www-claim": string;
+                    /** @example INDIGO_PRIMARY_BORDERED_SECONDARY */
                     "x-bloks-prism-button-version": string;
+                    /** @example true */
                     "x-bloks-prism-colors-enabled": string;
+                    /** @example false */
                     "x-bloks-prism-ax-base-colors-enabled": string;
+                    /** @example false */
                     "x-bloks-prism-font-enabled": string;
+                    /** @example {"attestation":[{"version":2,"type":"keystore","errors":[0],"challenge_nonce":"uWHrPMyq4kKfpTXsNxEi8ZemvIJh3l2B","signed_nonce":"MEYCIQCmiQ6-QXjvQ09BKEZyppYUzoqfYJBxlbH0g42fxdv_jgIhAMWhBCht4RsSlKc1akUh_rDEEPUZ7O8vqKhBr7RW20hu","key_hash":"4c1e0eada986a92da9666e6bee5744ba800ee5c08b96bda13fc918f5c3768270","certificate_chain":"-----BEGIN CERTIFICATE-----\\nMIICpzCCAk2gAwIBAgIBATAKBggqhkjOPQQDAjA5MQwwCgYDVQQMDANURUUxKTAnBgNVBAUTIGY4\\nYmQ0YTRjYmU0YmMyYWE3ZjUzNDQ1YWM2OGY3OTViMB4XDTIyMDEyNTIzMTk1OFoXDTMyMDEyMzIz\\nMTk1OFowHzEdMBsGA1UEAwwUQW5kcm9pZCBLZXlzdG9yZSBLZXkwWTATBgcqhkjOPQIBBggqhkjO\\nPQMBBwNCAATimKi9iqat+7hHrrA9NUOfPGH1SCSGXamyVH\\/JF9wObDNF2oJVYP9pJAOu+BAo7ubu\\nLFO1pA76h7VYAsnQZDA4o4IBXjCCAVowggFGBgorBgEEAdZ5AgERBIIBNjCCATICAQMKAQECAQQK\\nAQEEIGtwamRxeXZSMWhMV1lBdDZWM21zUXh3bjJaVU5yOElsBAAwWb+FPQgCBgGXI8uVDL+FRUkE\\nRzBFMR8wHQQVY29tLmluc3RhZ3JhbS5hbmRyb2lkAgQWawHeMSIEIOw6UW9yauA8m\\/9DvK2357Yx\\nlaM\\/dRIMnML7+h3jwYQIMIGkoQgxBgIBAgIBA6IDAgEDowQCAgEApQUxAwIBBKoDAgEBv4N3AgUA\\nv4U+AwIBAL+FQEwwSgQgCvFNUFk6UIB\\/izh\\/7Pc7P\\/oTypjmoZRvMt0lwvauxU8BAf8KAQAEIMtH\\nMjj\\/EKEFG3bzfjP\\/3ppSjShP29rWnMHJ3Y+LDtmHv4VBBQIDAfvQv4VCBQIDAxZFv4VOBgIEATSy\\n9b+FTwYCBAE0svUwDgYDVR0PAQH\\/BAQDAgeAMAoGCCqGSM49BAMCA0gAMEUCIDKFHIj7t8bkNRmt\\nInm\\/XTxCL4Eg7mKvoQFPg\\/koLMKAAiEA6SSpeIjoG+docsec0CChPfIJCHBxC6EaLWvBlwwgC3I=\\n-----END CERTIFICATE-----\\n-----BEGIN CERTIFICATE-----\\nMIIB9DCCAXmgAwIBAgIQF0\\/QiGUQoEVfQp20aqlgYTAKBggqhkjOPQQDAjA5MQwwCgYDVQQMDANU\\nRUUxKTAnBgNVBAUTIDhhN2Q2MTE0MGI1ZGY0ODViZmQ1NmMzNDZmOTM2MGQyMB4XDTIyMDEyNTIz\\nMTk1OFoXDTMyMDEyMzIzMTk1OFowOTEMMAoGA1UEDAwDVEVFMSkwJwYDVQQFEyBmOGJkNGE0Y2Jl\\nNGJjMmFhN2Y1MzQ0NWFjNjhmNzk1YjBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABO8YCdIKWNtu\\n3BikZYi5+CQboRdEG7MRHVYqdueWJ2dY\\/wiwG5AJX4l6Sf45el0oUsFM0uQlesSnyhqRzz74h22j\\nYzBhMB0GA1UdDgQWBBQUOkH6JTuktekWi01Cs2goqUhjBTAfBgNVHSMEGDAWgBTt4YE+w2CnvE0k\\nGW4FpFngFKaOtzAPBgNVHRMBAf8EBTADAQH\\/MA4GA1UdDwEB\\/wQEAwICBDAKBggqhkjOPQQDAgNp\\nADBmAjEAjpuPqhkUTooKvVRGBQJmqHjG0F4E3N548PP4x1R2AU+H\\/CSMgpnmdyw9+KawKPJaAjEA\\n9+F6\\/8LI7wcqXi7ZP1gzGqc2kcucqvvv9fUS9jRhpq1KQdrlCHXqJUw5WYhC\\/9e8\\n-----END CERTIFICATE-----\\n-----BEGIN CERTIFICATE-----\\nMIIDlDCCAXygAwIBAgIRANNfxRN+AsXKv20m1omT7towDQYJKoZIhvcNAQELBQAwGzEZMBcGA1UE\\nBRMQZjkyMDA5ZTg1M2I2YjA0NTAeFw0yMjAxMjUyMzE4MDJaFw0zMjAxMjMyMzE4MDJaMDkxDDAK\\nBgNVBAwMA1RFRTEpMCcGA1UEBRMgOGE3ZDYxMTQwYjVkZjQ4NWJmZDU2YzM0NmY5MzYwZDIwdjAQ\\nBgcqhkjOPQIBBgUrgQQAIgNiAAQaCFzQk6uIiHMybQ2264vnhZ9Nmr05MMCGeqKpPIRNq6paqeJw\\n6CKaACivH8sSXd93\\/DhoOs+FFYlfav9oC\\/WxGiSWqKY5FhNnsRJ2uXW28UA48WuiAhCUQYOHw2tQ\\nSOCjYzBhMB0GA1UdDgQWBBTt4YE+w2CnvE0kGW4FpFngFKaOtzAfBgNVHSMEGDAWgBQ2YeEAfIgF\\nCVGLRGxH\\/xpMyepPEjAPBgNVHRMBAf8EBTADAQH\\/MA4GA1UdDwEB\\/wQEAwICBDANBgkqhkiG9w0B\\nAQsFAAOCAgEAYKG7SCBNkAGxC6bRkjuJVe+iW01zPLdGlzBM7A+WVC6fmbZUNIT3B4JUXh38C8Xr\\nIqkBnlQ1SA7EDfGdefdr3sZzgUaDAKHelLG9oIc51tO0tpuRvS6bqxqICtvylCRwRPdcvJRo5h6E\\nvPcMyQ+Q5otyS5vaGUYWiZ6aOUbwZpltTnaRnB9Beq7WbKGrHY2G9cLEdcewp1\\/wRlyE0jJSNvh5\\n9+Xj\\/r6TiRoMaOViQDKBw8zNgWS6KZOBnlG2yc4vXIHDZw4kmFDhjnEuhbO7k5TsOXHa4VKEjKJm\\nWQmp3k0hX68O5Y1\\/I\\/LsGDUC43s7A+ooUEyQMBh9iTbaviRGvxDGbX0LFlJUiZgabkLEg+rFhxlB\\nUagCgjdZM732Qa8cfowl7+bkv2rngJT4OK39oGWUWjkxcectGFe+ytz6Hd\\/7KXw7Tul6DTDH8V4a\\nhW2wu6M5kR9VKIw2520fUf8Go5hLTWGjPLH1sxzfagUP\\/hviP0+4NaAPAOPfs3d43l\\/EdrfyA5VV\\nD09fDlhxuxdMEVePKYXXIuYH8xrYtlObHw9c7a\\/8hkdbR2Zt8rlkGj\\/UpM3Evp9d68wcEIIw2roX\\nmbdK6Z6mYxv7muS9Ry2GGeD0MKmL8Eak3CaBjCFR2G7s9j+I17XPa6yEKnh2XqDN5ra0GJj5\\/Rs1\\nhhayl3DDzWk=\\n-----END CERTIFICATE-----\\n-----BEGIN CERTIFICATE-----\\nMIIFHDCCAwSgAwIBAgIJAMNrfES5rhgxMA0GCSqGSIb3DQEBCwUAMBsxGTAXBgNVBAUTEGY5MjAw\\nOWU4NTNiNmIwNDUwHhcNMjExMTE3MjMxMDQyWhcNMzYxMTEzMjMxMDQyWjAbMRkwFwYDVQQFExBm\\nOTIwMDllODUzYjZiMDQ1MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAr7bHgiuxpwHs\\nK7Qui8xUFmOr75gvMsd\\/dTEDDJdSSxtf6An7xyqpRR90PL2abxM1dEqlXnf2tqw1Ne4Xwl5jlRfd\\nnJLmN0pTy\\/4lj4\\/7tv0Sk3iiKkypnEUtR6WfMgH0QZfKHM1+di+y9TFRtv6y\\/\\/0rb+T+W8a9nsNL\\n\\/ggjnar86461qO0rOs2cXjp3kOG1FEJ5MVmFmBGtnrKpa73XpXyTqRxB\\/M0n1n\\/W9nGqC4FSYa04\\nT6N5RIZGBN2z2MT5IKGbFlbC8UrW0DxW7AYImQQcHtGl\\/m00QLVWutHQoVJYnFPlXTcHYvASLu+R\\nhhsbDmxMgJJ0mcDpvsC4PjvB+TxywElgS70vE0XmLD+OJtvsBslHZvPBKCOdT0MS+tgSOIfga+z1\\nZ1g7+DVagf7quvmag8jfPioyKvxnK\\/EgsTUVi2ghzq8wm27ud\\/mIM7AY2qEORR8Go3TVB4HzWQgp\\nZrt3i5MIlCaY504LzSRiigHCzAPlHws+W0rB5N+er5\\/2pJKnfBSDiCiFAVtCLOZ7gLiMm0jhO2B6\\ntUXHI\\/+MRPjy02i59lINMRRev56GKtcd9qO\\/0kUJWdZTdA2XoS82ixPvZtXQpUpuL12ab+9EaDK8\\nZ4RHJYYfCT3Q5vNAXaiWQ+8PTWm2QgBR\\/bkwSWc+NpUFgNPN9PvQi8WEg5UmAGMCAwEAAaNjMGEw\\nHQYDVR0OBBYEFDZh4QB8iAUJUYtEbEf\\/GkzJ6k8SMB8GA1UdIwQYMBaAFDZh4QB8iAUJUYtEbEf\\/\\nGkzJ6k8SMA8GA1UdEwEB\\/wQFMAMBAf8wDgYDVR0PAQH\\/BAQDAgIEMA0GCSqGSIb3DQEBCwUAA4IC\\nAQBTNNZe5cuf8oiq+jV0itTGzWVhSTjOBEk2FQvh11J3o3lna0o7rd8RFHnN00q4hi6TapFhh4qa\\nw\\/iG6Xg+xOan63niLWIC5GOPFgPeYXM9+nBb3zZzC8ABypYuCusWCmt6Tn3+Pjbz3MTVhRGXuT\\/T\\nQH4KGFY4PhvzAyXwdjTOCXID+aHud4RLcSySr0Fq\\/L+R8TWalvM1wJJPhyRjqRCJerGtfBagiALz\\nvhnmY7U1qFcS0NCnKjoO7oFedKdWlZz0YAfu3aGCJd4KHT0MsGiLZez9WP81xYSrKMNEsDK+zK5f\\nVzw6jA7cxmpXcARTnmAuGUeI7VVDhDzKeVOctf3a0qQLwC+d0+xrETZ4r2fRGNw2YEs2W8Qj6oDc\\nfPvq9JySe7pJ6wcHnl5EZ0lwc4xH7Y4Dx9RA1JlfooLMw3tOdJZH0enxPXaydfAD3YifeZpFaUzi\\ncHeLzVJLt9dvGB0bHQLE4+EqKFgOZv2EoP686DQqbVS1u+9k0p2xbMA105TBIk7npraa8VM0fnrR\\nKi7wlZKwdH+aNAyhbXRW9xsnODJ+g8eF452zvbiKKngEKirK5LGieoXBX7tZ9D1GNBH2Ob3bKOww\\nIWdEFle\\/YF\\/h6zWgdeoaNGDqVBrLr2+0DtWoiB1aDEjLWl9FmyIUyUm7mD\\/vFDkzF+wm7cyWpQpC\\nVQ==\\n-----END CERTIFICATE-----"}]} */
                     "x-ig-attest-params": string;
+                    /** @example false */
                     "x-bloks-is-layout-rtl": string;
+                    /** @example 3ce30cbc-5663-4f98-bbfb-582457400887 */
                     "x-ig-device-id": string;
+                    /** @example 3181b53f-d6ae-40ea-880c-9b334041f778 */
                     "x-ig-family-device-id": string;
+                    /** @example android-8f9a1062a223ba71 */
                     "x-ig-android-id": string;
+                    /** @example 28800 */
                     "x-ig-timezone-offset": string;
+                    /** @example SelfFragment:self_profile:2:main_profile:1748652214.49:::1748652214.49,SettingsScreenFragment:main_settings_screen:3:button:1748652215.804:::1748652215.804,com.bloks.www.caa.login.aymh_single_profile_screen_entry:com.bloks.www.caa.login.aymh_single_profile_screen_entry:4:button:1748652231.987:::1748652231.987,IgCdsScreenNavigationLoggerModule:com.bloks.www.caa.login.login_homepage:5:button:1748652239.96:::1748652239.96,com.bloks.www.caa.login.login_homepage:com.bloks.www.caa.login.login_homepage:6:button:1748652251.385:::1748652251.385 */
                     "x-ig-nav-chain": string;
+                    /** @example nid=9fvZ/OEP2PM1;nc=1;fc=1;bc=0; */
                     "x-fb-session-id": string;
+                    /** @example oW/B5gKOk240 */
                     "x-fb-session-private": string;
+                    /** @example WIFI */
                     "x-fb-connection-type": string;
+                    /** @example WIFI */
                     "x-ig-connection-type": string;
+                    /** @example dhcpServerAddr=192.168.0.1;LocalAddrs=/fe80::5c64:adff:fef9:db76,/192.168.0.79,/2600:8807:c192:d000:5c64:adff:fef9:db76,/2600:8807:c192:d000:2073:c339:bf7a:86a3,; */
                     "x-fb-network-properties": string;
+                    /** @example 3brTv10= */
                     "x-ig-capabilities": string;
+                    /** @example 567067343352427 */
                     "x-ig-app-id": string;
+                    /** @example Instagram 361.0.0.46.88 Android (33/13; 280dpi; 720x1471; samsung; SM-S134DL; a03su; mt6765; en_US; 674674275) */
                     "user-agent": string;
+                    /** @example en-US */
                     "accept-language": string;
+                    /** @example aDlwaAABAAFDk7N685XYzU53scUI */
                     "x-mid": string;
+                    /** @example 0 */
                     "ig-intended-user-id": string;
+                    /** @example application/x-www-form-urlencoded; charset=UTF-8 */
                     "content-type": string;
+                    /** @example 6877 */
                     "content-length": string;
+                    /** @example zstd, gzip, deflate */
                     "accept-encoding": string;
+                    /** @example Liger */
                     "x-fb-http-engine": string;
+                    /** @example True */
                     "x-fb-client-ip": string;
+                    /** @example True */
                     "x-fb-server-cluster": string;
                 };
                 path?: never;
@@ -3906,693 +2998,16 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/x-www-form-urlencoded": {
+                        /** @example {"client_input_params":{"sim_phones":[],"aymh_accounts":[{"profiles":{"64695113561":{"is_derived":0,"credentials":[{"credential_type":"none","cloud_identifier":"","token":""},{"credential_type":"local_auth","cloud_identifier":"","token":"Bearer IGT:2:eyJkc191c2VyX2lkIjoiNjQ2OTUxMTM1NjEiLCJzZXNzaW9uaWQiOiI2NDY5NTExMzU2MSUzQTdia0JSUkIweXg3alAzJTNBMTElM0FBWWNwWF9GX2lSaXVRalgxanRnbXRVTnN2NkdSSWdZLUs1c000cEMtcmcifQ=="},{"credential_type":"nonce","cloud_identifier":"","token":"Kbf1F76Rlm7AdAmpTXcxh4LdzBQfe8GpyeR7cHh4biD4BHWuGvGHYbdTeUbtSUTm"}],"account_center_id":"64695113561","fx_saved_account_source":"","profile_picture_url":"https://scontent-atl3-2.cdninstagram.com/v/t51.2885-19/427975109_7238548102891632_8790814224061884882_n.jpg?_nc_ht=scontent-atl3-2.cdninstagram.com&_nc_cat=100&_nc_oc=Q6cZ2QHTg-6Kq29t6CA83zZV6gVhdO4x4qnHcGP-RZ4L-3WeOMf8cOp8UFsVqZlIufkXuYSQqTi6v-5qWKgo5qOwznBM&_nc_ohc=FeqJjU-TH4cQ7kNvwELJ6ut&edm=AAAAAAABAAAA&ccb=7-5&oh=00_AfLGZiUCfy6-aoZ9PH7AqgT9zoppwVcvucBJp9qmr0c8Hw&oe=6840206C&_nc_sid=328259","source_uid":"64695113561","notification_count":23,"last_access_time":0,"token":"Bearer IGT:2:eyJkc191c2VyX2lkIjoiNjQ2OTUxMTM1NjEiLCJzZXNzaW9uaWQiOiI2NDY5NTExMzU2MSUzQTdia0JSUkIweXg3alAzJTNBMTElM0FBWWNwWF9GX2lSaXVRalgxanRnbXRVTnN2NkdSSWdZLUs1c000cEMtcmcifQ==","has_smartlock":0,"credential_type":"local_auth","user_id":"64695113561","ob_user_id":"","name":"dl.tool","is_profile_batch_fetch_enabled":1,"source_credential_type":"local_auth","username":"dl.tool"}},"id":"64695113561"}],"secure_family_device_id":"","has_granted_read_contacts_permissions":0,"auth_secure_device_id":"","has_whatsapp_installed":0,"password":"#PWD_INSTAGRAM:4:1748652300:AbKRQnyQgtehmwaQoKYAAXqh1Id+ix0IrjukRs5t0tiYh38mlfcVecx06SQpEsBzO93E3q2d28s+bImRCRj2MhE6IGeh9f8/fuXeLH/rxvMq8Y5MxxGeZ1sWExOxe2RPfXfgZgLPSv8EHyk9lmDc3gf2hBxDB9AF9sDupzynagBFMczmFCose8p6nCpNUfTuZRiu7peQvydOWy7oNLLunIMJ8CgQp+aDZz674DhjhfXpUHdyRFBTBogbDDi+uehG6Zkw40s2waQkvkps2vyApa1jd6+eub3GWg2gKxpgTyWo+tIk8qzXoUWPgXU59Cn0RSNW70uMZnLrnpySQm8jWSmBIVWIuJRZhtdcbERsUgQfEnZt8MsPaZCSCoD4FdyH/69n3mlK0GA31M0/D6WE+6J8sw==","sso_token_map_json_string":"{\"64695113561\":[{\"credential_type\":\"local_auth\",\"token\":\"Bearer IGT:2:eyJkc191c2VyX2lkIjoiNjQ2OTUxMTM1NjEiLCJzZXNzaW9uaWQiOiI2NDY5NTExMzU2MSUzQTdia0JSUkIweXg3alAzJTNBMTElM0FBWWNwWF9GX2lSaXVRalgxanRnbXRVTnN2NkdSSWdZLUs1c000cEMtcmcifQ==\"},{\"credential_type\":\"nonce\",\"token\":\"Kbf1F76Rlm7AdAmpTXcxh4LdzBQfe8GpyeR7cHh4biD4BHWuGvGHYbdTeUbtSUTm\"}]}","block_store_machine_id":"","ig_vetted_device_nonces":"{\"64695113561\":\"{\\\"vetted_device_first_factor_nonce\\\":\\\"iLdZLu1n6ta1NxO0sgECDw9GF2IeXICmti3QlcDa3S7tyE5INk35NLxR5Ju4zWIM\\\",\\\"vetted_device_second_factor_nonce\\\":\\\"1EujM2mRnhngXjSt1ioiiQHct2xDK1WuZvlFGK4bJLuJxP4PU5nRWmOAcbkB5lBc\\\",\\\"timestamp\\\":1748597245}\"}","cloud_trust_token":null,"event_flow":"login_manual","password_contains_non_ascii":"false","client_known_key_hash":"","encrypted_msisdn":"","has_granted_read_phone_permissions":0,"app_manager_id":"","should_show_nested_nta_from_aymh":1,"device_id":"android-8f9a1062a223ba71","login_attempt_count":1,"machine_id":"aDlwaAABAAFDk7N685XYzU53scUI","flash_call_permission_status":{"READ_PHONE_STATE":"DENIED","READ_CALL_LOG":"DENIED","ANSWER_PHONE_CALLS":"DENIED"},"accounts_list":[{"uid":"64695113561","account_type":"nonce","token":"Kbf1F76Rlm7AdAmpTXcxh4LdzBQfe8GpyeR7cHh4biD4BHWuGvGHYbdTeUbtSUTm"},{"uid":"64695113561","credential_type":"local_auth","token":"Bearer IGT:2:eyJkc191c2VyX2lkIjoiNjQ2OTUxMTM1NjEiLCJzZXNzaW9uaWQiOiI2NDY5NTExMzU2MSUzQTdia0JSUkIweXg3alAzJTNBMTElM0FBWWNwWF9GX2lSaXVRalgxanRnbXRVTnN2NkdSSWdZLUs1c000cEMtcmcifQ=="},{"uid":"64695113561","credential_type":"none","token":""}],"family_device_id":"3181b53f-d6ae-40ea-880c-9b334041f778","fb_ig_device_id":[],"device_emails":[],"try_num":1,"lois_settings":{"lois_token":""},"event_step":"home_page","headers_infra_flow_id":"","openid_tokens":{},"contact_point":"dl.tool"},"server_params":{"should_trigger_override_login_2fa_action":0,"is_from_logged_out":1,"should_trigger_override_login_success_action":0,"login_credential_type":"none","server_login_source":"login","waterfall_id":"4aa3a7f4-c3a7-4374-996c-db97f268cb56","two_step_login_type":"one_step_login","login_source":"Login","is_platform_login":0,"INTERNAL__latency_qpl_marker_id":36707139,"is_from_aymh":0,"offline_experiment_group":"caa_iteration_v3_perf_ig_4","is_from_landing_page":0,"password_text_input_id":"ie6dt8:69","is_from_empty_password":0,"is_from_msplit_fallback":0,"ar_event_source":"login_home_page","qe_device_id":"3ce30cbc-5663-4f98-bbfb-582457400887","username_text_input_id":"ie6dt8:68","layered_homepage_experiment_group":null,"device_id":"android-8f9a1062a223ba71","INTERNAL__latency_qpl_instance_id":1.11220362800272E14,"reg_flow_source":"aymh_single_profile_native_integration_point","is_caa_perf_enabled":1,"credential_type":"password","is_from_password_entry_page":0,"caller":"gslr","family_device_id":"3181b53f-d6ae-40ea-880c-9b334041f778","is_from_assistive_id":0,"access_flow_version":"pre_mt_behavior","is_from_logged_in_switcher":0}} */
                         params: string;
+                        /** @example {"bloks_version":"16e9197b928710eafdf1e803935ed8c450a1a2e3eb696bff1184df088b900bcf","styles_id":"instagram"} */
                         bk_client_context: string;
+                        /** @example 16e9197b928710eafdf1e803935ed8c450a1a2e3eb696bff1184df088b900bcf */
                         bloks_versioning_id: string;
                     };
                 };
             };
-            responses: {
-                200: {
-                    headers: {
-                        "content-type": string;
-                        date: string;
-                        vary: string;
-                        "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
-                        "x-frame-options": string;
-                        "content-security-policy": string;
-                        "cross-origin-embedder-policy-report-only": string;
-                        "report-to": string;
-                        "cross-origin-resource-policy": string;
-                        "cross-origin-opener-policy": string;
-                        "x-content-type-options": string;
-                        "x-xss-protection": string;
-                        "x-ig-push-state": string;
-                        "x-ig-cache-control": string;
-                        "x-aed": string;
-                        "x-ig-request-elapsed-time-ms": string;
-                        "x-ig-peak-v2": string;
-                        "x-ig-peak-time": string;
-                        "x-ig-capacity-level": string;
-                        "content-encoding": string;
-                        "x-stack": string;
-                        "ig-set-ig-u-ig-direct-region-hint": string;
-                        "ig-set-ig-u-shbid": string;
-                        "ig-set-ig-u-shbts": string;
-                        "ig-set-ig-u-rur": string;
-                        "ig-set-ig-u-ds-user-id": string;
-                        "x-perf-stats": string;
-                        "content-length": string;
-                        "x-ig-origin-region": string;
-                        "x-fb-client-ip-forwarded": string;
-                        "x-fb-server-cluster-forwarded": string;
-                        "alt-svc": string;
-                        "x-fb-connection-quality": string;
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            layout: {
-                                bloks_payload: {
-                                    ft: {
-                                        "13i8q0a7kw": string;
-                                    };
-                                    data: {
-                                        id: string;
-                                        type: string;
-                                        data: {
-                                            key?: string;
-                                            mode?: string;
-                                            initial: boolean | number;
-                                        };
-                                    }[];
-                                    embedded_payloads: {
-                                        id: string;
-                                        payload: {
-                                            layout: {
-                                                bloks_payload: {
-                                                    tree: {
-                                                        "\u3408"?: {
-                                                            " ": {
-                                                                "\u3408": {
-                                                                    " ": {
-                                                                        "\u3408": {
-                                                                            "&": {
-                                                                                "\u3402": {
-                                                                                    "#": {
-                                                                                        "\u408E": {
-                                                                                            "+": string;
-                                                                                            "#": string;
-                                                                                            "*": string;
-                                                                                            "&": string;
-                                                                                            "(": string;
-                                                                                            ")": {
-                                                                                                "\u3435": {
-                                                                                                    $: string;
-                                                                                                    "#": string;
-                                                                                                };
-                                                                                            };
-                                                                                            $: {
-                                                                                                "\u3435": {
-                                                                                                    $: string;
-                                                                                                    "#": string;
-                                                                                                };
-                                                                                            };
-                                                                                        };
-                                                                                    };
-                                                                                };
-                                                                            };
-                                                                            $: string;
-                                                                            " ": {
-                                                                                "\u3408": {
-                                                                                    " ": {
-                                                                                        "\u3408": {
-                                                                                            ")": string;
-                                                                                            $: string;
-                                                                                            " ": {
-                                                                                                "\u3408": {
-                                                                                                    " ": {
-                                                                                                        "\u3408"?: {
-                                                                                                            ",": string;
-                                                                                                            $: string;
-                                                                                                            " ": {
-                                                                                                                "\u340B": {
-                                                                                                                    ")": string;
-                                                                                                                    "#": {
-                                                                                                                        "\u3435": {
-                                                                                                                            $: string;
-                                                                                                                            "#": string;
-                                                                                                                        };
-                                                                                                                    };
-                                                                                                                };
-                                                                                                            }[];
-                                                                                                            "\u0085": {
-                                                                                                                "\u365A": {
-                                                                                                                    ")": string;
-                                                                                                                };
-                                                                                                            }[];
-                                                                                                            "\u0084": {
-                                                                                                                "\u3438": {
-                                                                                                                    D: string;
-                                                                                                                    "*": string;
-                                                                                                                };
-                                                                                                            };
-                                                                                                        };
-                                                                                                        "\u3411"?: {
-                                                                                                            0: number;
-                                                                                                            5: {
-                                                                                                                "\u3435": {
-                                                                                                                    $: string;
-                                                                                                                    "#": string;
-                                                                                                                };
-                                                                                                            };
-                                                                                                            " ": {
-                                                                                                                "\u341B": {
-                                                                                                                    1: number;
-                                                                                                                    "*": string;
-                                                                                                                    "+": string;
-                                                                                                                    ",": {
-                                                                                                                        "\u3435": {
-                                                                                                                            $: string;
-                                                                                                                            "#": string;
-                                                                                                                        };
-                                                                                                                    };
-                                                                                                                    "#": string;
-                                                                                                                    "-": boolean;
-                                                                                                                    "&": string;
-                                                                                                                };
-                                                                                                            }[];
-                                                                                                            "*": string;
-                                                                                                            "&": number;
-                                                                                                            "(": number;
-                                                                                                            ",": {
-                                                                                                                "\u341B": {
-                                                                                                                    1: number;
-                                                                                                                    "&": string;
-                                                                                                                    "*": string;
-                                                                                                                    "+": string;
-                                                                                                                    ",": {
-                                                                                                                        "\u3435": {
-                                                                                                                            $: string;
-                                                                                                                            "#": string;
-                                                                                                                        };
-                                                                                                                    };
-                                                                                                                    "#": string;
-                                                                                                                };
-                                                                                                            }[];
-                                                                                                            ".": number;
-                                                                                                            "!": string;
-                                                                                                            "\u0085": {
-                                                                                                                "\u36B1": {
-                                                                                                                    0: boolean;
-                                                                                                                    "(": boolean;
-                                                                                                                    "*": string;
-                                                                                                                    "#": string;
-                                                                                                                };
-                                                                                                            }[];
-                                                                                                        };
-                                                                                                    }[];
-                                                                                                    "\u0084": {
-                                                                                                        "\u3438": {
-                                                                                                            ")": number;
-                                                                                                            A: number;
-                                                                                                            "#": string;
-                                                                                                            "-"?: string;
-                                                                                                        };
-                                                                                                    };
-                                                                                                    ")"?: string;
-                                                                                                };
-                                                                                            }[];
-                                                                                            "\u0084": {
-                                                                                                "\u3438": {
-                                                                                                    ")": number;
-                                                                                                };
-                                                                                            };
-                                                                                        };
-                                                                                    }[];
-                                                                                    "\u0085": null[];
-                                                                                    "\u0084": {
-                                                                                        "\u3438": {
-                                                                                            5: string;
-                                                                                            8: string;
-                                                                                            D: string;
-                                                                                            ";": string;
-                                                                                        };
-                                                                                    };
-                                                                                };
-                                                                            }[];
-                                                                            "\u0084": {
-                                                                                "\u3438": {
-                                                                                    7: string;
-                                                                                    9: string;
-                                                                                    "=": string;
-                                                                                    ":": string;
-                                                                                };
-                                                                            };
-                                                                        };
-                                                                    }[];
-                                                                    "\u0084": {
-                                                                        "\u3438": {
-                                                                            [key: string]: string;
-                                                                        };
-                                                                    };
-                                                                };
-                                                            }[];
-                                                            "\u0085": {
-                                                                "\u4083": {
-                                                                    "#": number;
-                                                                };
-                                                            }[];
-                                                            "\u0084": {
-                                                                "\u3438": {
-                                                                    ")": number;
-                                                                };
-                                                            };
-                                                        };
-                                                        "\u370D"?: {
-                                                            $: {
-                                                                "\u3408": {
-                                                                    ")": string;
-                                                                    $: string;
-                                                                    " ": {
-                                                                        "\u3408": {
-                                                                            ")": string;
-                                                                            $: string;
-                                                                            " ": {
-                                                                                "\u3408": {
-                                                                                    ")": string;
-                                                                                    " ": {
-                                                                                        "\u3408": {
-                                                                                            ")": string;
-                                                                                            " ": {
-                                                                                                "\u3408": {
-                                                                                                    ")": string;
-                                                                                                    " ": {
-                                                                                                        "\u3405"?: {
-                                                                                                            "*": string;
-                                                                                                            " ": {
-                                                                                                                "\u3408": {
-                                                                                                                    "&": {
-                                                                                                                        "\u3402": Record<string, never>;
-                                                                                                                    };
-                                                                                                                    ")": string;
-                                                                                                                    " ": {
-                                                                                                                        "\u3408": {
-                                                                                                                            ")": string;
-                                                                                                                            " ": {
-                                                                                                                                "\u3408": {
-                                                                                                                                    ")": string;
-                                                                                                                                    $: string;
-                                                                                                                                    " ": {
-                                                                                                                                        "\u3411"?: {
-                                                                                                                                            0: number;
-                                                                                                                                            5: {
-                                                                                                                                                "\u3435": {
-                                                                                                                                                    $: string;
-                                                                                                                                                    "#": string;
-                                                                                                                                                };
-                                                                                                                                            };
-                                                                                                                                            " ": {
-                                                                                                                                                "\u341B": {
-                                                                                                                                                    1: number;
-                                                                                                                                                    "*": string;
-                                                                                                                                                    "+": string;
-                                                                                                                                                    ",": {
-                                                                                                                                                        "\u3435": {
-                                                                                                                                                            $: string;
-                                                                                                                                                            "#": string;
-                                                                                                                                                        };
-                                                                                                                                                    };
-                                                                                                                                                    "#": string;
-                                                                                                                                                    "-": boolean;
-                                                                                                                                                    "&"?: string;
-                                                                                                                                                    "\u0087"?: string[];
-                                                                                                                                                };
-                                                                                                                                            }[];
-                                                                                                                                            "*": string;
-                                                                                                                                            "&": number;
-                                                                                                                                            "(": number;
-                                                                                                                                            ",": {
-                                                                                                                                                "\u341B": {
-                                                                                                                                                    1: number;
-                                                                                                                                                    "&": string;
-                                                                                                                                                    "*": string;
-                                                                                                                                                    "+": string;
-                                                                                                                                                    ",": {
-                                                                                                                                                        "\u3435": {
-                                                                                                                                                            $: string;
-                                                                                                                                                            "#": string;
-                                                                                                                                                        };
-                                                                                                                                                    };
-                                                                                                                                                    "#": string;
-                                                                                                                                                };
-                                                                                                                                            }[];
-                                                                                                                                            ".": number;
-                                                                                                                                            "\u0085"?: {
-                                                                                                                                                "\u3401": {
-                                                                                                                                                    "#": boolean;
-                                                                                                                                                    "&": string;
-                                                                                                                                                    $: string;
-                                                                                                                                                };
-                                                                                                                                            }[];
-                                                                                                                                        };
-                                                                                                                                        "\u3408"?: {
-                                                                                                                                            " ": {
-                                                                                                                                                "\u3408": {
-                                                                                                                                                    " ": {
-                                                                                                                                                        "\u3408": {
-                                                                                                                                                            " ": ({
-                                                                                                                                                                "\u3408": {
-                                                                                                                                                                    "&": {
-                                                                                                                                                                        "\u3402": {
-                                                                                                                                                                            ".": string;
-                                                                                                                                                                            "(": string;
-                                                                                                                                                                            "&": {
-                                                                                                                                                                                "\u3435": {
-                                                                                                                                                                                    $: string;
-                                                                                                                                                                                    "#": string;
-                                                                                                                                                                                };
-                                                                                                                                                                            };
-                                                                                                                                                                        };
-                                                                                                                                                                    };
-                                                                                                                                                                    " ": {
-                                                                                                                                                                        "\u3408": {
-                                                                                                                                                                            "&": {
-                                                                                                                                                                                "\u3402": {
-                                                                                                                                                                                    ".": string;
-                                                                                                                                                                                    "(": string;
-                                                                                                                                                                                    "+": boolean;
-                                                                                                                                                                                    "&": {
-                                                                                                                                                                                        "\u3435": {
-                                                                                                                                                                                            $: string;
-                                                                                                                                                                                            "#": string;
-                                                                                                                                                                                        };
-                                                                                                                                                                                    };
-                                                                                                                                                                                };
-                                                                                                                                                                            };
-                                                                                                                                                                            ",": string;
-                                                                                                                                                                            $: string;
-                                                                                                                                                                            " ": {
-                                                                                                                                                                                "\u340B": {
-                                                                                                                                                                                    ")": string;
-                                                                                                                                                                                    "\u0084": {
-                                                                                                                                                                                        "\u3438": {
-                                                                                                                                                                                            [key: string]: string;
-                                                                                                                                                                                        };
-                                                                                                                                                                                    };
-                                                                                                                                                                                };
-                                                                                                                                                                            }[];
-                                                                                                                                                                            "\u0084": {
-                                                                                                                                                                                "\u3438": {
-                                                                                                                                                                                    1: string;
-                                                                                                                                                                                    2: string;
-                                                                                                                                                                                    D: string;
-                                                                                                                                                                                    "*": string;
-                                                                                                                                                                                };
-                                                                                                                                                                            };
-                                                                                                                                                                        };
-                                                                                                                                                                    }[];
-                                                                                                                                                                    "\u0084": {
-                                                                                                                                                                        "\u3438": {
-                                                                                                                                                                            D: string;
-                                                                                                                                                                            "*": string;
-                                                                                                                                                                        };
-                                                                                                                                                                    };
-                                                                                                                                                                };
-                                                                                                                                                            } | null)[];
-                                                                                                                                                            "\u0084"?: {
-                                                                                                                                                                "\u3438": {
-                                                                                                                                                                    "?": string;
-                                                                                                                                                                    "&": string;
-                                                                                                                                                                    ">": string;
-                                                                                                                                                                };
-                                                                                                                                                            };
-                                                                                                                                                        };
-                                                                                                                                                    }[];
-                                                                                                                                                    "\u0085": {
-                                                                                                                                                        "\u36B1": {
-                                                                                                                                                            0: boolean;
-                                                                                                                                                            "(": boolean;
-                                                                                                                                                            "-": string;
-                                                                                                                                                            D: boolean;
-                                                                                                                                                        };
-                                                                                                                                                    }[];
-                                                                                                                                                    "\u0084": {
-                                                                                                                                                        "\u3438": {
-                                                                                                                                                            0: string;
-                                                                                                                                                            D: string;
-                                                                                                                                                            "*": string;
-                                                                                                                                                            ",": string;
-                                                                                                                                                        };
-                                                                                                                                                    };
-                                                                                                                                                };
-                                                                                                                                            }[];
-                                                                                                                                        };
-                                                                                                                                    }[];
-                                                                                                                                    "\u0084"?: {
-                                                                                                                                        "\u3438": {
-                                                                                                                                            7: string;
-                                                                                                                                            "=": string;
-                                                                                                                                        };
-                                                                                                                                    };
-                                                                                                                                };
-                                                                                                                            }[];
-                                                                                                                            "!": string;
-                                                                                                                            "\u0084": {
-                                                                                                                                "\u3438": {
-                                                                                                                                    7: string;
-                                                                                                                                    9: string;
-                                                                                                                                    D: string;
-                                                                                                                                    "=": string;
-                                                                                                                                    ":": string;
-                                                                                                                                };
-                                                                                                                            };
-                                                                                                                        };
-                                                                                                                    }[];
-                                                                                                                    "\u0085": {
-                                                                                                                        "\u365A": {
-                                                                                                                            ")": string;
-                                                                                                                        };
-                                                                                                                    }[];
-                                                                                                                    "\u0084": {
-                                                                                                                        "\u3438": {
-                                                                                                                            D: string;
-                                                                                                                        };
-                                                                                                                    };
-                                                                                                                };
-                                                                                                            }[];
-                                                                                                            C: boolean;
-                                                                                                            "\u0085": null[];
-                                                                                                            "\u0084": {
-                                                                                                                "\u3438": {
-                                                                                                                    ")": number;
-                                                                                                                };
-                                                                                                            };
-                                                                                                        };
-                                                                                                        "\u3408"?: {
-                                                                                                            ")": string;
-                                                                                                            " ": {
-                                                                                                                "\u3408": {
-                                                                                                                    "&": {
-                                                                                                                        "\u3402": {
-                                                                                                                            "+": boolean;
-                                                                                                                        };
-                                                                                                                    };
-                                                                                                                    ")": string;
-                                                                                                                    " ": {
-                                                                                                                        "\u3408": {
-                                                                                                                            "&"?: {
-                                                                                                                                "\u3402": {
-                                                                                                                                    "#": {
-                                                                                                                                        "\u341C": {
-                                                                                                                                            "#": {
-                                                                                                                                                "\u3435": {
-                                                                                                                                                    $: string;
-                                                                                                                                                    "#": string;
-                                                                                                                                                };
-                                                                                                                                            };
-                                                                                                                                        };
-                                                                                                                                    };
-                                                                                                                                };
-                                                                                                                            };
-                                                                                                                            ")": string;
-                                                                                                                            $?: string;
-                                                                                                                            " ": (null | null)[];
-                                                                                                                            "\u0084": {
-                                                                                                                                "\u3438": {
-                                                                                                                                    0?: string;
-                                                                                                                                    7?: string;
-                                                                                                                                    D?: string;
-                                                                                                                                    "*"?: string;
-                                                                                                                                    ")": number;
-                                                                                                                                    A: number;
-                                                                                                                                    "."?: string;
-                                                                                                                                    "="?: string;
-                                                                                                                                };
-                                                                                                                            };
-                                                                                                                        };
-                                                                                                                    }[];
-                                                                                                                    "\u0085": {
-                                                                                                                        "\u3578": {
-                                                                                                                            "(": string;
-                                                                                                                        };
-                                                                                                                    }[];
-                                                                                                                };
-                                                                                                            }[];
-                                                                                                            "\u0084": {
-                                                                                                                "\u3438": {
-                                                                                                                    A: number;
-                                                                                                                };
-                                                                                                            };
-                                                                                                        };
-                                                                                                    }[];
-                                                                                                    "\u0084": {
-                                                                                                        "\u3438": {
-                                                                                                            D: string;
-                                                                                                            "*": string;
-                                                                                                        };
-                                                                                                    };
-                                                                                                };
-                                                                                            }[];
-                                                                                        };
-                                                                                    }[];
-                                                                                    "\u0084": {
-                                                                                        "\u3438": {
-                                                                                            4: string;
-                                                                                            D: string;
-                                                                                            "*": string;
-                                                                                            A: number;
-                                                                                        };
-                                                                                    };
-                                                                                };
-                                                                            }[];
-                                                                            "\u0085": {
-                                                                                "\u365A": {
-                                                                                    ")": string;
-                                                                                };
-                                                                            }[];
-                                                                            "\u0084": {
-                                                                                "\u3438": {
-                                                                                    D: string;
-                                                                                    "*": string;
-                                                                                };
-                                                                            };
-                                                                        };
-                                                                    }[];
-                                                                };
-                                                            };
-                                                            "(": {
-                                                                "\u3408": {
-                                                                    ")": string;
-                                                                    " ": {
-                                                                        "\u3408": {
-                                                                            ")": string;
-                                                                            ",": string;
-                                                                            $: string;
-                                                                            " ": {
-                                                                                "\u3408": {
-                                                                                    " ": null[];
-                                                                                    "\u0085": {
-                                                                                        "\u4083"?: {
-                                                                                            "#": number;
-                                                                                        };
-                                                                                        "\u3578"?: Record<string, never>;
-                                                                                    }[];
-                                                                                    "\u0084": {
-                                                                                        "\u3438": {
-                                                                                            C?: string;
-                                                                                            ">"?: string;
-                                                                                            ")": number;
-                                                                                            A?: number;
-                                                                                        };
-                                                                                    };
-                                                                                    ")"?: string;
-                                                                                    ","?: string;
-                                                                                    $?: string;
-                                                                                };
-                                                                            }[];
-                                                                            "\u0085": null[];
-                                                                            "\u0084": {
-                                                                                "\u3438": {
-                                                                                    D: string;
-                                                                                    "*": string;
-                                                                                };
-                                                                            };
-                                                                        };
-                                                                    }[];
-                                                                    "\u0084": {
-                                                                        "\u3438": {
-                                                                            [key: string]: string;
-                                                                        };
-                                                                    };
-                                                                };
-                                                            };
-                                                            "\u0085": {
-                                                                "\u4091": {
-                                                                    $: string;
-                                                                };
-                                                            }[];
-                                                        };
-                                                    };
-                                                    ft?: {
-                                                        "13i8q0a7l3": string;
-                                                        "13i8q0a7l4": string;
-                                                        "13i8q0a7l5": string;
-                                                        "13i8q0a7l6": string;
-                                                        "13i8q0a7l7": string;
-                                                        "13i8q0a7l8": string;
-                                                        "13i8q0a7l9": string;
-                                                        "13i8q0a7la": string;
-                                                        "13i8q0a7lb": string;
-                                                        "13i8q0a7lc": string;
-                                                        "13i8q0a7ld": string;
-                                                        "13i8q0a7le": string;
-                                                        "13i8q0a7lf": string;
-                                                        "13i8q0a7lh": string;
-                                                        "13i8q0a7li": string;
-                                                        "13i8q0a7lj": string;
-                                                        "13i8q0a7lk": string;
-                                                        "13i8q0a7ll": string;
-                                                        "13i8q0a7lm": string;
-                                                        "13i8q0a7ln": string;
-                                                        "13i8q0a7lo": string;
-                                                        "13i8q0a7lp": string;
-                                                        "13i8q0a7lq": string;
-                                                        "13i8q0a7lr": string;
-                                                        "13i8q0a7ls": string;
-                                                        "13i8q0a7lt": string;
-                                                        "13i8q0a7m9": string;
-                                                        "13i8q0a7ma": string;
-                                                        "13i8q0a7mb": string;
-                                                        "13i8q0a7mc": string;
-                                                        "13i8q0a7md": string;
-                                                        "13i8q0a7me": string;
-                                                        "13i8q0a7mf": string;
-                                                        "13i8q0a7mg": string;
-                                                        "13i8q0a7mh": string;
-                                                        "13i8q0a7mi": string;
-                                                        "13i8q0a7mj": string;
-                                                        "13i8q0a7mk": string;
-                                                        "13i8q0a7ml": string;
-                                                    };
-                                                    referenced?: string[];
-                                                    referenced_embedded_payloads?: string[];
-                                                    templates?: {
-                                                        "13i8q0a7n2": {
-                                                            "\u3725": {
-                                                                "#": string;
-                                                            };
-                                                        };
-                                                        "13i8q0a7n3": {
-                                                            "\u3725": {
-                                                                "#": string;
-                                                            };
-                                                        };
-                                                    };
-                                                };
-                                            };
-                                        };
-                                    }[];
-                                    props: {
-                                        id: string;
-                                        name: string;
-                                    }[];
-                                    error_attribution: {
-                                        logging_id: string;
-                                        source_map_id: string;
-                                    };
-                                    action: string;
-                                };
-                            };
-                            status: string;
-                        };
-                    };
-                };
-            };
+            responses: never;
         };
         delete?: never;
         options?: never;
@@ -4613,42 +3028,79 @@ export interface paths {
             parameters: {
                 query?: never;
                 header: {
+                    /** @example en_US */
                     "x-ig-app-locale": string;
+                    /** @example en_US */
                     "x-ig-device-locale": string;
+                    /** @example en_US */
                     "x-ig-mapped-locale": string;
+                    /** @example UFS-47c5c5fc-fda5-482b-9ffb-4ea9074f622d-0 */
                     "x-pigeon-session-id": string;
+                    /** @example 1748652232.129 */
                     "x-pigeon-rawclienttime": string;
+                    /** @example 1042.000 */
                     "x-ig-bandwidth-speed-kbps": string;
+                    /** @example 213190 */
                     "x-ig-bandwidth-totalbytes-b": string;
+                    /** @example 194 */
                     "x-ig-bandwidth-totaltime-ms": string;
+                    /** @example 16e9197b928710eafdf1e803935ed8c450a1a2e3eb696bff1184df088b900bcf */
                     "x-bloks-version-id": string;
+                    /** @example 0 */
                     "x-ig-www-claim": string;
+                    /** @example INDIGO_PRIMARY_BORDERED_SECONDARY */
                     "x-bloks-prism-button-version": string;
+                    /** @example true */
                     "x-bloks-prism-colors-enabled": string;
+                    /** @example false */
                     "x-bloks-prism-ax-base-colors-enabled": string;
+                    /** @example false */
                     "x-bloks-prism-font-enabled": string;
+                    /** @example false */
                     "x-bloks-is-layout-rtl": string;
+                    /** @example 3ce30cbc-5663-4f98-bbfb-582457400887 */
                     "x-ig-device-id": string;
+                    /** @example 3181b53f-d6ae-40ea-880c-9b334041f778 */
                     "x-ig-family-device-id": string;
+                    /** @example android-8f9a1062a223ba71 */
                     "x-ig-android-id": string;
+                    /** @example 28800 */
                     "x-ig-timezone-offset": string;
+                    /** @example SelfFragment:self_profile:2:main_profile:1748652214.49:::1748652214.49,SettingsScreenFragment:main_settings_screen:3:button:1748652215.804:::1748652215.804,com.bloks.www.caa.login.aymh_single_profile_screen_entry:com.bloks.www.caa.login.aymh_single_profile_screen_entry:4:button:1748652231.987:::1748652231.987 */
                     "x-ig-nav-chain": string;
+                    /** @example nid=9fvZ/OEP2PM1;nc=1;fc=1;bc=0; */
                     "x-fb-session-id": string;
+                    /** @example oW/B5gKOk240 */
                     "x-fb-session-private": string;
+                    /** @example WIFI */
                     "x-fb-connection-type": string;
+                    /** @example WIFI */
                     "x-ig-connection-type": string;
+                    /** @example dhcpServerAddr=192.168.0.1;LocalAddrs=/fe80::5c64:adff:fef9:db76,/192.168.0.79,/2600:8807:c192:d000:5c64:adff:fef9:db76,/2600:8807:c192:d000:2073:c339:bf7a:86a3,; */
                     "x-fb-network-properties": string;
+                    /** @example 3brTv10= */
                     "x-ig-capabilities": string;
+                    /** @example 567067343352427 */
                     "x-ig-app-id": string;
+                    /** @example Instagram 361.0.0.46.88 Android (33/13; 280dpi; 720x1471; samsung; SM-S134DL; a03su; mt6765; en_US; 674674275) */
                     "user-agent": string;
+                    /** @example en-US */
                     "accept-language": string;
+                    /** @example aDlwaAABAAFDk7N685XYzU53scUI */
                     "x-mid": string;
+                    /** @example 0 */
                     "ig-intended-user-id": string;
+                    /** @example application/x-www-form-urlencoded; charset=UTF-8 */
                     "content-type": string;
+                    /** @example 2876 */
                     "content-length": string;
+                    /** @example zstd, gzip, deflate */
                     "accept-encoding": string;
+                    /** @example Liger */
                     "x-fb-http-engine": string;
+                    /** @example True */
                     "x-fb-client-ip": string;
+                    /** @example True */
                     "x-fb-server-cluster": string;
                 };
                 path?: never;
@@ -4657,101 +3109,16 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/x-www-form-urlencoded": {
+                        /** @example {"client_input_params":{"lois_settings":{"lois_token":""},"account_list":[{"profiles":{"64695113561":{"is_derived":0,"credentials":[{"credential_type":"none","cloud_identifier":"","token":""},{"credential_type":"local_auth","cloud_identifier":"","token":"Bearer IGT:2:eyJkc191c2VyX2lkIjoiNjQ2OTUxMTM1NjEiLCJzZXNzaW9uaWQiOiI2NDY5NTExMzU2MSUzQTdia0JSUkIweXg3alAzJTNBMTElM0FBWWNwWF9GX2lSaXVRalgxanRnbXRVTnN2NkdSSWdZLUs1c000cEMtcmcifQ=="},{"credential_type":"nonce","cloud_identifier":"","token":"Kbf1F76Rlm7AdAmpTXcxh4LdzBQfe8GpyeR7cHh4biD4BHWuGvGHYbdTeUbtSUTm"}],"account_center_id":"64695113561","fx_saved_account_source":"","profile_picture_url":"https://scontent-atl3-2.cdninstagram.com/v/t51.2885-19/427975109_7238548102891632_8790814224061884882_n.jpg?_nc_ht=scontent-atl3-2.cdninstagram.com&_nc_cat=100&_nc_oc=Q6cZ2QHTg-6Kq29t6CA83zZV6gVhdO4x4qnHcGP-RZ4L-3WeOMf8cOp8UFsVqZlIufkXuYSQqTi6v-5qWKgo5qOwznBM&_nc_ohc=FeqJjU-TH4cQ7kNvwELJ6ut&edm=AAAAAAABAAAA&ccb=7-5&oh=00_AfLGZiUCfy6-aoZ9PH7AqgT9zoppwVcvucBJp9qmr0c8Hw&oe=6840206C&_nc_sid=328259","source_uid":"64695113561","notification_count":0,"last_access_time":0,"token":"Bearer IGT:2:eyJkc191c2VyX2lkIjoiNjQ2OTUxMTM1NjEiLCJzZXNzaW9uaWQiOiI2NDY5NTExMzU2MSUzQTdia0JSUkIweXg3alAzJTNBMTElM0FBWWNwWF9GX2lSaXVRalgxanRnbXRVTnN2NkdSSWdZLUs1c000cEMtcmcifQ==","has_smartlock":0,"credential_type":"local_auth","user_id":"64695113561","ob_user_id":"","name":"dl.tool","is_profile_batch_fetch_enabled":1,"source_credential_type":"local_auth","username":"dl.tool"}},"id":"64695113561"}]},"server_params":{"is_from_logged_out":1,"layered_homepage_experiment_group":null,"INTERNAL__latency_qpl_marker_id":36707139,"family_device_id":"3181b53f-d6ae-40ea-880c-9b334041f778","device_id":"android-8f9a1062a223ba71","offline_experiment_group":"caa_iteration_v3_perf_ig_4","waterfall_id":"4aa3a7f4-c3a7-4374-996c-db97f268cb56","access_flow_version":"F2_FLOW","INTERNAL__latency_qpl_instance_id":1.11190768900074E14,"is_from_logged_in_switcher":0,"is_platform_login":0,"qe_device_id":"3ce30cbc-5663-4f98-bbfb-582457400887"}} */
                         params: string;
+                        /** @example {"bloks_version":"16e9197b928710eafdf1e803935ed8c450a1a2e3eb696bff1184df088b900bcf","styles_id":"instagram"} */
                         bk_client_context: string;
+                        /** @example 16e9197b928710eafdf1e803935ed8c450a1a2e3eb696bff1184df088b900bcf */
                         bloks_versioning_id: string;
                     };
                 };
             };
-            responses: {
-                200: {
-                    headers: {
-                        "content-type": string;
-                        date: string;
-                        vary: string;
-                        "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
-                        "x-frame-options": string;
-                        "content-security-policy": string;
-                        "cross-origin-embedder-policy-report-only": string;
-                        "report-to": string;
-                        "cross-origin-resource-policy": string;
-                        "cross-origin-opener-policy": string;
-                        "x-content-type-options": string;
-                        "x-xss-protection": string;
-                        "x-ig-push-state": string;
-                        "x-ig-cache-control": string;
-                        "x-aed": string;
-                        "x-ig-request-elapsed-time-ms": string;
-                        "x-ig-peak-v2": string;
-                        "x-ig-peak-time": string;
-                        "x-ig-capacity-level": string;
-                        "content-encoding": string;
-                        "x-stack": string;
-                        "ig-set-ig-u-ig-direct-region-hint": string;
-                        "ig-set-ig-u-shbid": string;
-                        "ig-set-ig-u-shbts": string;
-                        "ig-set-ig-u-rur": string;
-                        "ig-set-ig-u-ds-user-id": string;
-                        "x-perf-stats": string;
-                        "content-length": string;
-                        "x-ig-origin-region": string;
-                        "x-fb-client-ip-forwarded": string;
-                        "x-fb-server-cluster-forwarded": string;
-                        "alt-svc": string;
-                        "x-fb-connection-quality": string;
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            layout: {
-                                bloks_payload: {
-                                    ft: {
-                                        "13eyogsy03": string;
-                                        "13eyogsy04": string;
-                                        "13eyogsy05": string;
-                                        "13eyogsy07": string;
-                                        "13eyogsy09": string;
-                                        "13eyogsy0d": string;
-                                        "13eyogsy0e": string;
-                                        "13eyogsy0g": string;
-                                        "13eyogsy0j": string;
-                                        "13eyogsy0m": string;
-                                        "13eyogsy0n": string;
-                                        "13eyogsy0t": string;
-                                        "13eyogsy0w": string;
-                                        "13eyogsy0x": string;
-                                        "13eyogsy0y": string;
-                                        "13eyogsy0z": string;
-                                        "13eyogsy12": string;
-                                        "13eyogsy13": string;
-                                        "13eyogsy14": string;
-                                        "13eyogsy15": string;
-                                        "13eyogsy16": string;
-                                        "13eyogsy17": string;
-                                        "13eyogsy18": string;
-                                        "13eyogsy19": string;
-                                    };
-                                    data: null[];
-                                    props: {
-                                        id: string;
-                                        name: string;
-                                    }[];
-                                    error_attribution: {
-                                        logging_id: string;
-                                        source_map_id: string;
-                                    };
-                                    action: string;
-                                };
-                            };
-                            status: string;
-                        };
-                    };
-                };
-            };
+            responses: never;
         };
         delete?: never;
         options?: never;
@@ -4772,41 +3139,77 @@ export interface paths {
             parameters: {
                 query?: never;
                 header: {
+                    /** @example en_US */
                     "x-ig-app-locale": string;
+                    /** @example en_US */
                     "x-ig-device-locale": string;
+                    /** @example en_US */
                     "x-ig-mapped-locale": string;
+                    /** @example 1748652230.798 */
                     "x-pigeon-rawclienttime": string;
+                    /** @example 1042.000 */
                     "x-ig-bandwidth-speed-kbps": string;
+                    /** @example 213190 */
                     "x-ig-bandwidth-totalbytes-b": string;
+                    /** @example 194 */
                     "x-ig-bandwidth-totaltime-ms": string;
+                    /** @example 16e9197b928710eafdf1e803935ed8c450a1a2e3eb696bff1184df088b900bcf */
                     "x-bloks-version-id": string;
+                    /** @example 0 */
                     "x-ig-www-claim": string;
+                    /** @example INDIGO_PRIMARY_BORDERED_SECONDARY */
                     "x-bloks-prism-button-version": string;
+                    /** @example true */
                     "x-bloks-prism-colors-enabled": string;
+                    /** @example false */
                     "x-bloks-prism-ax-base-colors-enabled": string;
+                    /** @example false */
                     "x-bloks-prism-font-enabled": string;
+                    /** @example false */
                     "x-bloks-is-layout-rtl": string;
+                    /** @example 3ce30cbc-5663-4f98-bbfb-582457400887 */
                     "x-ig-device-id": string;
+                    /** @example 3181b53f-d6ae-40ea-880c-9b334041f778 */
                     "x-ig-family-device-id": string;
+                    /** @example android-8f9a1062a223ba71 */
                     "x-ig-android-id": string;
+                    /** @example 28800 */
                     "x-ig-timezone-offset": string;
+                    /** @example SelfFragment:self_profile:2:main_profile:1748652214.49:::1748652214.49,SettingsScreenFragment:main_settings_screen:3:button:1748652215.804:::1748652215.804 */
                     "x-ig-nav-chain": string;
+                    /** @example nid=9fvZ/OEP2PM1;nc=1;fc=1;bc=0; */
                     "x-fb-session-id": string;
+                    /** @example oW/B5gKOk240 */
                     "x-fb-session-private": string;
+                    /** @example WIFI */
                     "x-fb-connection-type": string;
+                    /** @example WIFI */
                     "x-ig-connection-type": string;
+                    /** @example dhcpServerAddr=192.168.0.1;LocalAddrs=/fe80::5c64:adff:fef9:db76,/192.168.0.79,/2600:8807:c192:d000:5c64:adff:fef9:db76,/2600:8807:c192:d000:2073:c339:bf7a:86a3,; */
                     "x-fb-network-properties": string;
+                    /** @example 3brTv10= */
                     "x-ig-capabilities": string;
+                    /** @example 567067343352427 */
                     "x-ig-app-id": string;
+                    /** @example Instagram 361.0.0.46.88 Android (33/13; 280dpi; 720x1471; samsung; SM-S134DL; a03su; mt6765; en_US; 674674275) */
                     "user-agent": string;
+                    /** @example en-US */
                     "accept-language": string;
+                    /** @example aDlwaAABAAFDk7N685XYzU53scUI */
                     "x-mid": string;
+                    /** @example 0 */
                     "ig-intended-user-id": string;
+                    /** @example application/x-www-form-urlencoded; charset=UTF-8 */
                     "content-type": string;
+                    /** @example 1622 */
                     "content-length": string;
+                    /** @example zstd, gzip, deflate */
                     "accept-encoding": string;
+                    /** @example Liger */
                     "x-fb-http-engine": string;
+                    /** @example True */
                     "x-fb-client-ip": string;
+                    /** @example True */
                     "x-fb-server-cluster": string;
                 };
                 path?: never;
@@ -4815,59 +3218,16 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/x-www-form-urlencoded": {
+                        /** @example {"is_from_logged_out":true,"logged_out_user":"64695113561","qpl_join_id":"cdb91862-6beb-42ad-9cab-fab4492fc49a","family_device_id":"3181b53f-d6ae-40ea-880c-9b334041f778","device_id":"android-8f9a1062a223ba71","offline_experiment_group":"caa_iteration_v3_perf_ig_4","waterfall_id":"4aa3a7f4-c3a7-4374-996c-db97f268cb56","show_internal_settings":false,"last_auto_login_time":0,"disable_auto_login":true,"qe_device_id":"3ce30cbc-5663-4f98-bbfb-582457400887","is_from_logged_in_switcher":false,"switcher_logged_in_uid":"","account_list":[{"uid":"64695113561","token":"Kbf1F76Rlm7AdAmpTXcxh4LdzBQfe8GpyeR7cHh4biD4BHWuGvGHYbdTeUbtSUTm","account_type":"nonce"},{"uid":"64695113561","credential_type":"local_auth","token":"Bearer IGT:2:eyJkc191c2VyX2lkIjoiNjQ2OTUxMTM1NjEiLCJzZXNzaW9uaWQiOiI2NDY5NTExMzU2MSUzQTdia0JSUkIweXg3alAzJTNBMTElM0FBWWNwWF9GX2lSaXVRalgxanRnbXRVTnN2NkdSSWdZLUs1c000cEMtcmcifQ=="},{"uid":"64695113561","credential_type":"none","token":""}],"blocked_uid":[],"INTERNAL_INFRA_THEME":"HARMONIZATION_F","launched_url":"","sim_phone_numbers":[]} */
                         params: string;
+                        /** @example {"bloks_version":"16e9197b928710eafdf1e803935ed8c450a1a2e3eb696bff1184df088b900bcf","styles_id":"instagram"} */
                         bk_client_context: string;
+                        /** @example 16e9197b928710eafdf1e803935ed8c450a1a2e3eb696bff1184df088b900bcf */
                         bloks_versioning_id: string;
                     };
                 };
             };
-            responses: {
-                200: {
-                    headers: {
-                        "content-type": string;
-                        date: string;
-                        vary: string;
-                        "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
-                        "x-frame-options": string;
-                        "content-security-policy": string;
-                        "cross-origin-embedder-policy-report-only": string;
-                        "report-to": string;
-                        "cross-origin-resource-policy": string;
-                        "cross-origin-opener-policy": string;
-                        "x-content-type-options": string;
-                        "x-xss-protection": string;
-                        "x-ig-push-state": string;
-                        "x-ig-cache-control": string;
-                        "x-aed": string;
-                        "x-ig-request-elapsed-time-ms": string;
-                        "x-ig-peak-v2": string;
-                        "x-ig-peak-time": string;
-                        "x-ig-capacity-level": string;
-                        "content-encoding": string;
-                        "x-stack": string;
-                        "ig-set-ig-u-ig-direct-region-hint": string;
-                        "ig-set-ig-u-shbid": string;
-                        "ig-set-ig-u-shbts": string;
-                        "ig-set-ig-u-rur": string;
-                        "ig-set-ig-u-ds-user-id": string;
-                        "x-perf-stats": string;
-                        "content-length": string;
-                        "x-ig-origin-region": string;
-                        "x-fb-client-ip-forwarded": string;
-                        "x-fb-server-cluster-forwarded": string;
-                        "alt-svc": string;
-                        "x-fb-connection-quality": string;
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": string;
-                    };
-                };
-            };
+            responses: never;
         };
         delete?: never;
         options?: never;
@@ -4938,69 +3298,7 @@ export interface paths {
                     };
                 };
             };
-            responses: {
-                200: {
-                    headers: {
-                        "content-type": string;
-                        date: string;
-                        vary: string;
-                        "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
-                        "x-frame-options": string;
-                        "content-security-policy": string;
-                        "cross-origin-embedder-policy-report-only": string;
-                        "report-to": string;
-                        "cross-origin-resource-policy": string;
-                        "cross-origin-opener-policy": string;
-                        "x-content-type-options": string;
-                        "x-xss-protection": string;
-                        "x-ig-push-state": string;
-                        "x-ig-cache-control": string;
-                        "x-aed": string;
-                        "x-ig-request-elapsed-time-ms": string;
-                        "x-ig-peak-v2": string;
-                        "x-ig-peak-time": string;
-                        "x-ig-capacity-level": string;
-                        "content-encoding": string;
-                        "x-stack": string;
-                        "ig-set-ig-u-ig-direct-region-hint": string;
-                        "ig-set-ig-u-shbid": string;
-                        "ig-set-ig-u-shbts": string;
-                        "ig-set-ig-u-rur": string;
-                        "ig-set-ig-u-ds-user-id": string;
-                        "x-perf-stats": string;
-                        "content-length": string;
-                        "x-ig-origin-region": string;
-                        "x-fb-client-ip-forwarded": string;
-                        "x-fb-server-cluster-forwarded": string;
-                        "alt-svc": string;
-                        "x-fb-connection-quality": string;
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            layout: {
-                                bloks_payload: {
-                                    data: null[];
-                                    props: {
-                                        id: string;
-                                        name: string;
-                                    }[];
-                                    error_attribution: {
-                                        logging_id: string;
-                                        source_map_id: string;
-                                    };
-                                    action: string;
-                                };
-                            };
-                            status: string;
-                        };
-                    };
-                };
-            };
+            responses: never;
         };
         delete?: never;
         options?: never;
@@ -5021,42 +3319,79 @@ export interface paths {
             parameters: {
                 query?: never;
                 header: {
+                    /** @example en_US */
                     "x-ig-app-locale": string;
+                    /** @example en_US */
                     "x-ig-device-locale": string;
+                    /** @example en_US */
                     "x-ig-mapped-locale": string;
+                    /** @example UFS-47c5c5fc-fda5-482b-9ffb-4ea9074f622d-0 */
                     "x-pigeon-session-id": string;
+                    /** @example 1748652244.383 */
                     "x-pigeon-rawclienttime": string;
+                    /** @example 1042.000 */
                     "x-ig-bandwidth-speed-kbps": string;
+                    /** @example 213190 */
                     "x-ig-bandwidth-totalbytes-b": string;
+                    /** @example 194 */
                     "x-ig-bandwidth-totaltime-ms": string;
+                    /** @example 16e9197b928710eafdf1e803935ed8c450a1a2e3eb696bff1184df088b900bcf */
                     "x-bloks-version-id": string;
+                    /** @example 0 */
                     "x-ig-www-claim": string;
+                    /** @example INDIGO_PRIMARY_BORDERED_SECONDARY */
                     "x-bloks-prism-button-version": string;
+                    /** @example true */
                     "x-bloks-prism-colors-enabled": string;
+                    /** @example false */
                     "x-bloks-prism-ax-base-colors-enabled": string;
+                    /** @example false */
                     "x-bloks-prism-font-enabled": string;
+                    /** @example false */
                     "x-bloks-is-layout-rtl": string;
+                    /** @example 3ce30cbc-5663-4f98-bbfb-582457400887 */
                     "x-ig-device-id": string;
+                    /** @example 3181b53f-d6ae-40ea-880c-9b334041f778 */
                     "x-ig-family-device-id": string;
+                    /** @example android-8f9a1062a223ba71 */
                     "x-ig-android-id": string;
+                    /** @example 28800 */
                     "x-ig-timezone-offset": string;
+                    /** @example SelfFragment:self_profile:2:main_profile:1748652214.49:::1748652214.49,SettingsScreenFragment:main_settings_screen:3:button:1748652215.804:::1748652215.804,com.bloks.www.caa.login.aymh_single_profile_screen_entry:com.bloks.www.caa.login.aymh_single_profile_screen_entry:4:button:1748652231.987:::1748652231.987,IgCdsScreenNavigationLoggerModule:com.bloks.www.caa.login.login_homepage:5:button:1748652239.96:::1748652239.96 */
                     "x-ig-nav-chain": string;
+                    /** @example nid=9fvZ/OEP2PM1;nc=1;fc=1;bc=0; */
                     "x-fb-session-id": string;
+                    /** @example oW/B5gKOk240 */
                     "x-fb-session-private": string;
+                    /** @example WIFI */
                     "x-fb-connection-type": string;
+                    /** @example WIFI */
                     "x-ig-connection-type": string;
+                    /** @example dhcpServerAddr=192.168.0.1;LocalAddrs=/fe80::5c64:adff:fef9:db76,/192.168.0.79,/2600:8807:c192:d000:5c64:adff:fef9:db76,/2600:8807:c192:d000:2073:c339:bf7a:86a3,; */
                     "x-fb-network-properties": string;
+                    /** @example 3brTv10= */
                     "x-ig-capabilities": string;
+                    /** @example 567067343352427 */
                     "x-ig-app-id": string;
+                    /** @example Instagram 361.0.0.46.88 Android (33/13; 280dpi; 720x1471; samsung; SM-S134DL; a03su; mt6765; en_US; 674674275) */
                     "user-agent": string;
+                    /** @example en-US */
                     "accept-language": string;
+                    /** @example aDlwaAABAAFDk7N685XYzU53scUI */
                     "x-mid": string;
+                    /** @example 0 */
                     "ig-intended-user-id": string;
+                    /** @example application/x-www-form-urlencoded; charset=UTF-8 */
                     "content-type": string;
+                    /** @example 1042 */
                     "content-length": string;
+                    /** @example zstd, gzip, deflate */
                     "accept-encoding": string;
+                    /** @example Liger */
                     "x-fb-http-engine": string;
+                    /** @example True */
                     "x-fb-client-ip": string;
+                    /** @example True */
                     "x-fb-server-cluster": string;
                 };
                 path?: never;
@@ -5065,79 +3400,16 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/x-www-form-urlencoded": {
+                        /** @example {"client_input_params":{"username_input":"dl.tool","lois_settings":{"lois_token":""}},"server_params":{"is_from_logged_out":1,"layered_homepage_experiment_group":null,"INTERNAL__latency_qpl_marker_id":36707139,"family_device_id":"3181b53f-d6ae-40ea-880c-9b334041f778","device_id":"android-8f9a1062a223ba71","offline_experiment_group":"caa_iteration_v3_perf_ig_4","waterfall_id":"4aa3a7f4-c3a7-4374-996c-db97f268cb56","access_flow_version":"pre_mt_behavior","INTERNAL__latency_qpl_instance_id":1.11220362800074E14,"is_from_logged_in_switcher":0,"is_platform_login":0,"qe_device_id":"3ce30cbc-5663-4f98-bbfb-582457400887"}} */
                         params: string;
+                        /** @example {"bloks_version":"16e9197b928710eafdf1e803935ed8c450a1a2e3eb696bff1184df088b900bcf","styles_id":"instagram"} */
                         bk_client_context: string;
+                        /** @example 16e9197b928710eafdf1e803935ed8c450a1a2e3eb696bff1184df088b900bcf */
                         bloks_versioning_id: string;
                     };
                 };
             };
-            responses: {
-                200: {
-                    headers: {
-                        "content-type": string;
-                        date: string;
-                        vary: string;
-                        "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
-                        "x-frame-options": string;
-                        "content-security-policy": string;
-                        "cross-origin-embedder-policy-report-only": string;
-                        "report-to": string;
-                        "cross-origin-resource-policy": string;
-                        "cross-origin-opener-policy": string;
-                        "x-content-type-options": string;
-                        "x-xss-protection": string;
-                        "x-ig-push-state": string;
-                        "x-ig-cache-control": string;
-                        "x-aed": string;
-                        "x-ig-request-elapsed-time-ms": string;
-                        "x-ig-peak-v2": string;
-                        "x-ig-peak-time": string;
-                        "x-ig-capacity-level": string;
-                        "content-encoding": string;
-                        "x-stack": string;
-                        "ig-set-ig-u-ig-direct-region-hint": string;
-                        "ig-set-ig-u-shbid": string;
-                        "ig-set-ig-u-shbts": string;
-                        "ig-set-ig-u-rur": string;
-                        "ig-set-ig-u-ds-user-id": string;
-                        "x-perf-stats": string;
-                        "content-length": string;
-                        "x-ig-origin-region": string;
-                        "x-fb-client-ip-forwarded": string;
-                        "x-fb-server-cluster-forwarded": string;
-                        "alt-svc": string;
-                        "x-fb-connection-quality": string;
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            layout: {
-                                bloks_payload: {
-                                    ft: {
-                                        "13fitxd9uz": string;
-                                        "13fitxd9v0": string;
-                                    };
-                                    data: null[];
-                                    props: {
-                                        id: string;
-                                        name: string;
-                                    }[];
-                                    error_attribution: {
-                                        logging_id: string;
-                                        source_map_id: string;
-                                    };
-                                    action: string;
-                                };
-                            };
-                            status: string;
-                        };
-                    };
-                };
-            };
+            responses: never;
         };
         delete?: never;
         options?: never;
@@ -5205,73 +3477,7 @@ export interface paths {
                 cookie?: never;
             };
             requestBody?: never;
-            responses: {
-                200: {
-                    headers: {
-                        "content-type": string;
-                        date: string;
-                        vary: string;
-                        "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
-                        "x-frame-options": string;
-                        "content-security-policy": string;
-                        "cross-origin-embedder-policy-report-only": string;
-                        "report-to": string;
-                        "cross-origin-resource-policy": string;
-                        "cross-origin-opener-policy": string;
-                        "x-content-type-options": string;
-                        "x-xss-protection": string;
-                        "x-ig-push-state": string;
-                        "x-ig-prefetch-request": string;
-                        "x-ig-cache-control": string;
-                        "x-aed": string;
-                        "x-ig-peak-v2": string;
-                        "x-ig-peak-time": string;
-                        "x-ig-capacity-level": string;
-                        "content-encoding": string;
-                        "x-stack": string;
-                        "ig-set-ig-u-ig-direct-region-hint": string;
-                        "ig-set-ig-u-shbid": string;
-                        "ig-set-ig-u-shbts": string;
-                        "ig-set-ig-u-rur": string;
-                        "ig-set-ig-u-ds-user-id": string;
-                        "x-perf-stats": string;
-                        "content-length": string;
-                        "x-ig-origin-region": string;
-                        "x-fb-client-ip-forwarded": string;
-                        "x-fb-server-cluster-forwarded": string;
-                        "alt-svc": string;
-                        "x-fb-connection-quality": string;
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            component_query_responses: {
-                                payload: string;
-                                consumed_params: {
-                                    __infra__container_config_id?: string;
-                                    caller_name?: string;
-                                };
-                                app_id: string;
-                                resources?: {
-                                    acq: {
-                                        app_id: string;
-                                        cache_ttl: number;
-                                        consumed_params?: {
-                                            caller_name: string;
-                                        };
-                                        cache_keys?: string[];
-                                    }[];
-                                };
-                            }[];
-                            status: string;
-                        };
-                    };
-                };
-            };
+            responses: never;
         };
         put?: never;
         post?: never;
@@ -20114,8 +18320,8 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-app-start-request"?: string;
                     "x-ig-accept-hint"?: string;
+                    "x-ig-app-start-request"?: string;
                     "x-ig-client-endpoint"?: string;
                 };
                 path?: never;
