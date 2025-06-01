@@ -308,7 +308,7 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/eslint
       '@instagramjs/flows2openapi':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../flows2openapi
       '@instagramjs/tsconfig':
         specifier: workspace:*
