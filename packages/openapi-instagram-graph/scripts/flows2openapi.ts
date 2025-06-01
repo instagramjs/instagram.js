@@ -3,7 +3,7 @@ import fs from "fs";
 import { type OpenAPI3 } from "openapi-typescript";
 import yaml from "yaml";
 
-const JSON_DUMP_FILE = "jsondump.out";
+const JSON_DUMP_FILE = "flows_json.out";
 const OPENAPI_FILE = "schema.yaml";
 const API_PREFIX = "https://graph.instagram.com";
 
@@ -26,7 +26,7 @@ async function main() {
   const schema = await flows2OpenAPI(jsonDump, existingDef, {
     apiPrefix: API_PREFIX,
 
-    filterExample: ({ request }) => request.path.includes("login"),
+    filterExample: () => false,
     filterResponse: ({ request }) => !request.path.includes("bloks"),
   });
 

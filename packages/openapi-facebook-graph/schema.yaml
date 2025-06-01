@@ -2621,6 +2621,156 @@ paths:
                           type: number
                         ads_manager_cancel$#event.logged:
                           type: number
+                        fxcal_settings_product$#event.captured:
+                          type: number
+                        fx_authentication$#event.logged:
+                          type: number
+                        manage_accounts_button_tapped$#event.logged:
+                          type: number
+                        fx_authentication$#event.queued:
+                          type: number
+                        attribution_sdk_debug$#event.logged:
+                          type: number
+                        switch_user_tapped$#event.logged:
+                          type: number
+                        instagram_netego_sub_impression$#event.logged:
+                          type: number
+                        ig_threads_unit_vpvd_impression$#event.queued:
+                          type: number
+                        ig_threads_unit_vpvd_impression$#event.captured:
+                          type: number
+                        ccu_contacts_upload_information_event$#event.queued:
+                          type: number
+                        ccu_contacts_upload_information_event$#event.logged:
+                          type: number
+                        ig_notification_suppressed$#event.logged:
+                          type: number
+                        ccu_upload_contacts_event$#event.captured:
+                          type: number
+                        fxcal_settings_product$#event.queued:
+                          type: number
+                        fxcal_settings_product$#event.logged:
+                          type: number
+                        instagram_netego_insertion_success$#event.queued:
+                          type: number
+                        ccu_contacts_upload_succeeded_event$#event.logged:
+                          type: number
+                        ccu_contacts_upload_succeeded_event$#event.captured:
+                          type: number
+                        big_foot_reporter_event$#event.captured:
+                          type: number
+                        ig_threads_in_feed_unit_vpvd_imp$#event.queued:
+                          type: number
+                        ig_notification_clicked$#event.logged:
+                          type: number
+                        ig_threads_unit_vpvd_impression$#event.logged:
+                          type: number
+                        switch_user_tapped$#event.queued:
+                          type: number
+                        ig_notification_suppressed$#event.captured:
+                          type: number
+                        big_foot_reporter_event$#event.queued:
+                          type: number
+                        ig_video_call_notification_waterfall$#event.logged:
+                          type: number
+                        ig_rug_pull_event$#event.logged:
+                          type: number
+                        ig_notification_clicked$#event.captured:
+                          type: number
+                        attribution_sdk_debug$#event.captured:
+                          type: number
+                        ig_threads_in_feed_unit_impression$#event.logged:
+                          type: number
+                        direct_request_user_action$#event.captured:
+                          type: number
+                        instagram_netego_impression$#event.captured:
+                          type: number
+                        direct_request_user_action$#event.logged:
+                          type: number
+                        manage_accounts_button_tapped$#event.queued:
+                          type: number
+                        ig_notification_suppressed$#event.queued:
+                          type: number
+                        ig_threads_in_feed_unit_card_1px$#event.queued:
+                          type: number
+                        instagram_ad_request_skipped$#event.captured:
+                          type: number
+                        ig_threads_in_feed_unit_vpvd_imp$#event.captured:
+                          type: number
+                        big_foot_reporter_event$#event.logged:
+                          type: number
+                        instagram_ad_request_skipped$#event.logged:
+                          type: number
+                        ccu_upload_contacts_event$#event.logged:
+                          type: number
+                        switch_user_tapped$#event.captured:
+                          type: number
+                        reel_loading_error$#event.queued:
+                          type: number
+                        ig_video_call_notification_waterfall$#event.queued:
+                          type: number
+                        ccu_upload_contacts_event$#event.queued:
+                          type: number
+                        ccu_contacts_upload_information_event$#event.captured:
+                          type: number
+                        ccu_create_session_check_sync_event$#event.logged:
+                          type: number
+                        ig_threads_in_feed_unit_impression$#event.queued:
+                          type: number
+                        instagram_netego_impression$#event.queued:
+                          type: number
+                        ig_threads_in_feed_unit_vpvd_imp$#event.logged:
+                          type: number
+                        reel_loading_error$#event.captured:
+                          type: number
+                        manage_accounts_button_tapped$#event.captured:
+                          type: number
+                        ig_threads_in_feed_unit_card_1px$#event.logged:
+                          type: number
+                        reel_loading_error$#event.logged:
+                          type: number
+                        ig_rug_pull_event$#event.captured:
+                          type: number
+                        ig_video_call_notification_waterfall$#event.captured:
+                          type: number
+                        fx_authentication$#event.captured:
+                          type: number
+                        direct_inapp_notification_tap$#event.queued:
+                          type: number
+                        ig_threads_in_feed_unit_impression$#event.captured:
+                          type: number
+                        ccu_create_session_check_sync_event$#event.captured:
+                          type: number
+                        direct_inapp_notification_tap$#event.captured:
+                          type: number
+                        direct_request_user_action$#event.queued:
+                          type: number
+                        ccu_contacts_upload_succeeded_event$#event.queued:
+                          type: number
+                        ig_threads_in_feed_unit_card_1px$#event.captured:
+                          type: number
+                        instagram_netego_sub_impression$#event.queued:
+                          type: number
+                        instagram_netego_insertion_success$#event.captured:
+                          type: number
+                        instagram_netego_sub_impression$#event.captured:
+                          type: number
+                        ig_rug_pull_event$#event.queued:
+                          type: number
+                        attribution_sdk_debug$#event.queued:
+                          type: number
+                        ig_notification_clicked$#event.queued:
+                          type: number
+                        instagram_netego_impression$#event.logged:
+                          type: number
+                        direct_inapp_notification_tap$#event.logged:
+                          type: number
+                        ccu_create_session_check_sync_event$#event.queued:
+                          type: number
+                        instagram_netego_insertion_success$#event.logged:
+                          type: number
+                        instagram_ad_request_skipped$#event.queued:
+                          type: number
                       required:
                         - sys_sql_persistence_store_db_recovery_attemp_on_startup
                         - ig_notification_will_display$#event.queued
@@ -2651,7 +2801,6 @@ paths:
                         - sys_sql_persistence_store_db_recovery_failed_on_dbop
                         - sys_sqlite_notadb
                         - messaging_notification_event$#event.captured
-                        - direct_message_waterfall$#event.captured
                         - messaging_notification_event$#event.logged
                         - ig_notification_will_display$#event.logged
                         - sys_upload_succeeded
@@ -2684,7 +2833,6 @@ paths:
                         - sys_sql_persistence_store_db_open_called
                         - sys_sql_persistence_store_db_recovery_failed_on_startup
                         - sys_sqlite_toobig
-                        - direct_message_waterfall$#event.queued
                         - ig_navigation_tab_impression$#event.queued
                         - time_spent_bit_array$#event.captured
                         - push_notification_setting$#event.queued
@@ -2711,7 +2859,6 @@ paths:
                         - instagram_android_badge$#event.captured
                         - sys_upload_failed_with_non200
                         - sys_sqlite_error
-                        - direct_message_waterfall$#event.logged
                         - direct_e2e_message_delivery_waterfall$#event.logged
                         - event.persisted
                         - event.filters.constraint

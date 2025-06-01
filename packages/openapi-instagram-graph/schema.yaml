@@ -97,6 +97,10 @@ paths:
               schema:
                 type: string
               required: true
+            content-encoding:
+              schema:
+                type: string
+              required: false
           content:
             text/javascript:
               schema:
@@ -104,12 +108,12 @@ paths:
       parameters:
         - name: x-fb-session-id
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-fb-session-private
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-fb-connection-type
@@ -124,7 +128,7 @@ paths:
             type: string
         - name: x-fb-network-properties
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-ig-capabilities
@@ -154,7 +158,7 @@ paths:
             type: string
         - name: content-encoding
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: content-length
@@ -178,6 +182,16 @@ paths:
           schema:
             type: string
         - name: x-fb-server-cluster
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-exp-tag
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: priority
           in: header
           required: true
           schema:
@@ -208,3 +222,179 @@ paths:
                   type: string
                 message:
                   type: string
+  /rmd:
+    post:
+      responses:
+        "200":
+          description: ""
+          headers:
+            content-encoding:
+              schema:
+                type: string
+              required: false
+            content-type:
+              schema:
+                type: string
+              required: true
+            vary:
+              schema:
+                type: string
+              required: true
+            facebook-api-version:
+              schema:
+                type: string
+              required: true
+            access-control-allow-origin:
+              schema:
+                type: string
+              required: true
+            strict-transport-security:
+              schema:
+                type: string
+              required: true
+            pragma:
+              schema:
+                type: string
+              required: true
+            cache-control:
+              schema:
+                type: string
+              required: true
+            expires:
+              schema:
+                type: string
+              required: true
+            x-fb-request-id:
+              schema:
+                type: string
+              required: true
+            x-fb-trace-id:
+              schema:
+                type: string
+              required: true
+            x-fb-rev:
+              schema:
+                type: string
+              required: true
+            x-stack:
+              schema:
+                type: string
+              required: true
+            x-fb-debug:
+              schema:
+                type: string
+              required: true
+            content-length:
+              schema:
+                type: string
+              required: true
+            date:
+              schema:
+                type: string
+              required: true
+            x-fb-client-ip-forwarded:
+              schema:
+                type: string
+              required: true
+            x-fb-server-cluster-forwarded:
+              schema:
+                type: string
+              required: true
+            x-fb-connection-quality:
+              schema:
+                type: string
+              required: true
+            alt-svc:
+              schema:
+                type: string
+              required: true
+          content:
+            text/javascript:
+              schema:
+                type: string
+      parameters:
+        - name: x-fb-request-analytics-tags
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-app-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: user-agent
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-rmd
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-capabilities
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-friendly-name
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-privacy-context
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-tigon-is-retry
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: accept-encoding
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-http-engine
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-client-ip
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-server-cluster
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: access_token
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: rule_context
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: net_iface
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: reason
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: prev_token
+          in: query
+          required: true
+          schema:
+            type: string

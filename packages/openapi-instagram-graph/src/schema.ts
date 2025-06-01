@@ -17,22 +17,24 @@ export interface paths {
             parameters: {
                 query?: never;
                 header: {
-                    "x-fb-session-id": string;
-                    "x-fb-session-private": string;
+                    "x-fb-session-id"?: string;
+                    "x-fb-session-private"?: string;
                     "x-fb-connection-type": string;
                     "x-ig-connection-type": string;
-                    "x-fb-network-properties": string;
+                    "x-fb-network-properties"?: string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
                     "accept-language": string;
                     "content-type": string;
-                    "content-encoding": string;
+                    "content-encoding"?: string;
                     "content-length": string;
                     "accept-encoding": string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
+                    "x-fb-exp-tag": string;
+                    priority: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -56,6 +58,80 @@ export interface paths {
                         vary: string;
                         "x-content-type-options": string;
                         "cross-origin-resource-policy": string;
+                        "facebook-api-version": string;
+                        "access-control-allow-origin": string;
+                        "strict-transport-security": string;
+                        pragma: string;
+                        "cache-control": string;
+                        expires: string;
+                        "x-fb-request-id": string;
+                        "x-fb-trace-id": string;
+                        "x-fb-rev": string;
+                        "x-stack": string;
+                        "x-fb-debug": string;
+                        "content-length": string;
+                        date: string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "x-fb-connection-quality": string;
+                        "alt-svc": string;
+                        "content-encoding"?: string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/javascript": string;
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/rmd": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query: {
+                    access_token: string;
+                    rule_context: string;
+                    net_iface: string;
+                    reason: string;
+                    prev_token: string;
+                };
+                header: {
+                    "x-fb-request-analytics-tags": string;
+                    "x-ig-app-id": string;
+                    "user-agent": string;
+                    "x-fb-rmd": string;
+                    "x-ig-capabilities": string;
+                    "x-fb-friendly-name": string;
+                    "x-fb-privacy-context": string;
+                    "x-tigon-is-retry": string;
+                    "accept-encoding": string;
+                    "x-fb-http-engine": string;
+                    "x-fb-client-ip": string;
+                    "x-fb-server-cluster": string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-encoding"?: string;
+                        "content-type": string;
+                        vary: string;
                         "facebook-api-version": string;
                         "access-control-allow-origin": string;
                         "strict-transport-security": string;
