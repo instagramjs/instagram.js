@@ -29,7 +29,7 @@ import {
   schemaFromValue,
 } from "./utils";
 
-async function processFlow(
+function processFlow(
   config: AutogenConfigFinal,
   spec: OpenAPI3,
   flow: AutogenFlow,
@@ -348,14 +348,14 @@ export function createOpenAPIAutogen(
     `The OpenAPI specification must have a "paths" property`,
   );
 
-  const _processFlow = async (flow: AutogenFlow) => {
+  const _processFlow = (flow: AutogenFlow) => {
     if (isComplete) {
       throw new Error(
         "Cannot process new flows after `isComplete()` is called",
       );
     }
 
-    await processFlow(finalConfig, def, flow);
+    processFlow(finalConfig, def, flow);
   };
 
   const complete = () => {

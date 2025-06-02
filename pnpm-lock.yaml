@@ -425,6 +425,9 @@ importers:
       openapi-fetch:
         specifier: ^0.14.0
         version: 0.14.0
+      zod:
+        specifier: ^3.25.48
+        version: 3.25.48
     devDependencies:
       '@instagramjs/eslint-config':
         specifier: workspace:*
@@ -2565,6 +2568,9 @@ packages:
   zod@3.25.42:
     resolution: {integrity: sha512-PcALTLskaucbeHc41tU/xfjfhcz8z0GdhhDcSgrCTmSazUuqnYqiXO63M0QUBVwpBlsLsNVn5qHSC5Dw3KZvaQ==}
 
+  zod@3.25.48:
+    resolution: {integrity: sha512-0X1mz8FtgEIvaxGjdIImYpZEaZMrund9pGXm3M6vM7Reba0e2eI71KPjSCGXBfwKDPwPoywf6waUKc3/tFvX2Q==}
+
 snapshots:
 
   '@babel/code-frame@7.27.1':
@@ -4498,3 +4504,5 @@ snapshots:
   yocto-queue@0.1.0: {}
 
   zod@3.25.42: {}
+
+  zod@3.25.48: {}

@@ -18,7 +18,10 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "dev": "pnpm build --watch",
-    "build": "tsup src/index.ts src/cli.ts --format cjs,esm --dts --clean --no-splitting"
+    "dev:cli": "pnpm build:cli --watch",
+    "build": "tsup src/index.ts --format cjs,esm --dts --no-splitting",
+    "build:cli": "tsup src/cli.ts --format esm --no-splitting",
+    "build:all": "pnpm build && pnpm build:cli"
   },
   "devDependencies": {
     "@instagramjs/eslint-config": "workspace:*",

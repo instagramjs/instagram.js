@@ -5,9 +5,14 @@ import { promisify } from "util";
 import { gunzip, inflate, zstdDecompress } from "zlib";
 import { z } from "zod";
 
-import { type AutogenFlow } from "~/flow";
+import {
+  type AutogenFlow,
+  type AutogenFlowMethod,
+  type AutogenFlowResponse,
+} from "~/flow";
 
 import { type AutogenReader, type AutogenReaderEventMap } from "./reader";
+import { readNthLines } from "./utils";
 
 const gunzipAsync = promisify(gunzip);
 const zstdDecompressAsync = promisify(zstdDecompress);
@@ -40,10 +45,9 @@ const mitmFlowJsonSchema = z.object({
     .nullable(),
   type: z.enum(["http"]),
 });
+type MitmFlow = z.infer<typeof mitmFlowJsonSchema>;
 
-function mitmMethodToAutogenMethod(
-  method: string,
-): AutogenFlow["request"]["method"] {
+function mitmMethodToAutogenMethod(method: string): AutogenFlowMethod {
   switch (method) {
     case "GET":
       return "get";
@@ -73,30 +77,33 @@ function isEncoding(encoding: string): encoding is Encoding {
 }
 
 async function decodeBody(content: string, encoding: Encoding) {
+  const contentBuffer = Buffer.from(content, "base64");
   switch (encoding) {
     case "zstd":
-      return await zstdDecompressAsync(content).then((buffer) =>
+      return await zstdDecompressAsync(contentBuffer).then((buffer) =>
         buffer.toString(),
       );
     case "gzip":
-      return await gunzipAsync(content).then((buffer) => buffer.toString());
+      return await gunzipAsync(contentBuffer).then((buffer) =>
+        buffer.toString(),
+      );
     case "deflate":
-      return await inflateAsync(content).then((buffer) => buffer.toString());
+      return await inflateAsync(contentBuffer).then((buffer) =>
+        buffer.toString(),
+      );
     default:
       throw new Error(`Unsupported encoding: ${encoding}`);
   }
 }
 
-async function mitmFlowToAutogenFlow(
-  flow: z.infer<typeof mitmFlowJsonSchema>,
-): Promise<AutogenFlow> {
+async function mitmFlowToAutogenFlow(flow: MitmFlow): Promise<AutogenFlow> {
   let requestBody = flow.request.content;
   const requestBodyEncoding = flow.request.headers["content-encoding"];
   if (requestBody && requestBodyEncoding && isEncoding(requestBodyEncoding)) {
     requestBody = await decodeBody(requestBody, requestBodyEncoding);
   }
 
-  let response: AutogenFlow["response"] = null;
+  let response: AutogenFlowResponse | null = null;
   if (flow.response) {
     let responseBody = flow.response.content;
     const responseBodyEncoding = flow.response.headers["content-encoding"];
@@ -129,57 +136,85 @@ async function mitmFlowToAutogenFlow(
   };
 }
 
-export type MitmJsonReaderOptions = {
-  filepath: string;
-};
+async function processReadlineStream(
+  rl: readline.Interface,
+  eventEmitter: EventEmitter<AutogenReaderEventMap>,
+) {
+  let linesRead = 0;
 
-export function createMitmJsonReader(
-  options: MitmJsonReaderOptions,
-): AutogenReader {
-  const eventEmitter = new EventEmitter<AutogenReaderEventMap>();
-
-  const fileStream = fs.createReadStream(options.filepath);
-  const rl = readline.createInterface({ input: fileStream });
-
-  let lineCount = 0;
-
-  rl.on("line", async (line) => {
-    lineCount++;
+  for await (const line of rl) {
+    linesRead++;
 
     let parsedJson;
     try {
-      parsedJson = mitmFlowJsonSchema.parse(JSON.parse(line));
+      parsedJson = JSON.parse(line);
     } catch (err) {
       eventEmitter.emit(
         "error",
-        new Error(`Failed to parse MiTM flow JSON at line ${lineCount}`, {
+        new Error(`Failed to parse MiTM flow JSON at line ${linesRead}`, {
           cause: err as Error,
         }),
       );
-      return;
+      continue;
+    }
+
+    const parsedFlowResult = mitmFlowJsonSchema.safeParse(parsedJson);
+    if (!parsedFlowResult.success) {
+      eventEmitter.emit(
+        "error",
+        new Error(`Failed to parse MiTM flow JSON at line ${linesRead}`, {
+          cause: parsedFlowResult.error,
+        }),
+      );
+      continue;
     }
 
     let autogenFlow;
     try {
-      autogenFlow = await mitmFlowToAutogenFlow(parsedJson);
+      autogenFlow = await mitmFlowToAutogenFlow(parsedFlowResult.data);
     } catch (err) {
       eventEmitter.emit(
         "error",
-        new Error(`Failed to parse MiTM flow at line ${lineCount}`, {
+        new Error(`Failed to parse MiTM flow at line ${linesRead}`, {
           cause: err as Error,
         }),
       );
-      return;
+      continue;
     }
 
     eventEmitter.emit("read", autogenFlow);
-  });
-  rl.on("close", () => {
-    eventEmitter.emit("complete");
-  });
-  rl.on("error", (err) => {
-    eventEmitter.emit("error", err);
-  });
+  }
+}
+
+export function createMitmJsonReader(filePath: string): AutogenReader {
+  const eventEmitter = new EventEmitter<AutogenReaderEventMap>();
+
+  const fileStream = fs.createReadStream(filePath);
+  const rl = readline.createInterface({ input: fileStream });
+
+  processReadlineStream(rl, eventEmitter)
+    .catch((err) => {
+      eventEmitter.emit("error", err);
+    })
+    .then(() => {
+      eventEmitter.emit("complete");
+    });
 
   return eventEmitter;
+}
+
+export async function isProbablyMitmJsonFile(filePath: string) {
+  const [firstLine] = await readNthLines(filePath, 1);
+  if (!firstLine) {
+    return false;
+  }
+
+  let parsedJson;
+  try {
+    parsedJson = JSON.parse(firstLine);
+  } catch {
+    return false;
+  }
+
+  return mitmFlowJsonSchema.safeParse(parsedJson).success;
 }

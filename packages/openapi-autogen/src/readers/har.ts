@@ -1,10 +1,12 @@
 import { EventEmitter } from "events";
 import fs from "fs";
+import path from "path";
 import { z } from "zod";
 
 import { type AutogenFlow } from "~/flow";
 
 import { type AutogenReader, type AutogenReaderEventMap } from "./reader";
+import { readNthLines } from "./utils";
 
 const harEntrySchema = z.object({
   request: z.object({
@@ -49,14 +51,12 @@ const harEntrySchema = z.object({
       .optional(),
   }),
 });
-type HarEntry = z.infer<typeof harEntrySchema>;
 
 const harDataSchema = z.object({
   log: z.object({
     entries: z.array(harEntrySchema),
   }),
 });
-type HarData = z.infer<typeof harDataSchema>;
 
 function harMethodToAutogenMethod(
   method: string,
@@ -121,14 +121,10 @@ const isValidStatusCode = (statusCode: number): boolean => {
   return statusCode >= 100 && statusCode < 600;
 };
 
-export type HarReaderOptions = {
-  filepath: string;
-};
-
-export function createHarReader(options: HarReaderOptions): AutogenReader {
+export function createHarReader(filePath: string): AutogenReader {
   const eventEmitter = new EventEmitter<AutogenReaderEventMap>();
 
-  const fileStream = fs.createReadStream(options.filepath, "utf-8");
+  const fileStream = fs.createReadStream(filePath, "utf-8");
 
   let data = "";
   fileStream.on("data", (chunk) => {
@@ -151,4 +147,25 @@ export function createHarReader(options: HarReaderOptions): AutogenReader {
   });
 
   return eventEmitter;
+}
+
+export async function isProbablyHarFile(filePath: string) {
+  const extension = path.extname(filePath);
+  if (extension === ".har") {
+    return true;
+  }
+
+  const [firstLine, secondLine] = await readNthLines(filePath, 2);
+  if (!firstLine || !secondLine) {
+    return false;
+  }
+
+  if (!firstLine.startsWith("{")) {
+    return false;
+  }
+  if (!secondLine.includes(`"log": {`)) {
+    return false;
+  }
+
+  return true;
 }
