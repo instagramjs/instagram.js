@@ -10,12 +10,15 @@
       "import": "./dist/index.js"
     }
   },
+  "bin": {
+    "openapi-autogen": "./dist/cli.js"
+  },
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "dev": "pnpm build --watch",
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean --no-splitting"
+    "build": "tsup src/index.ts src/cli.ts --format cjs,esm --dts --clean --no-splitting"
   },
   "devDependencies": {
     "@instagramjs/eslint-config": "workspace:*",
@@ -30,7 +33,9 @@
     "typescript-eslint": "^8.33.0"
   },
   "dependencies": {
+    "cac": "^6.7.14",
     "openapi-fetch": "^0.14.0",
+    "yaml": "^2.8.0",
     "zod": "^3.25.42"
   }
 }

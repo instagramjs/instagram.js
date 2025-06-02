@@ -114,7 +114,6 @@ async function generate(config: GeneratorConfig) {
       reject(err);
     });
     reader.on("complete", () => {
-      log("info", "Completed reading flows JSON");
       resolve(autogen.complete());
     });
   });
