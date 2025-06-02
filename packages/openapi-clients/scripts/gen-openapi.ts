@@ -1,6 +1,6 @@
 import {
   type AutogenConfig,
-  createMitmFlowsJsonReader,
+  createMitmJsonReader,
   createOpenAPIAutogen,
 } from "@instagramjs/openapi-autogen";
 import fs from "fs";
@@ -103,12 +103,10 @@ async function generate(config: GeneratorConfig) {
     },
     existingDef,
   );
-  const reader = createMitmFlowsJsonReader({
-    filepath: FLOWS_JSON_FILE,
-  });
-  reader.on("read", (flow) => autogen.processFlow(flow));
+  const reader = createMitmJsonReader(FLOWS_JSON_FILE);
 
   const def = await new Promise<OpenAPI3>((resolve, reject) => {
+    reader.on("read", (flow) => autogen.processFlow(flow));
     reader.on("error", (err) => {
       log("error", `Error reading flows JSON: ${err}`);
       reject(err);

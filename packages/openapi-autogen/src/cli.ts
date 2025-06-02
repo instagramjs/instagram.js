@@ -2,6 +2,7 @@ import { cac } from "cac";
 import fs from "fs";
 import { type OpenAPI3 } from "openapi-typescript";
 import yaml from "yaml";
+import { gray, green, red, white } from "yoctocolors";
 import { z } from "zod";
 
 import { version } from "../package.json";
@@ -13,25 +14,35 @@ import {
 } from "./readers/mitm-json";
 import { type AutogenReader } from "./readers/reader";
 
-const argsSchema = z.object({
-  name: z.string({ message: "Invalid API name" }),
-  apiPrefix: z.string({ message: "Invalid API prefix" }).url({
-    message: "API prefix must be a valid URL",
-  }),
-  input: z.string({ message: "Invalid input file" }),
-  inputFormat: z
-    .enum(["mitm-json", "har"], {
-      message: "Invalid input format",
-    })
-    .optional(),
-  spec: z.string({
-    message: "Invalid OpenAPI spec file",
-  }),
-  specFormat: z
-    .enum(["yaml", "json"], { message: "Invalid OpenAPI spec format" })
-    .optional(),
-});
-type Args = z.infer<typeof argsSchema>;
+function log(
+  level: "info" | "warn" | "error",
+  prefix: string,
+  message: string,
+) {
+  console[level](`${prefix} ${message}`);
+}
+
+function failAndExit(message: string) {
+  log("error", "❌", message);
+  process.exit(1);
+}
+
+function formatDurationMs(duration: number): string {
+  if (duration < 1000) {
+    return `${duration}ms`;
+  }
+  return `${(duration / 1000).toFixed(2)}s`;
+}
+
+function formatBytes(bytes: number): string {
+  if (bytes < 1000) {
+    return `${bytes}B`;
+  }
+  if (bytes < 1000 * 1000) {
+    return `${(bytes / 1000).toFixed(2)}KB`;
+  }
+  return `${(bytes / 1000 / 1000).toFixed(2)}MB`;
+}
 
 type SpecFormat = "yaml" | "json";
 type InputFormat = "har" | "mitm-json";
@@ -78,19 +89,53 @@ function serializeSpec(spec: OpenAPI3, format: SpecFormat): string {
   }
 }
 
-async function run(args: Args) {
+const argsSchema = z.object({
+  name: z.string({ message: "Invalid API name" }),
+  apiPrefix: z.string({ message: "Invalid API prefix" }).url({
+    message: "API prefix must be a valid URL",
+  }),
+  input: z.string({ message: "Invalid input file" }),
+  inputFormat: z
+    .enum(["mitm-json", "har"], {
+      message: "Invalid input format",
+    })
+    .optional(),
+  spec: z.string({
+    message: "Invalid OpenAPI spec file",
+  }),
+  specFormat: z
+    .enum(["yaml", "json"], { message: "Invalid OpenAPI spec format" })
+    .optional(),
+});
+
+async function run(rawArgs: unknown) {
+  log("info", "✨", `${white("openapi-autogen")} ${gray(`v${version}`)}`);
+
+  const startedAt = Date.now();
+
+  const parseArgsResult = argsSchema.safeParse(rawArgs);
+  if (!parseArgsResult.success) {
+    return failAndExit(parseArgsResult.error.message);
+  }
+  const args = parseArgsResult.data;
+
+  log("info", "✨", `Input: ${args.input}`);
+
   let inputFormat;
   if (args.inputFormat) {
     inputFormat = args.inputFormat;
   } else {
     inputFormat = await guessInputFormat(args.input);
     if (!inputFormat) {
-      console.error(
+      return failAndExit(
         `Unable to infer format of ${args.input}, please provide a format with --input-format`,
       );
-      process.exit(1);
     }
   }
+
+  log("info", "✨", `Input format: ${inputFormat}`);
+
+  log("info", "✨", `Spec: ${args.spec}`);
 
   let specFormat;
   if (args.specFormat) {
@@ -98,18 +143,18 @@ async function run(args: Args) {
   } else {
     specFormat = specFormatFromFilename(args.spec);
     if (!specFormat) {
-      console.error(
+      return failAndExit(
         `Unable to infer format of ${args.spec}, please provide a format with --spec-format`,
       );
-      process.exit(1);
     }
   }
+
+  log("info", "✨", `Spec format: ${specFormat}`);
 
   try {
     await fs.promises.access(args.input, fs.constants.F_OK);
   } catch {
-    console.error(`Input file ${args.input} does not exist`);
-    process.exit(1);
+    return failAndExit(`Input file ${args.input} does not exist`);
   }
 
   let existingDefData: string | null = null;
@@ -124,8 +169,9 @@ async function run(args: Args) {
     try {
       existingDef = deserializeSpec(existingDefData, specFormat);
     } catch (err) {
-      console.error(`Failed to parse schema file ${args.spec}:`, err);
-      process.exit(1);
+      return failAndExit(
+        `Failed to parse ${args.spec} as ${specFormat}: ${err}`,
+      );
     }
   }
 
@@ -139,6 +185,8 @@ async function run(args: Args) {
       break;
   }
 
+  const autogenStartedAt = Date.now();
+
   const autogen = createOpenAPIAutogen(
     {
       name: args.name,
@@ -146,25 +194,42 @@ async function run(args: Args) {
     },
     existingDef,
   );
-  reader.on("read", (flow) => autogen.processFlow(flow));
 
   let spec;
   try {
     spec = await new Promise<OpenAPI3>((resolve, reject) => {
+      reader.on("read", (flow) => autogen.processFlow(flow));
       reader.on("error", (err) => reject(err));
       reader.on("complete", () => resolve(autogen.complete()));
     });
   } catch (err) {
-    console.error(`Error reading input file:`, err);
-    process.exit(1);
+    return failAndExit(`Error reading input file: ${err}`);
   }
 
+  const autogenDuration = Date.now() - autogenStartedAt;
+  log(
+    "info",
+    "⌛",
+    `${white(existingDef ? "Updated" : "Generated")} ${green(formatDurationMs(autogenDuration))}`,
+  );
+
+  const serializedSpec = serializeSpec(spec, specFormat);
   try {
-    await fs.promises.writeFile(args.spec, serializeSpec(spec, specFormat));
+    await fs.promises.writeFile(args.spec, serializedSpec);
   } catch (err) {
-    console.error(`Error writing schema file:`, err);
-    process.exit(1);
+    return failAndExit(`Error writing schema file: ${err}`);
   }
+
+  log(
+    "info",
+    "⌛",
+    `${white(args.spec)} ${green(
+      formatBytes(Buffer.byteLength(serializedSpec, "utf-8")),
+    )}`,
+  );
+
+  const totalDuration = Date.now() - startedAt;
+  log("info", "⚡️", `Success in ${formatDurationMs(totalDuration)}`);
 }
 
 async function main() {
@@ -196,10 +261,7 @@ async function main() {
       "-o, --spec-format [yaml|json]",
       "The format of the OpenAPI spec. If not specified, it will be inferred.",
     )
-    .action(async (args) => {
-      const parsedArgs = argsSchema.parse(args);
-      await run(parsedArgs);
-    });
+    .action(run);
 
   cli.help();
   cli.version(version);
@@ -208,8 +270,7 @@ async function main() {
   try {
     await cli.runMatchedCommand();
   } catch (err) {
-    console.error(err);
-    process.exit(1);
+    return failAndExit((err as Error).message);
   }
 }
 

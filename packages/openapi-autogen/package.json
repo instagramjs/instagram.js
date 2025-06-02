@@ -43,6 +43,7 @@
     "stream-chain": "^3.4.0",
     "stream-json": "^1.9.1",
     "yaml": "^2.8.0",
+    "yoctocolors": "^2.1.1",
     "zod": "^3.25.42"
   }
 }
