@@ -1,5 +1,5 @@
 {
-  "name": "@instagramjs/openapi-axios",
+  "name": "@instagramjs/client",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -15,7 +15,8 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "dev": "pnpm build --watch",
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean --no-splitting"
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean --no-splitting",
+    "gen:openapi": "tsx ./scripts/gen-openapi.ts"
   },
   "devDependencies": {
     "@instagramjs/eslint-config": "workspace:*",
@@ -32,9 +33,8 @@
     "zod": "^3.25.42"
   },
   "dependencies": {
+    "@web-bee-ru/openapi-axios": "^0.0.5",
     "axios": "^1.9.0",
-    "openapi-typescript": "^7.8.0",
-    "openapi-typescript-helpers": "^0.0.15",
-    "query-string": "^9.2.0"
+    "openapi-fetch": "^0.14.0"
   }
 }

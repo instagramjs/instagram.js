@@ -7,6 +7,10 @@ import openapiTS, { astToString, type OpenAPI3 } from "openapi-typescript";
 import path from "path";
 import yaml from "yaml";
 
+import { FACEBOOK_GRAPH_API_BASE_URL } from "~/facebook-graph/const";
+import { INSTAGRAM_API_BASE_URL } from "~/instagram/const";
+import { INSTAGRAM_GRAPH_API_BASE_URL } from "~/instagram-graph/const";
+
 const FLOWS_JSON_FILE = path.join(
   import.meta.dirname,
   "..",
@@ -29,7 +33,7 @@ type GeneratorConfig = {
 const GENERATOR_CONFIGS: GeneratorConfig[] = [
   {
     name: "Instagram API",
-    apiPrefix: "https://i.instagram.com/api",
+    apiPrefix: INSTAGRAM_API_BASE_URL,
     openapiDir: path.join(BASE_OPENAPI_DIR, "instagram"),
     srcDir: path.join(BASE_SRC_DIR, "instagram"),
     flowsConfig: {
@@ -40,7 +44,7 @@ const GENERATOR_CONFIGS: GeneratorConfig[] = [
   },
   {
     name: "Instagram Graph API",
-    apiPrefix: "https://graph.instagram.com",
+    apiPrefix: INSTAGRAM_GRAPH_API_BASE_URL,
     openapiDir: path.join(BASE_OPENAPI_DIR, "instagram-graph"),
     srcDir: path.join(BASE_SRC_DIR, "instagram-graph"),
     flowsConfig: {
@@ -49,7 +53,7 @@ const GENERATOR_CONFIGS: GeneratorConfig[] = [
   },
   {
     name: "Facebook Graph API",
-    apiPrefix: "https://graph.facebook.com",
+    apiPrefix: FACEBOOK_GRAPH_API_BASE_URL,
     openapiDir: path.join(BASE_OPENAPI_DIR, "facebook-graph"),
     srcDir: path.join(BASE_SRC_DIR, "facebook-graph"),
     flowsConfig: {
