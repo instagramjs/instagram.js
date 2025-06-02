@@ -18,6 +18,7 @@ export type PathFilterContext = RequestFilterContext & {
 };
 
 export type Flow2OpenAPIConfig = {
+  name: string;
   apiPrefix: string;
 
   filterRequest?: (context: RequestFilterContext) => boolean;

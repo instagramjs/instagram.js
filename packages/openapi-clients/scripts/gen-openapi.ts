@@ -19,6 +19,7 @@ const BASE_OPENAPI_DIR = path.join(import.meta.dirname, "..", "openapi");
 const BASE_SRC_DIR = path.join(import.meta.dirname, "..", "src");
 
 type GeneratorConfig = {
+  name: string;
   apiPrefix: string;
   openapiDir: string;
   srcDir: string;
@@ -27,6 +28,7 @@ type GeneratorConfig = {
 
 const GENERATOR_CONFIGS: GeneratorConfig[] = [
   {
+    name: "Instagram API",
     apiPrefix: "https://i.instagram.com/api",
     openapiDir: path.join(BASE_OPENAPI_DIR, "instagram"),
     srcDir: path.join(BASE_SRC_DIR, "instagram"),
@@ -37,6 +39,7 @@ const GENERATOR_CONFIGS: GeneratorConfig[] = [
     },
   },
   {
+    name: "Instagram Graph API",
     apiPrefix: "https://graph.instagram.com",
     openapiDir: path.join(BASE_OPENAPI_DIR, "instagram-graph"),
     srcDir: path.join(BASE_SRC_DIR, "instagram-graph"),
@@ -45,6 +48,7 @@ const GENERATOR_CONFIGS: GeneratorConfig[] = [
     },
   },
   {
+    name: "Facebook Graph API",
     apiPrefix: "https://graph.facebook.com",
     openapiDir: path.join(BASE_OPENAPI_DIR, "facebook-graph"),
     srcDir: path.join(BASE_SRC_DIR, "facebook-graph"),
@@ -80,15 +84,24 @@ async function generate(config: GeneratorConfig, jsonDump: string) {
     // ignore
   }
 
+  const openapiSpecStartedAt = Date.now();
   const def = await flows2OpenAPI(jsonDump, existingDef, {
+    name: config.name,
     apiPrefix: config.apiPrefix,
     ...config.flowsConfig,
   });
+  console.log(
+    `[${config.name}] Generated OpenAPI spec in ${Date.now() - openapiSpecStartedAt}ms`,
+  );
 
   await fs.promises.writeFile(openapiDefFile, yaml.stringify(def));
 
+  const openapiTsStartedAt = Date.now();
   const ast = await openapiTS(def);
   const schemaCode = astToString(ast);
+  console.log(
+    `[${config.name}] Generated TypeScript schema in ${Date.now() - openapiTsStartedAt}ms`,
+  );
 
   await fs.promises.writeFile(openapiTsFile, HEADER + schemaCode);
 }
