@@ -129,12 +129,12 @@ async function mitmFlowToAutogenFlow(
   };
 }
 
-export type MitmFlowsJsonReaderOptions = {
+export type MitmJsonReaderOptions = {
   filepath: string;
 };
 
-export function createMitmFlowsJsonReader(
-  options: MitmFlowsJsonReaderOptions,
+export function createMitmJsonReader(
+  options: MitmJsonReaderOptions,
 ): AutogenReader {
   const eventEmitter = new EventEmitter<AutogenReaderEventMap>();
 

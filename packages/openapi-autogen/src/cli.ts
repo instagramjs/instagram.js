@@ -6,7 +6,8 @@ import { z } from "zod";
 
 import { version } from "../package.json";
 import { createOpenAPIAutogen } from "./autogen";
-import { createMitmFlowsJsonReader } from "./readers/mitm-flows-json";
+import { createHarReader } from "./readers/har";
+import { createMitmJsonReader } from "./readers/mitm-json";
 import { type AutogenReader } from "./readers/reader";
 
 const argsSchema = z.object({
@@ -68,10 +69,11 @@ async function main() {
     let reader: AutogenReader;
     switch (args.inputFormat) {
       case "mitm-json":
-        reader = createMitmFlowsJsonReader({ filepath: args.input });
+        reader = createMitmJsonReader({ filepath: args.input });
         break;
       case "har":
-        throw new Error("HAR format is not supported yet");
+        reader = createHarReader({ filepath: args.input });
+        break;
     }
 
     const autogen = createOpenAPIAutogen(

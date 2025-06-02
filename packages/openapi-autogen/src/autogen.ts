@@ -317,7 +317,8 @@ export function createOpenAPIAutogen(
     filterRequest: config.filterRequest ?? (() => true),
     filterResponse: config.filterResponse ?? (() => true),
     filterParameter: config.filterParameter ?? (() => true),
-    filterExample: config.filterExample ?? (() => true),
+    // Examples can contain sensitive data, so we don't want to include them by default
+    filterExample: config.filterExample ?? (() => false),
     filterSchema: config.filterSchema ?? (() => true),
   };
 
