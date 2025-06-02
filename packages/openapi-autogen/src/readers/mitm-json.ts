@@ -70,49 +70,39 @@ function mitmMethodToAutogenMethod(method: string): AutogenFlowMethod {
   }
 }
 
-type Encoding = "zstd" | "gzip" | "deflate";
-
-function isEncoding(encoding: string): encoding is Encoding {
-  return encoding === "zstd" || encoding === "gzip" || encoding === "deflate";
-}
-
-async function decodeBody(content: string, encoding: Encoding) {
-  const contentBuffer = Buffer.from(content, "base64");
+export async function decodeRawContent(
+  content: string,
+  encoding?: string,
+): Promise<string> {
+  const buffer = Buffer.from(content, "base64");
   switch (encoding) {
     case "zstd":
-      return await zstdDecompressAsync(contentBuffer).then((buffer) =>
-        buffer.toString(),
-      );
-    case "gzip":
-      return await gunzipAsync(contentBuffer).then((buffer) =>
-        buffer.toString(),
-      );
+      return zstdDecompressAsync(buffer).then((decoded) => decoded.toString());
     case "deflate":
-      return await inflateAsync(contentBuffer).then((buffer) =>
-        buffer.toString(),
-      );
+      return inflateAsync(buffer).then((decoded) => decoded.toString());
+    case "gzip":
+      return gunzipAsync(buffer).then((decoded) => decoded.toString());
     default:
-      throw new Error(`Unsupported encoding: ${encoding}`);
+      return buffer.toString();
   }
 }
-
 async function mitmFlowToAutogenFlow(flow: MitmFlow): Promise<AutogenFlow> {
   let requestBody = flow.request.content;
-  const requestBodyEncoding = flow.request.headers["content-encoding"];
-  if (requestBody && requestBodyEncoding && isEncoding(requestBodyEncoding)) {
-    requestBody = await decodeBody(requestBody, requestBodyEncoding);
+  if (requestBody) {
+    requestBody = await decodeRawContent(
+      requestBody,
+      flow.request.headers["content-encoding"],
+    );
   }
 
   let response: AutogenFlowResponse | null = null;
   if (flow.response) {
     let responseBody = flow.response.content;
-    const responseBodyEncoding = flow.response.headers["content-encoding"];
-    if (
-      responseBody &&
-      responseBodyEncoding &&
-      isEncoding(responseBodyEncoding)
-    ) {
-      responseBody = await decodeBody(responseBody, responseBodyEncoding);
+    if (responseBody) {
+      responseBody = await decodeRawContent(
+        responseBody,
+        flow.response.headers["content-encoding"],
+      );
     }
 
     response = {
@@ -126,7 +116,7 @@ async function mitmFlowToAutogenFlow(flow: MitmFlow): Promise<AutogenFlow> {
     type: flow.type,
     request: {
       headers: flow.request.headers,
-      content: flow.request.content,
+      content: requestBody,
       host: flow.request.host,
       method: mitmMethodToAutogenMethod(flow.request.method),
       path: flow.request.path,

@@ -2,7 +2,7 @@ import { cac } from "cac";
 import fs from "fs";
 import { type OpenAPI3 } from "openapi-typescript";
 import yaml from "yaml";
-import { gray, green, red, white } from "yoctocolors";
+import { gray, green, white } from "yoctocolors";
 import { z } from "zod";
 
 import { version } from "../package.json";
