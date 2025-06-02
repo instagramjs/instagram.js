@@ -5,7 +5,7 @@ import { INSTAGRAM_GRAPH_API_BASE_URL } from "./const";
 import { type paths } from "./schema";
 
 export function createInstagramGraphOpenAPIAxiosClient(
-  options: CreateAxiosDefaults,
+  options?: CreateAxiosDefaults,
 ) {
   return new OpenApiAxios<paths, "fetch">(
     axios.create({

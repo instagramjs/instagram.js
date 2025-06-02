@@ -19,7 +19,6 @@
   },
   "devDependencies": {
     "@instagramjs/eslint-config": "workspace:*",
-    "@instagramjs/openapi-clients": "workspace:*",
     "@instagramjs/tsconfig": "workspace:*",
     "@types/eslint": "^9.6.1",
     "@types/node": "^22.15.29",
