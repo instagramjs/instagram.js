@@ -2,7 +2,7 @@
   "name": "instagram.js",
   "private": true,
   "engines": {
-    "node": ">=20.17.0"
+    "node": ">=22.16.0"
   },
   "packageManager": "pnpm@9.11.0",
   "scripts": {

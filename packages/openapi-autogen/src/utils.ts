@@ -10,20 +10,8 @@ import {
   type ResponseObject,
   type SchemaObject,
 } from "openapi-typescript";
-import { promisify } from "util";
-import { gunzip, inflate, zstdDecompress } from "zlib";
 
-import {
-  filterExample,
-  filterParameter,
-  filterSchema,
-  type Flow2OpenAPIConfig,
-  type RequestFilterContext,
-} from "./config";
-
-const gunzipAsync = promisify(gunzip);
-const zstdDecompressAsync = promisify(zstdDecompress);
-const inflateAsync = promisify(inflate);
+import { type AutogenConfigFinal, type RequestFilterContext } from "./config";
 
 export function isRef<T extends object | undefined>(
   value: T,
@@ -58,12 +46,12 @@ const objectRefTypeToComponentsKey: Record<
 export function getObjectOrRef<
   T extends ObjectRefTypeToObjectType[K],
   K extends ObjectRefType,
->(def: OpenAPI3, type: K, obj: T | ReferenceObject): T {
+>(spec: OpenAPI3, type: K, obj: T | ReferenceObject): T {
   if (isRef(obj)) {
     const refKey = obj.$ref.split("/").pop();
     assert(refKey !== undefined, "Expected refKey to be present");
     const refObj =
-      def.components?.[objectRefTypeToComponentsKey[type]]?.[refKey] ?? null;
+      spec.components?.[objectRefTypeToComponentsKey[type]]?.[refKey] ?? null;
 
     if (!refObj) {
       throw new Error(`Reference object not found: ${obj.$ref}`);
@@ -126,7 +114,7 @@ export function normalizedPath(path: string): string {
 }
 
 export function parametersFromPathParameters(
-  config: Flow2OpenAPIConfig,
+  config: AutogenConfigFinal,
   filterContext: RequestFilterContext,
   filterPath: string,
   pathParameters: PathParameter[],
@@ -143,7 +131,7 @@ export function parametersFromPathParameters(
       schema: { type: "string" },
     };
     if (
-      filterExample(config, {
+      config.filterExample({
         ...filterContext,
         path: `${filterPath}.path.${pathParameterName}`,
         value: pathParameterValue,
@@ -158,13 +146,13 @@ export function parametersFromPathParameters(
 }
 
 export function parametersFromHeaders(
-  config: Flow2OpenAPIConfig,
+  config: AutogenConfigFinal,
   filterContext: RequestFilterContext,
   filterPath: string,
   headers: Record<string, string>,
 ): ParameterObject[] {
   const filteredHeaders = Object.entries(headers).filter(([key, value]) =>
-    filterParameter(config, {
+    config.filterParameter({
       ...filterContext,
       path: `${filterPath}.headers.${key}`,
       value,
@@ -180,7 +168,7 @@ export function parametersFromHeaders(
       schema: { type: "string" },
     };
     if (
-      filterExample(config, {
+      config.filterExample({
         ...filterContext,
         path: `${filterPath}.headers.${headerName}`,
         value: headerValue,
@@ -195,7 +183,7 @@ export function parametersFromHeaders(
 }
 
 export function parametersFromSearchParams(
-  config: Flow2OpenAPIConfig,
+  config: AutogenConfigFinal,
   filterContext: RequestFilterContext,
   filterPath: string,
   searchParams: URLSearchParams,
@@ -209,7 +197,7 @@ export function parametersFromSearchParams(
       schema: { type: "string" },
     };
     if (
-      filterExample(config, {
+      config.filterExample({
         ...filterContext,
         path: `${filterPath}.query.${key}`,
         value: value,
@@ -224,13 +212,13 @@ export function parametersFromSearchParams(
 }
 
 export function schemaFromSearchParams(
-  config: Flow2OpenAPIConfig,
+  config: AutogenConfigFinal,
   filterContext: RequestFilterContext,
   filterPath: string,
   searchParams: URLSearchParams,
 ): SchemaObject {
   if (
-    !filterSchema(config, {
+    !config.filterSchema({
       ...filterContext,
       path: filterPath,
       value: searchParams,
@@ -248,7 +236,7 @@ export function schemaFromSearchParams(
   assert(schema.properties !== undefined, "Expected properties to be present");
 
   const filteredSearchParams = searchParams.entries().filter(([key, value]) =>
-    filterSchema(config, {
+    config.filterSchema({
       ...filterContext,
       path: `${filterPath}.${key}`,
       value: value,
@@ -260,7 +248,7 @@ export function schemaFromSearchParams(
       type: "string",
     };
     if (
-      filterExample(config, {
+      config.filterExample({
         ...filterContext,
         path: `${filterPath}.query.${searchParamName}`,
         value: searchParamValue,
@@ -301,8 +289,8 @@ function objectIsRecord(
 }
 
 export function schemaFromValue(
-  def: OpenAPI3,
-  config: Flow2OpenAPIConfig,
+  spec: OpenAPI3,
+  config: AutogenConfigFinal,
   filterContext: RequestFilterContext,
   filterPath: string,
   value: unknown,
@@ -312,7 +300,7 @@ export function schemaFromValue(
   }
 
   if (
-    !filterSchema(config, {
+    !config.filterSchema({
       ...filterContext,
       path: filterPath,
       value: value,
@@ -324,7 +312,7 @@ export function schemaFromValue(
   if (typeof value === "string") {
     const schema: SchemaObject = { type: "string" };
     if (
-      filterExample(config, {
+      config.filterExample({
         ...filterContext,
         path: filterPath,
         value: value,
@@ -338,7 +326,7 @@ export function schemaFromValue(
   if (typeof value === "number") {
     const schema: SchemaObject = { type: "number" };
     if (
-      filterExample(config, {
+      config.filterExample({
         ...filterContext,
         path: filterPath,
         value: value,
@@ -352,7 +340,7 @@ export function schemaFromValue(
   if (typeof value === "boolean") {
     const schema: SchemaObject = { type: "boolean" };
     if (
-      filterExample(config, {
+      config.filterExample({
         ...filterContext,
         path: filterPath,
         value: value,
@@ -370,7 +358,7 @@ export function schemaFromValue(
     }
 
     const baseSchema = schemaFromValue(
-      def,
+      spec,
       config,
       filterContext,
       filterPath,
@@ -378,10 +366,10 @@ export function schemaFromValue(
     );
     for (const [itemIndex, itemValue] of restItems.entries()) {
       mergeSchemas(
-        def,
+        spec,
         baseSchema,
         schemaFromValue(
-          def,
+          spec,
           config,
           filterContext,
           `${filterPath}.${itemIndex}`,
@@ -403,7 +391,7 @@ export function schemaFromValue(
       const [firstEntryKey, firstEntryValue] = firstEntry;
 
       const valueSchema = schemaFromValue(
-        def,
+        spec,
         config,
         filterContext,
         `${filterPath}.${firstEntryKey}`,
@@ -411,10 +399,10 @@ export function schemaFromValue(
       );
       for (const [restEntryKey, restEntryValue] of restEntries) {
         mergeSchemas(
-          def,
+          spec,
           valueSchema,
           schemaFromValue(
-            def,
+            spec,
             config,
             filterContext,
             `${filterPath}.${restEntryKey}`,
@@ -444,7 +432,7 @@ export function schemaFromValue(
 
     for (const [key, objectValue] of Object.entries(value)) {
       schema.properties[key] = schemaFromValue(
-        def,
+        spec,
         config,
         filterContext,
         `${filterPath}.${key}`,
@@ -460,42 +448,46 @@ export function schemaFromValue(
 }
 
 function mergeSchemaIntoOneOf(
-  def: OpenAPI3,
+  spec: OpenAPI3,
   oneOfList: Required<SchemaObject>["oneOf"],
   newSchema: SchemaObject,
 ): void {
   const existingOneOf = oneOfList.find(
-    (schema) => getObjectOrRef(def, "schema", schema).type === newSchema.type,
+    (schema) => getObjectOrRef(spec, "schema", schema).type === newSchema.type,
   );
 
   if (existingOneOf) {
-    mergeSchemas(def, getObjectOrRef(def, "schema", existingOneOf), newSchema);
+    mergeSchemas(
+      spec,
+      getObjectOrRef(spec, "schema", existingOneOf),
+      newSchema,
+    );
   } else {
     oneOfList.push(newSchema);
   }
 }
 
 export function mergeSchemas(
-  def: OpenAPI3,
+  spec: OpenAPI3,
   existingSchema: SchemaObject,
   newSchema: SchemaObject,
 ): void {
   if (existingSchema.oneOf && newSchema.oneOf) {
     for (const newOneOf of newSchema.oneOf) {
       mergeSchemaIntoOneOf(
-        def,
+        spec,
         existingSchema.oneOf,
-        getObjectOrRef(def, "schema", newOneOf),
+        getObjectOrRef(spec, "schema", newOneOf),
       );
     }
     return;
   }
   if (existingSchema.oneOf && newSchema.type) {
-    mergeSchemaIntoOneOf(def, existingSchema.oneOf, newSchema);
+    mergeSchemaIntoOneOf(spec, existingSchema.oneOf, newSchema);
     return;
   }
   if (existingSchema.type && newSchema.oneOf) {
-    mergeSchemaIntoOneOf(def, newSchema.oneOf, existingSchema);
+    mergeSchemaIntoOneOf(spec, newSchema.oneOf, existingSchema);
     existingSchema.oneOf = newSchema.oneOf;
     return;
   }
@@ -534,9 +526,9 @@ export function mergeSchemas(
       for (const [newKey, newValue] of Object.entries(newSchema.properties)) {
         if (existingSchema.properties[newKey]) {
           mergeSchemas(
-            def,
-            getObjectOrRef(def, "schema", existingSchema.properties[newKey]),
-            getObjectOrRef(def, "schema", newValue),
+            spec,
+            getObjectOrRef(spec, "schema", existingSchema.properties[newKey]),
+            getObjectOrRef(spec, "schema", newValue),
           );
         } else {
           existingSchema.properties[newKey] = newValue;
@@ -569,9 +561,9 @@ export function mergeSchemas(
       );
 
       mergeSchemas(
-        def,
-        getObjectOrRef(def, "schema", existingSchema.additionalProperties),
-        getObjectOrRef(def, "schema", newSchema.additionalProperties),
+        spec,
+        getObjectOrRef(spec, "schema", existingSchema.additionalProperties),
+        getObjectOrRef(spec, "schema", newSchema.additionalProperties),
       );
     }
 
@@ -594,13 +586,13 @@ export function mergeSchemas(
     );
 
     const existingItemsSchema = getObjectOrRef(
-      def,
+      spec,
       "schema",
       existingSchema.items,
     );
-    const newItemsSchema = getObjectOrRef(def, "schema", newSchema.items);
+    const newItemsSchema = getObjectOrRef(spec, "schema", newSchema.items);
 
-    mergeSchemas(def, existingItemsSchema, newItemsSchema);
+    mergeSchemas(spec, existingItemsSchema, newItemsSchema);
 
     if (
       existingItemsSchema.type !== "null" &&
@@ -624,7 +616,7 @@ export function mergeSchemas(
 }
 
 export function mergeParameters(
-  def: OpenAPI3,
+  spec: OpenAPI3,
   maybeExistingParameters: (ParameterObject | ReferenceObject)[],
   maybeNewParameters: (ParameterObject | ReferenceObject)[],
 ): void {
@@ -633,19 +625,19 @@ export function mergeParameters(
     ParameterObject | ReferenceObject
   >(
     maybeExistingParameters.map((param) => {
-      const obj = getObjectOrRef(def, "parameter", param);
+      const obj = getObjectOrRef(spec, "parameter", param);
       return [`${obj.name}:${obj.in}`, obj];
     }),
   );
   const newByNameAndIn = new Map<string, ParameterObject | ReferenceObject>(
     maybeNewParameters.map((param) => {
-      const obj = getObjectOrRef(def, "parameter", param);
+      const obj = getObjectOrRef(spec, "parameter", param);
       return [`${obj.name}:${obj.in}`, obj];
     }),
   );
 
   for (const newParam of maybeNewParameters) {
-    const newParamObj = getObjectOrRef(def, "parameter", newParam);
+    const newParamObj = getObjectOrRef(spec, "parameter", newParam);
     const existingParam = existingByNameAndIn.get(
       `${newParamObj.name}:${newParamObj.in}`,
     );
@@ -658,7 +650,7 @@ export function mergeParameters(
   }
 
   for (const existingParam of maybeExistingParameters) {
-    const existingParamObj = getObjectOrRef(def, "parameter", existingParam);
+    const existingParamObj = getObjectOrRef(spec, "parameter", existingParam);
     const newParam = newByNameAndIn.get(
       `${existingParamObj.name}:${existingParamObj.in}`,
     );
@@ -691,13 +683,13 @@ export function mergeExamples(
 }
 
 export function headerMapFromHeaders(
-  config: Flow2OpenAPIConfig,
+  config: AutogenConfigFinal,
   filterContext: RequestFilterContext,
   filterPath: string,
   headers: Record<string, string>,
 ): Record<string, HeaderObject> {
   const filteredHeaders = Object.entries(headers).filter(([key, value]) =>
-    filterParameter(config, {
+    config.filterParameter({
       ...filterContext,
       path: `${filterPath}.headers.${key}`,
       value,
@@ -711,7 +703,7 @@ export function headerMapFromHeaders(
       required: true,
     };
     if (
-      filterExample(config, {
+      config.filterExample({
         ...filterContext,
         path: `${filterPath}.headers.${key}`,
         value: value,
@@ -740,22 +732,5 @@ export function mergeHeaderMaps(
     if (!newHeaders[key]) {
       value.required = false;
     }
-  }
-}
-
-export async function decodeRawContent(
-  content: string,
-  encoding?: string,
-): Promise<string> {
-  const buffer = Buffer.from(content, "base64");
-  switch (encoding) {
-    case "zstd":
-      return zstdDecompressAsync(buffer).then((decoded) => decoded.toString());
-    case "deflate":
-      return inflateAsync(buffer).then((decoded) => decoded.toString());
-    case "gzip":
-      return gunzipAsync(buffer).then((decoded) => decoded.toString());
-    default:
-      return buffer.toString();
   }
 }

@@ -6,17 +6,14 @@ import {
   type PathItemObject,
   type SchemaObject,
 } from "openapi-typescript";
-import { z } from "zod";
 
 import {
-  filterExample,
-  filterRequest,
-  filterResponse,
-  type Flow2OpenAPIConfig,
+  type AutogenConfig,
+  type AutogenConfigFinal,
   type RequestFilterContext,
 } from "./config";
+import { type AutogenFlow } from "./flow";
 import {
-  decodeRawContent,
   getObjectOrRef,
   headerMapFromHeaders,
   isRef,
@@ -32,49 +29,20 @@ import {
   schemaFromValue,
 } from "./utils";
 
-const flowDumpSchema = z.object({
-  id: z.string(),
-  request: z.object({
-    headers: z.record(z.string(), z.string()),
-    content: z.string().nullable(),
-    host: z.string(),
-    method: z.enum([
-      "GET",
-      "PUT",
-      "POST",
-      "DELETE",
-      "PATCH",
-      "HEAD",
-      "OPTIONS",
-    ]),
-    path: z.string(),
-    scheme: z.enum(["http", "https"]),
-  }),
-  response: z
-    .object({
-      headers: z.record(z.string(), z.string()),
-      content: z.string().nullable(),
-      status_code: z.number(),
-    })
-    .nullable(),
-  type: z.enum(["http"]),
-});
-type FlowDump = z.infer<typeof flowDumpSchema>;
-
-async function processDump(
-  config: Flow2OpenAPIConfig,
-  def: OpenAPI3,
-  dump: FlowDump,
+async function processFlow(
+  config: AutogenConfigFinal,
+  spec: OpenAPI3,
+  flow: AutogenFlow,
 ) {
-  assert(def.paths, "Schema is missing paths");
+  assert(spec.paths, "Schema is missing paths");
 
-  if (dump.type !== "http" || !dump.response) {
+  if (flow.type !== "http" || !flow.response) {
     return;
   }
 
   const prefixUrl = new URL(config.apiPrefix);
   const requestUrl = new URL(
-    `${dump.request.scheme}://${dump.request.host}${dump.request.path}`,
+    `${flow.request.scheme}://${flow.request.host}${flow.request.path}`,
   );
   if (
     requestUrl.hostname !== prefixUrl.hostname ||
@@ -87,50 +55,34 @@ async function processDump(
   );
   const [parameterizedPath, pathParameters] = parameterizePath(pathname);
 
-  let requestBody: string | null = null;
-  if (dump.request.content) {
-    requestBody = await decodeRawContent(
-      dump.request.content,
-      dump.request.headers["content-encoding"],
-    );
-  }
-
-  let responseBody: string | null = null;
-  if (dump.response.content) {
-    responseBody = await decodeRawContent(
-      dump.response.content,
-      dump.response.headers["content-encoding"],
-    );
-  }
-
   const filterContext: RequestFilterContext = {
     request: {
-      method: dump.request.method,
+      method: flow.request.method,
       path: pathname,
-      headers: dump.request.headers,
-      body: requestBody,
+      headers: flow.request.headers,
+      body: flow.request.content,
     },
     response: {
-      statusCode: dump.response.status_code,
-      headers: dump.response.headers,
-      content: responseBody,
+      statusCode: flow.response.statusCode,
+      headers: flow.response.headers,
+      content: flow.response.content,
     },
   };
 
-  if (!filterRequest(config, filterContext)) {
+  if (!config.filterRequest(filterContext)) {
     return;
   }
 
   let pathSchema;
-  if (def.paths[parameterizedPath]) {
-    pathSchema = def.paths[parameterizedPath];
+  if (spec.paths[parameterizedPath]) {
+    pathSchema = spec.paths[parameterizedPath];
   } else {
     pathSchema = {};
-    def.paths[parameterizedPath] = pathSchema;
+    spec.paths[parameterizedPath] = pathSchema;
   }
   assert(!isRef(pathSchema), "Reference object not expected");
 
-  const methodKey = dump.request.method.toLowerCase() as keyof PathItemObject;
+  const methodKey = flow.request.method.toLowerCase() as keyof PathItemObject;
   let methodSchema = pathSchema[methodKey] as OperationObject | undefined;
   if (!methodSchema) {
     methodSchema = {
@@ -153,7 +105,7 @@ async function processDump(
       config,
       filterContext,
       "request",
-      dump.request.headers,
+      flow.request.headers,
     ),
     ...parametersFromPathParameters(
       config,
@@ -173,14 +125,14 @@ async function processDump(
     );
   }
 
-  mergeParameters(def, methodSchema.parameters, newParameters);
+  mergeParameters(spec, methodSchema.parameters, newParameters);
 
-  const requestBodyType = dump.request.headers["content-type"]?.split(";")[0];
-  if (requestBody && requestBodyType) {
+  const requestBodyType = flow.request.headers["content-type"]?.split(";")[0];
+  if (flow.request.content && requestBodyType) {
     let requestBodySchema;
     if (methodSchema.requestBody) {
       requestBodySchema = getObjectOrRef(
-        def,
+        spec,
         "requestBody",
         methodSchema.requestBody,
       );
@@ -210,15 +162,18 @@ async function processDump(
     if (requestBodyType.startsWith("application/json")) {
       let jsonBody: unknown;
       try {
-        jsonBody = JSON.parse(requestBody);
+        jsonBody = JSON.parse(flow.request.content);
       } catch (e) {
-        throw new Error(`Error parsing JSON request body: ${requestBody}`, {
-          cause: e,
-        });
+        throw new Error(
+          `Error parsing JSON request body: ${flow.request.content}`,
+          {
+            cause: e,
+          },
+        );
       }
 
       const jsonSchema = schemaFromValue(
-        def,
+        spec,
         config,
         filterContext,
         "request.body",
@@ -226,8 +181,8 @@ async function processDump(
       );
       if (mediaTypeSchema.schema) {
         mergeSchemas(
-          def,
-          getObjectOrRef(def, "schema", mediaTypeSchema.schema),
+          spec,
+          getObjectOrRef(spec, "schema", mediaTypeSchema.schema),
           jsonSchema,
         );
       } else {
@@ -238,10 +193,10 @@ async function processDump(
     if (requestBodyType.startsWith("application/x-www-form-urlencoded")) {
       let parsedFormData;
       try {
-        parsedFormData = new URLSearchParams(requestBody);
+        parsedFormData = new URLSearchParams(flow.request.content);
       } catch (e) {
         throw new Error(
-          `Error parsing form data request body: ${requestBody}`,
+          `Error parsing form data request body: ${flow.request.content}`,
           {
             cause: e,
           },
@@ -258,15 +213,15 @@ async function processDump(
     }
   }
 
-  if (!filterResponse(config, filterContext)) {
+  if (!config.filterResponse(filterContext)) {
     return;
   }
 
-  const statusCodeKey = dump.response.status_code.toString();
+  const statusCodeKey = flow.response.statusCode.toString();
   let responseSchema;
   if (methodSchema.responses[statusCodeKey]) {
     responseSchema = getObjectOrRef(
-      def,
+      spec,
       "response",
       methodSchema.responses[statusCodeKey],
     );
@@ -295,12 +250,12 @@ async function processDump(
     config,
     filterContext,
     "response",
-    dump.response.headers,
+    flow.response.headers,
   );
   mergeHeaderMaps(responseSchema.headers, newHeaders);
 
-  const responseBodyType = dump.response.headers["content-type"]?.split(";")[0];
-  if (responseBody && responseBodyType) {
+  const responseBodyType = flow.response.headers["content-type"]?.split(";")[0];
+  if (flow.response.content && responseBodyType) {
     let responseBodySchema;
     if (responseSchema.content[responseBodyType]) {
       responseBodySchema = responseSchema.content[responseBodyType];
@@ -311,13 +266,13 @@ async function processDump(
 
     let schema: SchemaObject = { type: "string" };
     if (
-      filterExample(config, {
+      config.filterExample({
         ...filterContext,
         path: "response.body",
-        value: responseBody,
+        value: flow.response.content,
       })
     ) {
-      schema.example = responseBody;
+      schema.example = flow.response.content;
     }
 
     if (responseBodyType.startsWith("application/octet-stream")) {
@@ -326,9 +281,9 @@ async function processDump(
 
     if (responseBodyType.startsWith("application/json")) {
       try {
-        const jsonBody = JSON.parse(responseBody);
+        const jsonBody = JSON.parse(flow.response.content);
         schema = schemaFromValue(
-          def,
+          spec,
           config,
           filterContext,
           "response.body",
@@ -341,8 +296,8 @@ async function processDump(
 
     if (responseBodySchema.schema) {
       mergeSchemas(
-        def,
-        getObjectOrRef(def, "schema", responseBodySchema.schema),
+        spec,
+        getObjectOrRef(spec, "schema", responseBodySchema.schema),
         schema,
       );
     } else {
@@ -351,23 +306,31 @@ async function processDump(
   }
 }
 
-export async function flows2OpenAPI(
-  jsonDump: string,
+export function createOpenAPIAutogen(
+  config: AutogenConfig,
   def: OpenAPI3 | null,
-  config: Flow2OpenAPIConfig,
-): Promise<OpenAPI3> {
-  const { apiPrefix, name } = config;
+) {
+  let isComplete = false;
 
-  if (def === null) {
+  const finalConfig: AutogenConfigFinal = {
+    ...config,
+    filterRequest: config.filterRequest ?? (() => true),
+    filterResponse: config.filterResponse ?? (() => true),
+    filterParameter: config.filterParameter ?? (() => true),
+    filterExample: config.filterExample ?? (() => true),
+    filterSchema: config.filterSchema ?? (() => true),
+  };
+
+  if (!def) {
     def = {
       openapi: "3.1.0",
       info: {
-        title: name,
+        title: config.name,
         version: "1.0.0",
       },
       servers: [
         {
-          url: apiPrefix,
+          url: config.apiPrefix,
           description: "Primary Server",
           variables: {},
         },
@@ -375,17 +338,38 @@ export async function flows2OpenAPI(
       paths: {},
     };
   }
-  assert(def.paths !== undefined, "Expected paths to be present");
-
-  const dumps = jsonDump.split("\n").filter(Boolean);
-  for (const line of dumps) {
-    const parsedDump = flowDumpSchema.parse(JSON.parse(line));
-    await processDump(config, def, parsedDump);
-  }
-
-  def.paths = Object.fromEntries(
-    Object.entries(def.paths).sort(([a], [b]) => a.localeCompare(b)),
+  assert(
+    def.openapi !== undefined && def.openapi.startsWith("3.1"),
+    `The OpenAPI specification must be at least version 3.1`,
+  );
+  assert(
+    def.paths !== undefined,
+    `The OpenAPI specification must have a "paths" property`,
   );
 
-  return def;
+  const _processFlow = async (flow: AutogenFlow) => {
+    if (isComplete) {
+      throw new Error(
+        "Cannot process new flows after `isComplete()` is called",
+      );
+    }
+
+    await processFlow(finalConfig, def, flow);
+  };
+
+  const complete = () => {
+    if (isComplete) {
+      throw new Error("Already completed");
+    }
+
+    isComplete = true;
+    return def;
+  };
+
+  return {
+    processFlow: _processFlow,
+    complete,
+  };
 }
+
+export type OpenAPIAutogen = ReturnType<typeof createOpenAPIAutogen>;

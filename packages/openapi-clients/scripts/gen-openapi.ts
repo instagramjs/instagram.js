@@ -1,7 +1,8 @@
 import {
-  type Flow2OpenAPIConfig,
-  flows2OpenAPI,
-} from "@instagramjs/flows2openapi";
+  type AutogenConfig,
+  createMitmFlowsJsonReader,
+  createOpenAPIAutogen,
+} from "@instagramjs/openapi-autogen";
 import fs from "fs";
 import openapiTS, { astToString, type OpenAPI3 } from "openapi-typescript";
 import path from "path";
@@ -27,7 +28,7 @@ type GeneratorConfig = {
   apiPrefix: string;
   openapiDir: string;
   srcDir: string;
-  flowsConfig?: Partial<Flow2OpenAPIConfig>;
+  autogenConfig?: Partial<AutogenConfig>;
 };
 
 const GENERATOR_CONFIGS: GeneratorConfig[] = [
@@ -36,7 +37,7 @@ const GENERATOR_CONFIGS: GeneratorConfig[] = [
     apiPrefix: INSTAGRAM_API_BASE_URL,
     openapiDir: path.join(BASE_OPENAPI_DIR, "instagram"),
     srcDir: path.join(BASE_SRC_DIR, "instagram"),
-    flowsConfig: {
+    autogenConfig: {
       filterExample: () => false,
       filterRequest: ({ request }) => !request.path.startsWith("/v1/bloks"),
       filterSchema: ({ path }) => !path.endsWith("bloks_payload"),
@@ -47,7 +48,7 @@ const GENERATOR_CONFIGS: GeneratorConfig[] = [
     apiPrefix: INSTAGRAM_GRAPH_API_BASE_URL,
     openapiDir: path.join(BASE_OPENAPI_DIR, "instagram-graph"),
     srcDir: path.join(BASE_SRC_DIR, "instagram-graph"),
-    flowsConfig: {
+    autogenConfig: {
       filterExample: () => false,
     },
   },
@@ -56,7 +57,7 @@ const GENERATOR_CONFIGS: GeneratorConfig[] = [
     apiPrefix: FACEBOOK_GRAPH_API_BASE_URL,
     openapiDir: path.join(BASE_OPENAPI_DIR, "facebook-graph"),
     srcDir: path.join(BASE_SRC_DIR, "facebook-graph"),
-    flowsConfig: {
+    autogenConfig: {
       filterExample: () => false,
     },
   },
@@ -72,7 +73,11 @@ const HEADER = `/**
 
 `;
 
-async function generate(config: GeneratorConfig, jsonDump: string) {
+async function generate(config: GeneratorConfig) {
+  const log = (level: "info" | "error", message: string) => {
+    console[level](`[${config.name}] ${message}`);
+  };
+
   const openapiDefFile = path.join(config.openapiDir, "openapi.yaml");
   const openapiTsFile = path.join(config.srcDir, "schema.ts");
 
@@ -88,23 +93,42 @@ async function generate(config: GeneratorConfig, jsonDump: string) {
     // ignore
   }
 
-  const openapiSpecStartedAt = Date.now();
-  const def = await flows2OpenAPI(jsonDump, existingDef, {
-    name: config.name,
-    apiPrefix: config.apiPrefix,
-    ...config.flowsConfig,
-  });
-  console.log(
-    `[${config.name}] Generated OpenAPI spec in ${Date.now() - openapiSpecStartedAt}ms`,
+  const autogenStartedAt = Date.now();
+
+  const autogen = createOpenAPIAutogen(
+    {
+      name: config.name,
+      apiPrefix: config.apiPrefix,
+      ...config.autogenConfig,
+    },
+    existingDef,
   );
+  const reader = createMitmFlowsJsonReader({
+    filepath: FLOWS_JSON_FILE,
+  });
+  reader.on("read", (flow) => autogen.processFlow(flow));
+
+  const def = await new Promise<OpenAPI3>((resolve, reject) => {
+    reader.on("error", (err) => {
+      log("error", `Error reading flows JSON: ${err}`);
+      reject(err);
+    });
+    reader.on("complete", () => {
+      log("info", "Completed reading flows JSON");
+      resolve(autogen.complete());
+    });
+  });
+
+  log("info", `Generated OpenAPI spec in ${Date.now() - autogenStartedAt}ms`);
 
   await fs.promises.writeFile(openapiDefFile, yaml.stringify(def));
 
   const openapiTsStartedAt = Date.now();
   const ast = await openapiTS(def);
   const schemaCode = astToString(ast);
-  console.log(
-    `[${config.name}] Generated TypeScript schema in ${Date.now() - openapiTsStartedAt}ms`,
+  log(
+    "info",
+    `Generated TypeScript schema in ${Date.now() - openapiTsStartedAt}ms`,
   );
 
   await fs.promises.writeFile(openapiTsFile, HEADER + schemaCode);
@@ -117,11 +141,8 @@ async function main() {
     console.error(`Flows JSON dump does not exist at ${FLOWS_JSON_FILE}`);
     process.exit(1);
   }
-  const jsonDump = await fs.promises.readFile(FLOWS_JSON_FILE, "utf-8");
 
-  await Promise.all(
-    GENERATOR_CONFIGS.map((config) => generate(config, jsonDump)),
-  );
+  await Promise.all(GENERATOR_CONFIGS.map((config) => generate(config)));
 }
 
 main();
