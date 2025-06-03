@@ -1,0 +1,1263 @@
+openapi: 3.1.0
+info:
+  title: Instagram B API
+  version: 1.0.0
+servers:
+  - url: https://b.i.instagram.com/api
+    description: Primary Server
+    variables: {}
+paths:
+  /v1/zr/dual_tokens/:
+    post:
+      responses:
+        "200":
+          description: ""
+          headers:
+            content-type:
+              schema:
+                type: string
+              required: true
+            date:
+              schema:
+                type: string
+              required: true
+            vary:
+              schema:
+                type: string
+              required: true
+            content-language:
+              schema:
+                type: string
+              required: true
+            strict-transport-security:
+              schema:
+                type: string
+              required: true
+            cache-control:
+              schema:
+                type: string
+              required: true
+            pragma:
+              schema:
+                type: string
+              required: true
+            expires:
+              schema:
+                type: string
+              required: true
+            x-frame-options:
+              schema:
+                type: string
+              required: true
+            content-security-policy:
+              schema:
+                type: string
+              required: true
+            cross-origin-embedder-policy-report-only:
+              schema:
+                type: string
+              required: true
+            report-to:
+              schema:
+                type: string
+              required: true
+            cross-origin-opener-policy:
+              schema:
+                type: string
+              required: true
+            x-content-type-options:
+              schema:
+                type: string
+              required: true
+            x-xss-protection:
+              schema:
+                type: string
+              required: true
+            x-ig-push-state:
+              schema:
+                type: string
+              required: true
+            x-ig-cache-control:
+              schema:
+                type: string
+              required: true
+            x-aed:
+              schema:
+                type: string
+              required: true
+            x-ig-request-elapsed-time-ms:
+              schema:
+                type: string
+              required: true
+            x-ig-peak-v2:
+              schema:
+                type: string
+              required: true
+            x-ig-peak-time:
+              schema:
+                type: string
+              required: true
+            x-ig-capacity-level:
+              schema:
+                type: string
+              required: true
+            content-encoding:
+              schema:
+                type: string
+              required: true
+            x-stack:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-ig-direct-region-hint:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-shbid:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-shbts:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-rur:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-ds-user-id:
+              schema:
+                type: string
+              required: true
+            x-perf-stats:
+              schema:
+                type: string
+              required: true
+            content-length:
+              schema:
+                type: string
+              required: true
+            x-ig-origin-region:
+              schema:
+                type: string
+              required: true
+            x-fb-client-ip-forwarded:
+              schema:
+                type: string
+              required: true
+            x-fb-server-cluster-forwarded:
+              schema:
+                type: string
+              required: true
+            alt-svc:
+              schema:
+                type: string
+              required: true
+            x-fb-connection-quality:
+              schema:
+                type: string
+              required: true
+            ig-set-x-mid:
+              schema:
+                type: string
+              required: false
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  normal_token:
+                    type: object
+                    properties:
+                      carrier_name:
+                        type: string
+                      carrier_id:
+                        type: number
+                      ttl:
+                        type: number
+                      features:
+                        type: array
+                        items:
+                          type: "null"
+                      request_time:
+                        type: number
+                      token_hash:
+                        type: string
+                      rewrite_rules:
+                        type: array
+                        items:
+                          type: "null"
+                      enabled_wallet_defs_keys:
+                        type: array
+                        items:
+                          type: "null"
+                      deadline:
+                        type: string
+                      zero_cms_fetch_interval_seconds:
+                        type: number
+                      carrier_signal_config:
+                        type: array
+                        items:
+                          type: "null"
+                      eligibility_hash:
+                        type: string
+                    required:
+                      - carrier_name
+                      - carrier_id
+                      - ttl
+                      - features
+                      - request_time
+                      - token_hash
+                      - rewrite_rules
+                      - enabled_wallet_defs_keys
+                      - deadline
+                      - zero_cms_fetch_interval_seconds
+                      - carrier_signal_config
+                      - eligibility_hash
+                  free_token:
+                    type: object
+                    properties:
+                      carrier_name:
+                        type: string
+                      carrier_id:
+                        type: number
+                      ttl:
+                        type: number
+                      features:
+                        type: array
+                        items:
+                          type: "null"
+                      request_time:
+                        type: number
+                      token_hash:
+                        type: string
+                      rewrite_rules:
+                        type: array
+                        items:
+                          type: "null"
+                      enabled_wallet_defs_keys:
+                        type: array
+                        items:
+                          type: "null"
+                      deadline:
+                        type: string
+                      zero_cms_fetch_interval_seconds:
+                        type: number
+                      carrier_signal_config:
+                        type: array
+                        items:
+                          type: "null"
+                      eligibility_hash:
+                        type: string
+                    required:
+                      - carrier_name
+                      - carrier_id
+                      - ttl
+                      - features
+                      - request_time
+                      - token_hash
+                      - rewrite_rules
+                      - enabled_wallet_defs_keys
+                      - deadline
+                      - zero_cms_fetch_interval_seconds
+                      - carrier_signal_config
+                      - eligibility_hash
+                  status:
+                    type: string
+                required:
+                  - normal_token
+                  - free_token
+                  - status
+      parameters:
+        - name: x-ig-app-locale
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-device-locale
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-mapped-locale
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-pigeon-rawclienttime
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-bandwidth-speed-kbps
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-bandwidth-totalbytes-b
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-bandwidth-totaltime-ms
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-version-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-www-claim
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-button-version
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-colors-enabled
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-ax-base-colors-enabled
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-font-enabled
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-is-layout-rtl
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-device-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-family-device-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-ig-android-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-timezone-offset
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-nav-chain
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-fb-session-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-fb-session-private
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-fb-connection-type
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-connection-type
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-network-properties
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-ig-capabilities
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-app-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: user-agent
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: accept-language
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-mid
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: ig-intended-user-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: content-type
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: content-length
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: accept-encoding
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-http-engine
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-client-ip
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-server-cluster
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-pigeon-session-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: priority
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: authorization
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: ig-u-ds-user-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: ig-u-rur
+          in: header
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                normal_token_hash:
+                  type: string
+                device_id:
+                  type: string
+                _uuid:
+                  type: string
+                custom_device_id:
+                  type: string
+                fetch_reason:
+                  type: string
+              required:
+                - normal_token_hash
+                - device_id
+                - _uuid
+                - custom_device_id
+                - fetch_reason
+  /v1/attestation/create_android_keystore/:
+    post:
+      responses:
+        "200":
+          description: ""
+          headers:
+            content-type:
+              schema:
+                type: string
+              required: true
+            date:
+              schema:
+                type: string
+              required: true
+            vary:
+              schema:
+                type: string
+              required: true
+            content-language:
+              schema:
+                type: string
+              required: true
+            strict-transport-security:
+              schema:
+                type: string
+              required: true
+            cache-control:
+              schema:
+                type: string
+              required: true
+            pragma:
+              schema:
+                type: string
+              required: true
+            expires:
+              schema:
+                type: string
+              required: true
+            x-frame-options:
+              schema:
+                type: string
+              required: true
+            content-security-policy:
+              schema:
+                type: string
+              required: true
+            cross-origin-embedder-policy-report-only:
+              schema:
+                type: string
+              required: true
+            report-to:
+              schema:
+                type: string
+              required: true
+            cross-origin-opener-policy:
+              schema:
+                type: string
+              required: true
+            x-content-type-options:
+              schema:
+                type: string
+              required: true
+            x-xss-protection:
+              schema:
+                type: string
+              required: true
+            x-ig-push-state:
+              schema:
+                type: string
+              required: true
+            x-ig-cache-control:
+              schema:
+                type: string
+              required: true
+            x-aed:
+              schema:
+                type: string
+              required: true
+            x-ig-request-elapsed-time-ms:
+              schema:
+                type: string
+              required: true
+            x-ig-peak-v2:
+              schema:
+                type: string
+              required: true
+            x-ig-peak-time:
+              schema:
+                type: string
+              required: true
+            x-ig-capacity-level:
+              schema:
+                type: string
+              required: true
+            x-stack:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-ig-direct-region-hint:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-shbid:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-shbts:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-rur:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-ds-user-id:
+              schema:
+                type: string
+              required: true
+            x-perf-stats:
+              schema:
+                type: string
+              required: true
+            content-length:
+              schema:
+                type: string
+              required: true
+            x-ig-origin-region:
+              schema:
+                type: string
+              required: true
+            x-fb-client-ip-forwarded:
+              schema:
+                type: string
+              required: true
+            x-fb-server-cluster-forwarded:
+              schema:
+                type: string
+              required: true
+            alt-svc:
+              schema:
+                type: string
+              required: true
+            x-fb-connection-quality:
+              schema:
+                type: string
+              required: true
+            ig-set-x-mid:
+              schema:
+                type: string
+              required: false
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  challenge_nonce:
+                    type: string
+                  key_nonce:
+                    type: string
+                  status:
+                    type: string
+                required:
+                  - challenge_nonce
+                  - key_nonce
+                  - status
+      parameters:
+        - name: x-ig-app-locale
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-device-locale
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-mapped-locale
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-pigeon-rawclienttime
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-bandwidth-speed-kbps
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-bandwidth-totalbytes-b
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-bandwidth-totaltime-ms
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-version-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-www-claim
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-button-version
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-colors-enabled
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-ax-base-colors-enabled
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-font-enabled
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-is-layout-rtl
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-device-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-family-device-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-ig-android-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-timezone-offset
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-nav-chain
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-fb-session-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-fb-session-private
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-fb-connection-type
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-connection-type
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-network-properties
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-ig-capabilities
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-app-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: user-agent
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: accept-language
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-mid
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: ig-intended-user-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: content-type
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: content-length
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: accept-encoding
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-http-engine
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-client-ip
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-server-cluster
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-pigeon-session-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: priority
+          in: header
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                app_scoped_device_id:
+                  type: string
+                key_hash:
+                  type: string
+              required:
+                - app_scoped_device_id
+                - key_hash
+  /v1/multiple_accounts/get_account_family/:
+    get:
+      responses:
+        "200":
+          description: ""
+          headers:
+            content-type:
+              schema:
+                type: string
+              required: true
+            date:
+              schema:
+                type: string
+              required: true
+            vary:
+              schema:
+                type: string
+              required: true
+            content-language:
+              schema:
+                type: string
+              required: true
+            strict-transport-security:
+              schema:
+                type: string
+              required: true
+            cache-control:
+              schema:
+                type: string
+              required: true
+            pragma:
+              schema:
+                type: string
+              required: true
+            expires:
+              schema:
+                type: string
+              required: true
+            x-frame-options:
+              schema:
+                type: string
+              required: true
+            content-security-policy:
+              schema:
+                type: string
+              required: true
+            cross-origin-embedder-policy-report-only:
+              schema:
+                type: string
+              required: true
+            report-to:
+              schema:
+                type: string
+              required: true
+            cross-origin-opener-policy:
+              schema:
+                type: string
+              required: true
+            x-content-type-options:
+              schema:
+                type: string
+              required: true
+            x-xss-protection:
+              schema:
+                type: string
+              required: true
+            x-ig-push-state:
+              schema:
+                type: string
+              required: true
+            x-ig-cache-control:
+              schema:
+                type: string
+              required: true
+            x-aed:
+              schema:
+                type: string
+              required: true
+            x-ig-request-elapsed-time-ms:
+              schema:
+                type: string
+              required: true
+            x-ig-peak-v2:
+              schema:
+                type: string
+              required: true
+            x-ig-peak-time:
+              schema:
+                type: string
+              required: true
+            x-ig-capacity-level:
+              schema:
+                type: string
+              required: true
+            content-encoding:
+              schema:
+                type: string
+              required: true
+            x-stack:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-ig-direct-region-hint:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-shbid:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-shbts:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-rur:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-ds-user-id:
+              schema:
+                type: string
+              required: true
+            x-perf-stats:
+              schema:
+                type: string
+              required: true
+            content-length:
+              schema:
+                type: string
+              required: true
+            x-ig-origin-region:
+              schema:
+                type: string
+              required: true
+            x-fb-client-ip-forwarded:
+              schema:
+                type: string
+              required: true
+            x-fb-server-cluster-forwarded:
+              schema:
+                type: string
+              required: true
+            alt-svc:
+              schema:
+                type: string
+              required: true
+            x-fb-connection-quality:
+              schema:
+                type: string
+              required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  child_accounts:
+                    type: array
+                    items:
+                      type: "null"
+                  main_accounts:
+                    type: array
+                    items:
+                      type: "null"
+                  current_account:
+                    type: object
+                    properties:
+                      pk:
+                        type: number
+                      pk_id:
+                        type: string
+                      full_name:
+                        type: string
+                      is_private:
+                        type: boolean
+                      has_onboarded_to_text_post_app:
+                        type: boolean
+                      strong_id__:
+                        type: string
+                      has_password:
+                        type: number
+                      id:
+                        type: string
+                      username:
+                        type: string
+                      is_verified:
+                        type: boolean
+                      profile_pic_id:
+                        type: string
+                      profile_pic_url:
+                        type: string
+                      has_onboarded_to_basel:
+                        type: boolean
+                    required:
+                      - pk
+                      - pk_id
+                      - full_name
+                      - is_private
+                      - has_onboarded_to_text_post_app
+                      - strong_id__
+                      - has_password
+                      - id
+                      - username
+                      - is_verified
+                      - profile_pic_id
+                      - profile_pic_url
+                      - has_onboarded_to_basel
+                  status:
+                    type: string
+                required:
+                  - child_accounts
+                  - main_accounts
+                  - current_account
+                  - status
+      parameters:
+        - name: x-ig-app-locale
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-device-locale
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-mapped-locale
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-pigeon-rawclienttime
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-bandwidth-speed-kbps
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-bandwidth-totalbytes-b
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-bandwidth-totaltime-ms
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-version-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-www-claim
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-button-version
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-colors-enabled
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-ax-base-colors-enabled
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-font-enabled
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-is-layout-rtl
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-device-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-family-device-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-android-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-timezone-offset
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-nav-chain
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-connection-type
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-connection-type
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-capabilities
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-app-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: priority
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: user-agent
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: accept-language
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: authorization
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-mid
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: ig-u-ds-user-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: ig-u-rur
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: ig-intended-user-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: accept-encoding
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-http-engine
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-client-ip
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-server-cluster
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: request_source
+          in: query
+          required: true
+          schema:
+            type: string

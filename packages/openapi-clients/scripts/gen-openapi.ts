@@ -10,6 +10,7 @@ import yaml from "yaml";
 
 import { FACEBOOK_GRAPH_API_BASE_URL } from "~/facebook-graph/const";
 import { INSTAGRAM_API_BASE_URL } from "~/instagram/const";
+import { INSTAGRAM_B_API_BASE_URL } from "~/instagram-b/const";
 import { INSTAGRAM_GRAPH_API_BASE_URL } from "~/instagram-graph/const";
 
 const FLOWS_JSON_FILE = path.join(
@@ -38,7 +39,16 @@ const GENERATOR_CONFIGS: GeneratorConfig[] = [
     openapiDir: path.join(BASE_OPENAPI_DIR, "instagram"),
     srcDir: path.join(BASE_SRC_DIR, "instagram"),
     autogenConfig: {
-      filterExample: () => false,
+      filterRequest: ({ request }) => !request.path.startsWith("/v1/bloks"),
+      filterSchema: ({ path }) => !path.endsWith("bloks_payload"),
+    },
+  },
+  {
+    name: "Instagram B API",
+    apiPrefix: INSTAGRAM_B_API_BASE_URL,
+    openapiDir: path.join(BASE_OPENAPI_DIR, "instagram-b"),
+    srcDir: path.join(BASE_SRC_DIR, "instagram-b"),
+    autogenConfig: {
       filterRequest: ({ request }) => !request.path.startsWith("/v1/bloks"),
       filterSchema: ({ path }) => !path.endsWith("bloks_payload"),
     },
@@ -48,18 +58,12 @@ const GENERATOR_CONFIGS: GeneratorConfig[] = [
     apiPrefix: INSTAGRAM_GRAPH_API_BASE_URL,
     openapiDir: path.join(BASE_OPENAPI_DIR, "instagram-graph"),
     srcDir: path.join(BASE_SRC_DIR, "instagram-graph"),
-    autogenConfig: {
-      filterExample: () => false,
-    },
   },
   {
     name: "Facebook Graph API",
     apiPrefix: FACEBOOK_GRAPH_API_BASE_URL,
     openapiDir: path.join(BASE_OPENAPI_DIR, "facebook-graph"),
     srcDir: path.join(BASE_SRC_DIR, "facebook-graph"),
-    autogenConfig: {
-      filterExample: () => false,
-    },
   },
 ];
 

@@ -756,14 +756,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - phone_id
-                - is_app_level_spi
-                - guid
-                - device_id
-                - _uuid
-                - one_tap_app_login
-                - prevent_remove_device_from_wa
               properties:
                 phone_id:
                   type: string
@@ -779,6 +771,14 @@ paths:
                   type: string
                 prevent_remove_device_from_wa:
                   type: string
+              required:
+                - phone_id
+                - is_app_level_spi
+                - guid
+                - device_id
+                - _uuid
+                - one_tap_app_login
+                - prevent_remove_device_from_wa
   /v1/accounts/process_contact_point_signals/:
     post:
       responses:
@@ -1131,11 +1131,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/address_book/get_user_cps_for_invite/:
     get:
       responses:
@@ -3990,11 +3990,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/android_modules/download/:
     post:
       responses:
@@ -4372,11 +4372,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/banyan/banyan/:
     get:
       responses:
@@ -8121,16 +8121,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - seen_reels
-                - enable_mixed_media_chaining
-                - device_status
-                - should_refetch_chaining_media
-                - _uuid
-                - prefetch_trigger_type
-                - viewer_session_id
-                - server_driven_cache_config
-                - container_module
               properties:
                 seen_reels:
                   type: string
@@ -8150,6 +8140,16 @@ paths:
                   type: string
                 container_module:
                   type: string
+              required:
+                - seen_reels
+                - enable_mixed_media_chaining
+                - device_status
+                - should_refetch_chaining_media
+                - _uuid
+                - prefetch_trigger_type
+                - viewer_session_id
+                - server_driven_cache_config
+                - container_module
   /v1/clips/discover/stream/:
     post:
       responses:
@@ -10319,18 +10319,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - seen_reels
-                - enable_mixed_media_chaining
-                - client_view_state_media_list
-                - device_status
-                - session_info
-                - should_refetch_chaining_media
-                - _uuid
-                - chaining_media_id
-                - viewer_session_id
-                - server_driven_cache_config
-                - container_module
               properties:
                 seen_reels:
                   type: string
@@ -10354,6 +10342,18 @@ paths:
                   type: string
                 container_module:
                   type: string
+              required:
+                - seen_reels
+                - enable_mixed_media_chaining
+                - client_view_state_media_list
+                - device_status
+                - session_info
+                - should_refetch_chaining_media
+                - _uuid
+                - chaining_media_id
+                - viewer_session_id
+                - server_driven_cache_config
+                - container_module
   /v1/clips/get_mashup_info_for_media/:
     post:
       responses:
@@ -10756,11 +10756,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/clips/item/:
     get:
       responses:
@@ -15403,11 +15403,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - pivot_page_type
-                - device_status
-                - music_page
-                - _uuid
               properties:
                 pivot_page_type:
                   type: string
@@ -15417,6 +15412,11 @@ paths:
                   type: string
                 _uuid:
                   type: string
+              required:
+                - pivot_page_type
+                - device_status
+                - music_page
+                - _uuid
   /v1/clips/user/share_to_fb_config/:
     get:
       responses:
@@ -16144,11 +16144,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/collections/list/:
     get:
       responses:
@@ -19715,11 +19715,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/creator/creator_info/:
     get:
       responses:
@@ -25204,14 +25204,14 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - filter
-                - _uuid
               properties:
                 filter:
                   type: string
                 _uuid:
                   type: string
+              required:
+                - filter
+                - _uuid
   /v1/direct_v2/threads/{1}/get_items/:
     post:
       responses:
@@ -25546,12 +25546,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - visual_message_return_type
-                - eb_device_id
-                - _uuid
-                - original_message_client_contexts
-                - item_ids
               properties:
                 visual_message_return_type:
                   type: string
@@ -25563,6 +25557,12 @@ paths:
                   type: string
                 item_ids:
                   type: string
+              required:
+                - visual_message_return_type
+                - eb_device_id
+                - _uuid
+                - original_message_client_contexts
+                - item_ids
   /v1/direct_v2/threads/{1}/hide/:
     post:
       responses:
@@ -25892,10 +25892,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - should_move_future_requests_to_spam
-                - last_message_timestamp_ms_for_instamadillo
-                - _uuid
               properties:
                 should_move_future_requests_to_spam:
                   type: string
@@ -25903,6 +25899,10 @@ paths:
                   type: string
                 _uuid:
                   type: string
+              required:
+                - should_move_future_requests_to_spam
+                - last_message_timestamp_ms_for_instamadillo
+                - _uuid
   /v1/direct_v2/threads/{1}/leave/:
     post:
       responses:
@@ -26272,14 +26272,14 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - client_context
-                - _uuid
               properties:
                 client_context:
                   type: string
                 _uuid:
                   type: string
+              required:
+                - client_context
+                - _uuid
   /v1/direct_v2/threads/{1}/media/:
     get:
       responses:
@@ -27036,14 +27036,14 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - _uuid
-                - title
               properties:
                 _uuid:
                   type: string
                 title:
                   type: string
+              required:
+                - _uuid
+                - title
   /v1/direct_v2/threads/broadcast/animated_media/:
     post:
       responses:
@@ -27428,17 +27428,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - is_shh_mode
-                - thread_ids
-                - send_attribution
-                - client_context
-                - is_sticker
-                - id
-                - device_id
-                - mutation_token
-                - _uuid
-                - offline_threading_id
               properties:
                 is_shh_mode:
                   type: string
@@ -27460,6 +27449,17 @@ paths:
                   type: string
                 offline_threading_id:
                   type: string
+              required:
+                - is_shh_mode
+                - thread_ids
+                - send_attribution
+                - client_context
+                - is_sticker
+                - id
+                - device_id
+                - mutation_token
+                - _uuid
+                - offline_threading_id
   /v1/direct_v2/threads/broadcast/clip_share/:
     post:
       responses:
@@ -27802,22 +27802,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - inventory_source
-                - action
-                - is_x_transport_forward
-                - is_shh_mode
-                - thread_ids
-                - send_attribution
-                - client_context
-                - media_id
-                - ranking_info_token
-                - text
-                - device_id
-                - mutation_token
-                - _uuid
-                - nav_chain
-                - offline_threading_id
               properties:
                 inventory_source:
                   type: string
@@ -27849,6 +27833,22 @@ paths:
                   type: string
                 offline_threading_id:
                   type: string
+              required:
+                - inventory_source
+                - action
+                - is_x_transport_forward
+                - is_shh_mode
+                - thread_ids
+                - send_attribution
+                - client_context
+                - media_id
+                - ranking_info_token
+                - text
+                - device_id
+                - mutation_token
+                - _uuid
+                - nav_chain
+                - offline_threading_id
   /v1/direct_v2/threads/broadcast/media_share/:
     post:
       responses:
@@ -28201,21 +28201,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - inventory_source
-                - action
-                - is_x_transport_forward
-                - is_shh_mode
-                - thread_ids
-                - send_attribution
-                - client_context
-                - media_id
-                - ranking_info_token
-                - device_id
-                - mutation_token
-                - _uuid
-                - nav_chain
-                - offline_threading_id
               properties:
                 inventory_source:
                   type: string
@@ -28245,6 +28230,21 @@ paths:
                   type: string
                 offline_threading_id:
                   type: string
+              required:
+                - inventory_source
+                - action
+                - is_x_transport_forward
+                - is_shh_mode
+                - thread_ids
+                - send_attribution
+                - client_context
+                - media_id
+                - ranking_info_token
+                - device_id
+                - mutation_token
+                - _uuid
+                - nav_chain
+                - offline_threading_id
   /v1/direct_v2/threads/broadcast/photo_attachment/:
     post:
       responses:
@@ -28592,22 +28592,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - action
-                - is_x_transport_forward
-                - is_shh_mode
-                - thread_ids
-                - send_attribution
-                - client_context
-                - is_duplicate_attachment
-                - attachment_fbid
-                - meta_gallery_media_info
-                - device_id
-                - mutation_token
-                - _uuid
-                - allow_full_aspect_ratio
-                - nav_chain
-                - offline_threading_id
               properties:
                 action:
                   type: string
@@ -28639,6 +28623,22 @@ paths:
                   type: string
                 offline_threading_id:
                   type: string
+              required:
+                - action
+                - is_x_transport_forward
+                - is_shh_mode
+                - thread_ids
+                - send_attribution
+                - client_context
+                - is_duplicate_attachment
+                - attachment_fbid
+                - meta_gallery_media_info
+                - device_id
+                - mutation_token
+                - _uuid
+                - allow_full_aspect_ratio
+                - nav_chain
+                - offline_threading_id
   /v1/direct_v2/threads/broadcast/reels_audio_share/:
     post:
       responses:
@@ -29023,17 +29023,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - action
-                - is_shh_mode
-                - thread_ids
-                - client_context
-                - device_id
-                - mutation_token
-                - _uuid
-                - nav_chain
-                - audio_id
-                - offline_threading_id
               properties:
                 action:
                   type: string
@@ -29055,6 +29044,17 @@ paths:
                   type: string
                 offline_threading_id:
                   type: string
+              required:
+                - action
+                - is_shh_mode
+                - thread_ids
+                - client_context
+                - device_id
+                - mutation_token
+                - _uuid
+                - nav_chain
+                - audio_id
+                - offline_threading_id
   /v1/direct_v2/threads/broadcast/story_share/:
     post:
       responses:
@@ -29407,11 +29407,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/direct_v2/threads/broadcast/video_attachment/:
     post:
       responses:
@@ -29759,22 +29759,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - action
-                - is_x_transport_forward
-                - is_shh_mode
-                - thread_ids
-                - send_attribution
-                - client_context
-                - is_duplicate_attachment
-                - attachment_fbid
-                - meta_gallery_media_info
-                - video_result
-                - device_id
-                - mutation_token
-                - _uuid
-                - nav_chain
-                - offline_threading_id
               properties:
                 action:
                   type: string
@@ -29806,6 +29790,22 @@ paths:
                   type: string
                 offline_threading_id:
                   type: string
+              required:
+                - action
+                - is_x_transport_forward
+                - is_shh_mode
+                - thread_ids
+                - send_attribution
+                - client_context
+                - is_duplicate_attachment
+                - attachment_fbid
+                - meta_gallery_media_info
+                - video_result
+                - device_id
+                - mutation_token
+                - _uuid
+                - nav_chain
+                - offline_threading_id
   /v1/direct_v2/threads/broadcast/voice_attachment/:
     post:
       responses:
@@ -30153,21 +30153,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - action
-                - is_shh_mode
-                - thread_ids
-                - send_attribution
-                - client_context
-                - attachment_fbid
-                - device_id
-                - mutation_token
-                - _uuid
-                - nav_chain
-                - waveform
-                - waveform_sampling_frequency_hz
-                - upload_id
-                - offline_threading_id
               properties:
                 action:
                   type: string
@@ -30197,6 +30182,21 @@ paths:
                   type: string
                 offline_threading_id:
                   type: string
+              required:
+                - action
+                - is_shh_mode
+                - thread_ids
+                - send_attribution
+                - client_context
+                - attachment_fbid
+                - device_id
+                - mutation_token
+                - _uuid
+                - nav_chain
+                - waveform
+                - waveform_sampling_frequency_hz
+                - upload_id
+                - offline_threading_id
   /v1/direct_v2/threads/get_by_participants/:
     get:
       responses:
@@ -32177,11 +32177,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - module
-                - target_id
-                - _uuid
-                - mutual_followers_limit
               properties:
                 module:
                   type: string
@@ -32191,6 +32186,11 @@ paths:
                   type: string
                 mutual_followers_limit:
                   type: string
+              required:
+                - module
+                - target_id
+                - _uuid
+                - mutual_followers_limit
   /v1/discover/topical_explore/:
     get:
       responses:
@@ -39541,10 +39541,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - entity_id
-                - _uuid
-                - entity_type
               properties:
                 entity_id:
                   type: string
@@ -39552,6 +39548,10 @@ paths:
                   type: string
                 entity_type:
                   type: string
+              required:
+                - entity_id
+                - _uuid
+                - entity_type
   /v1/fbsearch/typeahead_stream/:
     get:
       responses:
@@ -40381,14 +40381,14 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - user_ids
-                - _uuid
               properties:
                 user_ids:
                   type: string
                 _uuid:
                   type: string
+              required:
+                - user_ids
+                - _uuid
   /v1/feed/injected_reels_media/:
     post:
       responses:
@@ -48886,11 +48886,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/feed/invalidate_privacy_violating_media_v2/:
     post:
       responses:
@@ -49262,14 +49262,14 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - media_ids_item_types
-                - _uuid
               properties:
                 media_ids_item_types:
                   type: string
                 _uuid:
                   type: string
+              required:
+                - media_ids_item_types
+                - _uuid
   /v1/feed/reels_media_stream/:
     post:
       responses:
@@ -50661,11 +50661,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/feed/reels_tray/:
     post:
       responses:
@@ -52393,14 +52393,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - reason
-                - timezone_offset
-                - tray_session_id
-                - request_id
-                - _uuid
-                - page_size
-                - reel_tray_impressions
               properties:
                 reason:
                   type: string
@@ -52416,6 +52408,14 @@ paths:
                   type: string
                 reel_tray_impressions:
                   type: string
+              required:
+                - reason
+                - timezone_offset
+                - tray_session_id
+                - request_id
+                - _uuid
+                - page_size
+                - reel_tray_impressions
   /v1/feed/timeline/:
     post:
       responses:
@@ -59373,28 +59373,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - has_camera_permission
-                - ad_and_netego_realtime_information
-                - feed_view_info
-                - organic_realtime_information
-                - phone_id
-                - max_id
-                - client_view_state_media_list
-                - reason
-                - battery_level
-                - timezone_offset
-                - feed_comment_button_tap_info
-                - device_id
-                - request_id
-                - is_pull_to_refresh
-                - _uuid
-                - feed_reshare_info
-                - is_charging
-                - is_dark_mode
-                - will_sound_on
-                - session_id
-                - bloks_versioning_id
               properties:
                 has_camera_permission:
                   type: string
@@ -59438,6 +59416,28 @@ paths:
                   type: string
                 bloks_versioning_id:
                   type: string
+              required:
+                - has_camera_permission
+                - ad_and_netego_realtime_information
+                - feed_view_info
+                - organic_realtime_information
+                - phone_id
+                - max_id
+                - client_view_state_media_list
+                - reason
+                - battery_level
+                - timezone_offset
+                - feed_comment_button_tap_info
+                - device_id
+                - request_id
+                - is_pull_to_refresh
+                - _uuid
+                - feed_reshare_info
+                - is_charging
+                - is_dark_mode
+                - will_sound_on
+                - session_id
+                - bloks_versioning_id
   /v1/feed/user_stream/{1}/:
     post:
       responses:
@@ -59809,11 +59809,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - _uuid
               properties:
                 _uuid:
                   type: string
+              required:
+                - _uuid
   /v1/feed/user/{1}/:
     get:
       responses:
@@ -65234,11 +65234,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/friendships/create/{1}/:
     post:
       responses:
@@ -65653,11 +65653,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/friendships/destroy/{1}/:
     post:
       responses:
@@ -66069,11 +66069,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/friendships/feed_favorites/:
     get:
       responses:
@@ -66814,11 +66814,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/friendships/mute_posts_or_story_from_follow/:
     post:
       responses:
@@ -67231,11 +67231,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/friendships/remove_follower/{1}/:
     post:
       responses:
@@ -67643,11 +67643,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/friendships/set_besties/:
     post:
       responses:
@@ -68047,11 +68047,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/friendships/show_many/:
     post:
       responses:
@@ -68610,10 +68610,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - include_followed_by
-                - user_ids
-                - _uuid
               properties:
                 include_followed_by:
                   type: string
@@ -68621,6 +68617,10 @@ paths:
                   type: string
                 _uuid:
                   type: string
+              required:
+                - include_followed_by
+                - user_ids
+                - _uuid
   /v1/friendships/show/{1}/:
     get:
       responses:
@@ -71987,11 +71987,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/friendships/unfollow_chaining_count/{1}/:
     get:
       responses:
@@ -72706,11 +72706,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/friendships/unmute_posts_or_story_from_follow/:
     post:
       responses:
@@ -73123,11 +73123,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/fxcal/get_sso_accounts/:
     post:
       responses:
@@ -73557,11 +73557,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/highlights/{1}/highlights_tray/:
     get:
       responses:
@@ -74784,11 +74784,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/loom/fetch_config/:
     get:
       responses:
@@ -75490,11 +75490,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/media/{1}/comment/:
     post:
       responses:
@@ -75936,11 +75936,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/media/{1}/like/:
     post:
       responses:
@@ -76303,14 +76303,14 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
-                - d
               properties:
                 signed_body:
                   type: string
                 d:
                   type: string
+              required:
+                - signed_body
+                - d
   /v1/media/{1}/permalink/:
     get:
       responses:
@@ -77076,11 +77076,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/media/{1}/stream_comments/:
     get:
       responses:
@@ -78772,11 +78772,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/music/bookmark_music/:
     post:
       responses:
@@ -79141,10 +79141,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - _uuid
-                - surface_requested_from
-                - audio_cluster_id
               properties:
                 _uuid:
                   type: string
@@ -79152,6 +79148,10 @@ paths:
                   type: string
                 audio_cluster_id:
                   type: string
+              required:
+                - _uuid
+                - surface_requested_from
+                - audio_cluster_id
   /v1/music/top_trends/:
     post:
       responses:
@@ -79963,10 +79963,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - max_id
-                - _uuid
-                - page_size
               properties:
                 max_id:
                   type: string
@@ -79974,6 +79970,10 @@ paths:
                   type: string
                 page_size:
                   type: string
+              required:
+                - max_id
+                - _uuid
+                - page_size
   /v1/music/unbookmark_music/:
     post:
       responses:
@@ -80338,10 +80338,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - _uuid
-                - surface_requested_from
-                - audio_cluster_id
               properties:
                 _uuid:
                   type: string
@@ -80349,6 +80345,10 @@ paths:
                   type: string
                 audio_cluster_id:
                   type: string
+              required:
+                - _uuid
+                - surface_requested_from
+                - audio_cluster_id
   /v1/news/inbox/:
     get:
       responses:
@@ -81659,11 +81659,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - phone_id
-                - user_ids
-                - device_id
-                - _uuid
               properties:
                 phone_id:
                   type: string
@@ -81673,6 +81668,11 @@ paths:
                   type: string
                 _uuid:
                   type: string
+              required:
+                - phone_id
+                - user_ids
+                - device_id
+                - _uuid
   /v1/notifications/store_client_push_permissions/:
     post:
       responses:
@@ -82025,10 +82025,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - enabled
-                - device_id
-                - _uuid
               properties:
                 enabled:
                   type: string
@@ -82036,6 +82032,10 @@ paths:
                   type: string
                 _uuid:
                   type: string
+              required:
+                - enabled
+                - device_id
+                - _uuid
   /v1/nudges/generate_nudge/:
     post:
       responses:
@@ -82401,12 +82401,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - is_bottom_sheet_open
-                - media_id
-                - source
-                - _uuid
-                - viewed_comment_ids
               properties:
                 is_bottom_sheet_open:
                   type: string
@@ -82418,6 +82412,12 @@ paths:
                   type: string
                 viewed_comment_ids:
                   type: string
+              required:
+                - is_bottom_sheet_open
+                - media_id
+                - source
+                - _uuid
+                - viewed_comment_ids
   /v1/pro_home/badge_pro_home_entry_point/:
     get:
       responses:
@@ -83808,11 +83808,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/restrict_action/get_restricted_users/:
     get:
       responses:
@@ -84716,11 +84716,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/restrict_action/unrestrict/:
     post:
       responses:
@@ -85169,10 +85169,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - _uuid
-                - target_user_id
-                - container_module
               properties:
                 _uuid:
                   type: string
@@ -85180,6 +85176,10 @@ paths:
                   type: string
                 container_module:
                   type: string
+              required:
+                - _uuid
+                - target_user_id
+                - container_module
   /v1/scores/bootstrap/users/:
     get:
       responses:
@@ -85983,11 +85983,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
   /v1/users/{1}/info_stream/:
     post:
       responses:
@@ -86362,10 +86362,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - entry_point
-                - from_module
-                - _uuid
               properties:
                 entry_point:
                   type: string
@@ -86373,6 +86369,10 @@ paths:
                   type: string
                 _uuid:
                   type: string
+              required:
+                - entry_point
+                - from_module
+                - _uuid
   /v1/users/{1}/info/:
     get:
       responses:
@@ -90341,14 +90341,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - locale
-                - vc_policy
-                - signed_body
-                - variables
-                - strip_nulls
-                - client_doc_id
-                - strip_defaults
               properties:
                 locale:
                   type: string
@@ -90364,6 +90356,14 @@ paths:
                   type: string
                 strip_defaults:
                   type: string
+              required:
+                - locale
+                - vc_policy
+                - signed_body
+                - variables
+                - strip_nulls
+                - client_doc_id
+                - strip_defaults
   /v2/media/seen/:
     post:
       responses:
@@ -90746,11 +90746,11 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: object
-              required:
-                - signed_body
               properties:
                 signed_body:
                   type: string
+              required:
+                - signed_body
 components:
   schemas:
     Thread:
