@@ -117,6 +117,7 @@ function processFlow(
   if (requestUrl.searchParams.size > 0) {
     newParameters.push(
       ...parametersFromSearchParams(
+        spec,
         config,
         filterContext,
         "request",
@@ -204,6 +205,7 @@ function processFlow(
       }
 
       const formDataSchema = schemaFromSearchParams(
+        spec,
         config,
         filterContext,
         "request.body",

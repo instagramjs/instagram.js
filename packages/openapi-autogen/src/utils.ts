@@ -10,6 +10,7 @@ import {
   type ResponseObject,
   type SchemaObject,
 } from "openapi-typescript";
+import qs from "qs";
 
 import { type AutogenConfigFinal, type RequestFilterContext } from "./config";
 
@@ -49,13 +50,15 @@ export function getObjectOrRef<
 >(spec: OpenAPI3, type: K, obj: T | ReferenceObject): T {
   if (isRef(obj)) {
     const refKey = obj.$ref.split("/").pop();
-    assert(refKey !== undefined, "Expected refKey to be present");
+    if (!refKey) {
+      throw new Error(`Invalid reference: ${obj.$ref}`);
+    }
     const refObj =
       spec.components?.[objectRefTypeToComponentsKey[type]]?.[refKey] ?? null;
-
     if (!refObj) {
-      throw new Error(`Reference object not found: ${obj.$ref}`);
+      throw new Error(`Unknown reference: ${obj.$ref}`);
     }
+
     return refObj;
   }
 
@@ -111,6 +114,15 @@ export function normalizedPath(path: string): string {
     return path;
   }
   return "/" + path;
+}
+
+export function parseQsWithConfig(
+  _config: AutogenConfigFinal,
+  searchParams: URLSearchParams,
+): Record<string, unknown> {
+  return qs.parse(searchParams.toString(), {
+    allowEmptyArrays: true,
+  });
 }
 
 export function parametersFromPathParameters(
@@ -183,18 +195,27 @@ export function parametersFromHeaders(
 }
 
 export function parametersFromSearchParams(
+  def: OpenAPI3,
   config: AutogenConfigFinal,
   filterContext: RequestFilterContext,
   filterPath: string,
   searchParams: URLSearchParams,
 ): ParameterObject[] {
+  const parsedQs = parseQsWithConfig(config, searchParams);
+
   const parameters: ParameterObject[] = [];
-  for (const [key, value] of searchParams.entries()) {
+  for (const [key, value] of Object.entries(parsedQs)) {
     const parameter: ParameterObject = {
       name: key,
       in: "query",
       required: true,
-      schema: { type: "string" },
+      schema: schemaFromValue(
+        def,
+        config,
+        filterContext,
+        `${filterPath}.query.${key}`,
+        value,
+      ),
     };
     if (
       config.filterExample({
@@ -212,6 +233,7 @@ export function parametersFromSearchParams(
 }
 
 export function schemaFromSearchParams(
+  spec: OpenAPI3,
   config: AutogenConfigFinal,
   filterContext: RequestFilterContext,
   filterPath: string,
@@ -227,40 +249,9 @@ export function schemaFromSearchParams(
     return { type: "null" };
   }
 
-  const schema: SchemaObject = {
-    type: "object",
-    required: [],
-    properties: {},
-  };
-  assert(schema.required !== undefined, "Expected required to be present");
-  assert(schema.properties !== undefined, "Expected properties to be present");
+  const parsedQs = parseQsWithConfig(config, searchParams);
 
-  const filteredSearchParams = searchParams.entries().filter(([key, value]) =>
-    config.filterSchema({
-      ...filterContext,
-      path: `${filterPath}.${key}`,
-      value: value,
-    }),
-  );
-
-  for (const [searchParamName, searchParamValue] of filteredSearchParams) {
-    const schemaProperty: SchemaObject = {
-      type: "string",
-    };
-    if (
-      config.filterExample({
-        ...filterContext,
-        path: `${filterPath}.query.${searchParamName}`,
-        value: searchParamValue,
-      })
-    ) {
-      schemaProperty.example = searchParamValue;
-    }
-    schema.properties[searchParamName] = schemaProperty;
-    schema.required.push(searchParamName);
-  }
-
-  return schema;
+  return schemaFromValue(spec, config, filterContext, filterPath, parsedQs);
 }
 
 function objectIsRecord(
