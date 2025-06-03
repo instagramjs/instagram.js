@@ -49,7 +49,6 @@ export interface paths {
                         format: string;
                         ffdb_token: string;
                         compressed: string;
-                        multi_batch: string;
                         sent_time: string;
                         message: string;
                     };

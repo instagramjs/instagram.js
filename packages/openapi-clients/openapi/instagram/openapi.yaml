@@ -364,6 +364,11 @@ paths:
           required: true
           schema:
             type: string
+        - name: x-ig-salt-ids
+          in: header
+          required: true
+          schema:
+            type: string
   /v1/accounts/logout/:
     post:
       responses:
@@ -6351,6 +6356,10 @@ paths:
                                   type: boolean
                                 private_reply_status:
                                   type: number
+                                has_translation:
+                                  type: boolean
+                                text_translation:
+                                  type: string
                               required:
                                 - bit_flags
                                 - created_at
@@ -7183,7 +7192,35 @@ paths:
                                     enabled:
                                       type: boolean
                                     entry_point_container:
-                                      type: "null"
+                                      type: object
+                                      nullable: true
+                                      properties:
+                                        comment:
+                                          type: object
+                                          properties:
+                                            action_type:
+                                              type: string
+                                          required:
+                                            - action_type
+                                        overflow:
+                                          type: "null"
+                                        pill:
+                                          type: object
+                                          properties:
+                                            action_type:
+                                              type: string
+                                            priority:
+                                              type: number
+                                          required:
+                                            - action_type
+                                            - priority
+                                        ufi:
+                                          type: "null"
+                                      required:
+                                        - comment
+                                        - overflow
+                                        - pill
+                                        - ufi
                                   required:
                                     - enabled
                                     - entry_point_container
@@ -7290,7 +7327,8 @@ paths:
                                         id:
                                           type: string
                                         ig_username:
-                                          type: "null"
+                                          type: string
+                                          nullable: true
                                         is_eligible_for_audio_effects:
                                           type: boolean
                                         is_eligible_for_vinyl_sticker:
@@ -7386,7 +7424,40 @@ paths:
                                         previous_trend_rank:
                                           type: "null"
                                         ig_artist:
-                                          type: "null"
+                                          type: object
+                                          nullable: true
+                                          properties:
+                                            pk:
+                                              type: number
+                                            pk_id:
+                                              type: string
+                                            id:
+                                              type: string
+                                            username:
+                                              type: string
+                                            full_name:
+                                              type: string
+                                            is_private:
+                                              type: boolean
+                                            is_verified:
+                                              type: boolean
+                                            profile_pic_id:
+                                              type: string
+                                            profile_pic_url:
+                                              type: string
+                                            strong_id__:
+                                              type: string
+                                          required:
+                                            - pk
+                                            - pk_id
+                                            - id
+                                            - username
+                                            - full_name
+                                            - is_private
+                                            - is_verified
+                                            - profile_pic_id
+                                            - profile_pic_url
+                                            - strong_id__
                                         audio_filter_infos:
                                           type: array
                                           items:
@@ -7784,6 +7855,64 @@ paths:
                               type: string
                             video_subtitles_locale:
                               type: string
+                            brs_content_blocklist_bitmap_obj:
+                              type: object
+                              properties:
+                                bitmap_array:
+                                  type: array
+                                  items:
+                                    type: number
+                                bitmap_string:
+                                  type: string
+                                encode:
+                                  type: number
+                                bitmap_map:
+                                  type: array
+                                  items:
+                                    type: "null"
+                              required:
+                                - bitmap_array
+                                - bitmap_string
+                                - encode
+                                - bitmap_map
+                            location:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                                address:
+                                  type: string
+                                city:
+                                  type: string
+                                has_viewer_saved:
+                                  type: boolean
+                                pk:
+                                  type: number
+                                short_name:
+                                  type: string
+                                facebook_places_id:
+                                  type: number
+                                external_source:
+                                  type: string
+                                lng:
+                                  type: number
+                                lat:
+                                  type: number
+                              required:
+                                - name
+                                - address
+                                - city
+                                - has_viewer_saved
+                                - pk
+                                - short_name
+                                - facebook_places_id
+                                - external_source
+                                - lng
+                                - lat
+                            lng:
+                              type: number
+                            lat:
+                              type: number
                           required:
                             - pk
                             - id
@@ -14953,7 +15082,7 @@ paths:
             type: string
         - name: x-ig-salt-ids
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-fb-connection-type
@@ -20415,7 +20544,7 @@ paths:
             type: string
         - name: x-ig-salt-ids
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-fb-connection-type
@@ -21893,6 +22022,11 @@ paths:
           required: true
           schema:
             type: string
+        - name: x-ig-salt-ids
+          in: header
+          required: true
+          schema:
+            type: string
   /v1/direct_v2/inbox/:
     get:
       responses:
@@ -22404,6 +22538,21 @@ paths:
         - name: priority
           in: header
           required: false
+          schema:
+            type: string
+        - name: cursor
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: direction
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: seq_id
+          in: query
+          required: true
           schema:
             type: string
   /v1/direct_v2/pending_inbox/:
@@ -25442,7 +25591,7 @@ paths:
             type: string
         - name: x-ig-salt-ids
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-fb-connection-type
@@ -28097,7 +28246,7 @@ paths:
             type: string
         - name: x-ig-salt-ids
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-fb-connection-type
@@ -28204,6 +28353,8 @@ paths:
               properties:
                 inventory_source:
                   type: string
+                carousel_share_child_media_id:
+                  type: string
                 action:
                   type: string
                 is_x_transport_forward:
@@ -28232,6 +28383,7 @@ paths:
                   type: string
               required:
                 - inventory_source
+                - carousel_share_child_media_id
                 - action
                 - is_x_transport_forward
                 - is_shh_mode
@@ -34655,6 +34807,10 @@ paths:
                                             type: boolean
                                           text_translation:
                                             type: string
+                                          fb_mentioned_users:
+                                            type: array
+                                            items:
+                                              type: "null"
                                         required:
                                           - bit_flags
                                           - created_at
@@ -35968,6 +36124,7 @@ paths:
                                               - best_audio_cluster_id
                                           audio_type:
                                             type: string
+                                            nullable: true
                                           branded_content_tag_info:
                                             type: object
                                             properties:
@@ -35987,7 +36144,35 @@ paths:
                                               enabled:
                                                 type: boolean
                                               entry_point_container:
-                                                type: "null"
+                                                type: object
+                                                nullable: true
+                                                properties:
+                                                  comment:
+                                                    type: object
+                                                    properties:
+                                                      action_type:
+                                                        type: string
+                                                    required:
+                                                      - action_type
+                                                  overflow:
+                                                    type: "null"
+                                                  pill:
+                                                    type: object
+                                                    properties:
+                                                      action_type:
+                                                        type: string
+                                                      priority:
+                                                        type: number
+                                                    required:
+                                                      - action_type
+                                                      - priority
+                                                  ufi:
+                                                    type: "null"
+                                                required:
+                                                  - comment
+                                                  - overflow
+                                                  - pill
+                                                  - ufi
                                             required:
                                               - enabled
                                               - entry_point_container
@@ -49163,7 +49348,7 @@ paths:
             type: string
         - name: x-ig-salt-ids
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-fb-connection-type
@@ -52394,6 +52579,8 @@ paths:
             schema:
               type: object
               properties:
+                supported_capabilities_new:
+                  type: string
                 reason:
                   type: string
                 timezone_offset:
@@ -52406,16 +52593,14 @@ paths:
                   type: string
                 page_size:
                   type: string
-                reel_tray_impressions:
-                  type: string
               required:
+                - supported_capabilities_new
                 - reason
                 - timezone_offset
                 - tray_session_id
                 - request_id
                 - _uuid
                 - page_size
-                - reel_tray_impressions
   /v1/feed/timeline/:
     post:
       responses:
@@ -52852,7 +53037,39 @@ paths:
                                 coauthor_producers:
                                   type: array
                                   items:
-                                    type: "null"
+                                    type: object
+                                    properties:
+                                      pk:
+                                        type: number
+                                      pk_id:
+                                        type: string
+                                      id:
+                                        type: string
+                                      full_name:
+                                        type: string
+                                      is_private:
+                                        type: boolean
+                                      strong_id__:
+                                        type: string
+                                      username:
+                                        type: string
+                                      is_verified:
+                                        type: boolean
+                                      profile_pic_id:
+                                        type: string
+                                      profile_pic_url:
+                                        type: string
+                                    required:
+                                      - pk
+                                      - pk_id
+                                      - id
+                                      - full_name
+                                      - is_private
+                                      - strong_id__
+                                      - username
+                                      - is_verified
+                                      - profile_pic_id
+                                      - profile_pic_url
                                 coauthor_producer_can_see_organic_insights:
                                   type: boolean
                                 invited_coauthor_producers:
@@ -52997,7 +53214,10 @@ paths:
                                             derived_content_id:
                                               type: "null"
                                             display_labels:
-                                              type: "null"
+                                              type: array
+                                              nullable: true
+                                              items:
+                                                type: string
                                             formatted_clips_media_count:
                                               type: "null"
                                             is_bookmarked:
@@ -54577,6 +54797,8 @@ paths:
                                         type: number
                                     validated_product_cursor:
                                       type: number
+                                    promoted_app_id:
+                                      type: number
                                   required:
                                     - about_ad_params
                                     - actor_id
@@ -56105,9 +56327,11 @@ paths:
                                       appId:
                                         type: "null"
                                       appInstallObjectiveInvalidationBehavior:
-                                        type: "null"
+                                        type: number
+                                        nullable: true
                                       appName:
-                                        type: "null"
+                                        type: string
+                                        nullable: true
                                       callToActionTitle:
                                         type: string
                                       deeplinkUri:
@@ -56119,7 +56343,8 @@ paths:
                                       igUserId:
                                         type: "null"
                                       isAndroidAppLink:
-                                        type: "null"
+                                        type: boolean
+                                        nullable: true
                                       isVtOdirEligible:
                                         type: "null"
                                       leadGenFormId:
@@ -56136,7 +56361,8 @@ paths:
                                         type: string
                                         nullable: true
                                       referrerData:
-                                        type: "null"
+                                        type: string
+                                        nullable: true
                                       webUri:
                                         type: string
                                     required:
@@ -56422,6 +56648,97 @@ paths:
                                     - ad_id
                                     - subtitle
                                     - title
+                                ranked_coauthors_author:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      pk:
+                                        type: number
+                                      pk_id:
+                                        type: string
+                                      id:
+                                        type: string
+                                      full_name:
+                                        type: string
+                                      is_private:
+                                        type: boolean
+                                      strong_id__:
+                                        type: string
+                                      username:
+                                        type: string
+                                      is_verified:
+                                        type: boolean
+                                      profile_pic_id:
+                                        type: string
+                                      profile_pic_url:
+                                        type: string
+                                      friendship_status:
+                                        type: object
+                                        properties:
+                                          following:
+                                            type: boolean
+                                          is_bestie:
+                                            type: boolean
+                                          is_feed_favorite:
+                                            type: boolean
+                                          is_private:
+                                            type: boolean
+                                          is_restricted:
+                                            type: boolean
+                                          incoming_request:
+                                            type: boolean
+                                          outgoing_request:
+                                            type: boolean
+                                          followed_by:
+                                            type: boolean
+                                          muting:
+                                            type: boolean
+                                          blocking:
+                                            type: boolean
+                                          is_eligible_to_subscribe:
+                                            type: boolean
+                                          subscribed:
+                                            type: boolean
+                                        required:
+                                          - following
+                                          - is_bestie
+                                          - is_feed_favorite
+                                          - is_private
+                                          - is_restricted
+                                          - incoming_request
+                                          - outgoing_request
+                                          - followed_by
+                                          - muting
+                                          - blocking
+                                          - is_eligible_to_subscribe
+                                          - subscribed
+                                    required:
+                                      - pk
+                                      - pk_id
+                                      - id
+                                      - full_name
+                                      - is_private
+                                      - strong_id__
+                                      - username
+                                      - is_verified
+                                      - profile_pic_id
+                                      - profile_pic_url
+                                      - friendship_status
+                                collab_follow_button_info:
+                                  type: object
+                                  properties:
+                                    show_follow_button:
+                                      type: boolean
+                                    is_owner_in_author_exp:
+                                      type: boolean
+                                  required:
+                                    - show_follow_button
+                                    - is_owner_in_author_exp
+                                video_subtitles_uri:
+                                  type: string
+                                video_subtitles_locale:
+                                  type: string
                               required:
                                 - pk
                                 - id
@@ -56943,7 +57260,22 @@ paths:
                                                 - url
                                                 - width
                                             smart_frame:
-                                              type: "null"
+                                              type: object
+                                              nullable: true
+                                              properties:
+                                                height:
+                                                  type: number
+                                                scans_profile:
+                                                  type: string
+                                                url:
+                                                  type: string
+                                                width:
+                                                  type: number
+                                              required:
+                                                - height
+                                                - scans_profile
+                                                - url
+                                                - width
                                           required:
                                             - first_frame
                                             - igtv_first_frame
@@ -58710,6 +59042,136 @@ paths:
                                         - comment_prompt
                                         - poll
                                         - quiz
+                                    creative_config:
+                                      type: object
+                                      properties:
+                                        capture_type:
+                                          type: string
+                                        face_effect_id:
+                                          type: "null"
+                                        attribution_user:
+                                          type: "null"
+                                        creation_tool_info:
+                                          type: array
+                                          items:
+                                            type: object
+                                            properties:
+                                              camera_tool:
+                                                type: number
+                                              duration_selector_seconds:
+                                                type: number
+                                              speed_selector:
+                                                type: number
+                                              color_filters:
+                                                type: string
+                                              appearance_effect:
+                                                type: number
+                                              timer_selector_seconds:
+                                                type: number
+                                              magic_cut_start_time:
+                                                type: number
+                                              magic_cut_end_time:
+                                                type: number
+                                            required:
+                                              - camera_tool
+                                              - duration_selector_seconds
+                                              - speed_selector
+                                              - color_filters
+                                              - appearance_effect
+                                              - timer_selector_seconds
+                                              - magic_cut_start_time
+                                              - magic_cut_end_time
+                                        effect_configs:
+                                          type: "null"
+                                        effect_preview:
+                                          type: "null"
+                                      required:
+                                        - capture_type
+                                        - face_effect_id
+                                        - attribution_user
+                                        - creation_tool_info
+                                        - effect_configs
+                                        - effect_preview
+                                    clips_on_impression_control:
+                                      type: object
+                                      properties:
+                                        negative_confirmation_body:
+                                          type: string
+                                        negative_confirmation_cta_text:
+                                          type: string
+                                        negative_confirmation_icon:
+                                          type: string
+                                        negative_confirmation_title:
+                                          type: string
+                                        negative_icon:
+                                          type: string
+                                        negative_text:
+                                          type: string
+                                        positive_confirmation_icon:
+                                          type: string
+                                        positive_confirmation_title:
+                                          type: string
+                                        positive_icon:
+                                          type: string
+                                        positive_text:
+                                          type: string
+                                        style:
+                                          type: string
+                                      required:
+                                        - negative_confirmation_body
+                                        - negative_confirmation_cta_text
+                                        - negative_confirmation_icon
+                                        - negative_confirmation_title
+                                        - negative_icon
+                                        - negative_text
+                                        - positive_confirmation_icon
+                                        - positive_confirmation_title
+                                        - positive_icon
+                                        - positive_text
+                                        - style
+                                    feed_on_impression_control:
+                                      type: object
+                                      properties:
+                                        dismiss_icon:
+                                          type: string
+                                        negative_confirmation_body:
+                                          type: string
+                                        negative_confirmation_cta_text:
+                                          type: string
+                                        negative_confirmation_icon:
+                                          type: string
+                                        negative_confirmation_title:
+                                          type: string
+                                        negative_icon:
+                                          type: string
+                                        negative_text:
+                                          type: string
+                                        positive_confirmation_body:
+                                          type: string
+                                        positive_confirmation_icon:
+                                          type: string
+                                        positive_icon:
+                                          type: string
+                                        positive_text:
+                                          type: string
+                                        style:
+                                          type: string
+                                        text:
+                                          type: string
+                                      required:
+                                        - dismiss_icon
+                                        - negative_confirmation_body
+                                        - negative_confirmation_cta_text
+                                        - negative_confirmation_icon
+                                        - negative_confirmation_title
+                                        - negative_icon
+                                        - negative_text
+                                        - positive_confirmation_body
+                                        - positive_confirmation_icon
+                                        - positive_icon
+                                        - positive_text
+                                        - style
+                                        - text
                                   required:
                                     - pk
                                     - id
@@ -59070,6 +59532,65 @@ paths:
                                 - follow_ranking_token
                                 - suggestion_cards
                                 - brs_severity
+                            bloks_netego:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                tracking_token:
+                                  type: string
+                                global_position:
+                                  type: "null"
+                                item_client_gap_rules:
+                                  type: object
+                                  properties:
+                                    time_based_insertion_gap_in_seconds:
+                                      type: number
+                                    push_up_min_gap:
+                                      type: number
+                                    enable_user_engagement_base_insertion:
+                                      type: boolean
+                                    user_engagement_based_insertion_settings:
+                                      type: "null"
+                                    predicted_xout_rate:
+                                      type: "null"
+                                    max_xout_prediction_threshold:
+                                      type: "null"
+                                    post_gap_to_previous_ad:
+                                      type: number
+                                    post_gap_to_previous_netego:
+                                      type: number
+                                  required:
+                                    - time_based_insertion_gap_in_seconds
+                                    - push_up_min_gap
+                                    - enable_user_engagement_base_insertion
+                                    - user_engagement_based_insertion_settings
+                                    - predicted_xout_rate
+                                    - max_xout_prediction_threshold
+                                    - post_gap_to_previous_ad
+                                    - post_gap_to_previous_netego
+                                netego_type:
+                                  type: string
+                                layout:
+                                  type: object
+                                  properties:
+                                    bloks_payload:
+                                      type: "null"
+                                  required:
+                                    - bloks_payload
+                                view_state_item_type:
+                                  type: number
+                                brs_threshold:
+                                  type: number
+                              required:
+                                - id
+                                - tracking_token
+                                - global_position
+                                - item_client_gap_rules
+                                - netego_type
+                                - layout
+                                - view_state_item_type
+                                - brs_threshold
                           required: []
                       feed_items_media_info:
                         type: array
@@ -59249,7 +59770,7 @@ paths:
             type: string
         - name: x-ig-salt-ids
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-fb-session-id
@@ -59376,25 +59897,21 @@ paths:
               properties:
                 has_camera_permission:
                   type: string
-                ad_and_netego_realtime_information:
-                  type: string
                 feed_view_info:
                   type: string
                 organic_realtime_information:
                   type: string
                 phone_id:
                   type: string
-                max_id:
-                  type: string
                 client_view_state_media_list:
                   type: string
                 reason:
                   type: string
+                last_head_load_time_ms:
+                  type: string
                 battery_level:
                   type: string
                 timezone_offset:
-                  type: string
-                feed_comment_button_tap_info:
                   type: string
                 device_id:
                   type: string
@@ -59404,7 +59921,7 @@ paths:
                   type: string
                 _uuid:
                   type: string
-                feed_reshare_info:
+                new_posts_pill_type:
                   type: string
                 is_charging:
                   type: string
@@ -59418,21 +59935,19 @@ paths:
                   type: string
               required:
                 - has_camera_permission
-                - ad_and_netego_realtime_information
                 - feed_view_info
                 - organic_realtime_information
                 - phone_id
-                - max_id
                 - client_view_state_media_list
                 - reason
+                - last_head_load_time_ms
                 - battery_level
                 - timezone_offset
-                - feed_comment_button_tap_info
                 - device_id
                 - request_id
                 - is_pull_to_refresh
                 - _uuid
-                - feed_reshare_info
+                - new_posts_pill_type
                 - is_charging
                 - is_dark_mode
                 - will_sound_on
@@ -77850,6 +78365,11 @@ paths:
           required: true
           schema:
             type: string
+        - name: x-ig-salt-ids
+          in: header
+          required: true
+          schema:
+            type: string
   /v1/media/comment_infos/:
     get:
       responses:
@@ -81101,7 +81621,7 @@ paths:
             type: string
         - name: x-ig-304-eligible
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-bloks-version-id
@@ -90751,6 +91271,1108 @@ paths:
                   type: string
               required:
                 - signed_body
+  /v1/feed/reels_media/:
+    post:
+      responses:
+        "200":
+          description: ""
+          headers:
+            content-type:
+              schema:
+                type: string
+              required: true
+            date:
+              schema:
+                type: string
+              required: true
+            vary:
+              schema:
+                type: string
+              required: true
+            content-language:
+              schema:
+                type: string
+              required: true
+            strict-transport-security:
+              schema:
+                type: string
+              required: true
+            cache-control:
+              schema:
+                type: string
+              required: true
+            pragma:
+              schema:
+                type: string
+              required: true
+            expires:
+              schema:
+                type: string
+              required: true
+            x-frame-options:
+              schema:
+                type: string
+              required: true
+            content-security-policy:
+              schema:
+                type: string
+              required: true
+            cross-origin-embedder-policy-report-only:
+              schema:
+                type: string
+              required: true
+            report-to:
+              schema:
+                type: string
+              required: true
+            cross-origin-resource-policy:
+              schema:
+                type: string
+              required: true
+            cross-origin-opener-policy:
+              schema:
+                type: string
+              required: true
+            x-content-type-options:
+              schema:
+                type: string
+              required: true
+            x-xss-protection:
+              schema:
+                type: string
+              required: true
+            x-ig-push-state:
+              schema:
+                type: string
+              required: true
+            x-ig-cache-control:
+              schema:
+                type: string
+              required: true
+            x-aed:
+              schema:
+                type: string
+              required: true
+            x-ig-request-elapsed-time-ms:
+              schema:
+                type: string
+              required: true
+            x-ig-peak-v2:
+              schema:
+                type: string
+              required: true
+            x-ig-peak-time:
+              schema:
+                type: string
+              required: true
+            x-ig-capacity-level:
+              schema:
+                type: string
+              required: true
+            content-encoding:
+              schema:
+                type: string
+              required: true
+            x-stack:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-ig-direct-region-hint:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-shbid:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-shbts:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-rur:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-ds-user-id:
+              schema:
+                type: string
+              required: true
+            x-perf-stats:
+              schema:
+                type: string
+              required: true
+            content-length:
+              schema:
+                type: string
+              required: true
+            x-ig-origin-region:
+              schema:
+                type: string
+              required: true
+            x-fb-client-ip-forwarded:
+              schema:
+                type: string
+              required: true
+            x-fb-server-cluster-forwarded:
+              schema:
+                type: string
+              required: true
+            alt-svc:
+              schema:
+                type: string
+              required: true
+            x-fb-connection-quality:
+              schema:
+                type: string
+              required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reels:
+                    type: object
+                    additionalProperties:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        strong_id__:
+                          type: string
+                        latest_reel_media:
+                          type: number
+                        seen:
+                          type: number
+                        can_reply:
+                          type: boolean
+                        can_gif_quick_reply:
+                          type: boolean
+                        can_reshare:
+                          type: boolean
+                        reel_type:
+                          type: string
+                        ad_expiry_timestamp_in_millis:
+                          type: "null"
+                        is_cta_sticker_available:
+                          type: "null"
+                        app_sticker_info:
+                          type: "null"
+                        should_treat_link_sticker_as_cta:
+                          type: "null"
+                        pool_refresh_ttl_in_sec:
+                          type: "null"
+                        can_react_with_avatar:
+                          type: boolean
+                        expiring_at:
+                          type: number
+                        user:
+                          type: object
+                          properties:
+                            pk:
+                              type: number
+                            pk_id:
+                              type: string
+                            full_name:
+                              type: string
+                            is_private:
+                              type: boolean
+                            strong_id__:
+                              type: string
+                            id:
+                              type: string
+                            username:
+                              type: string
+                            is_verified:
+                              type: boolean
+                            profile_pic_id:
+                              type: string
+                            profile_pic_url:
+                              type: string
+                            interop_messaging_user_fbid:
+                              type: number
+                            is_creator_agent_enabled:
+                              type: boolean
+                            transparency_product_enabled:
+                              type: boolean
+                            friendship_status:
+                              type: object
+                              properties:
+                                following:
+                                  type: boolean
+                                is_bestie:
+                                  type: boolean
+                                is_feed_favorite:
+                                  type: boolean
+                                is_private:
+                                  type: boolean
+                                is_restricted:
+                                  type: boolean
+                                incoming_request:
+                                  type: boolean
+                                outgoing_request:
+                                  type: boolean
+                              required:
+                                - following
+                                - is_bestie
+                                - is_feed_favorite
+                                - is_private
+                                - is_restricted
+                                - incoming_request
+                                - outgoing_request
+                          required:
+                            - pk
+                            - pk_id
+                            - full_name
+                            - is_private
+                            - strong_id__
+                            - id
+                            - username
+                            - is_verified
+                            - profile_pic_id
+                            - profile_pic_url
+                            - interop_messaging_user_fbid
+                            - is_creator_agent_enabled
+                            - transparency_product_enabled
+                            - friendship_status
+                        items:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              pk:
+                                type: number
+                              id:
+                                type: string
+                              is_visual_reply_commenter_notice_enabled:
+                                type: boolean
+                              like_and_view_counts_disabled:
+                                type: boolean
+                              is_post_live_clips_media:
+                                type: boolean
+                              is_reshare_of_text_post_app_media_in_ig:
+                                type: boolean
+                              is_reel_media:
+                                type: boolean
+                              fbid:
+                                type: number
+                              device_timestamp:
+                                type: number
+                              caption_is_edited:
+                                type: boolean
+                              strong_id__:
+                                type: string
+                              is_quicksnap_recap:
+                                type: boolean
+                              deleted_reason:
+                                type: number
+                              expiring_at:
+                                type: number
+                              mezql_token:
+                                type: string
+                              should_request_ads:
+                                type: boolean
+                              is_terminal_video_segment:
+                                type: boolean
+                              integrity_review_decision:
+                                type: string
+                              client_cache_key:
+                                type: string
+                              has_privately_liked:
+                                type: boolean
+                              filter_type:
+                                type: number
+                              taken_at:
+                                type: number
+                              hide_view_all_comment_entrypoint:
+                                type: boolean
+                              is_comments_gif_composer_enabled:
+                                type: boolean
+                              has_liked:
+                                type: boolean
+                              video_sticker_locales:
+                                type: array
+                                items:
+                                  type: "null"
+                              can_viewer_save:
+                                type: boolean
+                              shop_routing_user_id:
+                                type: "null"
+                              is_organic_product_tagging_eligible:
+                                type: boolean
+                              product_suggestions:
+                                type: array
+                                items:
+                                  type: "null"
+                              can_see_insights_as_brand:
+                                type: boolean
+                              media_type:
+                                type: number
+                              code:
+                                type: string
+                              caption:
+                                type: "null"
+                              fundraiser_tag:
+                                type: object
+                                properties:
+                                  has_standalone_fundraiser:
+                                    type: boolean
+                                required:
+                                  - has_standalone_fundraiser
+                              sharing_friction_info:
+                                type: object
+                                properties:
+                                  bloks_app_url:
+                                    type: "null"
+                                  should_have_sharing_friction:
+                                    type: boolean
+                                  sharing_friction_payload:
+                                    type: "null"
+                                required:
+                                  - bloks_app_url
+                                  - should_have_sharing_friction
+                                  - sharing_friction_payload
+                              timeline_pinned_user_ids:
+                                type: array
+                                items:
+                                  type: "null"
+                              has_translation:
+                                type: boolean
+                              original_media_has_visual_reply_media:
+                                type: boolean
+                              coauthor_producers:
+                                type: array
+                                items:
+                                  type: "null"
+                              coauthor_producer_can_see_organic_insights:
+                                type: boolean
+                              invited_coauthor_producers:
+                                type: array
+                                items:
+                                  type: "null"
+                              is_in_profile_grid:
+                                type: boolean
+                              profile_grid_control_enabled:
+                                type: boolean
+                              image_versions2:
+                                type: object
+                                properties:
+                                  candidates:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        estimated_scans_sizes:
+                                          type: array
+                                          items:
+                                            type: number
+                                        height:
+                                          type: number
+                                        scans_profile:
+                                          type: string
+                                        url:
+                                          type: string
+                                        width:
+                                          type: number
+                                      required:
+                                        - estimated_scans_sizes
+                                        - height
+                                        - scans_profile
+                                        - url
+                                        - width
+                                required:
+                                  - candidates
+                              original_width:
+                                type: number
+                              original_height:
+                                type: number
+                              product_type:
+                                type: string
+                              is_paid_partnership:
+                                type: boolean
+                              music_metadata:
+                                type: "null"
+                              organic_tracking_token:
+                                type: string
+                              ig_media_sharing_disabled:
+                                type: boolean
+                              crosspost_metadata:
+                                type: object
+                                properties:
+                                  fb_downstream_use_xpost_metadata:
+                                    type: object
+                                    properties:
+                                      downstream_use_xpost_deny_reason:
+                                        type: string
+                                    required:
+                                      - downstream_use_xpost_deny_reason
+                                required:
+                                  - fb_downstream_use_xpost_metadata
+                              boost_unavailable_identifier:
+                                type: "null"
+                              boost_unavailable_reason:
+                                type: "null"
+                              boost_unavailable_reason_v2:
+                                type: "null"
+                              is_cutout_sticker_allowed:
+                                type: boolean
+                              cutout_sticker_info:
+                                type: array
+                                items:
+                                  type: "null"
+                              can_hype:
+                                type: boolean
+                              gen_ai_detection_method:
+                                type: object
+                                properties:
+                                  detection_method:
+                                    type: string
+                                required:
+                                  - detection_method
+                              fb_aggregated_like_count:
+                                type: number
+                              fb_aggregated_comment_count:
+                                type: number
+                              has_high_risk_gen_ai_inform_treatment:
+                                type: boolean
+                              open_carousel_show_follow_button:
+                                type: boolean
+                              is_tagged_media_shared_to_viewer_profile_grid:
+                                type: boolean
+                              should_show_author_pog_for_tagged_media_shared_to_profile_grid:
+                                type: boolean
+                              is_open_to_public_submission:
+                                type: boolean
+                              media_attributions_data:
+                                type: array
+                                items:
+                                  type: "null"
+                              archive_story_deletion_ts:
+                                type: number
+                              can_send_prompt:
+                                type: boolean
+                              is_first_take:
+                                type: boolean
+                              is_from_discovery_surface:
+                                type: boolean
+                              is_rollcall_v2:
+                                type: boolean
+                              supports_reel_reactions:
+                                type: boolean
+                              is_photo_mash_story:
+                                type: boolean
+                              can_play_spotify_audio:
+                                type: boolean
+                              is_superlative:
+                                type: boolean
+                              show_one_tap_fb_share_tooltip:
+                                type: boolean
+                              can_reply:
+                                type: boolean
+                              is_viewer_mentioned:
+                                type: boolean
+                              user:
+                                type: object
+                                properties:
+                                  pk:
+                                    type: number
+                                  is_private:
+                                    type: boolean
+                                  id:
+                                    type: string
+                                  strong_id__:
+                                    type: string
+                                required:
+                                  - pk
+                                  - is_private
+                                  - id
+                                  - strong_id__
+                              can_reshare:
+                                type: boolean
+                              story_feed_media:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    end_time_ms:
+                                      type: number
+                                    height:
+                                      type: number
+                                    is_fb_sticker:
+                                      type: number
+                                    is_hidden:
+                                      type: number
+                                    is_pinned:
+                                      type: number
+                                    is_sticker:
+                                      type: number
+                                    media_code:
+                                      type: string
+                                    media_compound_str:
+                                      type: string
+                                    media_id:
+                                      type: string
+                                    product_type:
+                                      type: string
+                                    rotation:
+                                      type: number
+                                    start_time_ms:
+                                      type: number
+                                    tap_landing_id:
+                                      type: string
+                                    uncapped_height_ratio:
+                                      type: number
+                                    uncapped_width_ratio:
+                                      type: number
+                                    width:
+                                      type: number
+                                    x:
+                                      type: number
+                                    y:
+                                      type: number
+                                    z:
+                                      type: number
+                                    clips_creation_entry_point:
+                                      type: string
+                                    should_mute_audio:
+                                      type: boolean
+                                  required:
+                                    - end_time_ms
+                                    - height
+                                    - is_fb_sticker
+                                    - is_hidden
+                                    - is_pinned
+                                    - is_sticker
+                                    - media_code
+                                    - media_compound_str
+                                    - media_id
+                                    - product_type
+                                    - rotation
+                                    - start_time_ms
+                                    - tap_landing_id
+                                    - uncapped_height_ratio
+                                    - uncapped_width_ratio
+                                    - width
+                                    - x
+                                    - y
+                                    - z
+                              commenting_disabled_for_viewer:
+                                type: boolean
+                              is_dash_eligible:
+                                type: number
+                              video_dash_manifest:
+                                type: string
+                              video_codec:
+                                type: string
+                              number_of_qualities:
+                                type: number
+                              video_versions:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    bandwidth:
+                                      type: number
+                                    height:
+                                      type: number
+                                    id:
+                                      type: string
+                                    type:
+                                      type: number
+                                    url:
+                                      type: string
+                                    width:
+                                      type: number
+                                  required:
+                                    - bandwidth
+                                    - height
+                                    - id
+                                    - type
+                                    - url
+                                    - width
+                              video_duration:
+                                type: number
+                              has_audio:
+                                type: boolean
+                              reel_mentions:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    display_type:
+                                      type: string
+                                    end_time_ms:
+                                      type: number
+                                    height:
+                                      type: number
+                                    is_fb_sticker:
+                                      type: number
+                                    is_hidden:
+                                      type: number
+                                    is_pinned:
+                                      type: number
+                                    is_sticker:
+                                      type: number
+                                    rotation:
+                                      type: number
+                                    start_time_ms:
+                                      type: number
+                                    user:
+                                      type: object
+                                      properties:
+                                        pk:
+                                          type: number
+                                        pk_id:
+                                          type: string
+                                        full_name:
+                                          type: string
+                                        is_private:
+                                          type: boolean
+                                        strong_id__:
+                                          type: string
+                                        id:
+                                          type: string
+                                        username:
+                                          type: string
+                                        is_verified:
+                                          type: boolean
+                                        profile_pic_id:
+                                          type: string
+                                        profile_pic_url:
+                                          type: string
+                                      required:
+                                        - pk
+                                        - pk_id
+                                        - full_name
+                                        - is_private
+                                        - strong_id__
+                                        - id
+                                        - username
+                                        - is_verified
+                                        - profile_pic_id
+                                        - profile_pic_url
+                                    width:
+                                      type: number
+                                    x:
+                                      type: number
+                                    y:
+                                      type: number
+                                    z:
+                                      type: number
+                                  required:
+                                    - display_type
+                                    - end_time_ms
+                                    - height
+                                    - is_fb_sticker
+                                    - is_hidden
+                                    - is_pinned
+                                    - is_sticker
+                                    - rotation
+                                    - start_time_ms
+                                    - user
+                                    - width
+                                    - x
+                                    - y
+                                    - z
+                              story_link_stickers:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    end_time_ms:
+                                      type: number
+                                    height:
+                                      type: number
+                                    is_fb_sticker:
+                                      type: number
+                                    is_hidden:
+                                      type: number
+                                    is_pinned:
+                                      type: number
+                                    is_sticker:
+                                      type: number
+                                    rotation:
+                                      type: number
+                                    start_time_ms:
+                                      type: number
+                                    width:
+                                      type: number
+                                    x:
+                                      type: number
+                                    y:
+                                      type: number
+                                    z:
+                                      type: number
+                                    story_link:
+                                      type: object
+                                      properties:
+                                        click_id:
+                                          type: string
+                                        display_url:
+                                          type: string
+                                        link_title:
+                                          type: string
+                                        link_type:
+                                          type: string
+                                        url:
+                                          type: string
+                                      required:
+                                        - click_id
+                                        - display_url
+                                        - link_title
+                                        - link_type
+                                        - url
+                                  required:
+                                    - end_time_ms
+                                    - height
+                                    - is_fb_sticker
+                                    - is_hidden
+                                    - is_pinned
+                                    - is_sticker
+                                    - rotation
+                                    - start_time_ms
+                                    - width
+                                    - x
+                                    - y
+                                    - z
+                                    - story_link
+                            required:
+                              - pk
+                              - id
+                              - is_visual_reply_commenter_notice_enabled
+                              - like_and_view_counts_disabled
+                              - is_post_live_clips_media
+                              - is_reshare_of_text_post_app_media_in_ig
+                              - is_reel_media
+                              - fbid
+                              - device_timestamp
+                              - caption_is_edited
+                              - strong_id__
+                              - is_quicksnap_recap
+                              - deleted_reason
+                              - expiring_at
+                              - mezql_token
+                              - should_request_ads
+                              - is_terminal_video_segment
+                              - integrity_review_decision
+                              - client_cache_key
+                              - has_privately_liked
+                              - filter_type
+                              - taken_at
+                              - hide_view_all_comment_entrypoint
+                              - is_comments_gif_composer_enabled
+                              - has_liked
+                              - video_sticker_locales
+                              - can_viewer_save
+                              - shop_routing_user_id
+                              - is_organic_product_tagging_eligible
+                              - product_suggestions
+                              - can_see_insights_as_brand
+                              - media_type
+                              - code
+                              - caption
+                              - fundraiser_tag
+                              - sharing_friction_info
+                              - timeline_pinned_user_ids
+                              - has_translation
+                              - original_media_has_visual_reply_media
+                              - coauthor_producers
+                              - coauthor_producer_can_see_organic_insights
+                              - invited_coauthor_producers
+                              - is_in_profile_grid
+                              - profile_grid_control_enabled
+                              - image_versions2
+                              - original_width
+                              - original_height
+                              - product_type
+                              - is_paid_partnership
+                              - music_metadata
+                              - organic_tracking_token
+                              - ig_media_sharing_disabled
+                              - crosspost_metadata
+                              - boost_unavailable_identifier
+                              - boost_unavailable_reason
+                              - boost_unavailable_reason_v2
+                              - is_cutout_sticker_allowed
+                              - cutout_sticker_info
+                              - can_hype
+                              - gen_ai_detection_method
+                              - fb_aggregated_like_count
+                              - fb_aggregated_comment_count
+                              - has_high_risk_gen_ai_inform_treatment
+                              - open_carousel_show_follow_button
+                              - is_tagged_media_shared_to_viewer_profile_grid
+                              - should_show_author_pog_for_tagged_media_shared_to_profile_grid
+                              - is_open_to_public_submission
+                              - media_attributions_data
+                              - archive_story_deletion_ts
+                              - can_send_prompt
+                              - is_first_take
+                              - is_from_discovery_surface
+                              - is_rollcall_v2
+                              - supports_reel_reactions
+                              - is_photo_mash_story
+                              - can_play_spotify_audio
+                              - is_superlative
+                              - show_one_tap_fb_share_tooltip
+                              - can_reply
+                              - is_viewer_mentioned
+                              - user
+                              - can_reshare
+                        is_nux:
+                          type: boolean
+                        prefetch_count:
+                          type: number
+                        media_count:
+                          type: number
+                        media_ids:
+                          type: array
+                          items:
+                            type: number
+                        is_cacheable:
+                          type: boolean
+                        disabled_reply_types:
+                          type: array
+                          items:
+                            type: string
+                        is_archived:
+                          type: boolean
+                      required:
+                        - id
+                        - strong_id__
+                        - latest_reel_media
+                        - seen
+                        - can_reply
+                        - can_gif_quick_reply
+                        - can_reshare
+                        - reel_type
+                        - ad_expiry_timestamp_in_millis
+                        - is_cta_sticker_available
+                        - app_sticker_info
+                        - should_treat_link_sticker_as_cta
+                        - pool_refresh_ttl_in_sec
+                        - can_react_with_avatar
+                        - expiring_at
+                        - user
+                        - items
+                        - is_nux
+                        - prefetch_count
+                        - media_count
+                        - media_ids
+                        - is_cacheable
+                        - disabled_reply_types
+                        - is_archived
+                  status:
+                    type: string
+                required:
+                  - reels
+                  - status
+      parameters:
+        - name: x-ig-app-locale
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-device-locale
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-mapped-locale
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-pigeon-session-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-pigeon-rawclienttime
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-bandwidth-speed-kbps
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-bandwidth-totalbytes-b
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-bandwidth-totaltime-ms
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-version-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-www-claim
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-button-version
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-colors-enabled
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-ax-base-colors-enabled
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-font-enabled
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-is-layout-rtl
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-device-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-family-device-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-android-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-timezone-offset
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-nav-chain
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-salt-ids
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-connection-type
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-connection-type
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-capabilities
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-app-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: priority
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: user-agent
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: accept-language
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: authorization
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-mid
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: ig-u-ds-user-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: ig-u-rur
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: ig-intended-user-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: content-type
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: content-length
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: accept-encoding
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-http-engine
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-client-ip
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-server-cluster
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                signed_body:
+                  type: string
+              required:
+                - signed_body
 components:
   schemas:
     Thread:
@@ -91272,7 +92894,13 @@ components:
                 type: string
               shh_seen_state:
                 type: object
-                properties: {}
+                properties:
+                  item_id:
+                    type: string
+                  timestamp:
+                    type: string
+                  created_at:
+                    type: string
                 required: []
               disappearing_messages_seen_state:
                 type: object
@@ -92554,6 +94182,20 @@ components:
             type: "null"
         seen_count:
           type: number
+        persistent_menu:
+          type: object
+          properties:
+            postback_items:
+              type: array
+              items:
+                type: "null"
+            url_items:
+              type: array
+              items:
+                type: "null"
+          required:
+            - postback_items
+            - url_items
       required:
         - thread_id
         - icebreakers
@@ -92952,6 +94594,8 @@ components:
                 type: "null"
               view_count:
                 type: "null"
+              target_expiry_timestamp_ms:
+                type: number
             required:
               - xma_template_type
               - xma_layout_type
@@ -94381,6 +96025,186 @@ components:
                 - seen_count
                 - replay_expiring_at_us
                 - reply_type
+            media:
+              type: object
+              properties:
+                id:
+                  type: number
+                image_versions2:
+                  type: object
+                  properties:
+                    candidates:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          width:
+                            type: number
+                          height:
+                            type: number
+                          url:
+                            type: string
+                          scans_profile:
+                            type: string
+                            nullable: true
+                          fallback:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                            required:
+                              - url
+                          url_expiration_timestamp_us:
+                            type: number
+                        required:
+                          - width
+                          - height
+                          - url
+                          - scans_profile
+                          - fallback
+                          - url_expiration_timestamp_us
+                  required:
+                    - candidates
+                original_width:
+                  type: number
+                original_height:
+                  type: number
+                media_type:
+                  type: number
+                user:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    strong_id__:
+                      type: string
+                    pk:
+                      type: number
+                    pk_id:
+                      type: string
+                    full_name:
+                      type: string
+                    username:
+                      type: string
+                    short_name:
+                      type: string
+                    profile_pic_url:
+                      type: string
+                    is_verified:
+                      type: boolean
+                    interop_messaging_user_fbid:
+                      type: number
+                    fbid_v2:
+                      type: number
+                    has_ig_profile:
+                      type: boolean
+                    interop_user_type:
+                      type: number
+                    is_using_unified_inbox_for_direct:
+                      type: boolean
+                    is_private:
+                      type: boolean
+                    is_creator_agent_enabled:
+                      type: boolean
+                    is_creator_automated_response_enabled:
+                      type: boolean
+                    friendship_status:
+                      type: object
+                      properties:
+                        blocking:
+                          type: boolean
+                        is_messaging_only_blocking:
+                          type: boolean
+                        is_messaging_pseudo_blocking:
+                          type: boolean
+                        is_unavailable:
+                          type: boolean
+                      required:
+                        - blocking
+                        - is_messaging_only_blocking
+                        - is_messaging_pseudo_blocking
+                        - is_unavailable
+                    is_shared_account:
+                      type: boolean
+                    is_shared_account_with_messaging_access:
+                      type: boolean
+                    ai_agent_banner_type:
+                      type: "null"
+                    is_eligible_for_ai_bot_group_chats:
+                      type: boolean
+                  required:
+                    - id
+                    - strong_id__
+                    - pk
+                    - pk_id
+                    - full_name
+                    - username
+                    - short_name
+                    - profile_pic_url
+                    - is_verified
+                    - interop_messaging_user_fbid
+                    - fbid_v2
+                    - has_ig_profile
+                    - interop_user_type
+                    - is_using_unified_inbox_for_direct
+                    - is_private
+                    - is_creator_agent_enabled
+                    - is_creator_automated_response_enabled
+                    - friendship_status
+                    - is_shared_account
+                    - is_shared_account_with_messaging_access
+                    - ai_agent_banner_type
+                    - is_eligible_for_ai_bot_group_chats
+                video_versions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      type:
+                        type: number
+                      width:
+                        type: number
+                      height:
+                        type: number
+                      url:
+                        type: string
+                      fallback:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                        required:
+                          - url
+                      url_expiration_timestamp_us:
+                        type: number
+                      bandwidth:
+                        type: number
+                    required:
+                      - id
+                      - type
+                      - width
+                      - height
+                      - url
+                      - fallback
+                      - url_expiration_timestamp_us
+                      - bandwidth
+                video_duration:
+                  type: number
+                video_dash_manifest:
+                  type: string
+                is_dash_eligible:
+                  type: number
+              required:
+                - id
+                - image_versions2
+                - original_width
+                - original_height
+                - media_type
+                - user
+            is_edit_with_ai_eligible:
+              type: boolean
           required:
             - item_id
             - message_id
@@ -94681,7 +96505,8 @@ components:
                 type: string
                 nullable: true
               ig_template_type:
-                type: "null"
+                type: string
+                nullable: true
               playable_width:
                 type: number
                 nullable: true
@@ -94749,6 +96574,7 @@ components:
                 nullable: true
               is_sharable:
                 type: boolean
+                nullable: true
               original_image_width:
                 type: number
               original_image_height:
@@ -94820,6 +96646,7 @@ components:
                     - url_expiration_timestamp_us
               is_quoted:
                 type: boolean
+                nullable: true
               is_borderless:
                 type: boolean
                 nullable: true
@@ -94865,15 +96692,21 @@ components:
               should_refresh:
                 type: boolean
               audio_segment_start_time_ms:
-                type: "null"
+                type: number
+                nullable: true
               audio_segment_duration_ms:
-                type: "null"
+                type: number
+                nullable: true
               preview_extra_urls_info:
                 type: "null"
               preview_layout_type:
                 type: number
               target_expiry_timestamp_ms:
                 type: number
+              view_mode:
+                type: "null"
+              view_count:
+                type: "null"
             required:
               - xma_template_type
               - xma_layout_type
@@ -95643,6 +97476,339 @@ components:
               - timestamp
         like:
           type: string
+        placeholder:
+          type: object
+          properties:
+            is_linked:
+              type: boolean
+            title:
+              type: string
+            message:
+              type: string
+            reason:
+              type: "null"
+            metadata:
+              type: "null"
+          required:
+            - is_linked
+            - title
+            - message
+            - reason
+            - metadata
+        xma_link:
+          type: array
+          items:
+            type: object
+            properties:
+              preview_url:
+                type: string
+              preview_url_info:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  width:
+                    type: number
+                  height:
+                    type: number
+                required:
+                  - url
+                  - width
+                  - height
+              header_title_text:
+                type: "null"
+              title_text:
+                type: string
+              subtitle_text:
+                type: string
+              target_url:
+                type: string
+              xma_layout_type:
+                type: number
+              preview_layout_type:
+                type: number
+              is_sharable:
+                type: boolean
+              header_icon_url:
+                type: "null"
+              header_icon_url_info:
+                type: "null"
+              header_subtitle_text:
+                type: "null"
+              preview_media_fbid:
+                type: "null"
+              preview_url_mime_type:
+                type: "null"
+              xma_template_type:
+                type: "null"
+              subtitle_decoration_type:
+                type: "null"
+              bottom_icon_url:
+                type: string
+            required:
+              - preview_url
+              - preview_url_info
+              - header_title_text
+              - title_text
+              - subtitle_text
+              - target_url
+              - xma_layout_type
+              - preview_layout_type
+              - is_sharable
+              - header_icon_url
+              - header_icon_url_info
+              - header_subtitle_text
+              - preview_media_fbid
+              - preview_url_mime_type
+              - xma_template_type
+              - subtitle_decoration_type
+              - bottom_icon_url
+        animated_emojis_character_info:
+          type: array
+          items:
+            type: object
+            properties:
+              offset:
+                type: number
+              length:
+                type: number
+            required:
+              - offset
+              - length
+        voice_media:
+          type: object
+          properties:
+            media:
+              type: object
+              properties:
+                id:
+                  type: string
+                media_type:
+                  type: number
+                product_type:
+                  type: string
+                user:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    strong_id__:
+                      type: string
+                    pk:
+                      type: number
+                    pk_id:
+                      type: string
+                    full_name:
+                      type: string
+                    username:
+                      type: string
+                    short_name:
+                      type: string
+                    profile_pic_url:
+                      type: string
+                    is_verified:
+                      type: boolean
+                    interop_messaging_user_fbid:
+                      type: number
+                    fbid_v2:
+                      type: number
+                    has_ig_profile:
+                      type: boolean
+                    interop_user_type:
+                      type: number
+                    is_using_unified_inbox_for_direct:
+                      type: boolean
+                    is_private:
+                      type: boolean
+                    is_creator_agent_enabled:
+                      type: boolean
+                    is_creator_automated_response_enabled:
+                      type: boolean
+                    friendship_status:
+                      type: object
+                      properties:
+                        blocking:
+                          type: boolean
+                        is_messaging_pseudo_blocking:
+                          type: boolean
+                        is_viewer_unconnected:
+                          type: "null"
+                        is_private:
+                          type: boolean
+                        is_bestie:
+                          type: boolean
+                        is_feed_favorite:
+                          type: boolean
+                        is_restricted:
+                          type: boolean
+                        following:
+                          type: boolean
+                        followed_by:
+                          type: boolean
+                        outgoing_request:
+                          type: boolean
+                        incoming_request:
+                          type: boolean
+                        muting:
+                          type: boolean
+                      required:
+                        - blocking
+                        - is_messaging_pseudo_blocking
+                        - is_viewer_unconnected
+                        - is_private
+                        - is_bestie
+                        - is_feed_favorite
+                        - is_restricted
+                        - following
+                        - followed_by
+                        - outgoing_request
+                        - incoming_request
+                        - muting
+                    is_shared_account:
+                      type: boolean
+                    is_shared_account_with_messaging_access:
+                      type: boolean
+                    ai_agent_banner_type:
+                      type: "null"
+                    is_eligible_for_ai_bot_group_chats:
+                      type: boolean
+                  required:
+                    - id
+                    - strong_id__
+                    - pk
+                    - pk_id
+                    - full_name
+                    - username
+                    - short_name
+                    - profile_pic_url
+                    - is_verified
+                    - interop_messaging_user_fbid
+                    - fbid_v2
+                    - has_ig_profile
+                    - interop_user_type
+                    - is_using_unified_inbox_for_direct
+                    - is_private
+                    - is_creator_agent_enabled
+                    - is_creator_automated_response_enabled
+                    - friendship_status
+                    - is_shared_account
+                    - is_shared_account_with_messaging_access
+                    - ai_agent_banner_type
+                    - is_eligible_for_ai_bot_group_chats
+                audio:
+                  type: object
+                  properties:
+                    audio_src:
+                      type: string
+                    duration:
+                      type: number
+                    audio_src_expiration_timestamp_us:
+                      type: number
+                    waveform_data:
+                      type: array
+                      items:
+                        type: number
+                    waveform_sampling_frequency_hz:
+                      type: number
+                    fallback:
+                      type: object
+                      properties:
+                        audio_src:
+                          type: string
+                      required:
+                        - audio_src
+                  required:
+                    - audio_src
+                    - duration
+                    - audio_src_expiration_timestamp_us
+                    - waveform_data
+                    - waveform_sampling_frequency_hz
+                    - fallback
+                organic_tracking_token:
+                  type: string
+              required:
+                - id
+                - media_type
+                - product_type
+                - user
+                - audio
+                - organic_tracking_token
+            seen_user_ids:
+              type: array
+              items:
+                type: "null"
+            seen_count:
+              type: number
+            is_shh_mode:
+              type: boolean
+            view_mode:
+              type: string
+            replay_expiring_at_us:
+              type: "null"
+          required:
+            - media
+            - seen_user_ids
+            - seen_count
+            - is_shh_mode
+            - view_mode
+            - replay_expiring_at_us
+        reels_audio_share:
+          type: array
+          items:
+            type: object
+            properties:
+              attachment_index:
+                type: number
+              xma_layout_type:
+                type: number
+              header_title_text:
+                type: string
+              header_subtitle_text:
+                type: string
+              preview_layout_type:
+                type: number
+              preview_extra_urls_info:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+                  required:
+                    - url
+              target_url:
+                type: string
+              accessibility_summary_text:
+                type: string
+              accessibility_summary_hint:
+                type: string
+              is_sharable:
+                type: boolean
+              header_icon_url_info:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  width:
+                    type: number
+                  height:
+                    type: number
+                required:
+                  - url
+                  - width
+                  - height
+            required:
+              - attachment_index
+              - xma_layout_type
+              - header_title_text
+              - header_subtitle_text
+              - preview_layout_type
+              - preview_extra_urls_info
+              - target_url
+              - accessibility_summary_text
+              - accessibility_summary_hint
+              - is_sharable
+              - header_icon_url_info
       required:
         - item_id
         - user_id

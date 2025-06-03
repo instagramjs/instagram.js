@@ -211,8 +211,6 @@ paths:
                   type: string
                 compressed:
                   type: string
-                multi_batch:
-                  type: string
                 sent_time:
                   type: string
                 message:
@@ -222,7 +220,6 @@ paths:
                 - format
                 - ffdb_token
                 - compressed
-                - multi_batch
                 - sent_time
                 - message
   /rmd:

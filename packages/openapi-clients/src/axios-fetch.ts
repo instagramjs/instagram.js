@@ -9,7 +9,7 @@ export async function axiosFetch(
     init?.method || (typeof input === "string" ? "GET" : input.method) || "GET";
   const headers =
     init?.headers || (typeof input === "string" ? undefined : input.headers);
-  const data = init?.body;
+  const data = typeof input !== "string" ? await input.text() : init?.body;
 
   const config: AxiosRequestConfig = {
     url,

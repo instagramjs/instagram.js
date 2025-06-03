@@ -56,6 +56,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
+                    "x-ig-salt-ids": string;
                 };
                 path?: never;
                 cookie?: never;
@@ -2188,6 +2189,8 @@ export interface paths {
                                         };
                                         is_covered: boolean;
                                         private_reply_status: number;
+                                        has_translation?: boolean;
+                                        text_translation?: string;
                                     };
                                     fundraiser_tag: {
                                         has_standalone_fundraiser: boolean;
@@ -2490,7 +2493,17 @@ export interface paths {
                                         challenge_info: null;
                                         content_appreciation_info: {
                                             enabled: boolean;
-                                            entry_point_container: null;
+                                            entry_point_container: {
+                                                comment: {
+                                                    action_type: string;
+                                                };
+                                                overflow: null;
+                                                pill: {
+                                                    action_type: string;
+                                                    priority: number;
+                                                };
+                                                ufi: null;
+                                            } | null;
                                         };
                                         contextual_highlight_info: null;
                                         cutout_sticker_info: null[];
@@ -2533,7 +2546,7 @@ export interface paths {
                                                 has_lyrics: boolean;
                                                 highlight_start_times_in_ms: number[];
                                                 id: string;
-                                                ig_username: null;
+                                                ig_username: string | null;
                                                 is_eligible_for_audio_effects: boolean;
                                                 is_eligible_for_vinyl_sticker: boolean;
                                                 is_explicit: boolean;
@@ -2567,7 +2580,18 @@ export interface paths {
                                                 should_render_soundwave: boolean;
                                                 trend_rank: null;
                                                 previous_trend_rank: null;
-                                                ig_artist: null;
+                                                ig_artist: {
+                                                    pk: number;
+                                                    pk_id: string;
+                                                    id: string;
+                                                    username: string;
+                                                    full_name: string;
+                                                    is_private: boolean;
+                                                    is_verified: boolean;
+                                                    profile_pic_id: string;
+                                                    profile_pic_url: string;
+                                                    strong_id__: string;
+                                                } | null;
                                                 audio_filter_infos: null[];
                                                 audio_muting_info: {
                                                     mute_audio: boolean;
@@ -2692,6 +2716,26 @@ export interface paths {
                                     commerce_integrity_review_decision?: string;
                                     video_subtitles_uri?: string;
                                     video_subtitles_locale?: string;
+                                    brs_content_blocklist_bitmap_obj?: {
+                                        bitmap_array: number[];
+                                        bitmap_string: string;
+                                        encode: number;
+                                        bitmap_map: null[];
+                                    };
+                                    location?: {
+                                        name: string;
+                                        address: string;
+                                        city: string;
+                                        has_viewer_saved: boolean;
+                                        pk: number;
+                                        short_name: string;
+                                        facebook_places_id: number;
+                                        external_source: string;
+                                        lng: number;
+                                        lat: number;
+                                    };
+                                    lng?: number;
+                                    lat?: number;
                                 };
                             }[];
                             preload_distance: number;
@@ -4143,7 +4187,7 @@ export interface paths {
                     "x-ig-android-id": string;
                     "x-ig-timezone-offset": string;
                     "x-ig-nav-chain": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                     "x-fb-connection-type": string;
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
@@ -6710,7 +6754,7 @@ export interface paths {
                     "x-ig-android-id": string;
                     "x-ig-timezone-offset": string;
                     "x-ig-nav-chain": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                     "x-fb-connection-type": string;
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
@@ -7177,6 +7221,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
+                    "x-ig-salt-ids": string;
                 };
                 path?: never;
                 cookie?: never;
@@ -7261,6 +7306,9 @@ export interface paths {
                     push_disabled?: string;
                     is_prefetching: string;
                     fetch_reason: string;
+                    cursor: string;
+                    direction: string;
+                    seq_id: string;
                 };
                 header: {
                     "x-ig-app-locale": string;
@@ -8330,7 +8378,7 @@ export interface paths {
                     "x-ig-android-id": string;
                     "x-ig-timezone-offset": string;
                     "x-ig-nav-chain": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                     "x-fb-connection-type": string;
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
@@ -9191,7 +9239,7 @@ export interface paths {
                     "x-ig-android-id": string;
                     "x-ig-timezone-offset": string;
                     "x-ig-nav-chain": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                     "x-fb-connection-type": string;
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
@@ -9218,6 +9266,7 @@ export interface paths {
                 content: {
                     "application/x-www-form-urlencoded": {
                         inventory_source: string;
+                        carousel_share_child_media_id: string;
                         action: string;
                         is_x_transport_forward: string;
                         is_shh_mode: string;
@@ -11473,6 +11522,7 @@ export interface paths {
                                                 private_reply_status: number;
                                                 has_translation?: boolean;
                                                 text_translation?: string;
+                                                fb_mentioned_users?: null[];
                                             } | null;
                                             fundraiser_tag: {
                                                 has_standalone_fundraiser: boolean;
@@ -11933,7 +11983,7 @@ export interface paths {
                                                 audio_ranking_info: {
                                                     best_audio_cluster_id: string;
                                                 };
-                                                audio_type: string;
+                                                audio_type: string | null;
                                                 branded_content_tag_info: {
                                                     can_add_tag: boolean;
                                                 };
@@ -11942,7 +11992,17 @@ export interface paths {
                                                 challenge_info: null;
                                                 content_appreciation_info: {
                                                     enabled: boolean;
-                                                    entry_point_container: null;
+                                                    entry_point_container: {
+                                                        comment: {
+                                                            action_type: string;
+                                                        };
+                                                        overflow: null;
+                                                        pill: {
+                                                            action_type: string;
+                                                            priority: number;
+                                                        };
+                                                        ufi: null;
+                                                    } | null;
                                                 };
                                                 contextual_highlight_info: null;
                                                 cutout_sticker_info: null[];
@@ -16082,7 +16142,7 @@ export interface paths {
                     "x-ig-android-id": string;
                     "x-ig-timezone-offset": string;
                     "x-ig-nav-chain": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                     "x-fb-connection-type": string;
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
@@ -16698,13 +16758,13 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/x-www-form-urlencoded": {
+                        supported_capabilities_new: string;
                         reason: string;
                         timezone_offset: string;
                         tray_session_id: string;
                         request_id: string;
                         _uuid: string;
                         page_size: string;
-                        reel_tray_impressions: string;
                     };
                 };
             };
@@ -17258,7 +17318,7 @@ export interface paths {
                     "x-ig-timezone-offset": string;
                     "x-ig-nav-chain"?: string;
                     "x-ig-client-endpoint"?: string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                     "x-fb-session-id"?: string;
                     "x-fb-session-private"?: string;
                     "x-fb-connection-type": string;
@@ -17290,21 +17350,19 @@ export interface paths {
                 content: {
                     "application/x-www-form-urlencoded": {
                         has_camera_permission: string;
-                        ad_and_netego_realtime_information: string;
                         feed_view_info: string;
                         organic_realtime_information: string;
                         phone_id: string;
-                        max_id: string;
                         client_view_state_media_list: string;
                         reason: string;
+                        last_head_load_time_ms: string;
                         battery_level: string;
                         timezone_offset: string;
-                        feed_comment_button_tap_info: string;
                         device_id: string;
                         request_id: string;
                         is_pull_to_refresh: string;
                         _uuid: string;
-                        feed_reshare_info: string;
+                        new_posts_pill_type: string;
                         is_charging: string;
                         is_dark_mode: string;
                         will_sound_on: string;
@@ -17465,7 +17523,18 @@ export interface paths {
                                     fb_user_tags: {
                                         in: null[];
                                     };
-                                    coauthor_producers: null[];
+                                    coauthor_producers: {
+                                        pk: number;
+                                        pk_id: string;
+                                        id: string;
+                                        full_name: string;
+                                        is_private: boolean;
+                                        strong_id__: string;
+                                        username: string;
+                                        is_verified: boolean;
+                                        profile_pic_id: string;
+                                        profile_pic_url: string;
+                                    }[];
                                     coauthor_producer_can_see_organic_insights: boolean;
                                     invited_coauthor_producers: null[];
                                     is_in_profile_grid: boolean;
@@ -17516,7 +17585,7 @@ export interface paths {
                                                 audio_asset_start_time_in_ms: number;
                                                 contains_lyrics: null;
                                                 derived_content_id: null;
-                                                display_labels: null;
+                                                display_labels: string[] | null;
                                                 formatted_clips_media_count: null;
                                                 is_bookmarked: boolean;
                                                 is_trending_in_clips: boolean;
@@ -18091,6 +18160,7 @@ export interface paths {
                                         };
                                         post_trigger_experience_eligibilities?: number[];
                                         validated_product_cursor?: number;
+                                        promoted_app_id?: number;
                                     };
                                     item_client_gap_rules?: {
                                         enable_user_engagement_base_insertion: boolean;
@@ -18599,14 +18669,14 @@ export interface paths {
                                     android_links?: {
                                         androidClass: string;
                                         appId: null;
-                                        appInstallObjectiveInvalidationBehavior: null;
-                                        appName: null;
+                                        appInstallObjectiveInvalidationBehavior: number | null;
+                                        appName: string | null;
                                         callToActionTitle: string;
                                         deeplinkUri: string;
                                         funnelId: null;
                                         funnelPurpose: null;
                                         igUserId: null;
-                                        isAndroidAppLink: null;
+                                        isAndroidAppLink: boolean | null;
                                         isVtOdirEligible: null;
                                         leadGenFormId: null;
                                         linkType: number;
@@ -18614,7 +18684,7 @@ export interface paths {
                                         playableUri: null;
                                         productPageId: null;
                                         redirectUri: string | null;
-                                        referrerData: null;
+                                        referrerData: string | null;
                                         webUri: string;
                                     }[];
                                     dominant_color?: string;
@@ -18713,6 +18783,38 @@ export interface paths {
                                         subtitle: null;
                                         title: string;
                                     };
+                                    ranked_coauthors_author?: {
+                                        pk: number;
+                                        pk_id: string;
+                                        id: string;
+                                        full_name: string;
+                                        is_private: boolean;
+                                        strong_id__: string;
+                                        username: string;
+                                        is_verified: boolean;
+                                        profile_pic_id: string;
+                                        profile_pic_url: string;
+                                        friendship_status: {
+                                            following: boolean;
+                                            is_bestie: boolean;
+                                            is_feed_favorite: boolean;
+                                            is_private: boolean;
+                                            is_restricted: boolean;
+                                            incoming_request: boolean;
+                                            outgoing_request: boolean;
+                                            followed_by: boolean;
+                                            muting: boolean;
+                                            blocking: boolean;
+                                            is_eligible_to_subscribe: boolean;
+                                            subscribed: boolean;
+                                        };
+                                    }[];
+                                    collab_follow_button_info?: {
+                                        show_follow_button: boolean;
+                                        is_owner_in_author_exp: boolean;
+                                    };
+                                    video_subtitles_uri?: string;
+                                    video_subtitles_locale?: string;
                                 };
                                 explore_story?: {
                                     id: number;
@@ -18870,7 +18972,12 @@ export interface paths {
                                                     url: string;
                                                     width: number;
                                                 };
-                                                smart_frame: null;
+                                                smart_frame: {
+                                                    height: number;
+                                                    scans_profile: string;
+                                                    url: string;
+                                                    width: number;
+                                                } | null;
                                             };
                                             candidates: {
                                                 height: number;
@@ -19482,6 +19589,51 @@ export interface paths {
                                             };
                                             quiz: null;
                                         };
+                                        creative_config?: {
+                                            capture_type: string;
+                                            face_effect_id: null;
+                                            attribution_user: null;
+                                            creation_tool_info: {
+                                                camera_tool: number;
+                                                duration_selector_seconds: number;
+                                                speed_selector: number;
+                                                color_filters: string;
+                                                appearance_effect: number;
+                                                timer_selector_seconds: number;
+                                                magic_cut_start_time: number;
+                                                magic_cut_end_time: number;
+                                            }[];
+                                            effect_configs: null;
+                                            effect_preview: null;
+                                        };
+                                        clips_on_impression_control?: {
+                                            negative_confirmation_body: string;
+                                            negative_confirmation_cta_text: string;
+                                            negative_confirmation_icon: string;
+                                            negative_confirmation_title: string;
+                                            negative_icon: string;
+                                            negative_text: string;
+                                            positive_confirmation_icon: string;
+                                            positive_confirmation_title: string;
+                                            positive_icon: string;
+                                            positive_text: string;
+                                            style: string;
+                                        };
+                                        feed_on_impression_control?: {
+                                            dismiss_icon: string;
+                                            negative_confirmation_body: string;
+                                            negative_confirmation_cta_text: string;
+                                            negative_confirmation_icon: string;
+                                            negative_confirmation_title: string;
+                                            negative_icon: string;
+                                            negative_text: string;
+                                            positive_confirmation_body: string;
+                                            positive_confirmation_icon: string;
+                                            positive_icon: string;
+                                            positive_text: string;
+                                            style: string;
+                                            text: string;
+                                        };
                                     };
                                     inventory_source: string;
                                     is_eof: boolean;
@@ -19562,6 +19714,27 @@ export interface paths {
                                         };
                                     }[];
                                     brs_severity: number;
+                                };
+                                bloks_netego?: {
+                                    id: string;
+                                    tracking_token: string;
+                                    global_position: null;
+                                    item_client_gap_rules: {
+                                        time_based_insertion_gap_in_seconds: number;
+                                        push_up_min_gap: number;
+                                        enable_user_engagement_base_insertion: boolean;
+                                        user_engagement_based_insertion_settings: null;
+                                        predicted_xout_rate: null;
+                                        max_xout_prediction_threshold: null;
+                                        post_gap_to_previous_ad: number;
+                                        post_gap_to_previous_netego: number;
+                                    };
+                                    netego_type: string;
+                                    layout: {
+                                        bloks_payload: null;
+                                    };
+                                    view_state_item_type: number;
+                                    brs_threshold: number;
                                 };
                             }[];
                             feed_items_media_info: null[];
@@ -25460,6 +25633,7 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
+                    "x-ig-salt-ids": string;
                 };
                 path?: never;
                 cookie?: never;
@@ -26364,7 +26538,7 @@ export interface paths {
                     "x-ig-bandwidth-totalbytes-b": string;
                     "x-ig-bandwidth-totaltime-ms": string;
                     "x-ig-prefetch-request": string;
-                    "x-ig-304-eligible": string;
+                    "x-ig-304-eligible"?: string;
                     "x-bloks-version-id": string;
                     "x-ig-www-claim": string;
                     "x-bloks-prism-button-version": string;
@@ -29703,6 +29877,370 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/feed/reels_media/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    "x-ig-app-locale": string;
+                    "x-ig-device-locale": string;
+                    "x-ig-mapped-locale": string;
+                    "x-pigeon-session-id": string;
+                    "x-pigeon-rawclienttime": string;
+                    "x-ig-bandwidth-speed-kbps": string;
+                    "x-ig-bandwidth-totalbytes-b": string;
+                    "x-ig-bandwidth-totaltime-ms": string;
+                    "x-bloks-version-id": string;
+                    "x-ig-www-claim": string;
+                    "x-bloks-prism-button-version": string;
+                    "x-bloks-prism-colors-enabled": string;
+                    "x-bloks-prism-ax-base-colors-enabled": string;
+                    "x-bloks-prism-font-enabled": string;
+                    "x-bloks-is-layout-rtl": string;
+                    "x-ig-device-id": string;
+                    "x-ig-family-device-id": string;
+                    "x-ig-android-id": string;
+                    "x-ig-timezone-offset": string;
+                    "x-ig-nav-chain": string;
+                    "x-ig-salt-ids": string;
+                    "x-fb-connection-type": string;
+                    "x-ig-connection-type": string;
+                    "x-ig-capabilities": string;
+                    "x-ig-app-id": string;
+                    priority: string;
+                    "user-agent": string;
+                    "accept-language": string;
+                    authorization: string;
+                    "x-mid": string;
+                    "ig-u-ds-user-id": string;
+                    "ig-u-rur": string;
+                    "ig-intended-user-id": string;
+                    "content-type": string;
+                    "content-length": string;
+                    "accept-encoding": string;
+                    "x-fb-http-engine": string;
+                    "x-fb-client-ip": string;
+                    "x-fb-server-cluster": string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/x-www-form-urlencoded": {
+                        signed_body: string;
+                    };
+                };
+            };
+            responses: {
+                200: {
+                    headers: {
+                        "content-type": string;
+                        date: string;
+                        vary: string;
+                        "content-language": string;
+                        "strict-transport-security": string;
+                        "cache-control": string;
+                        pragma: string;
+                        expires: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "content-length": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            reels: {
+                                [key: string]: {
+                                    id: number;
+                                    strong_id__: string;
+                                    latest_reel_media: number;
+                                    seen: number;
+                                    can_reply: boolean;
+                                    can_gif_quick_reply: boolean;
+                                    can_reshare: boolean;
+                                    reel_type: string;
+                                    ad_expiry_timestamp_in_millis: null;
+                                    is_cta_sticker_available: null;
+                                    app_sticker_info: null;
+                                    should_treat_link_sticker_as_cta: null;
+                                    pool_refresh_ttl_in_sec: null;
+                                    can_react_with_avatar: boolean;
+                                    expiring_at: number;
+                                    user: {
+                                        pk: number;
+                                        pk_id: string;
+                                        full_name: string;
+                                        is_private: boolean;
+                                        strong_id__: string;
+                                        id: string;
+                                        username: string;
+                                        is_verified: boolean;
+                                        profile_pic_id: string;
+                                        profile_pic_url: string;
+                                        interop_messaging_user_fbid: number;
+                                        is_creator_agent_enabled: boolean;
+                                        transparency_product_enabled: boolean;
+                                        friendship_status: {
+                                            following: boolean;
+                                            is_bestie: boolean;
+                                            is_feed_favorite: boolean;
+                                            is_private: boolean;
+                                            is_restricted: boolean;
+                                            incoming_request: boolean;
+                                            outgoing_request: boolean;
+                                        };
+                                    };
+                                    items: {
+                                        pk: number;
+                                        id: string;
+                                        is_visual_reply_commenter_notice_enabled: boolean;
+                                        like_and_view_counts_disabled: boolean;
+                                        is_post_live_clips_media: boolean;
+                                        is_reshare_of_text_post_app_media_in_ig: boolean;
+                                        is_reel_media: boolean;
+                                        fbid: number;
+                                        device_timestamp: number;
+                                        caption_is_edited: boolean;
+                                        strong_id__: string;
+                                        is_quicksnap_recap: boolean;
+                                        deleted_reason: number;
+                                        expiring_at: number;
+                                        mezql_token: string;
+                                        should_request_ads: boolean;
+                                        is_terminal_video_segment: boolean;
+                                        integrity_review_decision: string;
+                                        client_cache_key: string;
+                                        has_privately_liked: boolean;
+                                        filter_type: number;
+                                        taken_at: number;
+                                        hide_view_all_comment_entrypoint: boolean;
+                                        is_comments_gif_composer_enabled: boolean;
+                                        has_liked: boolean;
+                                        video_sticker_locales: null[];
+                                        can_viewer_save: boolean;
+                                        shop_routing_user_id: null;
+                                        is_organic_product_tagging_eligible: boolean;
+                                        product_suggestions: null[];
+                                        can_see_insights_as_brand: boolean;
+                                        media_type: number;
+                                        code: string;
+                                        caption: null;
+                                        fundraiser_tag: {
+                                            has_standalone_fundraiser: boolean;
+                                        };
+                                        sharing_friction_info: {
+                                            bloks_app_url: null;
+                                            should_have_sharing_friction: boolean;
+                                            sharing_friction_payload: null;
+                                        };
+                                        timeline_pinned_user_ids: null[];
+                                        has_translation: boolean;
+                                        original_media_has_visual_reply_media: boolean;
+                                        coauthor_producers: null[];
+                                        coauthor_producer_can_see_organic_insights: boolean;
+                                        invited_coauthor_producers: null[];
+                                        is_in_profile_grid: boolean;
+                                        profile_grid_control_enabled: boolean;
+                                        image_versions2: {
+                                            candidates: {
+                                                estimated_scans_sizes: number[];
+                                                height: number;
+                                                scans_profile: string;
+                                                url: string;
+                                                width: number;
+                                            }[];
+                                        };
+                                        original_width: number;
+                                        original_height: number;
+                                        product_type: string;
+                                        is_paid_partnership: boolean;
+                                        music_metadata: null;
+                                        organic_tracking_token: string;
+                                        ig_media_sharing_disabled: boolean;
+                                        crosspost_metadata: {
+                                            fb_downstream_use_xpost_metadata: {
+                                                downstream_use_xpost_deny_reason: string;
+                                            };
+                                        };
+                                        boost_unavailable_identifier: null;
+                                        boost_unavailable_reason: null;
+                                        boost_unavailable_reason_v2: null;
+                                        is_cutout_sticker_allowed: boolean;
+                                        cutout_sticker_info: null[];
+                                        can_hype: boolean;
+                                        gen_ai_detection_method: {
+                                            detection_method: string;
+                                        };
+                                        fb_aggregated_like_count: number;
+                                        fb_aggregated_comment_count: number;
+                                        has_high_risk_gen_ai_inform_treatment: boolean;
+                                        open_carousel_show_follow_button: boolean;
+                                        is_tagged_media_shared_to_viewer_profile_grid: boolean;
+                                        should_show_author_pog_for_tagged_media_shared_to_profile_grid: boolean;
+                                        is_open_to_public_submission: boolean;
+                                        media_attributions_data: null[];
+                                        archive_story_deletion_ts: number;
+                                        can_send_prompt: boolean;
+                                        is_first_take: boolean;
+                                        is_from_discovery_surface: boolean;
+                                        is_rollcall_v2: boolean;
+                                        supports_reel_reactions: boolean;
+                                        is_photo_mash_story: boolean;
+                                        can_play_spotify_audio: boolean;
+                                        is_superlative: boolean;
+                                        show_one_tap_fb_share_tooltip: boolean;
+                                        can_reply: boolean;
+                                        is_viewer_mentioned: boolean;
+                                        user: {
+                                            pk: number;
+                                            is_private: boolean;
+                                            id: string;
+                                            strong_id__: string;
+                                        };
+                                        can_reshare: boolean;
+                                        story_feed_media?: {
+                                            end_time_ms: number;
+                                            height: number;
+                                            is_fb_sticker: number;
+                                            is_hidden: number;
+                                            is_pinned: number;
+                                            is_sticker: number;
+                                            media_code: string;
+                                            media_compound_str: string;
+                                            media_id: string;
+                                            product_type: string;
+                                            rotation: number;
+                                            start_time_ms: number;
+                                            tap_landing_id: string;
+                                            uncapped_height_ratio: number;
+                                            uncapped_width_ratio: number;
+                                            width: number;
+                                            x: number;
+                                            y: number;
+                                            z: number;
+                                            clips_creation_entry_point?: string;
+                                            should_mute_audio?: boolean;
+                                        }[];
+                                        commenting_disabled_for_viewer?: boolean;
+                                        is_dash_eligible?: number;
+                                        video_dash_manifest?: string;
+                                        video_codec?: string;
+                                        number_of_qualities?: number;
+                                        video_versions?: {
+                                            bandwidth: number;
+                                            height: number;
+                                            id: string;
+                                            type: number;
+                                            url: string;
+                                            width: number;
+                                        }[];
+                                        video_duration?: number;
+                                        has_audio?: boolean;
+                                        reel_mentions?: {
+                                            display_type: string;
+                                            end_time_ms: number;
+                                            height: number;
+                                            is_fb_sticker: number;
+                                            is_hidden: number;
+                                            is_pinned: number;
+                                            is_sticker: number;
+                                            rotation: number;
+                                            start_time_ms: number;
+                                            user: {
+                                                pk: number;
+                                                pk_id: string;
+                                                full_name: string;
+                                                is_private: boolean;
+                                                strong_id__: string;
+                                                id: string;
+                                                username: string;
+                                                is_verified: boolean;
+                                                profile_pic_id: string;
+                                                profile_pic_url: string;
+                                            };
+                                            width: number;
+                                            x: number;
+                                            y: number;
+                                            z: number;
+                                        }[];
+                                        story_link_stickers?: {
+                                            end_time_ms: number;
+                                            height: number;
+                                            is_fb_sticker: number;
+                                            is_hidden: number;
+                                            is_pinned: number;
+                                            is_sticker: number;
+                                            rotation: number;
+                                            start_time_ms: number;
+                                            width: number;
+                                            x: number;
+                                            y: number;
+                                            z: number;
+                                            story_link: {
+                                                click_id: string;
+                                                display_url: string;
+                                                link_title: string;
+                                                link_type: string;
+                                                url: string;
+                                            };
+                                        }[];
+                                    }[];
+                                    is_nux: boolean;
+                                    prefetch_count: number;
+                                    media_count: number;
+                                    media_ids: number[];
+                                    is_cacheable: boolean;
+                                    disabled_reply_types: string[];
+                                    is_archived: boolean;
+                                };
+                            };
+                            status: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -29908,7 +30446,11 @@ export interface components {
                     item_id: string;
                     timestamp: string;
                     created_at: string;
-                    shh_seen_state: Record<string, never>;
+                    shh_seen_state: {
+                        item_id?: string;
+                        timestamp?: string;
+                        created_at?: string;
+                    };
                     disappearing_messages_seen_state?: {
                         item_id: string;
                         timestamp: string;
@@ -30352,6 +30894,10 @@ export interface components {
             reactions_muted?: boolean;
             most_recent_polls?: null[];
             seen_count?: number;
+            persistent_menu?: {
+                postback_items: null[];
+                url_items: null[];
+            };
         };
         ThreadItem: {
             item_id: string;
@@ -30470,6 +31016,7 @@ export interface components {
                 preview_layout_type: number;
                 view_mode?: null;
                 view_count?: null;
+                target_expiry_timestamp_ms?: number;
             }[];
             message_item_type?: string;
             text?: string;
@@ -30937,6 +31484,69 @@ export interface components {
                     replay_expiring_at_us: number;
                     reply_type: null;
                 };
+                media?: {
+                    id: number;
+                    image_versions2: {
+                        candidates: {
+                            width: number;
+                            height: number;
+                            url: string;
+                            scans_profile: string | null;
+                            fallback: {
+                                url: string;
+                            };
+                            url_expiration_timestamp_us: number;
+                        }[];
+                    };
+                    original_width: number;
+                    original_height: number;
+                    media_type: number;
+                    user: {
+                        id: string;
+                        strong_id__: string;
+                        pk: number;
+                        pk_id: string;
+                        full_name: string;
+                        username: string;
+                        short_name: string;
+                        profile_pic_url: string;
+                        is_verified: boolean;
+                        interop_messaging_user_fbid: number;
+                        fbid_v2: number;
+                        has_ig_profile: boolean;
+                        interop_user_type: number;
+                        is_using_unified_inbox_for_direct: boolean;
+                        is_private: boolean;
+                        is_creator_agent_enabled: boolean;
+                        is_creator_automated_response_enabled: boolean;
+                        friendship_status: {
+                            blocking: boolean;
+                            is_messaging_only_blocking: boolean;
+                            is_messaging_pseudo_blocking: boolean;
+                            is_unavailable: boolean;
+                        };
+                        is_shared_account: boolean;
+                        is_shared_account_with_messaging_access: boolean;
+                        ai_agent_banner_type: null;
+                        is_eligible_for_ai_bot_group_chats: boolean;
+                    };
+                    video_versions?: {
+                        id: string;
+                        type: number;
+                        width: number;
+                        height: number;
+                        url: string;
+                        fallback: {
+                            url: string;
+                        };
+                        url_expiration_timestamp_us: number;
+                        bandwidth: number;
+                    }[];
+                    video_duration?: number;
+                    video_dash_manifest?: string;
+                    is_dash_eligible?: number;
+                };
+                is_edit_with_ai_eligible?: boolean;
             };
             media?: {
                 id: number;
@@ -31035,7 +31645,7 @@ export interface components {
                 group_name: null;
                 preview_media_fbid: number | null;
                 target_url: string | null;
-                ig_template_type: null;
+                ig_template_type: string | null;
                 playable_width: number | null;
                 playable_height: number | null;
                 playable_url: null;
@@ -31062,7 +31672,7 @@ export interface components {
                 } | null;
                 video_dash_manifest: null;
                 preview_image_decoration_type: number | null;
-                is_sharable?: boolean;
+                is_sharable?: boolean | null;
                 original_image_width?: number;
                 original_image_height?: number;
                 image_versions2?: {
@@ -31089,7 +31699,7 @@ export interface components {
                     };
                     url_expiration_timestamp_us: number;
                 }[] | null;
-                is_quoted?: boolean;
+                is_quoted?: boolean | null;
                 is_borderless?: boolean | null;
                 verified_type?: null;
                 sticker_type?: string | null;
@@ -31110,11 +31720,13 @@ export interface components {
                 quoted_author_verified_type?: null;
                 attachment_id?: string;
                 should_refresh?: boolean;
-                audio_segment_start_time_ms?: null;
-                audio_segment_duration_ms?: null;
+                audio_segment_start_time_ms?: number | null;
+                audio_segment_duration_ms?: number | null;
                 preview_extra_urls_info?: null;
                 preview_layout_type?: number;
                 target_expiry_timestamp_ms?: number;
+                view_mode?: null;
+                view_count?: null;
             }[];
             bot_metadata?: {
                 response_id: string;
@@ -31363,6 +31975,119 @@ export interface components {
                 timestamp: number;
             }[];
             like?: string;
+            placeholder?: {
+                is_linked: boolean;
+                title: string;
+                message: string;
+                reason: null;
+                metadata: null;
+            };
+            xma_link?: {
+                preview_url: string;
+                preview_url_info: {
+                    url: string;
+                    width: number;
+                    height: number;
+                };
+                header_title_text: null;
+                title_text: string;
+                subtitle_text: string;
+                target_url: string;
+                xma_layout_type: number;
+                preview_layout_type: number;
+                is_sharable: boolean;
+                header_icon_url: null;
+                header_icon_url_info: null;
+                header_subtitle_text: null;
+                preview_media_fbid: null;
+                preview_url_mime_type: null;
+                xma_template_type: null;
+                subtitle_decoration_type: null;
+                bottom_icon_url: string;
+            }[];
+            animated_emojis_character_info?: {
+                offset: number;
+                length: number;
+            }[];
+            voice_media?: {
+                media: {
+                    id: string;
+                    media_type: number;
+                    product_type: string;
+                    user: {
+                        id: string;
+                        strong_id__: string;
+                        pk: number;
+                        pk_id: string;
+                        full_name: string;
+                        username: string;
+                        short_name: string;
+                        profile_pic_url: string;
+                        is_verified: boolean;
+                        interop_messaging_user_fbid: number;
+                        fbid_v2: number;
+                        has_ig_profile: boolean;
+                        interop_user_type: number;
+                        is_using_unified_inbox_for_direct: boolean;
+                        is_private: boolean;
+                        is_creator_agent_enabled: boolean;
+                        is_creator_automated_response_enabled: boolean;
+                        friendship_status: {
+                            blocking: boolean;
+                            is_messaging_pseudo_blocking: boolean;
+                            is_viewer_unconnected: null;
+                            is_private: boolean;
+                            is_bestie: boolean;
+                            is_feed_favorite: boolean;
+                            is_restricted: boolean;
+                            following: boolean;
+                            followed_by: boolean;
+                            outgoing_request: boolean;
+                            incoming_request: boolean;
+                            muting: boolean;
+                        };
+                        is_shared_account: boolean;
+                        is_shared_account_with_messaging_access: boolean;
+                        ai_agent_banner_type: null;
+                        is_eligible_for_ai_bot_group_chats: boolean;
+                    };
+                    audio: {
+                        audio_src: string;
+                        duration: number;
+                        audio_src_expiration_timestamp_us: number;
+                        waveform_data: number[];
+                        waveform_sampling_frequency_hz: number;
+                        fallback: {
+                            audio_src: string;
+                        };
+                    };
+                    organic_tracking_token: string;
+                };
+                seen_user_ids: null[];
+                seen_count: number;
+                is_shh_mode: boolean;
+                view_mode: string;
+                replay_expiring_at_us: null;
+            };
+            reels_audio_share?: {
+                attachment_index: number;
+                xma_layout_type: number;
+                header_title_text: string;
+                header_subtitle_text: string;
+                preview_layout_type: number;
+                preview_extra_urls_info: {
+                    url: string;
+                }[];
+                target_url: string;
+                accessibility_summary_text: string;
+                accessibility_summary_hint: string;
+                is_sharable: boolean;
+                header_icon_url_info: {
+                    url: string;
+                    width: number;
+                    height: number;
+                };
+            }[];
         };
     };
     responses: never;
