@@ -126,69 +126,62 @@ async function mitmFlowToAutogenFlow(flow: MitmFlow): Promise<AutogenFlow> {
   };
 }
 
-async function processReadlineStream(
-  rl: readline.Interface,
-  eventEmitter: EventEmitter<AutogenReaderEventMap>,
-) {
-  let linesRead = 0;
-
-  for await (const line of rl) {
-    linesRead++;
-
-    let parsedJson;
-    try {
-      parsedJson = JSON.parse(line);
-    } catch (err) {
-      eventEmitter.emit(
-        "error",
-        new Error(`Failed to parse MiTM flow JSON at line ${linesRead}`, {
-          cause: err as Error,
-        }),
-      );
-      continue;
-    }
-
-    const parsedFlowResult = mitmFlowJsonSchema.safeParse(parsedJson);
-    if (!parsedFlowResult.success) {
-      eventEmitter.emit(
-        "error",
-        new Error(`Failed to parse MiTM flow JSON at line ${linesRead}`, {
-          cause: parsedFlowResult.error,
-        }),
-      );
-      continue;
-    }
-
-    let autogenFlow;
-    try {
-      autogenFlow = await mitmFlowToAutogenFlow(parsedFlowResult.data);
-    } catch (err) {
-      eventEmitter.emit(
-        "error",
-        new Error(`Failed to parse MiTM flow at line ${linesRead}`, {
-          cause: err as Error,
-        }),
-      );
-      continue;
-    }
-
-    eventEmitter.emit("read", autogenFlow);
-  }
-}
-
 export function createMitmJsonReader(filePath: string): AutogenReader {
   const eventEmitter = new EventEmitter<AutogenReaderEventMap>();
 
   const fileStream = fs.createReadStream(filePath);
   const rl = readline.createInterface({ input: fileStream });
 
-  processReadlineStream(rl, eventEmitter)
-    .catch((err) => {
-      eventEmitter.emit("error", err);
-    })
-    .then(() => {
-      eventEmitter.emit("complete");
-    });
+  let linesRead = 0;
+
+  const processStream = async () => {
+    for await (const line of rl) {
+      linesRead++;
+
+      let parsedJson;
+      try {
+        parsedJson = JSON.parse(line);
+      } catch (err) {
+        eventEmitter.emit(
+          "error",
+          new Error(`Failed to parse MiTM flow JSON at line ${linesRead}`, {
+            cause: err as Error,
+          }),
+        );
+        continue;
+      }
+
+      const parsedFlowResult = mitmFlowJsonSchema.safeParse(parsedJson);
+      if (!parsedFlowResult.success) {
+        eventEmitter.emit(
+          "error",
+          new Error(`Failed to parse MiTM flow JSON at line ${linesRead}`, {
+            cause: parsedFlowResult.error,
+          }),
+        );
+        continue;
+      }
+
+      let autogenFlow;
+      try {
+        autogenFlow = await mitmFlowToAutogenFlow(parsedFlowResult.data);
+      } catch (err) {
+        eventEmitter.emit(
+          "error",
+          new Error(`Failed to parse MiTM flow at line ${linesRead}`, {
+            cause: err as Error,
+          }),
+        );
+        continue;
+      }
+
+      eventEmitter.emit("read", autogenFlow);
+    }
+  };
+
+  processStream()
+    .catch((err) => eventEmitter.emit("error", err))
+    .finally(() => eventEmitter.emit("complete"));
 
   return eventEmitter;
 }

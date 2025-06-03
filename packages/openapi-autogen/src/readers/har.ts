@@ -126,12 +126,12 @@ export function createHarReader(filePath: string): AutogenReader {
 
   const fileStream = fs.createReadStream(filePath, "utf-8");
 
-  let data = "";
-  fileStream.on("data", (chunk) => {
-    data += chunk;
-  });
+  const processStream = async () => {
+    let data = "";
+    for await (const chunk of fileStream) {
+      data += chunk;
+    }
 
-  fileStream.on("end", () => {
     const parsedData = harDataSchema.parse(JSON.parse(data));
 
     for (const entry of parsedData.log.entries) {
@@ -144,7 +144,11 @@ export function createHarReader(filePath: string): AutogenReader {
     }
 
     eventEmitter.emit("complete");
-  });
+  };
+
+  processStream()
+    .catch((err) => eventEmitter.emit("error", err))
+    .finally(() => eventEmitter.emit("complete"));
 
   return eventEmitter;
 }
