@@ -20,6 +20,7 @@ export const BLOKS_IS_LAYOUT_RTL = "false";
 
 export const CONNECTION_TYPE = "WIFI";
 export const CAPABILITIES_HEADER = "3brTv70=";
+export const SALT_IDS_HEADER = "220140399,332020310,974466465,974460658";
 export const TIMEZONE_OFFSET = "28800";
 
 export const PIGEON_SESSION_ID_LIFETIME = 60 * 60 * 1000;

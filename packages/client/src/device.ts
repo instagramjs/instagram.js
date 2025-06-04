@@ -13,6 +13,7 @@ export type DeviceConfig = {
   phoneId: string;
   deviceId: string;
   androidId: string;
+  familyDeviceId: string;
   adId: string;
 };
 
@@ -21,6 +22,7 @@ export function generateDeviceConfig(
   overrides?: Partial<DeviceConfig>,
 ): DeviceConfig {
   const chance = new Chance(seed);
+  const androidId = chance.string({ pool: "abcdef0123456789", length: 16 });
   return {
     androidVersion: "13",
     androidRelease: "13",
@@ -33,7 +35,8 @@ export function generateDeviceConfig(
     uuid: chance.guid(),
     phoneId: chance.guid(),
     deviceId: chance.guid(),
-    androidId: `android-${chance.string({ pool: "abcdef0123456789", length: 16 })}`,
+    familyDeviceId: chance.guid(),
+    androidId: `android-${androidId}`,
     adId: chance.guid(),
     ...overrides,
   };

@@ -12,9 +12,11 @@ import {
   FB_ANALYTICS_APP_ID,
   LOCALE,
   PIGEON_SESSION_ID_LIFETIME,
+  SALT_IDS_HEADER,
   TIMEZONE_OFFSET,
 } from "~/const";
 import { type DeviceConfig } from "~/device";
+import { type ClientState } from "~/state";
 import { temporaryGuid } from "~/utils";
 
 export function generateUserAgent(deviceConfig: DeviceConfig) {
@@ -27,7 +29,10 @@ export function generateUserAgent(deviceConfig: DeviceConfig) {
   );
 }
 
-export function generateBaseHeaders(deviceConfig: DeviceConfig) {
+export function generateBaseHeaders(
+  clientState: ClientState,
+  deviceConfig: DeviceConfig,
+) {
   const pigeonSessionGuid = temporaryGuid(
     `pigeon-session-id${deviceConfig.deviceId}`,
     PIGEON_SESSION_ID_LIFETIME,
@@ -43,15 +48,17 @@ export function generateBaseHeaders(deviceConfig: DeviceConfig) {
     "x-ig-bandwidth-totalbytes-b": "0",
     "x-ig-bandwidth-totaltime-ms": "0",
     "x-bloks-version-id": BLOKS_VERSION_ID,
-    "x-ig-www-claim": "0",
+    "x-ig-www-claim": clientState.wwwClaim ?? "0",
     "x-bloks-prism-button-version": BLOKS_PRISM_BUTTON_VERSION,
     "x-bloks-prism-colors-enabled": BLOKS_PRISM_COLORS_ENABLED,
     "x-bloks-prism-ax-base-colors-enabled": BLOKS_PRISM_AX_BASE_COLORS_ENABLED,
     "x-bloks-prism-font-enabled": BLOKS_PRISM_FONT_ENABLED,
     "x-bloks-is-layout-rtl": BLOKS_IS_LAYOUT_RTL,
     "x-ig-device-id": deviceConfig.deviceId,
+    "x-ig-family-device-id": deviceConfig.familyDeviceId,
     "x-ig-android-id": deviceConfig.androidId,
     "x-ig-timezone-offset": TIMEZONE_OFFSET,
+    "x-ig-salt-ids": SALT_IDS_HEADER,
     "x-fb-connection-type": CONNECTION_TYPE,
     "x-ig-connection-type": CONNECTION_TYPE,
     "x-ig-capabilities": CAPABILITIES_HEADER,

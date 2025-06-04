@@ -1,18 +1,29 @@
 import { createInstagramBFetchClient } from "@instagramjs/openapi-clients";
 
-import zr from "~/api/zr";
+import { InstagramBAttestationApi } from "~/api/instagram-b/attestation";
+import { InstagramBZrApi } from "~/api/instagram-b/zr";
 import { generateDeviceConfig } from "~/device";
+import { createClientState } from "~/state";
 
 const USERNAME = "bradennss";
 
 async function main() {
+  const clientState = createClientState();
   const deviceConfig = generateDeviceConfig(USERNAME);
-
   const bFetchClient = createInstagramBFetchClient();
 
-  const dualTokens = await zr.getDualTokens(deviceConfig, bFetchClient);
+  const bZr = new InstagramBZrApi(clientState, deviceConfig, bFetchClient);
+  const bAttestation = new InstagramBAttestationApi(
+    clientState,
+    deviceConfig,
+    bFetchClient,
+  );
 
-  console.log(dualTokens);
+  console.log("b.zr.createDualTokens()", await bZr.createDualTokens());
+  console.log(
+    "b.attestation.createAndroidKeystore()",
+    await bAttestation.createAndroidKeystore(),
+  );
 }
 
 main();
