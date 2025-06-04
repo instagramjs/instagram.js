@@ -21,16 +21,15 @@ export interface paths {
                 query?: never;
                 header: {
                     "x-fb-request-analytics-tags": string;
-                    priority: string;
-                    "content-type": string;
-                    "x-fb-rmd"?: string;
-                    "content-length": string;
+                    priority?: string;
+                    "content-type"?: string;
+                    "x-fb-rmd": string;
                     "content-encoding": string;
                     "user-agent": string;
                     authorization: string;
                     "x-fb-friendly-name": string;
                     "x-tigon-is-retry": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -1353,19 +1352,18 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
-                        vary: string;
-                        "access-control-allow-origin": string;
+                        "content-type"?: string;
+                        vary?: string;
+                        "access-control-allow-origin"?: string;
                         "facebook-api-version": string;
-                        "strict-transport-security": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-fb-request-id": string;
                         "x-fb-trace-id": string;
                         "x-fb-rev": string;
                         "x-fb-debug": string;
-                        "content-length": string;
                         date: string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;

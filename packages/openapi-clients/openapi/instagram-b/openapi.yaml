@@ -16,7 +16,7 @@ paths:
             content-type:
               schema:
                 type: string
-              required: true
+              required: false
             date:
               schema:
                 type: string
@@ -24,7 +24,7 @@ paths:
             vary:
               schema:
                 type: string
-              required: true
+              required: false
             content-language:
               schema:
                 type: string
@@ -32,19 +32,19 @@ paths:
             strict-transport-security:
               schema:
                 type: string
-              required: true
+              required: false
             cache-control:
               schema:
                 type: string
-              required: true
+              required: false
             pragma:
               schema:
                 type: string
-              required: true
+              required: false
             expires:
               schema:
                 type: string
-              required: true
+              required: false
             x-frame-options:
               schema:
                 type: string
@@ -130,10 +130,6 @@ paths:
                 type: string
               required: true
             x-perf-stats:
-              schema:
-                type: string
-              required: true
-            content-length:
               schema:
                 type: string
               required: true
@@ -406,7 +402,7 @@ paths:
             type: string
         - name: accept-language
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-mid
@@ -421,17 +417,12 @@ paths:
             type: string
         - name: content-type
           in: header
-          required: true
-          schema:
-            type: string
-        - name: content-length
-          in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: accept-encoding
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-fb-http-engine
@@ -506,7 +497,7 @@ paths:
             content-type:
               schema:
                 type: string
-              required: true
+              required: false
             date:
               schema:
                 type: string
@@ -514,7 +505,7 @@ paths:
             vary:
               schema:
                 type: string
-              required: true
+              required: false
             content-language:
               schema:
                 type: string
@@ -522,19 +513,19 @@ paths:
             strict-transport-security:
               schema:
                 type: string
-              required: true
+              required: false
             cache-control:
               schema:
                 type: string
-              required: true
+              required: false
             pragma:
               schema:
                 type: string
-              required: true
+              required: false
             expires:
               schema:
                 type: string
-              required: true
+              required: false
             x-frame-options:
               schema:
                 type: string
@@ -616,10 +607,6 @@ paths:
                 type: string
               required: true
             x-perf-stats:
-              schema:
-                type: string
-              required: true
-            content-length:
               schema:
                 type: string
               required: true
@@ -800,7 +787,7 @@ paths:
             type: string
         - name: accept-language
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-mid
@@ -815,17 +802,12 @@ paths:
             type: string
         - name: content-type
           in: header
-          required: true
-          schema:
-            type: string
-        - name: content-length
-          in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: accept-encoding
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-fb-http-engine
@@ -876,7 +858,7 @@ paths:
             content-type:
               schema:
                 type: string
-              required: true
+              required: false
             date:
               schema:
                 type: string
@@ -884,7 +866,7 @@ paths:
             vary:
               schema:
                 type: string
-              required: true
+              required: false
             content-language:
               schema:
                 type: string
@@ -892,19 +874,19 @@ paths:
             strict-transport-security:
               schema:
                 type: string
-              required: true
+              required: false
             cache-control:
               schema:
                 type: string
-              required: true
+              required: false
             pragma:
               schema:
                 type: string
-              required: true
+              required: false
             expires:
               schema:
                 type: string
-              required: true
+              required: false
             x-frame-options:
               schema:
                 type: string
@@ -990,10 +972,6 @@ paths:
                 type: string
               required: true
             x-perf-stats:
-              schema:
-                type: string
-              required: true
-            content-length:
               schema:
                 type: string
               required: true
@@ -1198,7 +1176,7 @@ paths:
             type: string
         - name: priority
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: user-agent
@@ -1208,7 +1186,7 @@ paths:
             type: string
         - name: accept-language
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: authorization
@@ -1238,7 +1216,7 @@ paths:
             type: string
         - name: accept-encoding
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-fb-http-engine

@@ -44,19 +44,19 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -65,14 +65,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -95,7 +95,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -165,15 +164,14 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -197,14 +195,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -228,7 +226,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -292,17 +289,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -320,14 +316,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -349,7 +345,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -409,15 +404,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -429,14 +424,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -459,7 +454,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -538,17 +532,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -566,14 +559,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -596,7 +589,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -1392,17 +1384,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -1420,14 +1411,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -1450,7 +1441,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -1525,18 +1515,18 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
                     "x-ig-salt-ids": string;
-                    priority: string;
+                    priority?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -1545,14 +1535,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -1576,7 +1566,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -1787,13 +1776,13 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -1805,14 +1794,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -1835,7 +1824,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -1904,15 +1892,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -1924,14 +1912,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -1954,7 +1942,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -2045,17 +2032,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -2081,14 +2067,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -2112,7 +2098,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -2791,17 +2776,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -2829,14 +2813,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -3537,17 +3521,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -3565,14 +3548,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -3595,7 +3578,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -3670,15 +3652,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -3690,14 +3672,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -3720,7 +3702,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -4187,20 +4168,20 @@ export interface paths {
                     "x-ig-android-id": string;
                     "x-ig-timezone-offset": string;
                     "x-ig-nav-chain": string;
-                    "x-ig-salt-ids"?: string;
+                    "x-ig-salt-ids": string;
                     "x-fb-connection-type": string;
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -4212,14 +4193,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -4242,7 +4223,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -5081,17 +5061,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -5112,14 +5091,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -5198,15 +5177,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -5218,14 +5197,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -5248,7 +5227,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -5317,17 +5295,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -5345,14 +5322,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -5375,7 +5352,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -5439,15 +5415,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -5459,14 +5435,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -5490,7 +5466,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -5696,15 +5671,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -5717,14 +5692,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -5746,7 +5721,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -5811,15 +5785,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -5831,14 +5805,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -5860,7 +5834,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -5924,15 +5897,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -5944,14 +5917,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -5974,7 +5947,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -6502,17 +6474,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -6530,14 +6501,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -6560,7 +6531,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -6630,13 +6600,13 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -6650,14 +6620,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -6680,7 +6650,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -6754,20 +6723,20 @@ export interface paths {
                     "x-ig-android-id": string;
                     "x-ig-timezone-offset": string;
                     "x-ig-nav-chain": string;
-                    "x-ig-salt-ids"?: string;
+                    "x-ig-salt-ids": string;
                     "x-fb-connection-type": string;
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -6779,14 +6748,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -6808,7 +6777,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -6876,13 +6844,13 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -6895,9 +6863,9 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        vary: string;
+                        vary?: string;
                         "content-encoding": string;
-                        "content-type": string;
+                        "content-type"?: string;
                         "reporting-endpoints": string;
                         "report-to": string;
                         "content-security-policy": string;
@@ -6906,14 +6874,14 @@ export interface paths {
                         "cross-origin-resource-policy": string;
                         "cross-origin-embedder-policy": string;
                         "cross-origin-opener-policy": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
                         "origin-agent-cluster": string;
-                        "strict-transport-security": string;
+                        "strict-transport-security"?: string;
                         "x-stack": string;
                         "x-fb-debug": string;
                         date: string;
@@ -6986,13 +6954,13 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -7004,9 +6972,9 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        vary: string;
+                        vary?: string;
                         "content-encoding": string;
-                        "content-type": string;
+                        "content-type"?: string;
                         "reporting-endpoints": string;
                         "report-to": string;
                         "content-security-policy": string;
@@ -7015,14 +6983,14 @@ export interface paths {
                         "cross-origin-resource-policy": string;
                         "cross-origin-embedder-policy": string;
                         "cross-origin-opener-policy": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
                         "origin-agent-cluster": string;
-                        "strict-transport-security": string;
+                        "strict-transport-security"?: string;
                         "x-stack": string;
                         "x-fb-debug": string;
                         date: string;
@@ -7101,13 +7069,13 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -7120,9 +7088,9 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        vary: string;
+                        vary?: string;
                         "content-encoding": string;
-                        "content-type": string;
+                        "content-type"?: string;
                         "reporting-endpoints": string;
                         "report-to": string;
                         "content-security-policy": string;
@@ -7131,14 +7099,14 @@ export interface paths {
                         "cross-origin-resource-policy": string;
                         "cross-origin-embedder-policy": string;
                         "cross-origin-opener-policy": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
                         "origin-agent-cluster": string;
-                        "strict-transport-security": string;
+                        "strict-transport-security"?: string;
                         "x-stack": string;
                         "x-fb-debug": string;
                         date: string;
@@ -7209,19 +7177,19 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -7230,14 +7198,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -7260,7 +7228,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -7306,9 +7273,9 @@ export interface paths {
                     push_disabled?: string;
                     is_prefetching: string;
                     fetch_reason: string;
-                    cursor: string;
-                    direction: string;
-                    seq_id: string;
+                    cursor?: string;
+                    direction?: string;
+                    seq_id?: string;
                 };
                 header: {
                     "x-ig-app-locale": string;
@@ -7340,13 +7307,13 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -7360,9 +7327,9 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        vary: string;
+                        vary?: string;
                         "content-encoding": string;
-                        "content-type": string;
+                        "content-type"?: string;
                         "reporting-endpoints": string;
                         "report-to": string;
                         "content-security-policy": string;
@@ -7371,14 +7338,14 @@ export interface paths {
                         "cross-origin-resource-policy": string;
                         "cross-origin-embedder-policy": string;
                         "cross-origin-opener-policy": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
                         "origin-agent-cluster": string;
-                        "strict-transport-security": string;
+                        "strict-transport-security"?: string;
                         "x-stack": string;
                         "x-fb-debug": string;
                         date: string;
@@ -7492,15 +7459,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -7512,14 +7479,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -7543,7 +7510,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -7653,15 +7619,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -7673,9 +7639,9 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        vary: string;
+                        vary?: string;
                         "content-encoding": string;
-                        "content-type": string;
+                        "content-type"?: string;
                         "reporting-endpoints": string;
                         "report-to": string;
                         "content-security-policy": string;
@@ -7684,14 +7650,14 @@ export interface paths {
                         "cross-origin-resource-policy": string;
                         "cross-origin-embedder-policy": string;
                         "cross-origin-opener-policy": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
                         "origin-agent-cluster": string;
-                        "strict-transport-security": string;
+                        "strict-transport-security"?: string;
                         "x-stack": string;
                         "x-fb-debug": string;
                         date: string;
@@ -7871,15 +7837,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -7891,9 +7857,9 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        vary: string;
+                        vary?: string;
                         "content-encoding": string;
-                        "content-type": string;
+                        "content-type"?: string;
                         "reporting-endpoints": string;
                         "report-to": string;
                         "content-security-policy": string;
@@ -7902,14 +7868,14 @@ export interface paths {
                         "cross-origin-resource-policy": string;
                         "cross-origin-embedder-policy": string;
                         "cross-origin-opener-policy": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
                         "origin-agent-cluster": string;
-                        "strict-transport-security": string;
+                        "strict-transport-security"?: string;
                         "x-stack": string;
                         "x-fb-debug": string;
                         date: string;
@@ -7993,15 +7959,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -8013,14 +7979,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -8044,7 +8010,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -8157,13 +8122,13 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -8179,9 +8144,9 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        vary: string;
+                        vary?: string;
                         "content-encoding": string;
-                        "content-type": string;
+                        "content-type"?: string;
                         "reporting-endpoints": string;
                         "report-to": string;
                         "content-security-policy": string;
@@ -8190,14 +8155,14 @@ export interface paths {
                         "cross-origin-resource-policy": string;
                         "cross-origin-embedder-policy": string;
                         "cross-origin-opener-policy": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
                         "origin-agent-cluster": string;
-                        "strict-transport-security": string;
+                        "strict-transport-security"?: string;
                         "x-stack": string;
                         "x-fb-debug": string;
                         date: string;
@@ -8262,17 +8227,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -8293,14 +8257,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -8322,7 +8286,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -8378,22 +8341,21 @@ export interface paths {
                     "x-ig-android-id": string;
                     "x-ig-timezone-offset": string;
                     "x-ig-nav-chain": string;
-                    "x-ig-salt-ids"?: string;
+                    "x-ig-salt-ids": string;
                     "x-fb-connection-type": string;
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -8417,9 +8379,9 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        vary: string;
+                        vary?: string;
                         "content-encoding": string;
-                        "content-type": string;
+                        "content-type"?: string;
                         "reporting-endpoints": string;
                         "report-to": string;
                         "content-security-policy": string;
@@ -8428,14 +8390,14 @@ export interface paths {
                         "cross-origin-resource-policy": string;
                         "cross-origin-embedder-policy": string;
                         "cross-origin-opener-policy": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
                         "origin-agent-cluster": string;
-                        "strict-transport-security": string;
+                        "strict-transport-security"?: string;
                         "x-stack": string;
                         "x-fb-debug": string;
                         date: string;
@@ -8499,17 +8461,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -8531,9 +8492,9 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        vary: string;
+                        vary?: string;
                         "content-encoding": string;
-                        "content-type": string;
+                        "content-type"?: string;
                         "reporting-endpoints": string;
                         "report-to": string;
                         "content-security-policy": string;
@@ -8542,14 +8503,14 @@ export interface paths {
                         "cross-origin-resource-policy": string;
                         "cross-origin-embedder-policy": string;
                         "cross-origin-opener-policy": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
                         "origin-agent-cluster": string;
-                        "strict-transport-security": string;
+                        "strict-transport-security"?: string;
                         "x-stack": string;
                         "x-fb-debug": string;
                         date: string;
@@ -8612,17 +8573,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -8643,14 +8603,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -8673,7 +8633,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -8738,15 +8697,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -8760,14 +8719,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -8789,7 +8748,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -8853,17 +8811,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -8884,16 +8841,16 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
                         "x-instagram-trace-enabled": string;
                         "x-instagram-trace-token": string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -8916,7 +8873,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -8977,17 +8933,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -9014,14 +8969,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -9044,7 +8999,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -9111,17 +9065,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -9153,9 +9106,9 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        vary: string;
+                        vary?: string;
                         "content-encoding": string;
-                        "content-type": string;
+                        "content-type"?: string;
                         "reporting-endpoints": string;
                         "report-to": string;
                         "content-security-policy": string;
@@ -9164,14 +9117,14 @@ export interface paths {
                         "cross-origin-resource-policy": string;
                         "cross-origin-embedder-policy": string;
                         "cross-origin-opener-policy": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
                         "origin-agent-cluster": string;
-                        "strict-transport-security": string;
+                        "strict-transport-security"?: string;
                         "x-stack": string;
                         "x-fb-debug": string;
                         date: string;
@@ -9239,22 +9192,21 @@ export interface paths {
                     "x-ig-android-id": string;
                     "x-ig-timezone-offset": string;
                     "x-ig-nav-chain": string;
-                    "x-ig-salt-ids"?: string;
+                    "x-ig-salt-ids": string;
                     "x-fb-connection-type": string;
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -9266,7 +9218,6 @@ export interface paths {
                 content: {
                     "application/x-www-form-urlencoded": {
                         inventory_source: string;
-                        carousel_share_child_media_id: string;
                         action: string;
                         is_x_transport_forward: string;
                         is_shh_mode: string;
@@ -9286,9 +9237,9 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        vary: string;
+                        vary?: string;
                         "content-encoding": string;
-                        "content-type": string;
+                        "content-type"?: string;
                         "reporting-endpoints": string;
                         "report-to": string;
                         "content-security-policy": string;
@@ -9297,14 +9248,14 @@ export interface paths {
                         "cross-origin-resource-policy": string;
                         "cross-origin-embedder-policy": string;
                         "cross-origin-opener-policy": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
                         "origin-agent-cluster": string;
-                        "strict-transport-security": string;
+                        "strict-transport-security"?: string;
                         "x-stack": string;
                         "x-fb-debug": string;
                         date: string;
@@ -9375,17 +9326,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -9417,9 +9367,9 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        vary: string;
+                        vary?: string;
                         "content-encoding": string;
-                        "content-type": string;
+                        "content-type"?: string;
                         "reporting-endpoints": string;
                         "report-to": string;
                         "content-security-policy": string;
@@ -9428,14 +9378,14 @@ export interface paths {
                         "cross-origin-resource-policy": string;
                         "cross-origin-embedder-policy": string;
                         "cross-origin-opener-policy": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
                         "origin-agent-cluster": string;
-                        "strict-transport-security": string;
+                        "strict-transport-security"?: string;
                         "x-stack": string;
                         "x-fb-debug": string;
                         date: string;
@@ -9506,17 +9456,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -9543,14 +9492,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -9573,7 +9522,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -9643,17 +9591,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -9671,9 +9618,9 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        vary: string;
+                        vary?: string;
                         "content-encoding": string;
-                        "content-type": string;
+                        "content-type"?: string;
                         "reporting-endpoints": string;
                         "report-to": string;
                         "content-security-policy": string;
@@ -9682,14 +9629,14 @@ export interface paths {
                         "cross-origin-resource-policy": string;
                         "cross-origin-embedder-policy": string;
                         "cross-origin-opener-policy": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
                         "origin-agent-cluster": string;
-                        "strict-transport-security": string;
+                        "strict-transport-security"?: string;
                         "x-stack": string;
                         "x-fb-debug": string;
                         date: string;
@@ -9760,17 +9707,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -9802,9 +9748,9 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        vary: string;
+                        vary?: string;
                         "content-encoding": string;
-                        "content-type": string;
+                        "content-type"?: string;
                         "reporting-endpoints": string;
                         "report-to": string;
                         "content-security-policy": string;
@@ -9813,14 +9759,14 @@ export interface paths {
                         "cross-origin-resource-policy": string;
                         "cross-origin-embedder-policy": string;
                         "cross-origin-opener-policy": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
                         "origin-agent-cluster": string;
-                        "strict-transport-security": string;
+                        "strict-transport-security"?: string;
                         "x-stack": string;
                         "x-fb-debug": string;
                         date: string;
@@ -9891,17 +9837,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -9932,9 +9877,9 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        vary: string;
+                        vary?: string;
                         "content-encoding": string;
-                        "content-type": string;
+                        "content-type"?: string;
                         "reporting-endpoints": string;
                         "report-to": string;
                         "content-security-policy": string;
@@ -9943,14 +9888,14 @@ export interface paths {
                         "cross-origin-resource-policy": string;
                         "cross-origin-embedder-policy": string;
                         "cross-origin-opener-policy": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
                         "origin-agent-cluster": string;
-                        "strict-transport-security": string;
+                        "strict-transport-security"?: string;
                         "x-stack": string;
                         "x-fb-debug": string;
                         date: string;
@@ -10025,15 +9970,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -10045,14 +9990,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -10075,7 +10020,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -10140,15 +10084,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -10160,14 +10104,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -10190,7 +10134,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -10276,15 +10219,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -10296,16 +10239,16 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
                         "x-instagram-trace-enabled": string;
                         "x-instagram-trace-token": string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -10328,7 +10271,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -10490,17 +10432,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -10521,14 +10462,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -10551,7 +10492,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -10672,15 +10612,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -10693,14 +10633,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -10723,7 +10663,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -12348,15 +12287,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -12368,14 +12307,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -12397,7 +12336,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -12463,15 +12401,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -12483,14 +12421,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -12513,7 +12451,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -12585,15 +12522,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -12605,14 +12542,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -12634,7 +12571,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -12694,15 +12630,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -12714,14 +12650,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -12744,7 +12680,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -12813,15 +12748,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -12833,14 +12768,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -12863,7 +12798,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -12966,17 +12900,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -12996,14 +12929,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -13026,7 +12959,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -13091,15 +13023,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -13111,14 +13043,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -13205,15 +13137,14 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -13233,14 +13164,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -13263,7 +13194,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -13360,16 +13290,15 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
+                    "content-type"?: string;
                     "content-encoding": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -13389,15 +13318,15 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         elapsed_time_in_ms: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -13420,7 +13349,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -16142,22 +16070,21 @@ export interface paths {
                     "x-ig-android-id": string;
                     "x-ig-timezone-offset": string;
                     "x-ig-nav-chain": string;
-                    "x-ig-salt-ids"?: string;
+                    "x-ig-salt-ids": string;
                     "x-fb-connection-type": string;
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -16176,14 +16103,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -16206,7 +16133,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -16268,17 +16194,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -16297,14 +16222,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -16737,15 +16662,14 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -16758,27 +16682,27 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/x-www-form-urlencoded": {
-                        supported_capabilities_new: string;
                         reason: string;
                         timezone_offset: string;
                         tray_session_id: string;
                         request_id: string;
                         _uuid: string;
                         page_size: string;
+                        reel_tray_impressions: string;
                     };
                 };
             };
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -16807,7 +16731,6 @@ export interface paths {
                         "x-fb-server-cluster-forwarded": string;
                         "alt-svc": string;
                         "x-fb-connection-quality": string;
-                        "content-length"?: string;
                         [name: string]: unknown;
                     };
                     content: {
@@ -17318,7 +17241,7 @@ export interface paths {
                     "x-ig-timezone-offset": string;
                     "x-ig-nav-chain"?: string;
                     "x-ig-client-endpoint"?: string;
-                    "x-ig-salt-ids"?: string;
+                    "x-ig-salt-ids": string;
                     "x-fb-session-id"?: string;
                     "x-fb-session-private"?: string;
                     "x-fb-connection-type": string;
@@ -17327,16 +17250,15 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
+                    "content-type"?: string;
                     "content-encoding": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -17350,19 +17272,21 @@ export interface paths {
                 content: {
                     "application/x-www-form-urlencoded": {
                         has_camera_permission: string;
+                        ad_and_netego_realtime_information: string;
                         feed_view_info: string;
                         organic_realtime_information: string;
                         phone_id: string;
+                        max_id: string;
                         client_view_state_media_list: string;
                         reason: string;
-                        last_head_load_time_ms: string;
                         battery_level: string;
                         timezone_offset: string;
+                        feed_comment_button_tap_info: string;
                         device_id: string;
                         request_id: string;
                         is_pull_to_refresh: string;
                         _uuid: string;
-                        new_posts_pill_type: string;
+                        feed_reshare_info: string;
                         is_charging: string;
                         is_dark_mode: string;
                         will_sound_on: string;
@@ -17374,14 +17298,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -17410,7 +17334,6 @@ export interface paths {
                         "x-fb-server-cluster-forwarded": string;
                         "alt-svc": string;
                         "x-fb-connection-quality": string;
-                        "content-length"?: string;
                         "x-instagram-trace-enabled"?: string;
                         "x-instagram-trace-token"?: string;
                         [name: string]: unknown;
@@ -19788,17 +19711,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -19819,14 +19741,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -19908,15 +19830,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -19931,14 +19853,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -19962,7 +19884,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -20823,13 +20744,13 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -20845,14 +20766,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -20875,7 +20796,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -21332,14 +21252,14 @@ export interface paths {
                 };
                 400: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -21362,7 +21282,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "proxy-status": string;
                         "x-fb-client-ip-forwarded": string;
@@ -21426,15 +21345,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -21448,14 +21367,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -21479,7 +21398,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -21568,17 +21486,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -21598,14 +21515,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -21628,7 +21545,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -21702,17 +21618,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -21732,14 +21647,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -21763,7 +21678,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -21838,17 +21752,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -21868,14 +21781,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -21899,7 +21812,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -21975,13 +21887,13 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -21993,14 +21905,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -22023,7 +21935,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -22091,17 +22002,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -22119,14 +22029,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -22148,7 +22058,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -22211,17 +22120,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -22239,14 +22147,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -22270,7 +22178,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -22346,17 +22253,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -22376,14 +22282,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -22406,7 +22312,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -22480,17 +22385,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -22508,14 +22412,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -22539,7 +22443,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -22612,17 +22515,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -22642,14 +22544,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -22673,7 +22575,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -22701,14 +22602,14 @@ export interface paths {
                 };
                 400: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -22731,7 +22632,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "proxy-status": string;
                         "x-fb-client-ip-forwarded": string;
@@ -22793,15 +22693,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -22815,14 +22715,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -22846,7 +22746,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -22931,15 +22830,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -22951,14 +22850,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -22981,7 +22880,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -23062,15 +22960,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -23082,14 +22980,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -23112,7 +23010,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -23194,15 +23091,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -23214,14 +23111,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -23244,7 +23141,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -23326,15 +23222,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -23346,14 +23242,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -23376,7 +23272,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -23457,15 +23352,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -23477,14 +23372,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -23507,7 +23402,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -23608,15 +23502,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -23628,14 +23522,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -23658,7 +23552,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -23728,17 +23621,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -23758,14 +23650,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -23788,7 +23680,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -23860,15 +23751,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -23882,14 +23773,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -23911,7 +23802,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -23974,17 +23864,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -24002,14 +23891,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -24031,7 +23920,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -24094,17 +23982,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -24122,14 +24009,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -24153,7 +24040,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -24233,15 +24119,14 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -24259,14 +24144,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -24289,7 +24174,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -24382,15 +24266,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -24407,14 +24291,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -24438,7 +24322,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length"?: string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -24520,14 +24403,14 @@ export interface paths {
                 };
                 400: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -24612,14 +24495,13 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     "x-mid": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -24640,16 +24522,16 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         "ig-set-password-encryption-key-id": string;
                         "ig-set-password-encryption-pub-key": string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -24672,7 +24554,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -24749,15 +24630,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -24769,14 +24650,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -24798,7 +24679,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -24861,17 +24741,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -24891,14 +24770,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -24920,7 +24799,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -24980,17 +24858,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -25010,9 +24887,9 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        vary: string;
+                        vary?: string;
                         "content-encoding": string;
-                        "content-type": string;
+                        "content-type"?: string;
                         "reporting-endpoints": string;
                         "report-to": string;
                         "content-security-policy": string;
@@ -25021,14 +24898,14 @@ export interface paths {
                         "cross-origin-resource-policy": string;
                         "cross-origin-embedder-policy": string;
                         "cross-origin-opener-policy": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
                         "origin-agent-cluster": string;
-                        "strict-transport-security": string;
+                        "strict-transport-security"?: string;
                         "x-stack": string;
                         "x-fb-debug": string;
                         date: string;
@@ -25127,17 +25004,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -25158,14 +25034,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -25187,7 +25063,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -25256,15 +25131,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -25278,14 +25153,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -25308,7 +25183,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -25371,17 +25245,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -25401,14 +25274,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -25430,7 +25303,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -25496,15 +25368,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -25518,9 +25390,9 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        vary: string;
+                        vary?: string;
                         "content-encoding": string;
-                        "content-type": string;
+                        "content-type"?: string;
                         "reporting-endpoints": string;
                         "report-to": string;
                         "content-security-policy": string;
@@ -25529,14 +25401,14 @@ export interface paths {
                         "cross-origin-resource-policy": string;
                         "cross-origin-embedder-policy": string;
                         "cross-origin-opener-policy": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
                         "origin-agent-cluster": string;
-                        "strict-transport-security": string;
+                        "strict-transport-security"?: string;
                         "x-stack": string;
                         "x-fb-debug": string;
                         date: string;
@@ -25621,19 +25493,19 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                 };
                 path?: never;
                 cookie?: never;
@@ -25642,14 +25514,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -25671,7 +25543,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -25735,15 +25606,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -25755,14 +25626,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -25785,7 +25656,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -25916,17 +25786,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -25944,14 +25813,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -25973,7 +25842,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -26035,17 +25903,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -26065,14 +25932,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -26095,7 +25962,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -26156,17 +26022,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -26186,14 +26051,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -26216,7 +26081,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -26428,17 +26292,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -26458,14 +26321,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -26488,7 +26351,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -26538,7 +26400,7 @@ export interface paths {
                     "x-ig-bandwidth-totalbytes-b": string;
                     "x-ig-bandwidth-totaltime-ms": string;
                     "x-ig-prefetch-request": string;
-                    "x-ig-304-eligible"?: string;
+                    "x-ig-304-eligible": string;
                     "x-bloks-version-id": string;
                     "x-ig-www-claim": string;
                     "x-bloks-prism-button-version": string;
@@ -26556,15 +26418,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -26576,14 +26438,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -26607,7 +26469,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -26849,17 +26710,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -26880,14 +26740,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -26910,7 +26770,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -26979,17 +26838,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -27009,14 +26867,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -27038,7 +26896,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -27098,17 +26955,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -27130,14 +26986,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -27159,7 +27015,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -27224,13 +27079,13 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -27242,14 +27097,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -27271,7 +27126,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -27336,13 +27190,13 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -27354,14 +27208,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -27383,7 +27237,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -27450,17 +27303,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -27478,9 +27330,9 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        vary: string;
+                        vary?: string;
                         "content-encoding": string;
-                        "content-type": string;
+                        "content-type"?: string;
                         "reporting-endpoints": string;
                         "report-to": string;
                         "content-security-policy": string;
@@ -27489,14 +27341,14 @@ export interface paths {
                         "cross-origin-resource-policy": string;
                         "cross-origin-embedder-policy": string;
                         "cross-origin-opener-policy": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
                         "origin-agent-cluster": string;
-                        "strict-transport-security": string;
+                        "strict-transport-security"?: string;
                         "x-stack": string;
                         "x-fb-debug": string;
                         date: string;
@@ -27673,13 +27525,13 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -27693,14 +27545,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -27722,7 +27574,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -27815,17 +27666,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -27843,14 +27693,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -27873,7 +27723,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -27962,17 +27811,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -27992,14 +27840,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -28022,7 +27870,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -28110,15 +27957,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -28131,14 +27978,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -28161,7 +28008,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -28252,17 +28098,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -28280,16 +28125,16 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
                         "x-instagram-trace-enabled"?: string;
                         "x-instagram-trace-token"?: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -28312,7 +28157,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -28373,17 +28217,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -28405,14 +28248,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -28492,15 +28335,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -28514,14 +28357,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -28545,7 +28388,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -28961,13 +28803,13 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -28979,14 +28821,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -29008,7 +28850,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -29075,13 +28916,13 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -29093,14 +28934,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -29122,7 +28963,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -29190,15 +29030,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -29212,14 +29052,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -29243,7 +29083,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -29681,15 +29520,14 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -29714,9 +29552,9 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        vary: string;
+                        vary?: string;
                         "content-encoding": string;
-                        "content-type": string;
+                        "content-type"?: string;
                         "reporting-endpoints": string;
                         "report-to": string;
                         "content-security-policy": string;
@@ -29725,14 +29563,14 @@ export interface paths {
                         "cross-origin-resource-policy": string;
                         "cross-origin-embedder-policy": string;
                         "cross-origin-opener-policy": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
                         "origin-agent-cluster": string;
-                        "strict-transport-security": string;
+                        "strict-transport-security"?: string;
                         "x-stack": string;
                         "x-fb-debug": string;
                         date: string;
@@ -29796,18 +29634,17 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
+                    "content-type"?: string;
                     "content-encoding": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -29826,14 +29663,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -29855,7 +29692,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -29915,17 +29751,16 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -29943,14 +29778,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -29974,7 +29809,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;

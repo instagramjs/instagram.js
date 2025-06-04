@@ -13,6 +13,7 @@ import {
 import qs from "qs";
 
 import { type AutogenConfigFinal, type RequestFilterContext } from "./config";
+import { ALWAYS_IGNORED_HEADERS, ALWAYS_OPTIONAL_HEADERS } from "./const";
 
 export function isRef<T extends object | undefined>(
   value: T,
@@ -163,12 +164,14 @@ export function parametersFromHeaders(
   filterPath: string,
   headers: Record<string, string>,
 ): ParameterObject[] {
-  const filteredHeaders = Object.entries(headers).filter(([key, value]) =>
-    config.filterParameter({
-      ...filterContext,
-      path: `${filterPath}.headers.${key}`,
-      value,
-    }),
+  const filteredHeaders = Object.entries(headers).filter(
+    ([key, value]) =>
+      !ALWAYS_IGNORED_HEADERS.includes(key) &&
+      config.filterParameter({
+        ...filterContext,
+        path: `${filterPath}.headers.${key}`,
+        value,
+      }),
   );
 
   const parameters: ParameterObject[] = [];
@@ -176,7 +179,7 @@ export function parametersFromHeaders(
     const parameter: ParameterObject = {
       name: headerName,
       in: "header",
-      required: true,
+      required: !ALWAYS_OPTIONAL_HEADERS.includes(headerName),
       schema: { type: "string" },
     };
     if (
@@ -599,9 +602,7 @@ export function mergeSchemas(
   }
 
   if (existingSchema.type === newSchema.type) {
-    for (const [key, value] of Object.entries(newSchema)) {
-      existingSchema[key as keyof typeof existingSchema] = value;
-    }
+    Object.assign(existingSchema, newSchema);
     return;
   }
 }
@@ -634,7 +635,8 @@ export function mergeParameters(
     );
 
     if (existingParam) {
-      mergeExamples(existingParam, newParam);
+      const existingParamObj = getObjectOrRef(spec, "parameter", existingParam);
+      mergeParameterObjs(spec, existingParamObj, newParamObj);
     } else {
       maybeExistingParameters.push(newParam);
     }
@@ -649,6 +651,20 @@ export function mergeParameters(
     if (!newParam) {
       existingParamObj.required = false;
     }
+  }
+}
+
+export function mergeParameterObjs(
+  spec: OpenAPI3,
+  existingParam: ParameterObject,
+  newParam: ParameterObject,
+): void {
+  if (existingParam.schema && newParam.schema) {
+    mergeSchemas(spec, existingParam.schema, newParam.schema);
+  }
+  mergeExamples(existingParam, newParam);
+  if (newParam.required === false) {
+    existingParam.required = false;
   }
 }
 
@@ -679,19 +695,21 @@ export function headerMapFromHeaders(
   filterPath: string,
   headers: Record<string, string>,
 ): Record<string, HeaderObject> {
-  const filteredHeaders = Object.entries(headers).filter(([key, value]) =>
-    config.filterParameter({
-      ...filterContext,
-      path: `${filterPath}.headers.${key}`,
-      value,
-    }),
+  const filteredHeaders = Object.entries(headers).filter(
+    ([key, value]) =>
+      !ALWAYS_IGNORED_HEADERS.includes(key) &&
+      config.filterParameter({
+        ...filterContext,
+        path: `${filterPath}.headers.${key}`,
+        value,
+      }),
   );
 
   const headerMap: Record<string, HeaderObject> = {};
   for (const [key, value] of filteredHeaders) {
     headerMap[key] = {
       schema: { type: "string" },
-      required: true,
+      required: !ALWAYS_OPTIONAL_HEADERS.includes(key),
     };
     if (
       config.filterExample({
@@ -708,12 +726,13 @@ export function headerMapFromHeaders(
 }
 
 export function mergeHeaderMaps(
+  spec: OpenAPI3,
   existingHeaders: Record<string, HeaderObject>,
   newHeaders: Record<string, HeaderObject>,
 ) {
   for (const [key, value] of Object.entries(newHeaders)) {
     if (existingHeaders[key]) {
-      mergeExamples(existingHeaders[key], value);
+      mergeHeaderObjs(spec, existingHeaders[key], value);
     } else {
       existingHeaders[key] = value;
     }
@@ -723,5 +742,19 @@ export function mergeHeaderMaps(
     if (!newHeaders[key]) {
       value.required = false;
     }
+  }
+}
+
+export function mergeHeaderObjs(
+  spec: OpenAPI3,
+  existingHeader: HeaderObject,
+  newHeader: HeaderObject,
+): void {
+  if (existingHeader.schema && newHeader.schema) {
+    mergeSchemas(spec, existingHeader.schema, newHeader.schema);
+  }
+  mergeExamples(existingHeader, newHeader);
+  if (newHeader.required === false) {
+    existingHeader.required = false;
   }
 }

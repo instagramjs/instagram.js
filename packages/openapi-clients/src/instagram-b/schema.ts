@@ -47,12 +47,11 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     "x-mid"?: string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -79,14 +78,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -109,7 +108,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -200,12 +198,11 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     "x-mid"?: string;
                     "ig-intended-user-id": string;
-                    "content-type": string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "content-type"?: string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -226,14 +223,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -255,7 +252,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -316,15 +312,15 @@ export interface paths {
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
-                    priority: string;
+                    priority?: string;
                     "user-agent": string;
-                    "accept-language": string;
+                    "accept-language"?: string;
                     authorization: string;
                     "x-mid": string;
                     "ig-u-ds-user-id": string;
                     "ig-u-rur": string;
                     "ig-intended-user-id": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -336,14 +332,14 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
+                        "content-type"?: string;
                         date: string;
-                        vary: string;
+                        vary?: string;
                         "content-language": string;
-                        "strict-transport-security": string;
-                        "cache-control": string;
-                        pragma: string;
-                        expires: string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
                         "x-frame-options": string;
                         "content-security-policy": string;
                         "cross-origin-embedder-policy-report-only": string;
@@ -366,7 +362,6 @@ export interface paths {
                         "ig-set-ig-u-rur": string;
                         "ig-set-ig-u-ds-user-id": string;
                         "x-perf-stats": string;
-                        "content-length": string;
                         "x-ig-origin-region": string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;

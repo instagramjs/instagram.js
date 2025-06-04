@@ -28,11 +28,10 @@ export interface paths {
                     "x-ig-capabilities": string;
                     "x-ig-app-id": string;
                     "user-agent": string;
-                    "accept-language": string;
-                    "content-type": string;
+                    "accept-language"?: string;
+                    "content-type"?: string;
                     "content-encoding"?: string;
-                    "content-length": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -49,6 +48,7 @@ export interface paths {
                         format: string;
                         ffdb_token: string;
                         compressed: string;
+                        multi_batch: string;
                         sent_time: string;
                         message: string;
                     };
@@ -57,22 +57,21 @@ export interface paths {
             responses: {
                 200: {
                     headers: {
-                        "content-type": string;
-                        vary: string;
+                        "content-type"?: string;
+                        vary?: string;
                         "x-content-type-options": string;
                         "cross-origin-resource-policy": string;
                         "facebook-api-version": string;
-                        "access-control-allow-origin": string;
-                        "strict-transport-security": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        "access-control-allow-origin"?: string;
+                        "strict-transport-security"?: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-fb-request-id": string;
                         "x-fb-trace-id": string;
                         "x-fb-rev": string;
                         "x-stack": string;
                         "x-fb-debug": string;
-                        "content-length": string;
                         date: string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
@@ -120,7 +119,7 @@ export interface paths {
                     "x-fb-friendly-name": string;
                     "x-fb-privacy-context": string;
                     "x-tigon-is-retry": string;
-                    "accept-encoding": string;
+                    "accept-encoding"?: string;
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
@@ -133,20 +132,19 @@ export interface paths {
                 200: {
                     headers: {
                         "content-encoding"?: string;
-                        "content-type": string;
-                        vary: string;
+                        "content-type"?: string;
+                        vary?: string;
                         "facebook-api-version": string;
-                        "access-control-allow-origin": string;
-                        "strict-transport-security": string;
-                        pragma: string;
-                        "cache-control": string;
-                        expires: string;
+                        "access-control-allow-origin"?: string;
+                        "strict-transport-security"?: string;
+                        pragma?: string;
+                        "cache-control"?: string;
+                        expires?: string;
                         "x-fb-request-id": string;
                         "x-fb-trace-id": string;
                         "x-fb-rev": string;
                         "x-stack": string;
                         "x-fb-debug": string;
-                        "content-length": string;
                         date: string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;

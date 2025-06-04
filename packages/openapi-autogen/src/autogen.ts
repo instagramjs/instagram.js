@@ -12,6 +12,7 @@ import {
   type AutogenConfigFinal,
   type RequestFilterContext,
 } from "./config";
+import { ALWAYS_IGNORED_HEADERS } from "./const";
 import { type AutogenFlow } from "./flow";
 import {
   getObjectOrRef,
@@ -254,7 +255,7 @@ function processFlow(
     "response",
     flow.response.headers,
   );
-  mergeHeaderMaps(responseSchema.headers, newHeaders);
+  mergeHeaderMaps(spec, responseSchema.headers, newHeaders);
 
   const responseBodyType = flow.response.headers["content-type"]?.split(";")[0];
   if (flow.response.content && responseBodyType) {

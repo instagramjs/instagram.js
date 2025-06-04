@@ -16,15 +16,15 @@ paths:
             content-type:
               schema:
                 type: string
-              required: true
+              required: false
             vary:
               schema:
                 type: string
-              required: true
+              required: false
             access-control-allow-origin:
               schema:
                 type: string
-              required: true
+              required: false
             facebook-api-version:
               schema:
                 type: string
@@ -32,19 +32,19 @@ paths:
             strict-transport-security:
               schema:
                 type: string
-              required: true
+              required: false
             pragma:
               schema:
                 type: string
-              required: true
+              required: false
             cache-control:
               schema:
                 type: string
-              required: true
+              required: false
             expires:
               schema:
                 type: string
-              required: true
+              required: false
             x-fb-request-id:
               schema:
                 type: string
@@ -58,10 +58,6 @@ paths:
                 type: string
               required: true
             x-fb-debug:
-              schema:
-                type: string
-              required: true
-            content-length:
               schema:
                 type: string
               required: true
@@ -97,20 +93,15 @@ paths:
             type: string
         - name: priority
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: content-type
           in: header
-          required: true
-          schema:
-            type: string
-        - name: x-fb-rmd
-          in: header
           required: false
           schema:
             type: string
-        - name: content-length
+        - name: x-fb-rmd
           in: header
           required: true
           schema:
@@ -142,7 +133,7 @@ paths:
             type: string
         - name: accept-encoding
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-fb-http-engine
