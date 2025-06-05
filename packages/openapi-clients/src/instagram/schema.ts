@@ -8072,7 +8072,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/direct_v2/threads/{1}/": {
+    "/v1/direct_v2/threads/{threadId}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -8082,15 +8082,16 @@ export interface paths {
         get: {
             parameters: {
                 query: {
-                    visual_message_return_type: string;
+                    visual_message_return_type?: string;
                     eb_device_id: string;
                     igd_request_log_tracking_id: string;
                     seq_id: string;
-                    fetch_attribution: string;
+                    fetch_attribution?: string;
                     limit: string;
                     prev_cursor?: string;
                     cursor?: string;
                     direction?: string;
+                    recipient_users?: string;
                 };
                 header: {
                     "x-ig-app-locale": string;
@@ -8136,7 +8137,7 @@ export interface paths {
                     priority?: string;
                 };
                 path: {
-                    1: string;
+                    threadId: string;
                 };
                 cookie?: never;
             };
@@ -8147,13 +8148,13 @@ export interface paths {
                         vary?: string;
                         "content-encoding": string;
                         "content-type"?: string;
-                        "reporting-endpoints": string;
+                        "reporting-endpoints"?: string;
                         "report-to": string;
                         "content-security-policy": string;
-                        "document-policy": string;
-                        "permissions-policy": string;
-                        "cross-origin-resource-policy": string;
-                        "cross-origin-embedder-policy": string;
+                        "document-policy"?: string;
+                        "permissions-policy"?: string;
+                        "cross-origin-resource-policy"?: string;
+                        "cross-origin-embedder-policy"?: string;
                         "cross-origin-opener-policy": string;
                         pragma?: string;
                         "cache-control"?: string;
@@ -8161,15 +8162,31 @@ export interface paths {
                         "x-content-type-options": string;
                         "x-xss-protection": string;
                         "x-frame-options": string;
-                        "origin-agent-cluster": string;
+                        "origin-agent-cluster"?: string;
                         "strict-transport-security"?: string;
                         "x-stack": string;
-                        "x-fb-debug": string;
+                        "x-fb-debug"?: string;
                         date: string;
                         "x-fb-client-ip-forwarded": string;
                         "x-fb-server-cluster-forwarded": string;
                         "alt-svc": string;
                         "x-fb-connection-quality": string;
+                        "content-language"?: string;
+                        "cross-origin-embedder-policy-report-only"?: string;
+                        "x-ig-push-state"?: string;
+                        "x-ig-cache-control"?: string;
+                        "x-aed"?: string;
+                        "x-ig-request-elapsed-time-ms"?: string;
+                        "x-ig-peak-v2"?: string;
+                        "x-ig-peak-time"?: string;
+                        "x-ig-capacity-level"?: string;
+                        "ig-set-ig-u-ig-direct-region-hint"?: string;
+                        "ig-set-ig-u-shbid"?: string;
+                        "ig-set-ig-u-shbts"?: string;
+                        "ig-set-ig-u-rur"?: string;
+                        "ig-set-ig-u-ds-user-id"?: string;
+                        "x-perf-stats"?: string;
+                        "x-ig-origin-region"?: string;
                         [name: string]: unknown;
                     };
                     content: {
@@ -8189,7 +8206,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/direct_v2/threads/{1}/approve/": {
+    "/v1/direct_v2/threads/{threadId}/approve/": {
         parameters: {
             query?: never;
             header?: never;
@@ -8242,7 +8259,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    threadId: string;
                 };
                 cookie?: never;
             };
@@ -8308,7 +8325,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/direct_v2/threads/{1}/get_items/": {
+    "/v1/direct_v2/threads/{threadId}/get_items/": {
         parameters: {
             query?: never;
             header?: never;
@@ -8361,7 +8378,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    threadId: string;
                 };
                 cookie?: never;
             };
@@ -8423,7 +8440,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/direct_v2/threads/{1}/hide/": {
+    "/v1/direct_v2/threads/{threadId}/hide/": {
         parameters: {
             query?: never;
             header?: never;
@@ -8476,7 +8493,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    threadId: string;
                 };
                 cookie?: never;
             };
@@ -8535,7 +8552,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/direct_v2/threads/{1}/leave/": {
+    "/v1/direct_v2/threads/{threadId}/leave/": {
         parameters: {
             query?: never;
             header?: never;
@@ -8588,7 +8605,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    threadId: string;
                 };
                 cookie?: never;
             };
@@ -8655,7 +8672,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/direct_v2/threads/{1}/media/": {
+    "/v1/direct_v2/threads/{threadId}/media/": {
         parameters: {
             query?: never;
             header?: never;
@@ -8711,7 +8728,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    threadId: string;
                 };
                 cookie?: never;
             };
@@ -8773,7 +8790,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/direct_v2/threads/{1}/update_title/": {
+    "/v1/direct_v2/threads/{threadId}/update_title/": {
         parameters: {
             query?: never;
             header?: never;
@@ -8826,7 +8843,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    threadId: string;
                 };
                 cookie?: never;
             };
@@ -9218,7 +9235,6 @@ export interface paths {
                 content: {
                     "application/x-www-form-urlencoded": {
                         inventory_source: string;
-                        carousel_share_child_media_id: string;
                         action: string;
                         is_x_transport_forward: string;
                         is_shh_mode: string;
@@ -16683,13 +16699,13 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/x-www-form-urlencoded": {
-                        supported_capabilities_new: string;
                         reason: string;
                         timezone_offset: string;
                         tray_session_id: string;
                         request_id: string;
                         _uuid: string;
                         page_size: string;
+                        reel_tray_impressions: string;
                     };
                 };
             };
@@ -17273,19 +17289,21 @@ export interface paths {
                 content: {
                     "application/x-www-form-urlencoded": {
                         has_camera_permission: string;
+                        ad_and_netego_realtime_information: string;
                         feed_view_info: string;
                         organic_realtime_information: string;
                         phone_id: string;
+                        max_id: string;
                         client_view_state_media_list: string;
                         reason: string;
-                        last_head_load_time_ms: string;
                         battery_level: string;
                         timezone_offset: string;
+                        feed_comment_button_tap_info: string;
                         device_id: string;
                         request_id: string;
                         is_pull_to_refresh: string;
                         _uuid: string;
-                        new_posts_pill_type: string;
+                        feed_reshare_info: string;
                         is_charging: string;
                         is_dark_mode: string;
                         will_sound_on: string;
@@ -19671,7 +19689,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/feed/user_stream/{1}/": {
+    "/v1/feed/user_stream/{userId}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -19726,7 +19744,7 @@ export interface paths {
                     "x-ig-salt-ids"?: string;
                 };
                 path: {
-                    1: string;
+                    userId: string;
                 };
                 cookie?: never;
             };
@@ -19790,7 +19808,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/feed/user/{1}/": {
+    "/v1/feed/user/{userId}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -19844,7 +19862,7 @@ export interface paths {
                     "x-ig-salt-ids"?: string;
                 };
                 path: {
-                    1: string;
+                    userId: string;
                 };
                 cookie?: never;
             };
@@ -20700,7 +20718,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/feed/user/{1}/story/": {
+    "/v1/feed/user/{userId}/story/": {
         parameters: {
             query?: never;
             header?: never;
@@ -20757,7 +20775,7 @@ export interface paths {
                     "x-ig-salt-ids"?: string;
                 };
                 path: {
-                    1: string;
+                    userId: string;
                 };
                 cookie?: never;
             };
@@ -21306,7 +21324,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/friendships/{1}/following/": {
+    "/v1/friendships/{userId}/following/": {
         parameters: {
             query?: never;
             header?: never;
@@ -21358,7 +21376,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    userId: string;
                 };
                 cookie?: never;
             };
@@ -21447,7 +21465,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/friendships/block/{1}/": {
+    "/v1/friendships/block/{userId}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -21500,7 +21518,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    userId: string;
                 };
                 cookie?: never;
             };
@@ -21579,7 +21597,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/friendships/create/{1}/": {
+    "/v1/friendships/create/{userId}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -21632,7 +21650,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    userId: string;
                 };
                 cookie?: never;
             };
@@ -21713,7 +21731,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/friendships/destroy/{1}/": {
+    "/v1/friendships/destroy/{userId}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -21766,7 +21784,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    userId: string;
                 };
                 cookie?: never;
             };
@@ -22214,7 +22232,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/friendships/remove_follower/{1}/": {
+    "/v1/friendships/remove_follower/{userId}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -22267,7 +22285,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    userId: string;
                 };
                 cookie?: never;
             };
@@ -22654,7 +22672,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/friendships/show/{1}/": {
+    "/v1/friendships/show/{userId}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -22706,7 +22724,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    userId: string;
                 };
                 cookie?: never;
             };
@@ -23582,7 +23600,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/friendships/unblock/{1}/": {
+    "/v1/friendships/unblock/{userId}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -23635,7 +23653,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    userId: string;
                 };
                 cookie?: never;
             };
@@ -23714,7 +23732,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/friendships/unfollow_chaining_count/{1}/": {
+    "/v1/friendships/unfollow_chaining_count/{userId}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -23764,7 +23782,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    userId: string;
                 };
                 cookie?: never;
             };
@@ -24213,7 +24231,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/highlights/{1}/highlights_tray/": {
+    "/v1/highlights/{userId}/highlights_tray/": {
         parameters: {
             query?: never;
             header?: never;
@@ -24282,7 +24300,7 @@ export interface paths {
                     "x-ig-salt-ids"?: string;
                 };
                 path: {
-                    1: string;
+                    userId: string;
                 };
                 cookie?: never;
             };
@@ -24702,7 +24720,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/media/{1}/comment_like/": {
+    "/v1/media/{mediaId}/comment_like/": {
         parameters: {
             query?: never;
             header?: never;
@@ -24755,7 +24773,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    mediaId: string;
                 };
                 cookie?: never;
             };
@@ -24819,7 +24837,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/media/{1}/comment/": {
+    "/v1/media/{mediaId}/comment/": {
         parameters: {
             query?: never;
             header?: never;
@@ -24872,7 +24890,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    mediaId: string;
                 };
                 cookie?: never;
             };
@@ -24965,7 +24983,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/media/{1}/like/": {
+    "/v1/media/{mediaId}/like/": {
         parameters: {
             query?: never;
             header?: never;
@@ -25018,7 +25036,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    mediaId: string;
                 };
                 cookie?: never;
             };
@@ -25083,7 +25101,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/media/{1}/permalink/": {
+    "/v1/media/{mediaId}/permalink/": {
         parameters: {
             query?: never;
             header?: never;
@@ -25144,7 +25162,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    mediaId: string;
                 };
                 cookie?: never;
             };
@@ -25206,7 +25224,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/media/{1}/save/": {
+    "/v1/media/{mediaId}/save/": {
         parameters: {
             query?: never;
             header?: never;
@@ -25259,7 +25277,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    mediaId: string;
                 };
                 cookie?: never;
             };
@@ -25323,7 +25341,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/media/{1}/stream_comments/": {
+    "/v1/media/{mediaId}/stream_comments/": {
         parameters: {
             query?: never;
             header?: never;
@@ -25381,7 +25399,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    mediaId: string;
                 };
                 cookie?: never;
             };
@@ -28177,7 +28195,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/users/{1}/info_stream/": {
+    "/v1/users/{userId}/info_stream/": {
         parameters: {
             query?: never;
             header?: never;
@@ -28231,7 +28249,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    userId: string;
                 };
                 cookie?: never;
             };
@@ -28299,7 +28317,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/users/{1}/info/": {
+    "/v1/users/{userId}/info/": {
         parameters: {
             query?: never;
             header?: never;
@@ -28348,7 +28366,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    userId: string;
                 };
                 cookie?: never;
             };
@@ -28990,7 +29008,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/usertags/{1}/feed/": {
+    "/v1/usertags/{userId}/feed/": {
         parameters: {
             query?: never;
             header?: never;
@@ -29043,7 +29061,7 @@ export interface paths {
                     "x-fb-server-cluster": string;
                 };
                 path: {
-                    1: string;
+                    userId: string;
                 };
                 cookie?: never;
             };
@@ -29719,7 +29737,182 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        get: {
+            parameters: {
+                query: {
+                    supported_capabilities_new: string;
+                    phone_id: string;
+                    battery_level: string;
+                    is_charging: string;
+                    is_dark_mode: string;
+                    will_sound_on: string;
+                    should_include_my_week_preview: string;
+                };
+                header: {
+                    "x-ads-opt-out": string;
+                    "x-google-ad-id": string;
+                    "x-device-id": string;
+                    "x-fb": string;
+                    "x-cm-bandwidth-kbps": string;
+                    "x-cm-latency": string;
+                    "x-ig-app-locale": string;
+                    "x-ig-device-locale": string;
+                    "x-ig-mapped-locale": string;
+                    "x-pigeon-session-id": string;
+                    "x-pigeon-rawclienttime": string;
+                    "x-ig-bandwidth-speed-kbps": string;
+                    "x-ig-bandwidth-totalbytes-b": string;
+                    "x-ig-bandwidth-totaltime-ms": string;
+                    "x-bloks-version-id": string;
+                    "x-ig-www-claim": string;
+                    "x-bloks-prism-button-version": string;
+                    "x-bloks-prism-colors-enabled": string;
+                    "x-bloks-prism-ax-base-colors-enabled": string;
+                    "x-bloks-prism-font-enabled": string;
+                    "x-bloks-is-layout-rtl": string;
+                    "x-ig-device-id": string;
+                    "x-ig-family-device-id": string;
+                    "x-ig-android-id": string;
+                    "x-ig-timezone-offset": string;
+                    "x-ig-nav-chain": string;
+                    "x-fb-connection-type": string;
+                    "x-ig-connection-type": string;
+                    "x-ig-capabilities": string;
+                    "x-ig-app-id": string;
+                    priority?: string;
+                    "user-agent": string;
+                    "accept-language"?: string;
+                    authorization: string;
+                    "x-mid": string;
+                    "ig-u-ds-user-id": string;
+                    "ig-u-rur": string;
+                    "ig-intended-user-id": string;
+                    "accept-encoding"?: string;
+                    "x-fb-http-engine": string;
+                    "x-fb-client-ip": string;
+                    "x-fb-server-cluster": string;
+                };
+                path: {
+                    userId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                200: {
+                    headers: {
+                        "content-type"?: string;
+                        date: string;
+                        vary?: string;
+                        "content-language": string;
+                        "strict-transport-security"?: string;
+                        "cache-control"?: string;
+                        pragma?: string;
+                        expires?: string;
+                        "x-frame-options": string;
+                        "content-security-policy": string;
+                        "cross-origin-embedder-policy-report-only": string;
+                        "report-to": string;
+                        "cross-origin-resource-policy": string;
+                        "cross-origin-opener-policy": string;
+                        "x-content-type-options": string;
+                        "x-xss-protection": string;
+                        "x-ig-push-state": string;
+                        "x-ig-cache-control": string;
+                        "x-aed": string;
+                        "x-ig-request-elapsed-time-ms": string;
+                        "x-ig-peak-v2": string;
+                        "x-ig-peak-time": string;
+                        "x-ig-capacity-level": string;
+                        "content-encoding": string;
+                        "x-stack": string;
+                        "ig-set-ig-u-ig-direct-region-hint": string;
+                        "ig-set-ig-u-shbid": string;
+                        "ig-set-ig-u-shbts": string;
+                        "ig-set-ig-u-rur": string;
+                        "ig-set-ig-u-ds-user-id": string;
+                        "x-perf-stats": string;
+                        "x-ig-origin-region": string;
+                        "x-fb-client-ip-forwarded": string;
+                        "x-fb-server-cluster-forwarded": string;
+                        "alt-svc": string;
+                        "x-fb-connection-quality": string;
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            tray: {
+                                id: string;
+                                strong_id__: string;
+                                latest_reel_media: number;
+                                seen: null;
+                                can_reply: boolean;
+                                can_gif_quick_reply: boolean;
+                                can_reshare: null;
+                                reel_type: string;
+                                ad_expiry_timestamp_in_millis: null;
+                                is_cta_sticker_available: null;
+                                app_sticker_info: null;
+                                should_treat_link_sticker_as_cta: null;
+                                pool_refresh_ttl_in_sec: null;
+                                can_react_with_avatar: boolean;
+                                cover_media: {
+                                    cropped_image_version: {
+                                        width: number;
+                                        height: number;
+                                        url: string;
+                                        scans_profile: string;
+                                    };
+                                    crop_rect: number[] | null;
+                                    media_id: string | null;
+                                    full_image_version: {
+                                        width: number;
+                                        height: number;
+                                        url: string;
+                                        scans_profile: string;
+                                    };
+                                    upload_id: null;
+                                };
+                                user: {
+                                    pk: number;
+                                    pk_id: string;
+                                    full_name: string;
+                                    is_private: boolean;
+                                    strong_id__: string;
+                                    id: string;
+                                    username: string;
+                                    is_verified: boolean;
+                                    profile_pic_id: string;
+                                    profile_pic_url: string;
+                                };
+                                ranked_position: number;
+                                title: string;
+                                created_at: number;
+                                is_pinned_highlight: boolean;
+                                seen_ranked_position: number;
+                                prefetch_count: number;
+                                media_count: number;
+                                contains_stitched_media_blocked_by_rm: boolean;
+                                is_converted_to_clips: boolean;
+                                disabled_reply_types: string[];
+                                highlight_reel_type: string;
+                                contains_unavailable_story: boolean;
+                                is_added_to_main_grid: boolean;
+                                updated_timestamp: number;
+                                is_archived: boolean;
+                            }[];
+                            last_paginated_highlights_node_edited_at_ts: null;
+                            has_fetched_all_remaining_highlights: null;
+                            suggested_highlights: Record<string, never>;
+                            cursor: null;
+                            highlights_tray_type: string;
+                            my_week_enabled: null;
+                            status: string;
+                        };
+                    };
+                };
+            };
+        };
         put?: never;
         post: {
             parameters: {

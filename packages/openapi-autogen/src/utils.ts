@@ -87,9 +87,11 @@ export function parameterizePath(
 ): [string, PathParameter[]] {
   for (const matcher of config.pathMatchers) {
     const match = matcher(path);
+
     if (match) {
       let newPath = match.path;
       const parameters: PathParameter[] = [];
+
       for (const [key, value] of Object.entries(match.params)) {
         if (Array.isArray(value)) {
           throw new Error("Wildcard path parameters are not supported");
@@ -100,9 +102,11 @@ export function parameterizePath(
         });
         newPath = newPath.replace(String(value), `{${key}}`);
       }
+
       return [newPath, parameters];
     }
   }
+
   return [path, []];
 }
 

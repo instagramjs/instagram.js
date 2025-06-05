@@ -24460,7 +24460,7 @@ paths:
           required: true
           schema:
             type: string
-  /v1/direct_v2/threads/{1}/:
+  /v1/direct_v2/threads/{threadId}/:
     get:
       responses:
         "200":
@@ -24481,7 +24481,7 @@ paths:
             reporting-endpoints:
               schema:
                 type: string
-              required: true
+              required: false
             report-to:
               schema:
                 type: string
@@ -24493,19 +24493,19 @@ paths:
             document-policy:
               schema:
                 type: string
-              required: true
+              required: false
             permissions-policy:
               schema:
                 type: string
-              required: true
+              required: false
             cross-origin-resource-policy:
               schema:
                 type: string
-              required: true
+              required: false
             cross-origin-embedder-policy:
               schema:
                 type: string
-              required: true
+              required: false
             cross-origin-opener-policy:
               schema:
                 type: string
@@ -24537,7 +24537,7 @@ paths:
             origin-agent-cluster:
               schema:
                 type: string
-              required: true
+              required: false
             strict-transport-security:
               schema:
                 type: string
@@ -24549,7 +24549,7 @@ paths:
             x-fb-debug:
               schema:
                 type: string
-              required: true
+              required: false
             date:
               schema:
                 type: string
@@ -24570,6 +24570,70 @@ paths:
               schema:
                 type: string
               required: true
+            content-language:
+              schema:
+                type: string
+              required: false
+            cross-origin-embedder-policy-report-only:
+              schema:
+                type: string
+              required: false
+            x-ig-push-state:
+              schema:
+                type: string
+              required: false
+            x-ig-cache-control:
+              schema:
+                type: string
+              required: false
+            x-aed:
+              schema:
+                type: string
+              required: false
+            x-ig-request-elapsed-time-ms:
+              schema:
+                type: string
+              required: false
+            x-ig-peak-v2:
+              schema:
+                type: string
+              required: false
+            x-ig-peak-time:
+              schema:
+                type: string
+              required: false
+            x-ig-capacity-level:
+              schema:
+                type: string
+              required: false
+            ig-set-ig-u-ig-direct-region-hint:
+              schema:
+                type: string
+              required: false
+            ig-set-ig-u-shbid:
+              schema:
+                type: string
+              required: false
+            ig-set-ig-u-shbts:
+              schema:
+                type: string
+              required: false
+            ig-set-ig-u-rur:
+              schema:
+                type: string
+              required: false
+            ig-set-ig-u-ds-user-id:
+              schema:
+                type: string
+              required: false
+            x-perf-stats:
+              schema:
+                type: string
+              required: false
+            x-ig-origin-region:
+              schema:
+                type: string
+              required: false
           content:
             application/json:
               schema:
@@ -24778,14 +24842,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
-          in: path
-          required: true
-          schema:
-            type: string
         - name: visual_message_return_type
           in: query
-          required: true
+          required: false
           schema:
             type: string
         - name: eb_device_id
@@ -24805,7 +24864,7 @@ paths:
             type: string
         - name: fetch_attribution
           in: query
-          required: true
+          required: false
           schema:
             type: string
         - name: limit
@@ -24838,7 +24897,17 @@ paths:
           required: false
           schema:
             type: string
-  /v1/direct_v2/threads/{1}/approve/:
+        - name: threadId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: recipient_users
+          in: query
+          required: false
+          schema:
+            type: string
+  /v1/direct_v2/threads/{threadId}/approve/:
     post:
       responses:
         "200":
@@ -25183,7 +25252,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
+        - name: threadId
           in: path
           required: true
           schema:
@@ -25202,7 +25271,7 @@ paths:
               required:
                 - filter
                 - _uuid
-  /v1/direct_v2/threads/{1}/get_items/:
+  /v1/direct_v2/threads/{threadId}/get_items/:
     post:
       responses:
         "200":
@@ -25520,7 +25589,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
+        - name: threadId
           in: path
           required: true
           schema:
@@ -25548,7 +25617,7 @@ paths:
                 - _uuid
                 - original_message_client_contexts
                 - item_ids
-  /v1/direct_v2/threads/{1}/hide/:
+  /v1/direct_v2/threads/{threadId}/hide/:
     post:
       responses:
         "200":
@@ -25861,7 +25930,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
+        - name: threadId
           in: path
           required: true
           schema:
@@ -25883,7 +25952,7 @@ paths:
                 - should_move_future_requests_to_spam
                 - last_message_timestamp_ms_for_instamadillo
                 - _uuid
-  /v1/direct_v2/threads/{1}/leave/:
+  /v1/direct_v2/threads/{threadId}/leave/:
     post:
       responses:
         "200":
@@ -26232,7 +26301,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
+        - name: threadId
           in: path
           required: true
           schema:
@@ -26251,7 +26320,7 @@ paths:
               required:
                 - client_context
                 - _uuid
-  /v1/direct_v2/threads/{1}/media/:
+  /v1/direct_v2/threads/{threadId}/media/:
     get:
       responses:
         "200":
@@ -26596,11 +26665,6 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
-          in: path
-          required: true
-          schema:
-            type: string
         - name: eb_device_id
           in: query
           required: true
@@ -26626,7 +26690,12 @@ paths:
           required: false
           schema:
             type: string
-  /v1/direct_v2/threads/{1}/update_title/:
+        - name: threadId
+          in: path
+          required: true
+          schema:
+            type: string
+  /v1/direct_v2/threads/{threadId}/update_title/:
     post:
       responses:
         "200":
@@ -26983,7 +27052,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
+        - name: threadId
           in: path
           required: true
           schema:
@@ -28143,8 +28212,6 @@ paths:
               properties:
                 inventory_source:
                   type: string
-                carousel_share_child_media_id:
-                  type: string
                 action:
                   type: string
                 is_x_transport_forward:
@@ -28173,7 +28240,6 @@ paths:
                   type: string
               required:
                 - inventory_source
-                - carousel_share_child_media_id
                 - action
                 - is_x_transport_forward
                 - is_shh_mode
@@ -52245,8 +52311,6 @@ paths:
             schema:
               type: object
               properties:
-                supported_capabilities_new:
-                  type: string
                 reason:
                   type: string
                 timezone_offset:
@@ -52259,14 +52323,16 @@ paths:
                   type: string
                 page_size:
                   type: string
+                reel_tray_impressions:
+                  type: string
               required:
-                - supported_capabilities_new
                 - reason
                 - timezone_offset
                 - tray_session_id
                 - request_id
                 - _uuid
                 - page_size
+                - reel_tray_impressions
   /v1/feed/timeline/:
     post:
       responses:
@@ -59554,21 +59620,25 @@ paths:
               properties:
                 has_camera_permission:
                   type: string
+                ad_and_netego_realtime_information:
+                  type: string
                 feed_view_info:
                   type: string
                 organic_realtime_information:
                   type: string
                 phone_id:
                   type: string
+                max_id:
+                  type: string
                 client_view_state_media_list:
                   type: string
                 reason:
                   type: string
-                last_head_load_time_ms:
-                  type: string
                 battery_level:
                   type: string
                 timezone_offset:
+                  type: string
+                feed_comment_button_tap_info:
                   type: string
                 device_id:
                   type: string
@@ -59578,7 +59648,7 @@ paths:
                   type: string
                 _uuid:
                   type: string
-                new_posts_pill_type:
+                feed_reshare_info:
                   type: string
                 is_charging:
                   type: string
@@ -59592,25 +59662,27 @@ paths:
                   type: string
               required:
                 - has_camera_permission
+                - ad_and_netego_realtime_information
                 - feed_view_info
                 - organic_realtime_information
                 - phone_id
+                - max_id
                 - client_view_state_media_list
                 - reason
-                - last_head_load_time_ms
                 - battery_level
                 - timezone_offset
+                - feed_comment_button_tap_info
                 - device_id
                 - request_id
                 - is_pull_to_refresh
                 - _uuid
-                - new_posts_pill_type
+                - feed_reshare_info
                 - is_charging
                 - is_dark_mode
                 - will_sound_on
                 - session_id
                 - bloks_versioning_id
-  /v1/feed/user_stream/{1}/:
+  /v1/feed/user_stream/{userId}/:
     post:
       responses:
         "200":
@@ -59960,14 +60032,14 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
-          in: path
-          required: true
-          schema:
-            type: string
         - name: x-ig-salt-ids
           in: header
           required: false
+          schema:
+            type: string
+        - name: userId
+          in: path
+          required: true
           schema:
             type: string
       requestBody:
@@ -59981,7 +60053,7 @@ paths:
                   type: string
               required:
                 - _uuid
-  /v1/feed/user/{1}/:
+  /v1/feed/user/{userId}/:
     get:
       responses:
         "200":
@@ -62670,11 +62742,6 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
-          in: path
-          required: true
-          schema:
-            type: string
         - name: exclude_comment
           in: query
           required: true
@@ -62695,7 +62762,12 @@ paths:
           required: false
           schema:
             type: string
-  /v1/feed/user/{1}/story/:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+  /v1/feed/user/{userId}/story/:
     get:
       responses:
         "200":
@@ -64516,11 +64588,6 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
-          in: path
-          required: true
-          schema:
-            type: string
         - name: supported_capabilities_new
           in: query
           required: true
@@ -64541,7 +64608,12 @@ paths:
           required: false
           schema:
             type: string
-  /v1/friendships/{1}/following/:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+  /v1/friendships/{userId}/following/:
     get:
       responses:
         "200":
@@ -64968,17 +65040,17 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
-          in: path
-          required: true
-          schema:
-            type: string
         - name: search_surface
           in: query
           required: true
           schema:
             type: string
-  /v1/friendships/block/{1}/:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+  /v1/friendships/block/{userId}/:
     post:
       responses:
         "200":
@@ -65365,7 +65437,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
+        - name: userId
           in: path
           required: true
           schema:
@@ -65381,7 +65453,7 @@ paths:
                   type: string
               required:
                 - signed_body
-  /v1/friendships/create/{1}/:
+  /v1/friendships/create/{userId}/:
     post:
       responses:
         "200":
@@ -65775,7 +65847,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
+        - name: userId
           in: path
           required: true
           schema:
@@ -65791,7 +65863,7 @@ paths:
                   type: string
               required:
                 - signed_body
-  /v1/friendships/destroy/{1}/:
+  /v1/friendships/destroy/{userId}/:
     post:
       responses:
         "200":
@@ -66182,7 +66254,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
+        - name: userId
           in: path
           required: true
           schema:
@@ -67338,7 +67410,7 @@ paths:
                   type: string
               required:
                 - signed_body
-  /v1/friendships/remove_follower/{1}/:
+  /v1/friendships/remove_follower/{userId}/:
     post:
       responses:
         "200":
@@ -67725,7 +67797,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
+        - name: userId
           in: path
           required: true
           schema:
@@ -68692,7 +68764,7 @@ paths:
                 - include_followed_by
                 - user_ids
                 - _uuid
-  /v1/friendships/show/{1}/:
+  /v1/friendships/show/{userId}/:
     get:
       responses:
         "200":
@@ -69094,13 +69166,13 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
-          in: path
+        - name: is_external_deeplink_profile_view
+          in: query
           required: true
           schema:
             type: string
-        - name: is_external_deeplink_profile_view
-          in: query
+        - name: userId
+          in: path
           required: true
           schema:
             type: string
@@ -71623,7 +71695,7 @@ paths:
           required: true
           schema:
             type: string
-  /v1/friendships/unblock/{1}/:
+  /v1/friendships/unblock/{userId}/:
     post:
       responses:
         "200":
@@ -72010,7 +72082,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
+        - name: userId
           in: path
           required: true
           schema:
@@ -72026,7 +72098,7 @@ paths:
                   type: string
               required:
                 - signed_body
-  /v1/friendships/unfollow_chaining_count/{1}/:
+  /v1/friendships/unfollow_chaining_count/{userId}/:
     get:
       responses:
         "200":
@@ -72366,7 +72438,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
+        - name: userId
           in: path
           required: true
           schema:
@@ -73565,7 +73637,7 @@ paths:
                   type: string
               required:
                 - signed_body
-  /v1/highlights/{1}/highlights_tray/:
+  /v1/highlights/{userId}/highlights_tray/:
     get:
       responses:
         "200":
@@ -74298,11 +74370,6 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
-          in: path
-          required: true
-          schema:
-            type: string
         - name: supported_capabilities_new
           in: query
           required: true
@@ -74366,6 +74433,11 @@ paths:
         - name: fetch_high_res_cover_image
           in: query
           required: false
+          schema:
+            type: string
+        - name: userId
+          in: path
+          required: true
           schema:
             type: string
   /v1/launcher/mobileconfig/:
@@ -75114,7 +75186,7 @@ paths:
           required: true
           schema:
             type: string
-  /v1/media/{1}/comment_like/:
+  /v1/media/{mediaId}/comment_like/:
     post:
       responses:
         "200":
@@ -75456,7 +75528,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
+        - name: mediaId
           in: path
           required: true
           schema:
@@ -75472,7 +75544,7 @@ paths:
                   type: string
               required:
                 - signed_body
-  /v1/media/{1}/comment/:
+  /v1/media/{mediaId}/comment/:
     post:
       responses:
         "200":
@@ -75897,7 +75969,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
+        - name: mediaId
           in: path
           required: true
           schema:
@@ -75913,7 +75985,7 @@ paths:
                   type: string
               required:
                 - signed_body
-  /v1/media/{1}/like/:
+  /v1/media/{mediaId}/like/:
     post:
       responses:
         "200":
@@ -76255,7 +76327,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
+        - name: mediaId
           in: path
           required: true
           schema:
@@ -76274,7 +76346,7 @@ paths:
               required:
                 - signed_body
                 - d
-  /v1/media/{1}/permalink/:
+  /v1/media/{mediaId}/permalink/:
     get:
       responses:
         "200":
@@ -76618,11 +76690,6 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
-          in: path
-          required: true
-          schema:
-            type: string
         - name: exposed_to_experiment
           in: query
           required: true
@@ -76673,7 +76740,12 @@ paths:
           required: true
           schema:
             type: string
-  /v1/media/{1}/save/:
+        - name: mediaId
+          in: path
+          required: true
+          schema:
+            type: string
+  /v1/media/{mediaId}/save/:
     post:
       responses:
         "200":
@@ -77015,7 +77087,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
+        - name: mediaId
           in: path
           required: true
           schema:
@@ -77031,7 +77103,7 @@ paths:
                   type: string
               required:
                 - signed_body
-  /v1/media/{1}/stream_comments/:
+  /v1/media/{mediaId}/stream_comments/:
     get:
       responses:
         "200":
@@ -77424,11 +77496,6 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
-          in: path
-          required: true
-          schema:
-            type: string
         - name: can_support_threading
           in: query
           required: true
@@ -77457,6 +77524,11 @@ paths:
         - name: carousel_size
           in: query
           required: false
+          schema:
+            type: string
+        - name: mediaId
+          in: path
+          required: true
           schema:
             type: string
   /v1/media/blocked/:
@@ -85820,7 +85892,7 @@ paths:
                   type: string
               required:
                 - signed_body
-  /v1/users/{1}/info_stream/:
+  /v1/users/{userId}/info_stream/:
     post:
       responses:
         "200":
@@ -86178,7 +86250,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
+        - name: userId
           in: path
           required: true
           schema:
@@ -86200,7 +86272,7 @@ paths:
                 - entry_point
                 - from_module
                 - _uuid
-  /v1/users/{1}/info/:
+  /v1/users/{userId}/info/:
     get:
       responses:
         "200":
@@ -87617,7 +87689,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
+        - name: userId
           in: path
           required: true
           schema:
@@ -88352,7 +88424,7 @@ paths:
           required: true
           schema:
             type: string
-  /v1/usertags/{1}/feed/:
+  /v1/usertags/{userId}/feed/:
     get:
       responses:
         "200":
@@ -89906,13 +89978,13 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
-          in: path
+        - name: count
+          in: query
           required: true
           schema:
             type: string
-        - name: count
-          in: query
+        - name: userId
+          in: path
           required: true
           schema:
             type: string
@@ -90549,6 +90621,618 @@ paths:
               required:
                 - signed_body
   /v1/feed/reels_media/:
+    get:
+      responses:
+        "200":
+          description: ""
+          headers:
+            content-type:
+              schema:
+                type: string
+              required: false
+            date:
+              schema:
+                type: string
+              required: true
+            vary:
+              schema:
+                type: string
+              required: false
+            content-language:
+              schema:
+                type: string
+              required: true
+            strict-transport-security:
+              schema:
+                type: string
+              required: false
+            cache-control:
+              schema:
+                type: string
+              required: false
+            pragma:
+              schema:
+                type: string
+              required: false
+            expires:
+              schema:
+                type: string
+              required: false
+            x-frame-options:
+              schema:
+                type: string
+              required: true
+            content-security-policy:
+              schema:
+                type: string
+              required: true
+            cross-origin-embedder-policy-report-only:
+              schema:
+                type: string
+              required: true
+            report-to:
+              schema:
+                type: string
+              required: true
+            cross-origin-resource-policy:
+              schema:
+                type: string
+              required: true
+            cross-origin-opener-policy:
+              schema:
+                type: string
+              required: true
+            x-content-type-options:
+              schema:
+                type: string
+              required: true
+            x-xss-protection:
+              schema:
+                type: string
+              required: true
+            x-ig-push-state:
+              schema:
+                type: string
+              required: true
+            x-ig-cache-control:
+              schema:
+                type: string
+              required: true
+            x-aed:
+              schema:
+                type: string
+              required: true
+            x-ig-request-elapsed-time-ms:
+              schema:
+                type: string
+              required: true
+            x-ig-peak-v2:
+              schema:
+                type: string
+              required: true
+            x-ig-peak-time:
+              schema:
+                type: string
+              required: true
+            x-ig-capacity-level:
+              schema:
+                type: string
+              required: true
+            content-encoding:
+              schema:
+                type: string
+              required: true
+            x-stack:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-ig-direct-region-hint:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-shbid:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-shbts:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-rur:
+              schema:
+                type: string
+              required: true
+            ig-set-ig-u-ds-user-id:
+              schema:
+                type: string
+              required: true
+            x-perf-stats:
+              schema:
+                type: string
+              required: true
+            x-ig-origin-region:
+              schema:
+                type: string
+              required: true
+            x-fb-client-ip-forwarded:
+              schema:
+                type: string
+              required: true
+            x-fb-server-cluster-forwarded:
+              schema:
+                type: string
+              required: true
+            alt-svc:
+              schema:
+                type: string
+              required: true
+            x-fb-connection-quality:
+              schema:
+                type: string
+              required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tray:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        strong_id__:
+                          type: string
+                        latest_reel_media:
+                          type: number
+                        seen:
+                          type: "null"
+                        can_reply:
+                          type: boolean
+                        can_gif_quick_reply:
+                          type: boolean
+                        can_reshare:
+                          type: "null"
+                        reel_type:
+                          type: string
+                        ad_expiry_timestamp_in_millis:
+                          type: "null"
+                        is_cta_sticker_available:
+                          type: "null"
+                        app_sticker_info:
+                          type: "null"
+                        should_treat_link_sticker_as_cta:
+                          type: "null"
+                        pool_refresh_ttl_in_sec:
+                          type: "null"
+                        can_react_with_avatar:
+                          type: boolean
+                        cover_media:
+                          type: object
+                          properties:
+                            cropped_image_version:
+                              type: object
+                              properties:
+                                width:
+                                  type: number
+                                height:
+                                  type: number
+                                url:
+                                  type: string
+                                scans_profile:
+                                  type: string
+                              required:
+                                - width
+                                - height
+                                - url
+                                - scans_profile
+                            crop_rect:
+                              type: array
+                              items:
+                                type: number
+                              nullable: true
+                            media_id:
+                              type: string
+                              nullable: true
+                            full_image_version:
+                              type: object
+                              properties:
+                                width:
+                                  type: number
+                                height:
+                                  type: number
+                                url:
+                                  type: string
+                                scans_profile:
+                                  type: string
+                              required:
+                                - width
+                                - height
+                                - url
+                                - scans_profile
+                            upload_id:
+                              type: "null"
+                          required:
+                            - cropped_image_version
+                            - crop_rect
+                            - media_id
+                            - full_image_version
+                            - upload_id
+                        user:
+                          type: object
+                          properties:
+                            pk:
+                              type: number
+                            pk_id:
+                              type: string
+                            full_name:
+                              type: string
+                            is_private:
+                              type: boolean
+                            strong_id__:
+                              type: string
+                            id:
+                              type: string
+                            username:
+                              type: string
+                            is_verified:
+                              type: boolean
+                            profile_pic_id:
+                              type: string
+                            profile_pic_url:
+                              type: string
+                          required:
+                            - pk
+                            - pk_id
+                            - full_name
+                            - is_private
+                            - strong_id__
+                            - id
+                            - username
+                            - is_verified
+                            - profile_pic_id
+                            - profile_pic_url
+                        ranked_position:
+                          type: number
+                        title:
+                          type: string
+                        created_at:
+                          type: number
+                        is_pinned_highlight:
+                          type: boolean
+                        seen_ranked_position:
+                          type: number
+                        prefetch_count:
+                          type: number
+                        media_count:
+                          type: number
+                        contains_stitched_media_blocked_by_rm:
+                          type: boolean
+                        is_converted_to_clips:
+                          type: boolean
+                        disabled_reply_types:
+                          type: array
+                          items:
+                            type: string
+                        highlight_reel_type:
+                          type: string
+                        contains_unavailable_story:
+                          type: boolean
+                        is_added_to_main_grid:
+                          type: boolean
+                        updated_timestamp:
+                          type: number
+                        is_archived:
+                          type: boolean
+                      required:
+                        - id
+                        - strong_id__
+                        - latest_reel_media
+                        - seen
+                        - can_reply
+                        - can_gif_quick_reply
+                        - can_reshare
+                        - reel_type
+                        - ad_expiry_timestamp_in_millis
+                        - is_cta_sticker_available
+                        - app_sticker_info
+                        - should_treat_link_sticker_as_cta
+                        - pool_refresh_ttl_in_sec
+                        - can_react_with_avatar
+                        - cover_media
+                        - user
+                        - ranked_position
+                        - title
+                        - created_at
+                        - is_pinned_highlight
+                        - seen_ranked_position
+                        - prefetch_count
+                        - media_count
+                        - contains_stitched_media_blocked_by_rm
+                        - is_converted_to_clips
+                        - disabled_reply_types
+                        - highlight_reel_type
+                        - contains_unavailable_story
+                        - is_added_to_main_grid
+                        - updated_timestamp
+                        - is_archived
+                  last_paginated_highlights_node_edited_at_ts:
+                    type: "null"
+                  has_fetched_all_remaining_highlights:
+                    type: "null"
+                  suggested_highlights:
+                    type: object
+                    properties: {}
+                    required: []
+                  cursor:
+                    type: "null"
+                  highlights_tray_type:
+                    type: string
+                  my_week_enabled:
+                    type: "null"
+                  status:
+                    type: string
+                required:
+                  - tray
+                  - last_paginated_highlights_node_edited_at_ts
+                  - has_fetched_all_remaining_highlights
+                  - suggested_highlights
+                  - cursor
+                  - highlights_tray_type
+                  - my_week_enabled
+                  - status
+      parameters:
+        - name: x-ads-opt-out
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-google-ad-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-device-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-cm-bandwidth-kbps
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-cm-latency
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-app-locale
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-device-locale
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-mapped-locale
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-pigeon-session-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-pigeon-rawclienttime
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-bandwidth-speed-kbps
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-bandwidth-totalbytes-b
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-bandwidth-totaltime-ms
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-version-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-www-claim
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-button-version
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-colors-enabled
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-ax-base-colors-enabled
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-font-enabled
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-is-layout-rtl
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-device-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-family-device-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-android-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-timezone-offset
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-nav-chain
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-connection-type
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-connection-type
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-capabilities
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-app-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: priority
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: user-agent
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: accept-language
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: authorization
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-mid
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: ig-u-ds-user-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: ig-u-rur
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: ig-intended-user-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: accept-encoding
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-fb-http-engine
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-client-ip
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-server-cluster
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: supported_capabilities_new
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: phone_id
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: battery_level
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: is_charging
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: is_dark_mode
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: will_sound_on
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: should_include_my_week_preview
+          in: query
+          required: true
+          schema:
+            type: string
     post:
       responses:
         "200":
