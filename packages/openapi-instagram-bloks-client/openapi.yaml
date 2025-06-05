@@ -1,0 +1,215 @@
+openapi: 3.1.0
+info:
+  title: Instagram Bloks API
+  version: 1.0.0
+servers:
+  - url: https://i.instagram.com/api/v1/bloks
+    description: Primary Server
+    variables: {}
+paths:
+  /apps/{1}/:
+    post:
+      responses: {}
+      parameters:
+        - name: x-ig-app-locale
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-device-locale
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-mapped-locale
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-pigeon-session-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-pigeon-rawclienttime
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-bandwidth-speed-kbps
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-bandwidth-totalbytes-b
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-bandwidth-totaltime-ms
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-version-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-www-claim
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-button-version
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-colors-enabled
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-ax-base-colors-enabled
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-prism-font-enabled
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-bloks-is-layout-rtl
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-device-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-family-device-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-android-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-timezone-offset
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-connection-type
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-connection-type
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-capabilities
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ig-app-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: priority
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-tigon-is-retry
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: user-agent
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: accept-language
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-mid
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: ig-intended-user-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: content-type
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: accept-encoding
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-fb-http-engine
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-client-ip
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-fb-server-cluster
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: "1"
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: x-ig-nav-chain
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-ig-attest-params
+          in: header
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                params:
+                  type: string
+                bk_client_context:
+                  type: string
+                bloks_versioning_id:
+                  type: string
+              required:
+                - params
+                - bk_client_context
+                - bloks_versioning_id

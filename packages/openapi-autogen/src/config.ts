@@ -26,6 +26,8 @@ export type AutogenConfig = {
   filterParameter?: (context: PathFilterContext) => boolean;
   filterExample?: (context: PathFilterContext) => boolean;
   filterSchema?: (context: PathFilterContext) => boolean;
+
+  pathSelectors?: RegExp[];
 };
 
 export type AutogenConfigFinal = Required<AutogenConfig>;

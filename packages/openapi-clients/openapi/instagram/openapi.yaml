@@ -14995,7 +14995,7 @@ paths:
             type: string
         - name: x-ig-salt-ids
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-fb-connection-type
@@ -20406,7 +20406,7 @@ paths:
             type: string
         - name: x-ig-salt-ids
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-fb-connection-type
@@ -25432,7 +25432,7 @@ paths:
             type: string
         - name: x-ig-salt-ids
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-fb-connection-type
@@ -28041,7 +28041,7 @@ paths:
             type: string
         - name: x-ig-salt-ids
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-fb-connection-type
@@ -28143,6 +28143,8 @@ paths:
               properties:
                 inventory_source:
                   type: string
+                carousel_share_child_media_id:
+                  type: string
                 action:
                   type: string
                 is_x_transport_forward:
@@ -28171,6 +28173,7 @@ paths:
                   type: string
               required:
                 - inventory_source
+                - carousel_share_child_media_id
                 - action
                 - is_x_transport_forward
                 - is_shh_mode
@@ -49030,7 +49033,7 @@ paths:
             type: string
         - name: x-ig-salt-ids
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-fb-connection-type
@@ -52242,6 +52245,8 @@ paths:
             schema:
               type: object
               properties:
+                supported_capabilities_new:
+                  type: string
                 reason:
                   type: string
                 timezone_offset:
@@ -52254,16 +52259,14 @@ paths:
                   type: string
                 page_size:
                   type: string
-                reel_tray_impressions:
-                  type: string
               required:
+                - supported_capabilities_new
                 - reason
                 - timezone_offset
                 - tray_session_id
                 - request_id
                 - _uuid
                 - page_size
-                - reel_tray_impressions
   /v1/feed/timeline/:
     post:
       responses:
@@ -59429,7 +59432,7 @@ paths:
             type: string
         - name: x-ig-salt-ids
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-fb-session-id
@@ -59551,25 +59554,21 @@ paths:
               properties:
                 has_camera_permission:
                   type: string
-                ad_and_netego_realtime_information:
-                  type: string
                 feed_view_info:
                   type: string
                 organic_realtime_information:
                   type: string
                 phone_id:
                   type: string
-                max_id:
-                  type: string
                 client_view_state_media_list:
                   type: string
                 reason:
                   type: string
+                last_head_load_time_ms:
+                  type: string
                 battery_level:
                   type: string
                 timezone_offset:
-                  type: string
-                feed_comment_button_tap_info:
                   type: string
                 device_id:
                   type: string
@@ -59579,7 +59578,7 @@ paths:
                   type: string
                 _uuid:
                   type: string
-                feed_reshare_info:
+                new_posts_pill_type:
                   type: string
                 is_charging:
                   type: string
@@ -59593,21 +59592,19 @@ paths:
                   type: string
               required:
                 - has_camera_permission
-                - ad_and_netego_realtime_information
                 - feed_view_info
                 - organic_realtime_information
                 - phone_id
-                - max_id
                 - client_view_state_media_list
                 - reason
+                - last_head_load_time_ms
                 - battery_level
                 - timezone_offset
-                - feed_comment_button_tap_info
                 - device_id
                 - request_id
                 - is_pull_to_refresh
                 - _uuid
-                - feed_reshare_info
+                - new_posts_pill_type
                 - is_charging
                 - is_dark_mode
                 - will_sound_on
@@ -81011,7 +81008,7 @@ paths:
             type: string
         - name: x-ig-304-eligible
           in: header
-          required: true
+          required: false
           schema:
             type: string
         - name: x-bloks-version-id

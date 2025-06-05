@@ -81,33 +81,30 @@ export type PathParameter = {
   value: string;
 };
 
-export function parameterizePath(path: string): [string, PathParameter[]] {
-  const segments = path.split("/").filter(Boolean);
-  const parameters: PathParameter[] = [];
-  let paramIndex = 1;
+const PATH_NUMBER_SELECTOR = /\/(\d+)(?=\/|$)/g;
 
-  const parameterizedSegments: string[] = [];
-  for (const segment of segments) {
-    if (/^\d+$/.test(segment) || /^[\d_]+$/.test(segment)) {
-      parameters.push({
-        name: String(paramIndex),
-        value: String(segment),
-      });
-      parameterizedSegments.push(`{${paramIndex++}}`);
-    } else {
-      parameterizedSegments.push(segment);
+export function parameterizePath(
+  config: AutogenConfigFinal,
+  path: string,
+): [string, PathParameter[]] {
+  let newPath = path;
+  const parameters: PathParameter[] = [];
+
+  for (const selector of [...config.pathSelectors, PATH_NUMBER_SELECTOR]) {
+    const matches = [...newPath.matchAll(selector)];
+    if (matches.length > 0) {
+      for (const [index, value] of matches.map((m) => m[1]!).entries()) {
+        parameters.push({
+          name: String(index + 1),
+          value: String(value),
+        });
+        newPath = newPath.replace(value, `{${index + 1}}`);
+      }
+      break;
     }
   }
 
-  let parameterizedPath = parameterizedSegments.join("/");
-  if (path.startsWith("/")) {
-    parameterizedPath = "/" + parameterizedPath;
-  }
-  if (path.endsWith("/")) {
-    parameterizedPath = parameterizedPath + "/";
-  }
-
-  return [parameterizedPath, parameters];
+  return [newPath, parameters];
 }
 
 export function normalizedPath(path: string): string {

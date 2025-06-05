@@ -4168,7 +4168,7 @@ export interface paths {
                     "x-ig-android-id": string;
                     "x-ig-timezone-offset": string;
                     "x-ig-nav-chain": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                     "x-fb-connection-type": string;
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
@@ -6723,7 +6723,7 @@ export interface paths {
                     "x-ig-android-id": string;
                     "x-ig-timezone-offset": string;
                     "x-ig-nav-chain": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                     "x-fb-connection-type": string;
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
@@ -8341,7 +8341,7 @@ export interface paths {
                     "x-ig-android-id": string;
                     "x-ig-timezone-offset": string;
                     "x-ig-nav-chain": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                     "x-fb-connection-type": string;
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
@@ -9192,7 +9192,7 @@ export interface paths {
                     "x-ig-android-id": string;
                     "x-ig-timezone-offset": string;
                     "x-ig-nav-chain": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                     "x-fb-connection-type": string;
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
@@ -9218,6 +9218,7 @@ export interface paths {
                 content: {
                     "application/x-www-form-urlencoded": {
                         inventory_source: string;
+                        carousel_share_child_media_id: string;
                         action: string;
                         is_x_transport_forward: string;
                         is_shh_mode: string;
@@ -16070,7 +16071,7 @@ export interface paths {
                     "x-ig-android-id": string;
                     "x-ig-timezone-offset": string;
                     "x-ig-nav-chain": string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                     "x-fb-connection-type": string;
                     "x-ig-connection-type": string;
                     "x-ig-capabilities": string;
@@ -16682,13 +16683,13 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/x-www-form-urlencoded": {
+                        supported_capabilities_new: string;
                         reason: string;
                         timezone_offset: string;
                         tray_session_id: string;
                         request_id: string;
                         _uuid: string;
                         page_size: string;
-                        reel_tray_impressions: string;
                     };
                 };
             };
@@ -17241,7 +17242,7 @@ export interface paths {
                     "x-ig-timezone-offset": string;
                     "x-ig-nav-chain"?: string;
                     "x-ig-client-endpoint"?: string;
-                    "x-ig-salt-ids": string;
+                    "x-ig-salt-ids"?: string;
                     "x-fb-session-id"?: string;
                     "x-fb-session-private"?: string;
                     "x-fb-connection-type": string;
@@ -17272,21 +17273,19 @@ export interface paths {
                 content: {
                     "application/x-www-form-urlencoded": {
                         has_camera_permission: string;
-                        ad_and_netego_realtime_information: string;
                         feed_view_info: string;
                         organic_realtime_information: string;
                         phone_id: string;
-                        max_id: string;
                         client_view_state_media_list: string;
                         reason: string;
+                        last_head_load_time_ms: string;
                         battery_level: string;
                         timezone_offset: string;
-                        feed_comment_button_tap_info: string;
                         device_id: string;
                         request_id: string;
                         is_pull_to_refresh: string;
                         _uuid: string;
-                        feed_reshare_info: string;
+                        new_posts_pill_type: string;
                         is_charging: string;
                         is_dark_mode: string;
                         will_sound_on: string;
@@ -26400,7 +26399,7 @@ export interface paths {
                     "x-ig-bandwidth-totalbytes-b": string;
                     "x-ig-bandwidth-totaltime-ms": string;
                     "x-ig-prefetch-request": string;
-                    "x-ig-304-eligible": string;
+                    "x-ig-304-eligible"?: string;
                     "x-bloks-version-id": string;
                     "x-ig-www-claim": string;
                     "x-bloks-prism-button-version": string;

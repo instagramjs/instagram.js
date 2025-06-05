@@ -1,7 +1,7 @@
 import { createInstagramBFetchClient } from "@instagramjs/openapi-clients";
 
-import { InstagramBAttestationApi } from "~/api/instagram-b/attestation";
-import { InstagramBZrApi } from "~/api/instagram-b/zr";
+import { InstagramBAttestationApi } from "~/api/b/attestation";
+import { InstagramBZrApi } from "~/api/b/zr";
 import { generateDeviceConfig } from "~/device";
 import { createClientState } from "~/state";
 

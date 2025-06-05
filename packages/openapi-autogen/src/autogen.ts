@@ -12,7 +12,6 @@ import {
   type AutogenConfigFinal,
   type RequestFilterContext,
 } from "./config";
-import { ALWAYS_IGNORED_HEADERS } from "./const";
 import { type AutogenFlow } from "./flow";
 import {
   getObjectOrRef,
@@ -54,7 +53,10 @@ function processFlow(
   const pathname = normalizedPath(
     requestUrl.pathname.slice(prefixUrl.pathname.length),
   );
-  const [parameterizedPath, pathParameters] = parameterizePath(pathname);
+  const [parameterizedPath, pathParameters] = parameterizePath(
+    config,
+    pathname,
+  );
 
   const filterContext: RequestFilterContext = {
     request: {
@@ -323,6 +325,7 @@ export function createOpenAPIAutogen(
     // Examples can contain sensitive data, so we don't want to include them by default
     filterExample: config.filterExample ?? (() => false),
     filterSchema: config.filterSchema ?? (() => true),
+    pathSelectors: config.pathSelectors ?? [],
   };
 
   if (!def) {

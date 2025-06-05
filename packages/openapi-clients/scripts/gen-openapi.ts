@@ -39,7 +39,9 @@ const GENERATOR_CONFIGS: GeneratorConfig[] = [
     openapiDir: path.join(BASE_OPENAPI_DIR, "instagram"),
     srcDir: path.join(BASE_SRC_DIR, "instagram"),
     autogenConfig: {
-      filterRequest: ({ request }) => !request.path.startsWith("/v1/bloks"),
+      filterRequest: ({ request }) =>
+        !request.path.startsWith("/v1/bloks") &&
+        !request.path.startsWith("/v1/wwwgraphql"),
       filterSchema: ({ path }) => !path.endsWith("bloks_payload"),
     },
   },
