@@ -7,7 +7,7 @@
 /* prettier-ignore */
 
 export interface paths {
-    "/apps/{1}/": {
+    "/apps/{appId}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -54,11 +54,11 @@ export interface paths {
                     "x-fb-http-engine": string;
                     "x-fb-client-ip": string;
                     "x-fb-server-cluster": string;
-                    "x-ig-nav-chain"?: string;
+                    "x-ig-nav-chain": string;
                     "x-ig-attest-params"?: string;
                 };
                 path: {
-                    1: string;
+                    appId: string;
                 };
                 cookie?: never;
             };

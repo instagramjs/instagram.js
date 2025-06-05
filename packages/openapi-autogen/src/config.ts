@@ -1,3 +1,5 @@
+import { type match, type MatchFunction } from "path-to-regexp";
+
 export type RequestFilterContext = {
   request: {
     method: string;
@@ -27,7 +29,11 @@ export type AutogenConfig = {
   filterExample?: (context: PathFilterContext) => boolean;
   filterSchema?: (context: PathFilterContext) => boolean;
 
-  pathSelectors?: RegExp[];
+  pathMatchers?: string[];
 };
 
-export type AutogenConfigFinal = Required<AutogenConfig>;
+export type AutogenConfigFinal = Required<
+  Omit<AutogenConfig, "pathMatchers">
+> & {
+  pathMatchers: ReturnType<typeof match>[];
+};

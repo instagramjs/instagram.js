@@ -13,7 +13,7 @@ import { INSTAGRAM_BLOKS_API_BASE_URL } from "~/const";
 const GENERATOR_CONFIG: AutogenConfig = {
   name: "Instagram Bloks API",
   apiPrefix: INSTAGRAM_BLOKS_API_BASE_URL,
-  pathSelectors: [/\/apps\/(.+)\//g],
+  pathMatchers: ["/apps/:appId/"],
   filterResponse: () => false,
 };
 

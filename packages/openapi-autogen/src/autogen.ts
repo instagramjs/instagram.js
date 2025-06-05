@@ -6,6 +6,7 @@ import {
   type PathItemObject,
   type SchemaObject,
 } from "openapi-typescript";
+import { match } from "path-to-regexp";
 
 import {
   type AutogenConfig,
@@ -325,7 +326,7 @@ export function createOpenAPIAutogen(
     // Examples can contain sensitive data, so we don't want to include them by default
     filterExample: config.filterExample ?? (() => false),
     filterSchema: config.filterSchema ?? (() => true),
-    pathSelectors: config.pathSelectors ?? [],
+    pathMatchers: (config.pathMatchers ?? []).map((m) => match(m)),
   };
 
   if (!def) {

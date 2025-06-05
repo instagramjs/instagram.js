@@ -7,7 +7,7 @@ servers:
     description: Primary Server
     variables: {}
 paths:
-  /apps/{1}/:
+  /apps/{appId}/:
     post:
       responses: {}
       parameters:
@@ -181,14 +181,14 @@ paths:
           required: true
           schema:
             type: string
-        - name: "1"
+        - name: appId
           in: path
           required: true
           schema:
             type: string
         - name: x-ig-nav-chain
           in: header
-          required: false
+          required: true
           schema:
             type: string
         - name: x-ig-attest-params

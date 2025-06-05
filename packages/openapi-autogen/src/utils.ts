@@ -81,30 +81,29 @@ export type PathParameter = {
   value: string;
 };
 
-const PATH_NUMBER_SELECTOR = /\/(\d+)(?=\/|$)/g;
-
 export function parameterizePath(
   config: AutogenConfigFinal,
   path: string,
 ): [string, PathParameter[]] {
-  let newPath = path;
-  const parameters: PathParameter[] = [];
-
-  for (const selector of [...config.pathSelectors, PATH_NUMBER_SELECTOR]) {
-    const matches = [...newPath.matchAll(selector)];
-    if (matches.length > 0) {
-      for (const [index, value] of matches.map((m) => m[1]!).entries()) {
+  for (const matcher of config.pathMatchers) {
+    const match = matcher(path);
+    if (match) {
+      let newPath = match.path;
+      const parameters: PathParameter[] = [];
+      for (const [key, value] of Object.entries(match.params)) {
+        if (Array.isArray(value)) {
+          throw new Error("Wildcard path parameters are not supported");
+        }
         parameters.push({
-          name: String(index + 1),
+          name: key,
           value: String(value),
         });
-        newPath = newPath.replace(value, `{${index + 1}}`);
+        newPath = newPath.replace(String(value), `{${key}}`);
       }
-      break;
+      return [newPath, parameters];
     }
   }
-
-  return [newPath, parameters];
+  return [path, []];
 }
 
 export function normalizedPath(path: string): string {
@@ -544,11 +543,11 @@ export function mergeSchemas(
     if (existingSchema.additionalProperties && newSchema.additionalProperties) {
       assert(
         isSchemaObjectOrRef(existingSchema.additionalProperties),
-        "Expected existing additionalProperties to be a schema",
+        "Expected existing additionalProperties to be a schema or ref object",
       );
       assert(
         isSchemaObjectOrRef(newSchema.additionalProperties),
-        "Expected new additionalProperties to be a schema",
+        "Expected new additionalProperties to be a schema or ref object",
       );
 
       mergeSchemas(
