@@ -1,7 +1,7 @@
 import { EventEmitter } from 'node:events';
 import { Collection } from './collection';
 import { DEFAULT_CLIENT_OPTIONS, TYPING_TTL } from './constants';
-import { ApiError, TimeoutError } from './errors';
+import { ApiError, AuthError, TimeoutError } from './errors';
 import { HttpClient } from './http';
 import { LruCollection } from './lru-collection';
 import { createMessage } from './models/message';
@@ -102,6 +102,7 @@ export class Client extends EventEmitter<ClientEventMap> {
   private seqId = 0;
   private reconnectAttempts = 0;
   private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  private reconnectStabilityTimer: ReturnType<typeof setTimeout> | null = null;
   private readonly typingTimers = new Map<string, ReturnType<typeof setTimeout>>();
   private readonly maxCachedMessages: number;
   private readonly sendTimeout: number;
@@ -111,6 +112,8 @@ export class Client extends EventEmitter<ClientEventMap> {
     timer: ReturnType<typeof setTimeout>;
   }> = [];
   private session: SessionData | null = null;
+  private irisRetryAttempts = 0;
+  private irisRetryTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(options?: ClientOptions) {
     super();
@@ -192,6 +195,8 @@ export class Client extends EventEmitter<ClientEventMap> {
         this.handleDeltaMessage(payload);
       } else if (topic === '/ig_send_message_response') {
         this.handleSendResponse(payload);
+      } else if (topic === '/ig_sub_iris_response') {
+        this.handleIrisResponse(payload);
       }
     });
 
@@ -212,18 +217,9 @@ export class Client extends EventEmitter<ClientEventMap> {
     });
 
     await this.mqtt.connect();
-    await this.mqtt.subscribe(['/ig_message_sync', '/ig_send_message_response']);
+    await this.mqtt.subscribe(['/ig_message_sync', '/ig_send_message_response', '/ig_sub_iris_response']);
 
-    this.mqtt.publish(
-      '/ig_sub_iris',
-      JSON.stringify({
-        seq_id: this.seqId,
-        snapshot_at_ms: Date.now(),
-        snapshot_app_version: 'web',
-        subscription_type: 'slide_gql',
-      }),
-      1,
-    );
+    this.publishIrisSubscription();
 
     this.connected = true;
     this.readyAt = new Date();
@@ -236,6 +232,16 @@ export class Client extends EventEmitter<ClientEventMap> {
     if (this.reconnectTimer) {
       clearTimeout(this.reconnectTimer);
       this.reconnectTimer = null;
+    }
+
+    if (this.reconnectStabilityTimer) {
+      clearTimeout(this.reconnectStabilityTimer);
+      this.reconnectStabilityTimer = null;
+    }
+
+    if (this.irisRetryTimer) {
+      clearTimeout(this.irisRetryTimer);
+      this.irisRetryTimer = null;
     }
 
     for (const timer of this.typingTimers.values()) {
@@ -253,6 +259,8 @@ export class Client extends EventEmitter<ClientEventMap> {
       this.mqtt.disconnect();
       this.mqtt = null;
     }
+
+    this.emit('disconnect', { reason: 'destroyed', willReconnect: false });
 
     this.threads.clear();
     this.users.clear();
@@ -1016,6 +1024,11 @@ export class Client extends EventEmitter<ClientEventMap> {
   }
 
   private attemptReconnect(): void {
+    if (this.reconnectStabilityTimer) {
+      clearTimeout(this.reconnectStabilityTimer);
+      this.reconnectStabilityTimer = null;
+    }
+
     if (this.reconnectAttempts >= this.options.reconnectMaxRetries) {
       this.emit('disconnect', {
         reason: 'connection_lost',
@@ -1026,7 +1039,7 @@ export class Client extends EventEmitter<ClientEventMap> {
 
     const delay = Math.min(
       this.options.reconnectInterval * Math.pow(2, this.reconnectAttempts),
-      60_000,
+      300_000,
     );
     this.reconnectAttempts++;
 
@@ -1039,24 +1052,98 @@ export class Client extends EventEmitter<ClientEventMap> {
       try {
         if (this.mqtt) {
           await this.mqtt.connect();
-          await this.mqtt.subscribe(['/ig_message_sync', '/ig_send_message_response']);
-          this.mqtt.publish(
-            '/ig_sub_iris',
-            JSON.stringify({
-              seq_id: this.seqId,
-              snapshot_at_ms: Date.now(),
-              snapshot_app_version: 'web',
-              subscription_type: 'slide_gql',
-            }),
-            1,
-          );
+          await this.mqtt.subscribe(['/ig_message_sync', '/ig_send_message_response', '/ig_sub_iris_response']);
+          this.publishIrisSubscription();
           this.connected = true;
-          this.reconnectAttempts = 0;
+          this.reconnectStabilityTimer = setTimeout(() => {
+            this.reconnectAttempts = 0;
+            this.reconnectStabilityTimer = null;
+          }, 30_000);
           this.emit('reconnect');
         }
-      } catch {
+      } catch (err) {
+        if (err instanceof AuthError) {
+          this.emit('disconnect', { reason: 'auth_expired', willReconnect: false });
+          return;
+        }
         this.attemptReconnect();
       }
     }, delay);
+  }
+
+  private publishIrisSubscription(): void {
+    this.requireMqtt().publish(
+      '/ig_sub_iris',
+      JSON.stringify({
+        seq_id: this.seqId,
+        snapshot_at_ms: Date.now(),
+        snapshot_app_version: 'web',
+        subscription_type: 'slide_gql',
+      }),
+      1,
+    );
+  }
+
+  private handleIrisResponse(payload: Buffer): void {
+    let parsed: Record<string, unknown>;
+    try {
+      const raw: unknown = JSON.parse(payload.toString());
+      if (!isRecord(raw)) {
+        return;
+      }
+      parsed = raw;
+    } catch {
+      return;
+    }
+
+    const errorType = parsed['error_type'];
+
+    if (errorType === 1) {
+      this.irisRetryAttempts = 0;
+      this.performResync();
+    } else if (errorType === 2) {
+      const delay = Math.min(Math.pow(2, this.irisRetryAttempts), 64) * 1000;
+      this.irisRetryAttempts++;
+      this.irisRetryTimer = setTimeout(() => {
+        this.irisRetryTimer = null;
+        this.publishIrisSubscription();
+      }, delay);
+    } else {
+      this.irisRetryAttempts = 0;
+    }
+  }
+
+  private async performResync(): Promise<void> {
+    try {
+      const http = this.requireHttp();
+      const inboxData = await http.graphql<{
+        data?: { viewer?: { message_threads?: { nodes?: RawThread[] }; seq_id?: number } };
+      }>('IGDInboxTrayQuery', {});
+
+      const viewer = inboxData.data?.viewer;
+      if (viewer?.seq_id !== undefined) {
+        this.seqId = viewer.seq_id;
+        if (this.session) {
+          this.session.seqId = viewer.seq_id;
+        }
+      }
+
+      const threadNodes = viewer?.message_threads?.nodes ?? [];
+      for (const rawThread of threadNodes) {
+        const thread = Thread.from(rawThread, this);
+        this.threads.set(thread.id, thread);
+
+        for (const participant of thread.participants) {
+          if (!this.users.has(participant.user.id)) {
+            this.users.set(participant.user.id, participant.user);
+          }
+        }
+      }
+
+      this.publishIrisSubscription();
+      this.emit('resync');
+    } catch (err) {
+      this.emit('error', err instanceof Error ? err : new Error(String(err)));
+    }
   }
 }

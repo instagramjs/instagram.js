@@ -1,5 +1,5 @@
 import { BASE_URL, DEFAULT_DOC_IDS, GRAPHQL_ENDPOINT } from './constants';
-import { ApiError, AuthError, RateLimitError } from './errors';
+import { ApiError, AuthError, DocIdError, RateLimitError } from './errors';
 import { buildGraphQLBody, buildGraphQLHeaders, buildRestHeaders } from './session';
 import type { DocIdMap, SessionData } from './types';
 import { isRecord } from './utils';
@@ -164,8 +164,23 @@ export class HttpClient {
       this.throwForStatus(response.status, queryName);
     }
 
-    const data: T = await response.json();
-    return data;
+    const data: unknown = await response.json();
+
+    // Heuristic: detect GraphQL-level errors that indicate an invalid doc_id.
+    // Should be refined once a real invalid-doc_id response is captured.
+    if (queryName && isRecord(data)) {
+      const errors = data['errors'];
+      if (Array.isArray(errors) && errors.length > 0) {
+        const errorText = JSON.stringify(errors).toLowerCase();
+        if (errorText.includes('doc_id') || errorText.includes('document') || errorText.includes('query_id')) {
+          throw new DocIdError(
+            `Invalid doc_id for ${queryName}: ${String((errors[0] as Record<string, unknown>)?.['message'] ?? 'unknown error')}`,
+          );
+        }
+      }
+    }
+
+    return data as T;
   }
 
   private throwForStatus(status: number, queryName?: string): never {

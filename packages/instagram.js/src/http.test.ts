@@ -111,6 +111,67 @@ describe('HttpClient', () => {
       const body = vi.mocked(fetch).mock.calls[0]![1]?.body as string;
       expect(body).toContain('doc_id=99999');
     });
+
+    it('throws DocIdError when response contains doc_id error', async () => {
+      const errorResponse = {
+        errors: [{ message: 'Invalid doc_id provided', code: 1675030 }],
+      };
+      vi.mocked(fetch).mockResolvedValueOnce(
+        new Response(JSON.stringify(errorResponse), { status: 200 }),
+      );
+
+      const client = new HttpClient(session);
+      await expect(client.graphql('IGDInboxTrayQuery', {})).rejects.toThrow(DocIdError);
+    });
+
+    it('throws DocIdError when response contains document error', async () => {
+      const errorResponse = {
+        errors: [{ message: 'Unknown document' }],
+      };
+      vi.mocked(fetch).mockResolvedValueOnce(
+        new Response(JSON.stringify(errorResponse), { status: 200 }),
+      );
+
+      const client = new HttpClient(session);
+      await expect(client.graphql('IGDInboxTrayQuery', {})).rejects.toThrow(DocIdError);
+    });
+
+    it('throws DocIdError when response contains query_id error', async () => {
+      const errorResponse = {
+        errors: [{ message: 'Bad query_id' }],
+      };
+      vi.mocked(fetch).mockResolvedValueOnce(
+        new Response(JSON.stringify(errorResponse), { status: 200 }),
+      );
+
+      const client = new HttpClient(session);
+      await expect(client.graphql('IGDInboxTrayQuery', {})).rejects.toThrow(DocIdError);
+    });
+
+    it('passes through unrelated GraphQL errors', async () => {
+      const errorResponse = {
+        errors: [{ message: 'Rate limit exceeded' }],
+        data: { viewer: null },
+      };
+      vi.mocked(fetch).mockResolvedValueOnce(
+        new Response(JSON.stringify(errorResponse), { status: 200 }),
+      );
+
+      const client = new HttpClient(session);
+      const result = await client.graphql('IGDInboxTrayQuery', {});
+      expect(result).toEqual(errorResponse);
+    });
+
+    it('returns normal responses without errors field', async () => {
+      const normalResponse = { data: { viewer: { threads: [] } } };
+      vi.mocked(fetch).mockResolvedValueOnce(
+        new Response(JSON.stringify(normalResponse), { status: 200 }),
+      );
+
+      const client = new HttpClient(session);
+      const result = await client.graphql('IGDInboxTrayQuery', {});
+      expect(result).toEqual(normalResponse);
+    });
   });
 
   describe('rest', () => {

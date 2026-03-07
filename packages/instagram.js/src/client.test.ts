@@ -1,7 +1,7 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import { Client } from './client';
 import { DEFAULT_CLIENT_OPTIONS } from './constants';
-import { ApiError, TimeoutError } from './errors';
+import { ApiError, AuthError, TimeoutError } from './errors';
 
 vi.mock('./session', async (importOriginal) => {
   const original = await importOriginal<typeof import('./session')>();
@@ -31,43 +31,47 @@ vi.mock('./session', async (importOriginal) => {
   };
 });
 
-vi.mock('./http', () => ({
-  HttpClient: vi.fn().mockImplementation(() => ({
-    graphql: vi.fn().mockResolvedValue({
-      data: {
-        viewer: {
-          message_threads: {
-            nodes: [
+const defaultInboxResponse = {
+  data: {
+    viewer: {
+      message_threads: {
+        nodes: [
+          {
+            thread_id: 'thread-1',
+            thread_title: 'Test Thread',
+            users: [
+              { pk: '456', username: 'user1', full_name: 'User One' },
+            ],
+            left_users: [],
+            items: [
               {
-                thread_id: 'thread-1',
-                thread_title: 'Test Thread',
-                users: [
-                  { pk: '456', username: 'user1', full_name: 'User One' },
-                ],
-                left_users: [],
-                items: [
-                  {
-                    item_id: 'msg-1',
-                    user_id: '456',
-                    timestamp: '1700000000000000',
-                    item_type: 'text',
-                    text: 'Hello',
-                  },
-                ],
-                read_state: 0,
-                is_group: false,
-                muted: false,
-                admin_user_ids: [],
+                item_id: 'msg-1',
+                user_id: '456',
+                timestamp: '1700000000000000',
+                item_type: 'text',
+                text: 'Hello',
               },
             ],
+            read_state: 0,
+            is_group: false,
+            muted: false,
+            admin_user_ids: [],
           },
-          seq_id: 100,
-        },
+        ],
       },
-    }),
-    rest: vi.fn(),
-    upload: vi.fn(),
-  })),
+      seq_id: 100,
+    },
+  },
+};
+
+const mockHttpInstance = {
+  graphql: vi.fn().mockResolvedValue(defaultInboxResponse),
+  rest: vi.fn(),
+  upload: vi.fn(),
+};
+
+vi.mock('./http', () => ({
+  HttpClient: vi.fn().mockImplementation(() => mockHttpInstance),
 }));
 
 const mockMqttInstance = {
@@ -86,6 +90,7 @@ vi.mock('./mqtt', () => ({
 describe('Client', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockHttpInstance.graphql.mockResolvedValue(defaultInboxResponse);
     mockMqttInstance.connect.mockResolvedValue(undefined);
     mockMqttInstance.subscribe.mockResolvedValue(undefined);
     mockMqttInstance.on.mockReset();
@@ -161,6 +166,7 @@ describe('Client', () => {
       expect(mockMqttInstance.subscribe).toHaveBeenCalledWith([
         '/ig_message_sync',
         '/ig_send_message_response',
+        '/ig_sub_iris_response',
       ]);
     });
 
@@ -586,9 +592,7 @@ describe('Client', () => {
   describe('GraphQL actions', () => {
     async function loginAndGetHttp(client: Client) {
       await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
-      const { HttpClient: HttpCtor } = await import('./http');
-      const httpInstance = vi.mocked(HttpCtor).mock.results[0]!.value;
-      return httpInstance;
+      return mockHttpInstance;
     }
 
     it('markAsRead calls correct mutation', async () => {
@@ -723,9 +727,7 @@ describe('Client', () => {
   describe('REST actions', () => {
     async function loginAndGetHttp(client: Client) {
       await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
-      const { HttpClient: HttpCtor } = await import('./http');
-      const httpInstance = vi.mocked(HttpCtor).mock.results[0]!.value;
-      return httpInstance;
+      return mockHttpInstance;
     }
 
     it('createGroupThread sends correct body', async () => {
@@ -860,11 +862,9 @@ describe('Client', () => {
 
     async function loginAndGetHttp(client: Client) {
       await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
-      const { HttpClient: HttpCtor } = await import('./http');
-      const httpInstance = vi.mocked(HttpCtor).mock.results[0]!.value;
-      vi.mocked(httpInstance.upload).mockResolvedValue({ id: '123456' });
-      vi.mocked(httpInstance.rest).mockResolvedValue(broadcastResponse);
-      return httpInstance;
+      vi.mocked(mockHttpInstance.upload).mockResolvedValue({ id: '123456' });
+      vi.mocked(mockHttpInstance.rest).mockResolvedValue(broadcastResponse);
+      return mockHttpInstance;
     }
 
     it('sends photo via upload and broadcast', async () => {
@@ -1087,6 +1087,331 @@ describe('Client', () => {
       client.on('typingStop', typingStopHandler);
       vi.advanceTimersByTime(30000);
       expect(typingStopHandler).not.toHaveBeenCalled();
+
+      vi.useRealTimers();
+    });
+
+    it('emits destroyed disconnect reason', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+
+      const disconnectHandler = vi.fn();
+      client.on('disconnect', disconnectHandler);
+
+      await client.destroy();
+
+      expect(disconnectHandler).toHaveBeenCalledWith({
+        reason: 'destroyed',
+        willReconnect: false,
+      });
+    });
+
+    it('clears iris retry timer', async () => {
+      vi.useFakeTimers();
+
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const handler = getMessageHandler(client);
+
+      handler('/ig_sub_iris_response', Buffer.from(JSON.stringify({ error_type: 2 })));
+
+      await client.destroy();
+
+      mockMqttInstance.publish.mockClear();
+      vi.advanceTimersByTime(10_000);
+      expect(mockMqttInstance.publish).not.toHaveBeenCalled();
+
+      vi.useRealTimers();
+    });
+  });
+
+  describe('reconnect', () => {
+    function getMqttDisconnectHandler(): () => void {
+      const disconnectCall = mockMqttInstance.on.mock.calls.find(
+        (c: unknown[]) => c[0] === 'disconnect',
+      );
+      return disconnectCall![1] as () => void;
+    }
+
+    it('caps backoff delay at 300,000ms', async () => {
+      vi.useFakeTimers();
+
+      const client = new Client({ reconnect: true, reconnectInterval: 1000, reconnectMaxRetries: 100 });
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const disconnectHandler = getMqttDisconnectHandler();
+
+      const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
+
+      // Simulate many reconnect attempts to exceed the cap
+      for (let i = 0; i < 20; i++) {
+        disconnectHandler();
+      }
+
+      // After enough attempts, delay should be capped at 300_000
+      const reconnectDelays = setTimeoutSpy.mock.calls
+        .map((c) => c[1])
+        .filter((d): d is number => typeof d === 'number' && d >= 1000);
+
+      const maxDelay = Math.max(...reconnectDelays);
+      expect(maxDelay).toBe(300_000);
+
+      setTimeoutSpy.mockRestore();
+      vi.useRealTimers();
+    });
+
+    it('does not reset reconnect counter immediately on success', async () => {
+      vi.useFakeTimers();
+
+      const client = new Client({ reconnect: true, reconnectInterval: 100 });
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const disconnectHandler = getMqttDisconnectHandler();
+
+      disconnectHandler();
+      await vi.advanceTimersByTimeAsync(100);
+
+      // Counter should not be 0 immediately — stability timer pending
+      // Disconnect again quickly (within 30s) to test it wasn't reset
+      const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
+      disconnectHandler();
+
+      const reconnectCalls = setTimeoutSpy.mock.calls.filter((c) => typeof c[1] === 'number' && c[1]! >= 100);
+      const lastDelay = reconnectCalls[reconnectCalls.length - 1]?.[1];
+      expect(lastDelay).toBeGreaterThan(100);
+
+      setTimeoutSpy.mockRestore();
+      vi.useRealTimers();
+    });
+
+    it('resets reconnect counter after 30s stability', async () => {
+      vi.useFakeTimers();
+
+      const client = new Client({ reconnect: true, reconnectInterval: 100 });
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const disconnectHandler = getMqttDisconnectHandler();
+
+      disconnectHandler();
+      await vi.advanceTimersByTimeAsync(100);
+
+      // Wait the full 30s stability period
+      await vi.advanceTimersByTimeAsync(30_000);
+
+      // Now disconnect again — delay should be based on attempt 0 (reset)
+      const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
+      disconnectHandler();
+
+      const reconnectCalls = setTimeoutSpy.mock.calls.filter((c) => typeof c[1] === 'number' && c[1]! >= 100);
+      const lastDelay = reconnectCalls[reconnectCalls.length - 1]?.[1];
+      expect(lastDelay).toBe(100);
+
+      setTimeoutSpy.mockRestore();
+      vi.useRealTimers();
+    });
+
+    it('emits auth_expired and stops retrying on AuthError', async () => {
+      vi.useFakeTimers();
+
+      const client = new Client({ reconnect: true, reconnectInterval: 100 });
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const disconnectHandler = getMqttDisconnectHandler();
+
+      mockMqttInstance.connect.mockRejectedValueOnce(new AuthError('expired'));
+
+      const disconnectEvents: Array<{ reason: string; willReconnect: boolean }> = [];
+      client.on('disconnect', (evt) => disconnectEvents.push(evt));
+
+      disconnectHandler();
+      await vi.advanceTimersByTimeAsync(100);
+
+      const authEvent = disconnectEvents.find((e) => e.reason === 'auth_expired');
+      expect(authEvent).toEqual({ reason: 'auth_expired', willReconnect: false });
+
+      vi.useRealTimers();
+    });
+
+    it('retries on non-auth errors', async () => {
+      vi.useFakeTimers();
+
+      const client = new Client({ reconnect: true, reconnectInterval: 100 });
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const disconnectHandler = getMqttDisconnectHandler();
+
+      mockMqttInstance.connect.mockRejectedValueOnce(new Error('network error'));
+
+      const disconnectEvents: Array<{ reason: string }> = [];
+      client.on('disconnect', (evt) => disconnectEvents.push(evt));
+
+      disconnectHandler();
+      await vi.advanceTimersByTimeAsync(100);
+
+      // Should have scheduled another reconnect (connection_lost with willReconnect: true)
+      const retryEvents = disconnectEvents.filter((e) => e.reason === 'connection_lost');
+      expect(retryEvents.length).toBeGreaterThanOrEqual(2);
+
+      vi.useRealTimers();
+    });
+
+    it('subscribes to iris response topic on reconnect', async () => {
+      vi.useFakeTimers();
+
+      const client = new Client({ reconnect: true, reconnectInterval: 100 });
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const disconnectHandler = getMqttDisconnectHandler();
+
+      mockMqttInstance.subscribe.mockClear();
+      disconnectHandler();
+      await vi.advanceTimersByTimeAsync(100);
+
+      expect(mockMqttInstance.subscribe).toHaveBeenCalledWith([
+        '/ig_message_sync',
+        '/ig_send_message_response',
+        '/ig_sub_iris_response',
+      ]);
+
+      vi.useRealTimers();
+    });
+  });
+
+  describe('iris subscription error handling', () => {
+    it('performs resync on error_type 1', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const handler = getMessageHandler(client);
+
+      // Override graphql to return a new seq_id for the resync call.
+      // Need two "once" values: handleIrisResponse synchronously triggers
+      // performResync which awaits graphql, but vi.waitFor may also trigger
+      // the default mock between microtasks. Two ensures the first real call gets 500.
+      mockHttpInstance.graphql.mockResolvedValueOnce({
+        data: {
+          viewer: {
+            message_threads: { nodes: [] },
+            seq_id: 500,
+          },
+        },
+      });
+      mockHttpInstance.graphql.mockResolvedValueOnce({
+        data: {
+          viewer: {
+            message_threads: { nodes: [] },
+            seq_id: 500,
+          },
+        },
+      });
+
+      const resyncHandler = vi.fn();
+      client.on('resync', resyncHandler);
+
+      handler('/ig_sub_iris_response', Buffer.from(JSON.stringify({ error_type: 1 })));
+
+      await vi.waitFor(() => {
+        expect(resyncHandler).toHaveBeenCalledOnce();
+      });
+
+      expect(client.getSeqId()).toBe(500);
+      expect(mockMqttInstance.publish).toHaveBeenCalledWith(
+        '/ig_sub_iris',
+        expect.stringContaining('"seq_id":500'),
+        1,
+      );
+    });
+
+    it('schedules retry with exponential backoff on error_type 2', async () => {
+      vi.useFakeTimers();
+
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const handler = getMessageHandler(client);
+      mockMqttInstance.publish.mockClear();
+
+      // First retry: 1s delay (2^0 * 1000)
+      handler('/ig_sub_iris_response', Buffer.from(JSON.stringify({ error_type: 2 })));
+
+      vi.advanceTimersByTime(999);
+      expect(mockMqttInstance.publish).not.toHaveBeenCalled();
+
+      vi.advanceTimersByTime(1);
+      expect(mockMqttInstance.publish).toHaveBeenCalledWith(
+        '/ig_sub_iris',
+        expect.any(String),
+        1,
+      );
+
+      mockMqttInstance.publish.mockClear();
+
+      // Second retry: 2s delay (2^1 * 1000)
+      handler('/ig_sub_iris_response', Buffer.from(JSON.stringify({ error_type: 2 })));
+
+      vi.advanceTimersByTime(1999);
+      expect(mockMqttInstance.publish).not.toHaveBeenCalled();
+
+      vi.advanceTimersByTime(1);
+      expect(mockMqttInstance.publish).toHaveBeenCalledOnce();
+
+      mockMqttInstance.publish.mockClear();
+
+      // Third retry: 4s delay (2^2 * 1000)
+      handler('/ig_sub_iris_response', Buffer.from(JSON.stringify({ error_type: 2 })));
+
+      vi.advanceTimersByTime(3999);
+      expect(mockMqttInstance.publish).not.toHaveBeenCalled();
+
+      vi.advanceTimersByTime(1);
+      expect(mockMqttInstance.publish).toHaveBeenCalledOnce();
+
+      vi.useRealTimers();
+    });
+
+    it('caps iris retry backoff at 64s', async () => {
+      vi.useFakeTimers();
+
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const handler = getMessageHandler(client);
+
+      // Fire 7 error_type 2 responses to exceed 64s cap (2^7 = 128 > 64)
+      for (let i = 0; i < 7; i++) {
+        handler('/ig_sub_iris_response', Buffer.from(JSON.stringify({ error_type: 2 })));
+        vi.advanceTimersByTime(100_000);
+      }
+
+      mockMqttInstance.publish.mockClear();
+      handler('/ig_sub_iris_response', Buffer.from(JSON.stringify({ error_type: 2 })));
+
+      vi.advanceTimersByTime(63_999);
+      expect(mockMqttInstance.publish).not.toHaveBeenCalled();
+
+      vi.advanceTimersByTime(1);
+      expect(mockMqttInstance.publish).toHaveBeenCalledOnce();
+
+      vi.useRealTimers();
+    });
+
+    it('resets retry counter on success response', async () => {
+      vi.useFakeTimers();
+
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const handler = getMessageHandler(client);
+
+      // Build up retry counter
+      handler('/ig_sub_iris_response', Buffer.from(JSON.stringify({ error_type: 2 })));
+      vi.advanceTimersByTime(10_000);
+      handler('/ig_sub_iris_response', Buffer.from(JSON.stringify({ error_type: 2 })));
+      vi.advanceTimersByTime(10_000);
+
+      // Success resets counter
+      handler('/ig_sub_iris_response', Buffer.from(JSON.stringify({ succeeded: true })));
+
+      mockMqttInstance.publish.mockClear();
+
+      // Next error should use 1s delay (2^0), not 4s (2^2)
+      handler('/ig_sub_iris_response', Buffer.from(JSON.stringify({ error_type: 2 })));
+
+      vi.advanceTimersByTime(999);
+      expect(mockMqttInstance.publish).not.toHaveBeenCalled();
+
+      vi.advanceTimersByTime(1);
+      expect(mockMqttInstance.publish).toHaveBeenCalledOnce();
 
       vi.useRealTimers();
     });
