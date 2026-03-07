@@ -96,13 +96,12 @@ export abstract class BaseMessage {
    * });
    * ```
    */
-  reply(content: string): void;
+  reply(content: string): Promise<void>;
   reply(content: SendContent): Promise<Message>;
-  reply(content: string | SendContent): void | Promise<Message> {
+  reply(content: string | SendContent): Promise<void> | Promise<Message> {
     const client = this.requireClient();
     if (typeof content === 'string') {
-      client.sendText(this.threadId, content, this.id);
-      return;
+      return client.sendText(this.threadId, content, this.id);
     }
     return client.sendMedia(this.threadId, content);
   }

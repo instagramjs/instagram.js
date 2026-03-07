@@ -10,6 +10,7 @@ export const MQTT_ENDPOINT = 'wss://edge-chat.instagram.com/chat';
 export const MQTT_CLIENT_ID = 'mqttwsclient';
 export const DEFAULT_MQTT_KEEPALIVE = 10;
 export const TYPING_TTL = 22_000;
+export const DEFAULT_SEND_TIMEOUT = 15_000;
 
 export const USER_AGENT =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
@@ -71,4 +72,5 @@ export const DEFAULT_CLIENT_OPTIONS = {
   maxCachedThreads: 50,
   maxCachedMessages: 100,
   mqttKeepAlive: DEFAULT_MQTT_KEEPALIVE,
+  sendTimeout: DEFAULT_SEND_TIMEOUT,
 } satisfies Required<Omit<ClientOptions, 'docIds'>>;

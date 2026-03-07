@@ -103,13 +103,12 @@ export class Thread {
    * thread.send({ link: 'https://example.com' });
    * ```
    */
-  send(content: string): void;
+  send(content: string): Promise<void>;
   send(content: SendContent): Promise<Message>;
-  send(content: string | SendContent): void | Promise<Message> {
+  send(content: string | SendContent): Promise<void> | Promise<Message> {
     const client = this.requireClient();
     if (typeof content === 'string') {
-      client.sendText(this.id, content);
-      return;
+      return client.sendText(this.id, content);
     }
     return client.sendMedia(this.id, content);
   }

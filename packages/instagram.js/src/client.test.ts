@@ -1,6 +1,7 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import { Client } from './client';
 import { DEFAULT_CLIENT_OPTIONS } from './constants';
+import { ApiError, TimeoutError } from './errors';
 
 vi.mock('./session', async (importOriginal) => {
   const original = await importOriginal<typeof import('./session')>();
@@ -182,16 +183,16 @@ describe('Client', () => {
     });
   });
 
-  describe('delta processing', () => {
-    function getMessageHandler(client: Client): (topic: string, payload: Buffer) => void {
-      client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
-      const calls = mockMqttInstance.on.mock.calls;
-      const messageCall = calls.find(
-        (c: unknown[]) => c[0] === 'message',
-      );
-      return messageCall![1] as (topic: string, payload: Buffer) => void;
-    }
+  function getMessageHandler(client: Client): (topic: string, payload: Buffer) => void {
+    client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+    const calls = mockMqttInstance.on.mock.calls;
+    const messageCall = calls.find(
+      (c: unknown[]) => c[0] === 'message',
+    );
+    return messageCall![1] as (topic: string, payload: Buffer) => void;
+  }
 
+  describe('delta processing', () => {
     it('emits message event for new items', async () => {
       const client = new Client();
       await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
@@ -482,12 +483,22 @@ describe('Client', () => {
   });
 
   describe('MQTT actions', () => {
+    function simulateSendResponse(
+      handler: (topic: string, payload: Buffer) => void,
+      response: Record<string, unknown> = { status: 'ok', payload: {} },
+    ) {
+      handler('/ig_send_message_response', Buffer.from(JSON.stringify(response)));
+    }
+
     it('sendText publishes correct payload', async () => {
       const client = new Client();
       await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const handler = getMessageHandler(client);
       mockMqttInstance.publish.mockClear();
 
-      client.sendText('thread-1', 'Hello!');
+      const promise = client.sendText('thread-1', 'Hello!');
+      simulateSendResponse(handler);
+      await promise;
 
       expect(mockMqttInstance.publish).toHaveBeenCalledWith(
         '/ig_send_message',
@@ -509,9 +520,12 @@ describe('Client', () => {
     it('sendText includes reply fields when replying', async () => {
       const client = new Client();
       await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const handler = getMessageHandler(client);
       mockMqttInstance.publish.mockClear();
 
-      client.sendText('thread-1', 'Reply', 'msg-parent');
+      const promise = client.sendText('thread-1', 'Reply', 'msg-parent');
+      simulateSendResponse(handler);
+      await promise;
 
       const payload = JSON.parse(mockMqttInstance.publish.mock.calls[0]![1] as string);
       expect(payload.replied_to_item_id).toBe('msg-parent');
@@ -912,6 +926,109 @@ describe('Client', () => {
     });
   });
 
+  describe('send response handling', () => {
+    function simulateSendResponse(
+      handler: (topic: string, payload: Buffer) => void,
+      response: Record<string, unknown> = { status: 'ok', payload: {} },
+    ) {
+      handler('/ig_send_message_response', Buffer.from(JSON.stringify(response)));
+    }
+
+    it('sendText resolves on ok response', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const handler = getMessageHandler(client);
+
+      const promise = client.sendText('thread-1', 'Hello');
+      simulateSendResponse(handler);
+
+      await expect(promise).resolves.toBeUndefined();
+    });
+
+    it('sendText rejects with TimeoutError on timeout', async () => {
+      vi.useFakeTimers();
+
+      const client = new Client({ sendTimeout: 100 });
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+
+      const promise = client.sendText('thread-1', 'Hello');
+      vi.advanceTimersByTime(100);
+
+      await expect(promise).rejects.toThrow(TimeoutError);
+
+      vi.useRealTimers();
+    });
+
+    it('sendText rejects with ApiError on error response', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const handler = getMessageHandler(client);
+
+      const promise = client.sendText('thread-1', 'Hello');
+      simulateSendResponse(handler, { status: 'error', payload: {} });
+
+      await expect(promise).rejects.toThrow(ApiError);
+    });
+
+    it('multiple concurrent sends resolved in FIFO order', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const handler = getMessageHandler(client);
+
+      const results: number[] = [];
+      const p1 = client.sendText('thread-1', 'First').then(() => results.push(1));
+      const p2 = client.sendText('thread-1', 'Second').then(() => results.push(2));
+
+      simulateSendResponse(handler);
+      await p1;
+      simulateSendResponse(handler);
+      await p2;
+
+      expect(results).toEqual([1, 2]);
+    });
+
+    it('activity responses are skipped and do not resolve message sends', async () => {
+      const client = new Client({ sendTimeout: 100 });
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const handler = getMessageHandler(client);
+
+      vi.useFakeTimers();
+      const promise = client.sendText('thread-1', 'Hello');
+
+      // Typing indicator response should be ignored
+      simulateSendResponse(handler, {
+        status: 'ok',
+        payload: { activity_status: 1 },
+      });
+
+      // The send should still be pending — advance timers to trigger timeout
+      vi.advanceTimersByTime(100);
+      await expect(promise).rejects.toThrow(TimeoutError);
+
+      vi.useRealTimers();
+    });
+
+    it('response with empty queue is silently ignored', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const handler = getMessageHandler(client);
+
+      // Should not throw
+      simulateSendResponse(handler);
+    });
+
+    it('client.send routes text to sendText', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const handler = getMessageHandler(client);
+
+      const promise = client.send('thread-1', 'Hello');
+      simulateSendResponse(handler);
+
+      await expect(promise).resolves.toBeUndefined();
+    });
+  });
+
   describe('destroy', () => {
     it('clears all state', async () => {
       const client = new Client();
@@ -925,6 +1042,16 @@ describe('Client', () => {
       expect(client.threads.size).toBe(0);
       expect(client.users.size).toBe(0);
       expect(mockMqttInstance.disconnect).toHaveBeenCalled();
+    });
+
+    it('rejects pending sends', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+
+      const promise = client.sendText('thread-1', 'Hello');
+      await client.destroy();
+
+      await expect(promise).rejects.toThrow('Client destroyed');
     });
 
     it('clears typing timers', async () => {

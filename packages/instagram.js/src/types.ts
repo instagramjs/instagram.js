@@ -11,6 +11,7 @@ export type ClientOptions = {
   maxCachedThreads?: number;
   maxCachedMessages?: number;
   mqttKeepAlive?: number;
+  sendTimeout?: number;
   docIds?: Partial<DocIdMap>;
 };
 

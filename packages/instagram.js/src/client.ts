@@ -1,6 +1,7 @@
 import { EventEmitter } from 'node:events';
 import { Collection } from './collection';
 import { DEFAULT_CLIENT_OPTIONS, TYPING_TTL } from './constants';
+import { ApiError, TimeoutError } from './errors';
 import { HttpClient } from './http';
 import { LruCollection } from './lru-collection';
 import { createMessage } from './models/message';
@@ -103,6 +104,12 @@ export class Client extends EventEmitter<ClientEventMap> {
   private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
   private readonly typingTimers = new Map<string, ReturnType<typeof setTimeout>>();
   private readonly maxCachedMessages: number;
+  private readonly sendTimeout: number;
+  private readonly pendingSends: Array<{
+    resolve: () => void;
+    reject: (err: Error) => void;
+    timer: ReturnType<typeof setTimeout>;
+  }> = [];
   private session: SessionData | null = null;
 
   constructor(options?: ClientOptions) {
@@ -111,6 +118,7 @@ export class Client extends EventEmitter<ClientEventMap> {
       reconnect: options?.reconnect ?? DEFAULT_CLIENT_OPTIONS.reconnect,
       reconnectInterval: options?.reconnectInterval ?? DEFAULT_CLIENT_OPTIONS.reconnectInterval,
       reconnectMaxRetries: options?.reconnectMaxRetries ?? DEFAULT_CLIENT_OPTIONS.reconnectMaxRetries,
+      sendTimeout: options?.sendTimeout ?? DEFAULT_CLIENT_OPTIONS.sendTimeout,
       syncOnConnect: options?.syncOnConnect ?? DEFAULT_CLIENT_OPTIONS.syncOnConnect,
       maxCachedThreads: options?.maxCachedThreads ?? DEFAULT_CLIENT_OPTIONS.maxCachedThreads,
       maxCachedMessages: options?.maxCachedMessages ?? DEFAULT_CLIENT_OPTIONS.maxCachedMessages,
@@ -120,6 +128,7 @@ export class Client extends EventEmitter<ClientEventMap> {
     this.threads = new LruCollection(this.options.maxCachedThreads);
     this.users = new Collection();
     this.maxCachedMessages = this.options.maxCachedMessages;
+    this.sendTimeout = this.options.sendTimeout;
   }
 
   get uptime(): number | null {
@@ -181,6 +190,8 @@ export class Client extends EventEmitter<ClientEventMap> {
     this.mqtt.on('message', (topic, payload) => {
       if (topic === '/ig_message_sync') {
         this.handleDeltaMessage(payload);
+      } else if (topic === '/ig_send_message_response') {
+        this.handleSendResponse(payload);
       }
     });
 
@@ -232,6 +243,12 @@ export class Client extends EventEmitter<ClientEventMap> {
     }
     this.typingTimers.clear();
 
+    for (const entry of this.pendingSends) {
+      clearTimeout(entry.timer);
+      entry.reject(new Error('Client destroyed'));
+    }
+    this.pendingSends.length = 0;
+
     if (this.mqtt) {
       this.mqtt.disconnect();
       this.mqtt = null;
@@ -272,23 +289,53 @@ export class Client extends EventEmitter<ClientEventMap> {
 
   // -- MQTT actions --
 
+  /**
+   * Send a message to a thread.
+   *
+   * @example
+   * ```ts
+   * await client.send('thread-id', 'Hello!');
+   * const msg = await client.send('thread-id', { photo: imageBuffer });
+   * ```
+   */
+  send(threadId: string, content: string): Promise<void>;
+  send(threadId: string, content: SendContent): Promise<Message>;
+  send(threadId: string, content: string | SendContent): Promise<void | Message> {
+    if (typeof content === 'string') return this.sendText(threadId, content);
+    return this.sendMedia(threadId, content);
+  }
+
   /** Send a text message to a thread. */
-  sendText(threadId: string, text: string, replyToId?: string): void {
-    this.requireMqtt().publish(
-      '/ig_send_message',
-      JSON.stringify({
-        action: 'send_item',
-        item_type: 'text',
-        text,
-        thread_id: threadId,
-        mutation_token: generateMutationToken(),
-        client_context: generateOfflineThreadingId(),
-        device_id: this.deviceId(),
-        replied_to_item_id: replyToId ?? null,
-        replied_to_client_context: null,
-      }),
-      1,
-    );
+  sendText(threadId: string, text: string, replyToId?: string): Promise<void> {
+    const mqtt = this.requireMqtt();
+
+    return new Promise<void>((resolve, reject) => {
+      const timer = setTimeout(() => {
+        const idx = this.pendingSends.findIndex((e) => e.resolve === resolve);
+        if (idx !== -1) {
+          this.pendingSends.splice(idx, 1);
+        }
+        reject(new TimeoutError('Send response timed out'));
+      }, this.sendTimeout);
+
+      this.pendingSends.push({ resolve, reject, timer });
+
+      mqtt.publish(
+        '/ig_send_message',
+        JSON.stringify({
+          action: 'send_item',
+          item_type: 'text',
+          text,
+          thread_id: threadId,
+          mutation_token: generateMutationToken(),
+          client_context: generateOfflineThreadingId(),
+          device_id: this.deviceId(),
+          replied_to_item_id: replyToId ?? null,
+          replied_to_client_context: null,
+        }),
+        1,
+      );
+    });
   }
 
   /** Send a reaction to a message. */
@@ -587,6 +634,38 @@ export class Client extends EventEmitter<ClientEventMap> {
     await this.requireHttp().rest('/api/v1/direct_v2/threads/decline_all/', {
       method: 'POST',
     });
+  }
+
+  private handleSendResponse(payload: Buffer): void {
+    let parsed: Record<string, unknown>;
+    try {
+      const raw: unknown = JSON.parse(payload.toString());
+      if (!isRecord(raw)) {
+        return;
+      }
+      parsed = raw;
+    } catch {
+      return;
+    }
+
+    const inner = isRecord(parsed['payload']) ? parsed['payload'] : null;
+    if (inner && inner['activity_status'] != null) {
+      return;
+    }
+
+    const entry = this.pendingSends.shift();
+    if (!entry) {
+      return;
+    }
+    clearTimeout(entry.timer);
+
+    if (parsed['status'] === 'ok') {
+      entry.resolve();
+    } else {
+      entry.reject(
+        new ApiError(`Send failed: ${String(parsed['status'] ?? 'unknown')}`),
+      );
+    }
   }
 
   // -- Delta processing --

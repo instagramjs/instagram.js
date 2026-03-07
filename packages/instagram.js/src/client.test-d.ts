@@ -13,6 +13,26 @@ import type {
 } from './types';
 import type { RawDelta } from './types';
 
+describe('Client.send() return types', () => {
+  it('send with text returns Promise<void>', () => {
+    const client = new Client();
+    const result = client.send('t', 'text');
+    expectTypeOf(result).toEqualTypeOf<Promise<void>>();
+  });
+
+  it('send with media returns Promise<Message>', () => {
+    const client = new Client();
+    const result = client.send('t', { photo: Buffer.from('x') });
+    expectTypeOf(result).toEqualTypeOf<Promise<Message>>();
+  });
+
+  it('sendText returns Promise<void>', () => {
+    const client = new Client();
+    const result = client.sendText('t', 'text');
+    expectTypeOf(result).toEqualTypeOf<Promise<void>>();
+  });
+});
+
 describe('Client event emitter types', () => {
   it('message event provides Message', () => {
     const client = new Client();
