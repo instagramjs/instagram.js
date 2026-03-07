@@ -26,6 +26,8 @@ import type {
   TypingEvent,
 } from './types';
 import type { Message } from './models/message';
+import type { SendContent } from './media';
+import { sendGif, sendLink, sendPhoto, sendVideo, sendVoice } from './media';
 import { generateMutationToken, generateOfflineThreadingId, isRecord } from './utils';
 
 type ClientEventMap = {
@@ -339,6 +341,49 @@ export class Client extends EventEmitter<ClientEventMap> {
       }),
       0,
     );
+  }
+
+  // -- Media actions --
+
+  /** Send media content to a thread. */
+  async sendMedia(threadId: string, content: SendContent): Promise<Message> {
+    const http = this.requireHttp();
+
+    if ('photo' in content) {
+      return sendPhoto({
+        http, threadId, client: this,
+        photo: content.photo,
+        ...(content.filename !== undefined ? { filename: content.filename } : {}),
+      });
+    }
+    if ('video' in content) {
+      return sendVideo({
+        http, threadId, client: this,
+        video: content.video,
+        ...(content.filename !== undefined ? { filename: content.filename } : {}),
+      });
+    }
+    if ('gif' in content) {
+      return sendGif({
+        http, threadId, client: this,
+        gifId: content.gif,
+        ...(content.isSticker !== undefined ? { isSticker: content.isSticker } : {}),
+      });
+    }
+    if ('voice' in content) {
+      return sendVoice({
+        http, threadId, client: this,
+        voice: content.voice,
+        duration: content.duration,
+        ...(content.waveform !== undefined ? { waveform: content.waveform } : {}),
+      });
+    }
+    // Only LinkContent remains
+    return sendLink({
+      http, threadId, client: this,
+      url: content.link,
+      ...(content.text !== undefined ? { text: content.text } : {}),
+    });
   }
 
   // -- GraphQL actions --

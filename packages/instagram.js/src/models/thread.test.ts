@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { Client } from '../client';
 import { Collection } from '../collection';
 import type { RawThread } from '../types';
@@ -112,4 +112,31 @@ describe('Thread actions', () => {
     await expect(thread.delete()).rejects.toThrow('No client attached');
   });
 
+  it('send with string calls sendText', () => {
+    const sendText = vi.fn();
+    const client = { sendText } as unknown as Client;
+    const thread = new Thread({ id: 't1', client });
+
+    thread.send('hello');
+
+    expect(sendText).toHaveBeenCalledWith('t1', 'hello');
+  });
+
+  it('send with SendContent calls sendMedia', async () => {
+    const sentMessage = { id: 'msg-1', type: 'media' };
+    const sendMedia = vi.fn().mockResolvedValue(sentMessage);
+    const client = { sendMedia } as unknown as Client;
+    const thread = new Thread({ id: 't1', client });
+
+    const content = { photo: Buffer.from('img') };
+    const result = await thread.send(content);
+
+    expect(sendMedia).toHaveBeenCalledWith('t1', content);
+    expect(result).toBe(sentMessage);
+  });
+
+  it('send with SendContent throws when no client attached', () => {
+    const thread = new Thread({ id: 't1' });
+    expect(() => thread.send({ photo: Buffer.from('img') })).toThrow('No client attached');
+  });
 });

@@ -1,5 +1,6 @@
 import type { Client } from '../client';
 import { ITEM_TYPE_MAP } from '../constants';
+import type { SendContent } from '../media';
 import type {
   MessageType,
   RawMessage,
@@ -85,19 +86,25 @@ export abstract class BaseMessage {
   }
 
   /**
-   * Reply to this message with text.
+   * Reply to this message.
    *
    * @example
    * ```ts
    * client.on('message', (msg) => {
-   *   if (msg.type === 'text') {
-   *     msg.reply('Got it!');
-   *   }
+   *   msg.reply('Got it!');
+   *   msg.reply({ photo: imageBuffer });
    * });
    * ```
    */
-  reply(content: string): void {
-    this.requireClient().sendText(this.threadId, content, this.id);
+  reply(content: string): void;
+  reply(content: SendContent): Promise<Message>;
+  reply(content: string | SendContent): void | Promise<Message> {
+    const client = this.requireClient();
+    if (typeof content === 'string') {
+      client.sendText(this.threadId, content, this.id);
+      return;
+    }
+    return client.sendMedia(this.threadId, content);
   }
 
   /** Edit this message's text. */

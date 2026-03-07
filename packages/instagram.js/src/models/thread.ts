@@ -1,5 +1,6 @@
 import type { Client } from '../client';
 import { Collection } from '../collection';
+import type { SendContent } from '../media';
 import type { RawThread, ThreadParticipant, MessageSearchResponse } from '../types';
 import type { Message } from './message';
 import { createMessage } from './message';
@@ -93,16 +94,24 @@ export class Thread {
   }
 
   /**
-   * Send a text message to this thread.
+   * Send a message to this thread.
    *
    * @example
    * ```ts
-   * const thread = client.threads.first();
    * thread.send('Hello!');
+   * thread.send({ photo: imageBuffer });
+   * thread.send({ link: 'https://example.com' });
    * ```
    */
-  send(content: string): void {
-    this.requireClient().sendText(this.id, content);
+  send(content: string): void;
+  send(content: SendContent): Promise<Message>;
+  send(content: string | SendContent): void | Promise<Message> {
+    const client = this.requireClient();
+    if (typeof content === 'string') {
+      client.sendText(this.id, content);
+      return;
+    }
+    return client.sendMedia(this.id, content);
   }
 
   /** Send typing start indicator. */

@@ -836,6 +836,82 @@ describe('Client', () => {
     });
   });
 
+  describe('sendMedia', () => {
+    const broadcastResponse = {
+      item_id: 'sent-1',
+      user_id: '123',
+      timestamp: '1700000000000000',
+      item_type: 'text',
+    };
+
+    async function loginAndGetHttp(client: Client) {
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const { HttpClient: HttpCtor } = await import('./http');
+      const httpInstance = vi.mocked(HttpCtor).mock.results[0]!.value;
+      vi.mocked(httpInstance.upload).mockResolvedValue({ id: '123456' });
+      vi.mocked(httpInstance.rest).mockResolvedValue(broadcastResponse);
+      return httpInstance;
+    }
+
+    it('sends photo via upload and broadcast', async () => {
+      const client = new Client();
+      const http = await loginAndGetHttp(client);
+
+      const result = await client.sendMedia('thread-1', { photo: Buffer.from('img') });
+
+      expect(http.upload).toHaveBeenCalledWith(Buffer.from('img'), 'photo.jpg');
+      expect(http.rest).toHaveBeenCalledWith(
+        '/api/v1/direct_v2/threads/broadcast/configure_photo/',
+        expect.objectContaining({
+          method: 'POST',
+          body: expect.objectContaining({
+            content_type: 'photo',
+            thread_id: 'thread-1',
+          }),
+        }),
+      );
+      expect(result.id).toBe('sent-1');
+    });
+
+    it('sends gif by ID', async () => {
+      const client = new Client();
+      const http = await loginAndGetHttp(client);
+
+      await client.sendMedia('thread-1', { gif: 'xT9IgzoKnwFNmISR8I' });
+
+      expect(http.rest).toHaveBeenCalledWith(
+        '/api/v1/direct_v2/threads/broadcast/animated_media/',
+        expect.objectContaining({
+          body: expect.objectContaining({
+            id: 'xT9IgzoKnwFNmISR8I',
+          }),
+        }),
+      );
+    });
+
+    it('sends link', async () => {
+      const client = new Client();
+      const http = await loginAndGetHttp(client);
+
+      await client.sendMedia('thread-1', { link: 'https://example.com', text: 'Check this' });
+
+      expect(http.rest).toHaveBeenCalledWith(
+        '/api/v1/direct_v2/threads/broadcast/link/',
+        expect.objectContaining({
+          body: expect.objectContaining({
+            link_urls: '["https://example.com"]',
+            link_text: 'Check this',
+          }),
+        }),
+      );
+    });
+
+    it('throws when not connected', async () => {
+      const client = new Client();
+      await expect(client.sendMedia('thread-1', { photo: Buffer.from('x') })).rejects.toThrow('Client not connected');
+    });
+  });
+
   describe('destroy', () => {
     it('clears all state', async () => {
       const client = new Client();

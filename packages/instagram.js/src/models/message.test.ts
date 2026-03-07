@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { Client } from '../client';
 import type { RawMessage } from '../types';
 import { createMessage } from './message';
@@ -241,5 +241,47 @@ describe('createMessage', () => {
       author,
     });
     expect(() => msg.reply('test')).toThrow('No client attached');
+  });
+
+  it('reply with string calls sendText with replyToId', () => {
+    const sendText = vi.fn();
+    const client = { sendText } as unknown as Client;
+    const msg = createMessage({
+      raw: makeRaw({ item_type: 'text', text: 'hi', item_id: 'msg-99' }),
+      threadId,
+      author,
+      client,
+    });
+
+    msg.reply('response');
+
+    expect(sendText).toHaveBeenCalledWith(threadId, 'response', 'msg-99');
+  });
+
+  it('reply with SendContent calls sendMedia', async () => {
+    const sentMessage = { id: 'msg-new', type: 'media' };
+    const sendMedia = vi.fn().mockResolvedValue(sentMessage);
+    const client = { sendMedia } as unknown as Client;
+    const msg = createMessage({
+      raw: makeRaw({ item_type: 'text', text: 'hi' }),
+      threadId,
+      author,
+      client,
+    });
+
+    const content = { link: 'https://example.com', text: 'Check this' };
+    const result = await msg.reply(content);
+
+    expect(sendMedia).toHaveBeenCalledWith(threadId, content);
+    expect(result).toBe(sentMessage);
+  });
+
+  it('reply with SendContent throws when no client attached', () => {
+    const msg = createMessage({
+      raw: makeRaw({ item_type: 'text', text: 'hi' }),
+      threadId,
+      author,
+    });
+    expect(() => msg.reply({ gif: 'abc123' })).toThrow('No client attached');
   });
 });
