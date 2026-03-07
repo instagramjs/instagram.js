@@ -1,5 +1,6 @@
 import { EventEmitter } from 'node:events';
 import mqtt from 'mqtt';
+import WebSocket from 'ws';
 import { MQTT_ENDPOINT } from './constants';
 import { MqttError } from './errors';
 import { buildCookieString, buildMqttUsername } from './session';
@@ -49,13 +50,15 @@ export class MqttClient extends EventEmitter<MqttClientEvents> {
         keepalive: this.keepAlive,
         clean: true,
         connectTimeout: 30_000,
-        wsOptions: {
-          headers: {
-            'Cookie': cookieHeader,
-            'Origin': 'https://www.instagram.com',
-            'User-Agent': this.session.cookies.sessionid ? 'Mozilla/5.0' : '',
-          },
-        },
+        createWebsocket: (wsUrl) =>
+          new WebSocket(wsUrl, {
+            headers: {
+              'Cookie': cookieHeader,
+              'Origin': 'https://www.instagram.com',
+              'User-Agent': this.session.cookies.sessionid ? 'Mozilla/5.0' : '',
+            },
+            perMessageDeflate: false,
+          }),
       });
 
       this.client.on('connect', () => {
@@ -94,34 +97,31 @@ export class MqttClient extends EventEmitter<MqttClientEvents> {
     });
   }
 
-  /** Subscribe to one or more topics at QoS 1. */
+  /** Subscribe to one or more topics at QoS 0. */
   async subscribe(topics: string[]): Promise<void> {
     if (!this.client) {
       throw new MqttError('Not connected');
     }
 
-    const subscriptions: Record<string, { qos: 0 | 1 | 2 }> = {};
     for (const topic of topics) {
-      subscriptions[topic] = { qos: 1 };
-    }
-
-    return new Promise<void>((resolve, reject) => {
-      this.client!.subscribe(subscriptions, (err) => {
-        if (err) {
-          reject(new MqttError('Subscribe failed', err));
-        } else {
-          resolve();
-        }
+      await new Promise<void>((resolve, reject) => {
+        this.client!.subscribe({ [topic]: { qos: 0 } }, (err) => {
+          if (err) {
+            reject(new MqttError('Subscribe failed', err));
+          } else {
+            resolve();
+          }
+        });
       });
-    });
+    }
   }
 
   /** Publish a message to a topic. */
-  publish(topic: string, payload: string | Buffer, qos: 0 | 1 = 0): void {
+  publish(topic: string, payload: string | Buffer): void {
     if (!this.client) {
       throw new MqttError('Not connected');
     }
-    this.client.publish(topic, payload, { qos });
+    this.client.publish(topic, payload, { qos: 0 });
   }
 
   /** Send DISCONNECT and close the connection. */

@@ -2,6 +2,7 @@ import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import { Client } from './client';
 import { DEFAULT_CLIENT_OPTIONS } from './constants';
 import { ApiError, AuthError, TimeoutError } from './errors';
+import { Thread } from './models/thread';
 
 vi.mock('./session', async (importOriginal) => {
   const original = await importOriginal<typeof import('./session')>();
@@ -26,6 +27,7 @@ vi.mock('./session', async (importOriginal) => {
       deviceId: 'dev',
       sessionId: '999',
       igScopedId: '5555',
+      username: 'testbot',
       seqId: 0,
     }),
   };
@@ -33,33 +35,8 @@ vi.mock('./session', async (importOriginal) => {
 
 const defaultInboxResponse = {
   data: {
-    viewer: {
-      message_threads: {
-        nodes: [
-          {
-            thread_id: 'thread-1',
-            thread_title: 'Test Thread',
-            users: [
-              { pk: '456', username: 'user1', full_name: 'User One' },
-            ],
-            left_users: [],
-            items: [
-              {
-                item_id: 'msg-1',
-                user_id: '456',
-                timestamp: '1700000000000000',
-                item_type: 'text',
-                text: 'Hello',
-              },
-            ],
-            read_state: 0,
-            is_group: false,
-            muted: false,
-            admin_user_ids: [],
-          },
-        ],
-      },
-      seq_id: 100,
+    get_slide_mailbox_for_iris_subscription: {
+      iris_inactive_subscription_uq_seq_id: '100',
     },
   },
 };
@@ -129,26 +106,14 @@ describe('Client', () => {
       expect(client.user).not.toBeNull();
       expect(client.user!.id).toBe('123');
       expect(client.user!.igScopedId).toBe('5555');
+      expect(client.user!.username).toBe('testbot');
       expect(readyHandler).toHaveBeenCalledOnce();
     });
 
-    it('populates thread cache from inbox', async () => {
+    it('populates user cache with client user', async () => {
       const client = new Client();
       await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
 
-      expect(client.threads.size).toBe(1);
-      expect(client.threads.has('thread-1')).toBe(true);
-
-      const thread = client.threads.get('thread-1')!;
-      expect(thread.name).toBe('Test Thread');
-      expect(thread.messages.size).toBe(1);
-    });
-
-    it('populates user cache from participants', async () => {
-      const client = new Client();
-      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
-
-      expect(client.users.has('456')).toBe(true);
       expect(client.users.has('123')).toBe(true);
     });
 
@@ -165,7 +130,6 @@ describe('Client', () => {
 
       expect(mockMqttInstance.subscribe).toHaveBeenCalledWith([
         '/ig_message_sync',
-        '/ig_send_message_response',
         '/ig_sub_iris_response',
       ]);
     });
@@ -177,8 +141,12 @@ describe('Client', () => {
       expect(mockMqttInstance.publish).toHaveBeenCalledWith(
         '/ig_sub_iris',
         expect.stringContaining('"seq_id":100'),
-        1,
       );
+      const irisPayload = JSON.parse(mockMqttInstance.publish.mock.calls[0]![1] as string);
+      expect(irisPayload.subscription_type).toBe('slide_gql');
+      expect(irisPayload.graphql_config).toBeTruthy();
+      const config = JSON.parse(irisPayload.graphql_config);
+      expect(config.slide_doc_id).toBe('26744961355092044');
     });
 
     it('uptime is computed after login', async () => {
@@ -198,33 +166,55 @@ describe('Client', () => {
     return messageCall![1] as (topic: string, payload: Buffer) => void;
   }
 
+  function seedThread(client: Client): void {
+    const thread = Thread.from({
+      thread_id: 'thread-1',
+      thread_title: 'Test Thread',
+      users: [{ pk: '456', username: 'user1', full_name: 'User One' }],
+      left_users: [],
+      items: [
+        {
+          item_id: 'msg-1',
+          user_id: '456',
+          timestamp: '1700000000000000',
+          item_type: 'text',
+          text: 'Hello',
+        },
+      ],
+      read_state: 0,
+      is_group: false,
+      muted: false,
+      admin_user_ids: [],
+    }, client);
+    client.threads.set(thread.id, thread);
+  }
+
+  function slideDelta(mutations: Record<string, unknown>[]): Buffer {
+    return Buffer.from(JSON.stringify({
+      data: { slide_delta_processor: mutations },
+    }));
+  }
+
   describe('delta processing', () => {
-    it('emits message event for new items', async () => {
+    it('emits message event for SlideUQPPNewMessage', async () => {
       const client = new Client();
       await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
       const handler = getMessageHandler(client);
       const messageHandler = vi.fn();
       client.on('message', messageHandler);
 
-      const delta = {
-        event: 'patch',
-        data: [
-          {
-            op: 'add',
-            path: '/direct_v2/threads/thread-1/items/msg-2',
-            value: JSON.stringify({
-              item_id: 'msg-2',
-              user_id: '456',
-              timestamp: '1700000001000000',
-              item_type: 'text',
-              text: 'New message',
-            }),
-          },
-        ],
-        seq_id: 101,
-      };
-
-      handler('/ig_message_sync', Buffer.from(JSON.stringify(delta)));
+      handler('/ig_message_sync', slideDelta([{
+        __typename: 'SlideUQPPNewMessage',
+        uq_seq_id: '101',
+        message: {
+          thread_fbid: 'thread-1',
+          id: 'mid.msg-2',
+          sender_fbid: '456',
+          timestamp_ms: '1700000001000',
+          text_body: 'New message',
+          content: { __typename: 'SlideMessageText' },
+        },
+      }]));
 
       expect(messageHandler).toHaveBeenCalledOnce();
       const msg = messageHandler.mock.calls[0]![0];
@@ -239,240 +229,191 @@ describe('Client', () => {
       const messageHandler = vi.fn();
       client.on('message', messageHandler);
 
-      const delta = {
-        event: 'patch',
-        data: [
-          {
-            op: 'add',
-            path: '/direct_v2/threads/thread-1/items/msg-self',
-            value: JSON.stringify({
-              item_id: 'msg-self',
-              user_id: '123',
-              timestamp: '1700000001000000',
-              item_type: 'text',
-              text: 'Self sent',
-            }),
-          },
-        ],
-        seq_id: 102,
-      };
-
-      handler('/ig_message_sync', Buffer.from(JSON.stringify(delta)));
+      handler('/ig_message_sync', slideDelta([{
+        __typename: 'SlideUQPPNewMessage',
+        uq_seq_id: '102',
+        message: {
+          thread_fbid: 'thread-1',
+          id: 'mid.msg-self',
+          sender_fbid: '123',
+          timestamp_ms: '1700000001000',
+          text_body: 'Self sent',
+          content: { __typename: 'SlideMessageText' },
+        },
+      }]));
 
       expect(messageHandler).not.toHaveBeenCalled();
     });
 
-    it('emits messageDelete event', async () => {
+    it('emits messageDelete for SlideUQPPDeleteMessage', async () => {
       const client = new Client();
       await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      seedThread(client);
       const handler = getMessageHandler(client);
       const deleteHandler = vi.fn();
       client.on('messageDelete', deleteHandler);
 
-      const delta = {
-        event: 'patch',
-        data: [
-          {
-            op: 'remove',
-            path: '/direct_v2/threads/thread-1/items/msg-1',
-          },
-        ],
-        seq_id: 103,
-      };
-
-      handler('/ig_message_sync', Buffer.from(JSON.stringify(delta)));
+      handler('/ig_message_sync', slideDelta([{
+        __typename: 'SlideUQPPDeleteMessage',
+        uq_seq_id: '103',
+        thread_fbid: 'thread-1',
+        message_id: 'msg-1',
+      }]));
 
       expect(deleteHandler).toHaveBeenCalledOnce();
       expect(deleteHandler.mock.calls[0]![0].messageId).toBe('msg-1');
       expect(deleteHandler.mock.calls[0]![0].message).not.toBeNull();
     });
 
-    it('emits messageEdit when text changes', async () => {
-      const client = new Client();
-      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
-      const handler = getMessageHandler(client);
-      const editHandler = vi.fn();
-      client.on('messageEdit', editHandler);
-
-      const delta = {
-        event: 'patch',
-        data: [
-          {
-            op: 'replace',
-            path: '/direct_v2/threads/thread-1/items/msg-1',
-            value: JSON.stringify({
-              item_id: 'msg-1',
-              user_id: '456',
-              timestamp: '1700000000000000',
-              item_type: 'text',
-              text: 'Edited text',
-            }),
-          },
-        ],
-        seq_id: 104,
-      };
-
-      handler('/ig_message_sync', Buffer.from(JSON.stringify(delta)));
-
-      expect(editHandler).toHaveBeenCalledOnce();
-      expect(editHandler.mock.calls[0]![0].oldText).toBe('Hello');
-      expect(editHandler.mock.calls[0]![0].message.text).toBe('Edited text');
-    });
-
-    it('emits rawDelta for every delta', async () => {
+    it('emits rawDelta for every mutation', async () => {
       const client = new Client();
       await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
       const handler = getMessageHandler(client);
       const rawHandler = vi.fn();
       client.on('rawDelta', rawHandler);
 
-      const delta = {
-        event: 'patch',
-        data: [
-          { op: 'add', path: '/direct_v2/threads/thread-1/items/msg-x', value: '{}' },
-        ],
-        seq_id: 105,
-      };
-
-      handler('/ig_message_sync', Buffer.from(JSON.stringify(delta)));
+      handler('/ig_message_sync', slideDelta([{
+        __typename: 'SlideUQPPNotYetImplementedMutation',
+        uq_seq_id: '105',
+      }]));
 
       expect(rawHandler).toHaveBeenCalledOnce();
+      expect(rawHandler.mock.calls[0]![0].__typename).toBe('SlideUQPPNotYetImplementedMutation');
     });
 
-    it('updates seq_id from deltas', async () => {
+    it('updates seqId from uq_seq_id', async () => {
       const client = new Client();
       await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
       const handler = getMessageHandler(client);
 
-      const delta = {
-        event: 'patch',
-        data: [
-          { op: 'add', path: '/some/path', value: '{}' },
-        ],
-        seq_id: 200,
-      };
-
-      handler('/ig_message_sync', Buffer.from(JSON.stringify(delta)));
+      handler('/ig_message_sync', slideDelta([{
+        __typename: 'SlideUQPPNotYetImplementedMutation',
+        uq_seq_id: '200',
+      }]));
 
       expect(client.getSeqId()).toBe(200);
     });
 
-    it('emits threadDelete on inbox thread remove', async () => {
+    it('emits threadDelete for SlideUQPPDeleteThread', async () => {
       const client = new Client();
       await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      seedThread(client);
       const handler = getMessageHandler(client);
       const threadDeleteHandler = vi.fn();
       client.on('threadDelete', threadDeleteHandler);
 
-      const delta = {
-        event: 'patch',
-        data: [
-          {
-            op: 'remove',
-            path: '/direct_v2/inbox/threads/thread-1',
-          },
-        ],
-        seq_id: 106,
-      };
-
-      handler('/ig_message_sync', Buffer.from(JSON.stringify(delta)));
+      handler('/ig_message_sync', slideDelta([{
+        __typename: 'SlideUQPPDeleteThread',
+        uq_seq_id: '106',
+        thread_fbid: 'thread-1',
+      }]));
 
       expect(threadDeleteHandler).toHaveBeenCalledOnce();
       expect(threadDeleteHandler.mock.calls[0]![0].threadId).toBe('thread-1');
       expect(client.threads.has('thread-1')).toBe(false);
     });
 
-    it('emits typingStart and auto-stops after TTL', async () => {
-      vi.useFakeTimers();
-
+    it('emits reaction for SlideUQPPCreateReaction', async () => {
       const client = new Client();
       await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
-      const handler = getMessageHandler(client);
-      const typingStartHandler = vi.fn();
-      const typingStopHandler = vi.fn();
-      client.on('typingStart', typingStartHandler);
-      client.on('typingStop', typingStopHandler);
-
-      const delta = {
-        event: 'patch',
-        data: [
-          {
-            op: 'add',
-            path: '/direct_v2/threads/thread-1/activity_indicator_id/uuid-1',
-            value: JSON.stringify({
-              sender_id: '456',
-              activity_status: 1,
-              ttl: 22000,
-            }),
-          },
-        ],
-        seq_id: 107,
-      };
-
-      handler('/ig_message_sync', Buffer.from(JSON.stringify(delta)));
-
-      expect(typingStartHandler).toHaveBeenCalledOnce();
-      expect(typingStopHandler).not.toHaveBeenCalled();
-
-      vi.advanceTimersByTime(22000);
-
-      expect(typingStopHandler).toHaveBeenCalledOnce();
-
-      vi.useRealTimers();
-    });
-
-    it('emits reaction event', async () => {
-      const client = new Client();
-      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      seedThread(client);
       const handler = getMessageHandler(client);
       const reactionHandler = vi.fn();
       client.on('reaction', reactionHandler);
 
-      const delta = {
-        event: 'patch',
-        data: [
-          {
-            op: 'add',
-            path: '/direct_v2/threads/thread-1/items/msg-1/reactions/likes/456',
-            value: JSON.stringify({ emoji: '\u2764\ufe0f' }),
-          },
-        ],
-        seq_id: 108,
-      };
-
-      handler('/ig_message_sync', Buffer.from(JSON.stringify(delta)));
+      handler('/ig_message_sync', slideDelta([{
+        __typename: 'SlideUQPPCreateReaction',
+        uq_seq_id: '108',
+        thread_fbid: 'thread-1',
+        message_id: 'msg-1',
+        reaction: { reaction: '\u2764\ufe0f', sender_id: '456' },
+      }]));
 
       expect(reactionHandler).toHaveBeenCalledOnce();
       expect(reactionHandler.mock.calls[0]![0].emoji).toBe('\u2764\ufe0f');
       expect(reactionHandler.mock.calls[0]![0].messageId).toBe('msg-1');
     });
 
-    it('emits readReceipt event', async () => {
+    it('emits reactionRemove for SlideUQPPDeleteReaction', async () => {
       const client = new Client();
       await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      seedThread(client);
+      const handler = getMessageHandler(client);
+      const reactionHandler = vi.fn();
+      client.on('reactionRemove', reactionHandler);
+
+      handler('/ig_message_sync', slideDelta([{
+        __typename: 'SlideUQPPDeleteReaction',
+        uq_seq_id: '109',
+        thread_fbid: 'thread-1',
+        message_id: 'msg-1',
+        reaction: { reaction: '\u2764\ufe0f', sender_id: '456' },
+      }]));
+
+      expect(reactionHandler).toHaveBeenCalledOnce();
+      expect(reactionHandler.mock.calls[0]![0].emoji).toBe('\u2764\ufe0f');
+    });
+
+    it('emits readReceipt for SlideUQPPReadReceipt', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      seedThread(client);
       const handler = getMessageHandler(client);
       const receiptHandler = vi.fn();
       client.on('readReceipt', receiptHandler);
 
-      const delta = {
-        event: 'patch',
-        data: [
-          {
-            op: 'replace',
-            path: '/direct_v2/threads/thread-1/participants/456/has_seen',
-            value: JSON.stringify({ item_id: 'msg-1', timestamp: 1700000000000 }),
-          },
-        ],
-        seq_id: 109,
-      };
-
-      handler('/ig_message_sync', Buffer.from(JSON.stringify(delta)));
+      handler('/ig_message_sync', slideDelta([{
+        __typename: 'SlideUQPPReadReceipt',
+        uq_seq_id: '110',
+        thread_fbid: 'thread-1',
+        read_receipt: {
+          participant_fbid: '456',
+          watermark_timestamp_ms: '1700000000000',
+        },
+      }]));
 
       expect(receiptHandler).toHaveBeenCalledOnce();
-      expect(receiptHandler.mock.calls[0]![0].messageId).toBe('msg-1');
     });
 
-    it('ignores non-patch events', async () => {
+    it('emits threadUpdate for SlideUQPPChangeMuteSettings', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      seedThread(client);
+      const handler = getMessageHandler(client);
+      const updateHandler = vi.fn();
+      client.on('threadUpdate', updateHandler);
+
+      handler('/ig_message_sync', slideDelta([{
+        __typename: 'SlideUQPPChangeMuteSettings',
+        uq_seq_id: '111',
+        thread_fbid: 'thread-1',
+        is_muted_now: true,
+      }]));
+
+      expect(updateHandler).toHaveBeenCalledOnce();
+      expect(updateHandler.mock.calls[0]![0].changes.muted).toBe(true);
+    });
+
+    it('emits threadUpdate for SlideUQPPThreadName', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      seedThread(client);
+      const handler = getMessageHandler(client);
+      const updateHandler = vi.fn();
+      client.on('threadUpdate', updateHandler);
+
+      handler('/ig_message_sync', slideDelta([{
+        __typename: 'SlideUQPPThreadName',
+        uq_seq_id: '112',
+        thread_fbid: 'thread-1',
+        thread_name: 'New Name',
+      }]));
+
+      expect(updateHandler).toHaveBeenCalledOnce();
+      expect(updateHandler.mock.calls[0]![0].changes.name).toBe('New Name');
+    });
+
+    it('ignores messages without slide_delta_processor', async () => {
       const client = new Client();
       await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
       const handler = getMessageHandler(client);
@@ -485,6 +426,62 @@ describe('Client', () => {
       );
 
       expect(rawHandler).not.toHaveBeenCalled();
+    });
+
+    it('backfills user data from sender.user_dict', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const handler = getMessageHandler(client);
+      const messageHandler = vi.fn();
+      client.on('message', messageHandler);
+
+      handler('/ig_message_sync', slideDelta([{
+        __typename: 'SlideUQPPNewMessage',
+        uq_seq_id: '120',
+        message: {
+          thread_fbid: 'thread-1',
+          id: 'mid.msg-backfill',
+          sender_fbid: '789',
+          timestamp_ms: '1700000001000',
+          text_body: 'Hi',
+          content: { __typename: 'SlideMessageText' },
+          sender: {
+            user_dict: {
+              pk: '789',
+              username: 'someuser',
+              profile_pic_url: 'https://example.com/pic.jpg',
+            },
+          },
+        },
+      }]));
+
+      expect(messageHandler).toHaveBeenCalledOnce();
+      const author = messageHandler.mock.calls[0]![0].author;
+      expect(author.username).toBe('someuser');
+      expect(author.profilePicUrl).toBe('https://example.com/pic.jpg');
+    });
+
+    it('handles SlideUQPPAdminTextMessage as a message', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const handler = getMessageHandler(client);
+      const messageHandler = vi.fn();
+      client.on('message', messageHandler);
+
+      handler('/ig_message_sync', slideDelta([{
+        __typename: 'SlideUQPPAdminTextMessage',
+        uq_seq_id: '130',
+        message: {
+          thread_fbid: 'thread-1',
+          id: 'mid.admin-1',
+          sender_fbid: '456',
+          timestamp_ms: '1700000001000',
+          text_body: 'Group name changed',
+          content: { __typename: 'SlideMessageAdminText' },
+        },
+      }]));
+
+      expect(messageHandler).toHaveBeenCalledOnce();
     });
   });
 
@@ -509,7 +506,6 @@ describe('Client', () => {
       expect(mockMqttInstance.publish).toHaveBeenCalledWith(
         '/ig_send_message',
         expect.any(String),
-        1,
       );
 
       const payload = JSON.parse(mockMqttInstance.publish.mock.calls[0]![1] as string);
@@ -570,7 +566,7 @@ describe('Client', () => {
 
       client.sendTyping('thread-1', 1);
 
-      expect(mockMqttInstance.publish).toHaveBeenCalledWith('/ig_send_message', expect.any(String), 0);
+      expect(mockMqttInstance.publish).toHaveBeenCalledWith('/ig_send_message', expect.any(String));
       const payload = JSON.parse(mockMqttInstance.publish.mock.calls[0]![1] as string);
       expect(payload.action).toBe('indicate_activity');
       expect(payload.activity_status).toBe(1);
@@ -1263,7 +1259,6 @@ describe('Client', () => {
 
       expect(mockMqttInstance.subscribe).toHaveBeenCalledWith([
         '/ig_message_sync',
-        '/ig_send_message_response',
         '/ig_sub_iris_response',
       ]);
 
@@ -1281,22 +1276,15 @@ describe('Client', () => {
       // Need two "once" values: handleIrisResponse synchronously triggers
       // performResync which awaits graphql, but vi.waitFor may also trigger
       // the default mock between microtasks. Two ensures the first real call gets 500.
-      mockHttpInstance.graphql.mockResolvedValueOnce({
+      const resyncResponse = {
         data: {
-          viewer: {
-            message_threads: { nodes: [] },
-            seq_id: 500,
+          get_slide_mailbox_for_iris_subscription: {
+            iris_inactive_subscription_uq_seq_id: '500',
           },
         },
-      });
-      mockHttpInstance.graphql.mockResolvedValueOnce({
-        data: {
-          viewer: {
-            message_threads: { nodes: [] },
-            seq_id: 500,
-          },
-        },
-      });
+      };
+      mockHttpInstance.graphql.mockResolvedValueOnce(resyncResponse);
+      mockHttpInstance.graphql.mockResolvedValueOnce(resyncResponse);
 
       const resyncHandler = vi.fn();
       client.on('resync', resyncHandler);
@@ -1311,7 +1299,6 @@ describe('Client', () => {
       expect(mockMqttInstance.publish).toHaveBeenCalledWith(
         '/ig_sub_iris',
         expect.stringContaining('"seq_id":500'),
-        1,
       );
     });
 
@@ -1333,7 +1320,6 @@ describe('Client', () => {
       expect(mockMqttInstance.publish).toHaveBeenCalledWith(
         '/ig_sub_iris',
         expect.any(String),
-        1,
       );
 
       mockMqttInstance.publish.mockClear();

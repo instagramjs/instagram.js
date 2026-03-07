@@ -34,6 +34,7 @@ function makeSession(overrides?: Partial<SessionData>): SessionData {
     deviceId: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
     sessionId: '1573652938096639',
     igScopedId: '17841455700157674',
+    username: 'testuser',
     seqId: 0,
     ...overrides,
   };
@@ -45,9 +46,10 @@ function makeFakePageBody(): string {
     '<script type="application/json">["DTSGInitData",[],{"token":"dtsg_token_value"},123]</script>',
     '<script type="application/json">["LSD",[],{"token":"lsd_token_value"},456]</script>',
     '<script>{"__spin_r":1034695662,"__spin_b":"trunk","__spin_t":1772859074}</script>',
-    '<script>{"__hs":"20519.HYP:instagram_web_pkg"}</script>',
-    '<script>{"bloks_version":"60648760d1b9abc123"}</script>',
+    '<script>{"haste_session":"20519.HYP:instagram_web_pkg"}</script>',
+    '<script>{"bloks_version\\":\\"60648760d1b9abc123"}</script>',
     '<script>{"NON_FACEBOOK_USER_ID":"17841455700157674"}</script>',
+    '<script>{"full_name":"Test","id":"12345678","username":"testuser","is_private":false}</script>',
     '</head><body></body></html>',
   ].join('\n');
 }
@@ -129,6 +131,7 @@ describe('bootstrapSession', () => {
     expect(session.hs).toBe('20519.HYP:instagram_web_pkg');
     expect(session.bloksVersion).toBe('60648760d1b9abc123');
     expect(session.igScopedId).toBe('17841455700157674');
+    expect(session.username).toBe('testuser');
     expect(session.rolloutHash).toBe('1034695662');
     expect(session.cookies).toEqual(validCookies);
     expect(session.deviceId).toMatch(
@@ -241,9 +244,12 @@ describe('buildMqttUsername', () => {
     expect(parsed.u).toBe('12345678');
     expect(parsed.s).toBe(Number(session.sessionId));
     expect(parsed.cp).toBe(1);
-    expect(parsed.fg).toBe(true);
+    expect(parsed.ecp).toBe(0);
+    expect(parsed.fg).toBe(false);
     expect(parsed.no_auto_fg).toBe(true);
     expect(parsed.chat_on).toBe(false);
+    expect(parsed.asi).toEqual({ 'Accept-Language': 'en' });
+    expect(parsed.aids).toBeNull();
   });
 });
 

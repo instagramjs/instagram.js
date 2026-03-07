@@ -23,6 +23,7 @@ const session: SessionData = {
   deviceId: 'dev-uuid',
   sessionId: '123456',
   igScopedId: '178414557',
+  username: 'testuser',
   seqId: 0,
 };
 

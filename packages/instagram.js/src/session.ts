@@ -107,13 +107,13 @@ export async function bootstrapSession(cookies: Cookies): Promise<SessionData> {
 
   const hs = extractValue(
     body,
-    /"__hs":"([^"]+)"/,
-    '__hs',
+    /"haste_session":"([^"]+)"/,
+    'haste_session',
   );
 
   const bloksVersion = extractValue(
     body,
-    /"bloks_version":"([^"]+)"/,
+    /bloks_version\\":\\"([a-f0-9]+)/,
     'bloks_version',
   );
 
@@ -122,6 +122,18 @@ export async function bootstrapSession(cookies: Cookies): Promise<SessionData> {
     /"NON_FACEBOOK_USER_ID":"(\d+)"/,
     'IG scoped ID',
   );
+
+  const userObjPattern = new RegExp(
+    `\\{[^{}]*"id":"${cookies.ds_user_id}"[^{}]*\\}`,
+  );
+  const userObjMatch = body.match(userObjPattern);
+  let username: string | null = null;
+  if (userObjMatch) {
+    const nameMatch = userObjMatch[0].match(/"username":"([^"]+)"/);
+    if (nameMatch) {
+      username = nameMatch[1]!;
+    }
+  }
 
   const deviceId = crypto.randomUUID();
   const sessionId = Math.floor(Math.random() * 9_000_000_000_000_000 + 1_000_000_000_000_000).toString();
@@ -139,6 +151,7 @@ export async function bootstrapSession(cookies: Cookies): Promise<SessionData> {
     deviceId,
     sessionId,
     igScopedId,
+    username,
     seqId: 0,
   };
 }
@@ -214,6 +227,7 @@ export function buildMqttUsername(session: SessionData): string {
   return JSON.stringify({
     a: USER_AGENT,
     aid: Number(APP_ID),
+    aids: null,
     asi: { 'Accept-Language': 'en' },
     chat_on: false,
     cp: 1,
@@ -221,7 +235,7 @@ export function buildMqttUsername(session: SessionData): string {
     d: session.deviceId,
     dc: '',
     ecp: 0,
-    fg: true,
+    fg: false,
     gas: null,
     mqtt_sid: '',
     no_auto_fg: true,

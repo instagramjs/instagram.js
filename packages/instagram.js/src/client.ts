@@ -1,6 +1,6 @@
 import { EventEmitter } from 'node:events';
 import { Collection } from './collection';
-import { DEFAULT_CLIENT_OPTIONS, TYPING_TTL } from './constants';
+import { DEFAULT_CLIENT_OPTIONS } from './constants';
 import { ApiError, AuthError, TimeoutError } from './errors';
 import { HttpClient } from './http';
 import { LruCollection } from './lru-collection';
@@ -18,6 +18,7 @@ import type {
   RawDelta,
   RawMessage,
   RawThread,
+  RawUser,
   ReactionEvent,
   ReadReceiptEvent,
   RecipientSearchResult,
@@ -50,29 +51,85 @@ type ClientEventMap = {
   rawDelta: [RawDelta];
 };
 
-function isValidDeltaOp(op: unknown): op is RawDelta['op'] {
-  return op === 'add' || op === 'remove' || op === 'replace';
-}
+const SLIDE_CONTENT_TYPE_MAP: Record<string, string> = {
+  SlideMessageText: 'text',
+  SlideMessageImageContent: 'media',
+  SlideMessageVideoContent: 'media',
+  SlideMessageAnimatedMedia: 'animated_media',
+  SlideMessageVoiceMedia: 'voice_media',
+  SlideMessageMediaShare: 'media_share',
+  SlideMessageReelShare: 'reel_share',
+  SlideMessageStoryShare: 'story_share',
+  SlideMessageClip: 'clip',
+  SlideMessageAdminText: 'action_log',
+  SlideMessageLink: 'link',
+};
 
-function parseDeltaValue(value: unknown): Record<string, unknown> | null {
-  if (typeof value === 'string') {
-    try {
-      const parsed: unknown = JSON.parse(value);
-      return isRecord(parsed) ? parsed : null;
-    } catch {
-      return null;
-    }
+function toRawMessage(slide: Record<string, unknown>): RawMessage | null {
+  const msg = isRecord(slide['message']) ? slide['message'] : slide;
+  const id = msg['id'] ?? msg['message_id'];
+  const senderId = msg['sender_fbid'];
+  const timestampMs = msg['timestamp_ms'];
+  if (typeof id !== 'string' || senderId == null || timestampMs == null) {
+    return null;
   }
-  return isRecord(value) ? value : null;
+
+  const content = isRecord(msg['content']) ? msg['content'] : null;
+  const contentTypename = typeof content?.['__typename'] === 'string' ? content['__typename'] : '';
+  const itemType = SLIDE_CONTENT_TYPE_MAP[contentTypename] ?? 'text';
+
+  const raw: RawMessage = {
+    item_id: id,
+    user_id: String(senderId),
+    timestamp: String(Number(timestampMs) * 1000),
+    item_type: itemType,
+  };
+
+  const textBody = msg['text_body'];
+  if (typeof textBody === 'string') {
+    raw.text = textBody;
+  }
+
+  if (contentTypename === 'SlideMessageImageContent') {
+    raw.media = { media_type: 1, ...(isRecord(content) ? extractMedia(content) : {}) };
+  } else if (contentTypename === 'SlideMessageVideoContent') {
+    raw.media = { media_type: 2, ...(isRecord(content) ? extractMedia(content) : {}) };
+  }
+
+  const reactions = msg['reactions'];
+  if (isRecord(reactions) && Array.isArray(reactions['likes'])) {
+    raw.reactions = { likes: reactions['likes'] as Array<{ sender_id: string | number; emoji: string; timestamp: string | number }> };
+  }
+
+  const repliedToId = msg['replied_to_message_id'];
+  if (typeof repliedToId === 'string') {
+    raw.replied_to_message = { item_id: repliedToId, user_id: '', timestamp: '0' };
+  }
+
+  return raw;
 }
 
-function hasRawMessageFields(obj: Record<string, unknown>): obj is RawMessage {
-  return (
-    typeof obj['item_id'] === 'string' &&
-    'user_id' in obj &&
-    'timestamp' in obj &&
-    typeof obj['item_type'] === 'string'
-  );
+function extractMedia(content: Record<string, unknown>): { image_versions2?: { candidates?: Array<{ url: string; width: number; height: number }> } } {
+  const url = typeof content['url'] === 'string' ? content['url'] : undefined;
+  if (!url) return {};
+  const width = typeof content['width'] === 'number' ? content['width'] : 0;
+  const height = typeof content['height'] === 'number' ? content['height'] : 0;
+  return { image_versions2: { candidates: [{ url, width, height }] } };
+}
+
+function extractUserDict(slide: Record<string, unknown>): RawUser | null {
+  const msg = isRecord(slide['message']) ? slide['message'] : slide;
+  const sender = isRecord(msg['sender']) ? msg['sender'] : null;
+  const userDict = isRecord(sender?.['user_dict']) ? sender!['user_dict'] : null;
+  if (!userDict) return null;
+  const pk = userDict['pk'] ?? userDict['id'] ?? msg['sender_fbid'];
+  if (pk == null) return null;
+  const result: RawUser = { pk: String(pk) };
+  if (typeof userDict['username'] === 'string') result.username = userDict['username'];
+  if (typeof userDict['full_name'] === 'string') result.full_name = userDict['full_name'];
+  if (typeof userDict['profile_pic_url'] === 'string') result.profile_pic_url = userDict['profile_pic_url'];
+  if (typeof userDict['is_verified'] === 'boolean') result.is_verified = userDict['is_verified'];
+  return result;
 }
 
 /**
@@ -158,31 +215,12 @@ export class Client extends EventEmitter<ClientEventMap> {
     this.http = new HttpClient(session, this.options.docIds);
 
     if (this.options.syncOnConnect) {
-      const inboxData = await this.http.graphql<{
-        data?: { viewer?: { message_threads?: { nodes?: RawThread[] }; seq_id?: number } };
-      }>('IGDInboxTrayQuery', {});
-
-      const viewer = inboxData.data?.viewer;
-      if (viewer?.seq_id !== undefined) {
-        this.seqId = viewer.seq_id;
-        session.seqId = viewer.seq_id;
-      }
-
-      const threadNodes = viewer?.message_threads?.nodes ?? [];
-      for (const rawThread of threadNodes) {
-        const thread = Thread.from(rawThread, this);
-        this.threads.set(thread.id, thread);
-
-        for (const participant of thread.participants) {
-          if (!this.users.has(participant.user.id)) {
-            this.users.set(participant.user.id, participant.user);
-          }
-        }
-      }
+      await this.syncInbox();
     }
 
     this.user = new ClientUser({
       id: cookies.ds_user_id,
+      username: session.username,
       igScopedId: session.igScopedId,
       client: this,
     });
@@ -217,7 +255,7 @@ export class Client extends EventEmitter<ClientEventMap> {
     });
 
     await this.mqtt.connect();
-    await this.mqtt.subscribe(['/ig_message_sync', '/ig_send_message_response', '/ig_sub_iris_response']);
+    await this.mqtt.subscribe(['/ig_message_sync', '/ig_sub_iris_response']);
 
     this.publishIrisSubscription();
 
@@ -295,6 +333,34 @@ export class Client extends EventEmitter<ClientEventMap> {
     return this.session?.deviceId ?? '';
   }
 
+  private async syncInbox(): Promise<void> {
+    const http = this.requireHttp();
+    const inboxData = await http.graphql<{
+      data?: {
+        get_slide_mailbox_for_iris_subscription?: {
+          iris_inactive_subscription_uq_seq_id?: string;
+        };
+      };
+    }>('PolarisDirectInboxQuery', {
+      device_id_for_iris_subscription: this.deviceId(),
+      __relay_internal__pv__IGDEnableOffMsysThreadListQErelayprovider: true,
+      __relay_internal__pv__IGDIsProfessionalAccountGKrelayprovider: false,
+      __relay_internal__pv__IGDPinnedThreadsRenderEnabledGKrelayprovider: true,
+      __relay_internal__pv__IGDMaxUnreadMessagesCountrelayprovider: 5,
+      __relay_internal__pv__IGDThreadListActionsEnabledGKrelayprovider: true,
+    });
+
+    const mailbox = inboxData.data?.get_slide_mailbox_for_iris_subscription;
+    const rawSeqId = mailbox?.iris_inactive_subscription_uq_seq_id;
+    if (rawSeqId) {
+      const seqId = Number(rawSeqId);
+      this.seqId = seqId;
+      if (this.session) {
+        this.session.seqId = seqId;
+      }
+    }
+  }
+
   // -- MQTT actions --
 
   /**
@@ -341,7 +407,6 @@ export class Client extends EventEmitter<ClientEventMap> {
           replied_to_item_id: replyToId ?? null,
           replied_to_client_context: null,
         }),
-        1,
       );
     });
   }
@@ -362,7 +427,6 @@ export class Client extends EventEmitter<ClientEventMap> {
         client_context: generateOfflineThreadingId(),
         device_id: this.deviceId(),
       }),
-      1,
     );
   }
 
@@ -381,7 +445,6 @@ export class Client extends EventEmitter<ClientEventMap> {
         client_context: generateOfflineThreadingId(),
         device_id: this.deviceId(),
       }),
-      1,
     );
   }
 
@@ -394,7 +457,6 @@ export class Client extends EventEmitter<ClientEventMap> {
         activity_status: status,
         thread_id: threadId,
       }),
-      0,
     );
   }
 
@@ -682,258 +744,160 @@ export class Client extends EventEmitter<ClientEventMap> {
     let parsed: Record<string, unknown>;
     try {
       const raw: unknown = JSON.parse(payload.toString());
-      if (!isRecord(raw)) {
+      const obj = Array.isArray(raw) ? raw[0] : raw;
+      if (!isRecord(obj)) {
         this.emit('error', new Error('Delta message is not an object'));
         return;
       }
-      parsed = raw;
+      parsed = obj;
     } catch {
       this.emit('error', new Error('Failed to parse delta message'));
       return;
     }
 
-    if (parsed['event'] !== 'patch' || !Array.isArray(parsed['data'])) {
+    const data = isRecord(parsed['data']) ? parsed['data'] : null;
+    const mutations = Array.isArray(data?.['slide_delta_processor'])
+      ? (data!['slide_delta_processor'] as unknown[])
+      : null;
+    if (!mutations) {
       return;
     }
 
-    const seqId = parsed['seq_id'];
-    if (typeof seqId === 'number' && seqId > this.seqId) {
-      this.seqId = seqId;
-    }
-
-    const data = parsed['data'] as unknown[];
-    for (const delta of data) {
-      if (!isRecord(delta)) {
+    for (const mutation of mutations) {
+      if (!isRecord(mutation)) {
         continue;
       }
 
-      const op = delta['op'];
-      const path = delta['path'];
-      if (typeof op !== 'string' || typeof path !== 'string' || !isValidDeltaOp(op)) {
+      const typename = mutation['__typename'];
+      const rawSeqId = mutation['uq_seq_id'];
+      if (typeof typename !== 'string' || typeof rawSeqId !== 'string') {
         continue;
       }
 
-      const rawDelta: RawDelta = {
-        op,
-        path,
-        value: delta['value'],
-        seqId: typeof seqId === 'number' ? seqId : this.seqId,
-      };
-      this.emit('rawDelta', rawDelta);
+      const seqId = Number(rawSeqId);
+      if (seqId > this.seqId) {
+        this.seqId = seqId;
+      }
+
+      this.emit('rawDelta', mutation as RawDelta);
 
       try {
-        this.processDelta(rawDelta);
+        this.processSlide(typename, mutation);
       } catch (err) {
         this.emit('error', err instanceof Error ? err : new Error(String(err)));
       }
     }
   }
 
-  private processDelta(delta: RawDelta): void {
-    const { op, path, value } = delta;
-
-    const itemMatch = path.match(
-      /^\/direct_v2\/threads\/([^/]+)\/items\/([^/]+)$/,
-    );
-    if (itemMatch) {
-      const threadId = itemMatch[1]!;
-      const itemId = itemMatch[2]!;
-      this.handleItemDelta(op, threadId, itemId, value);
-      return;
-    }
-
-    const reactionMatch = path.match(
-      /^\/direct_v2\/threads\/([^/]+)\/items\/([^/]+)\/reactions\/likes\/([^/]+)$/,
-    );
-    if (reactionMatch) {
-      const threadId = reactionMatch[1]!;
-      const itemId = reactionMatch[2]!;
-      const userId = reactionMatch[3]!;
-      this.handleReactionDelta(op, threadId, itemId, userId, value);
-      return;
-    }
-
-    const typingMatch = path.match(
-      /^\/direct_v2\/threads\/([^/]+)\/activity_indicator_id\/([^/]+)$/,
-    );
-    if (typingMatch) {
-      const threadId = typingMatch[1]!;
-      this.handleTypingDelta(threadId, value);
-      return;
-    }
-
-    const readMatch = path.match(
-      /^\/direct_v2\/threads\/([^/]+)\/participants\/([^/]+)\/has_seen$/,
-    );
-    if (readMatch) {
-      const threadId = readMatch[1]!;
-      const userId = readMatch[2]!;
-      this.handleReadReceiptDelta(threadId, userId, value);
-      return;
-    }
-
-    const adminMatch = path.match(
-      /^\/direct_v2\/threads\/([^/]+)\/admin_user_ids\/([^/]+)$/,
-    );
-    if (adminMatch) {
-      const threadId = adminMatch[1]!;
-      const userId = adminMatch[2]!;
-      this.handleAdminDelta(op, threadId, userId);
-      return;
-    }
-
-    const settingsMatch = path.match(
-      /^\/direct_v2\/threads\/([^/]+)\/dm_settings$/,
-    );
-    if (settingsMatch) {
-      const threadId = settingsMatch[1]!;
-      const thread = this.threads.get(threadId);
-      if (thread) {
-        this.emit('threadUpdate', { thread, changes: {} });
-      }
-      return;
-    }
-
-    const threadDeleteMatch = path.match(
-      /^\/direct_v2\/inbox\/threads\/([^/]+)$/,
-    );
-    if (threadDeleteMatch && op === 'remove') {
-      const threadId = threadDeleteMatch[1]!;
-      this.threads.delete(threadId);
-      this.emit('threadDelete', { threadId });
+  private processSlide(typename: string, mutation: Record<string, unknown>): void {
+    switch (typename) {
+      case 'SlideUQPPNewMessage':
+        this.handleSlideNewMessage(mutation);
+        break;
+      case 'SlideUQPPAdminTextMessage':
+        this.handleSlideNewMessage(mutation);
+        break;
+      case 'SlideUQPPDeleteMessage':
+        this.handleSlideDeleteMessage(mutation);
+        break;
+      case 'SlideUQPPCreateReaction':
+        this.handleSlideReaction(mutation, 'reaction');
+        break;
+      case 'SlideUQPPDeleteReaction':
+        this.handleSlideReaction(mutation, 'reactionRemove');
+        break;
+      case 'SlideUQPPReadReceipt':
+        this.handleSlideReadReceipt(mutation);
+        break;
+      case 'SlideUQPPChangeMuteSettings':
+        this.handleSlideThreadUpdate(mutation);
+        break;
+      case 'SlideUQPPThreadName':
+        this.handleSlideThreadUpdate(mutation);
+        break;
+      case 'SlideUQPPDeleteThread':
+        this.handleSlideDeleteThread(mutation);
+        break;
     }
   }
 
-  private handleItemDelta(
-    op: string,
-    threadId: string,
-    itemId: string,
-    value: unknown,
-  ): void {
-    const thread = this.threads.get(threadId);
+  private handleSlideNewMessage(mutation: Record<string, unknown>): void {
+    const raw = toRawMessage(mutation);
+    if (!raw) {
+      return;
+    }
 
-    if (op === 'add') {
-      const obj = parseDeltaValue(value);
-      if (!obj || !hasRawMessageFields(obj)) {
-        return;
-      }
+    const msg = isRecord(mutation['message']) ? mutation['message'] : mutation;
+    const threadId = typeof msg['thread_fbid'] === 'string' ? msg['thread_fbid'] : '';
+    const userId = raw.user_id;
 
-      const userId = String(obj.user_id);
+    if (this.user && String(userId) === this.user.id) {
+      return;
+    }
 
-      if (this.user && userId === this.user.id) {
-        return;
-      }
-
-      let author = this.users.get(userId);
-      if (!author) {
-        author = new User({ id: userId, partial: true, client: this });
-        this.users.set(userId, author);
-      }
-
-      const message = createMessage({ raw: obj, threadId, author, client: this });
-
-      if (thread) {
-        thread.messages.set(message.id, message);
-      }
-
-      this.emit('message', message);
-    } else if (op === 'remove') {
-      const message = thread?.messages.get(itemId) ?? null;
-      if (thread) {
-        thread.messages.delete(itemId);
-      }
-      this.emit('messageDelete', {
-        messageId: itemId,
-        message,
-        thread: thread ?? new Thread({ id: threadId, client: this }),
-        timestamp: new Date(),
+    const userDict = extractUserDict(mutation);
+    let author = this.users.get(String(userId));
+    if (!author) {
+      author = new User({
+        id: String(userId),
+        partial: !userDict,
+        client: this,
+        ...(userDict?.username ? { username: userDict.username } : {}),
+        ...(userDict?.profile_pic_url ? { profilePicUrl: userDict.profile_pic_url } : {}),
       });
-    } else if (op === 'replace') {
-      if (!thread) {
-        return;
-      }
-      const existing = thread.messages.get(itemId);
-      if (!existing) {
-        return;
-      }
-
-      const obj = parseDeltaValue(value);
-      if (!obj) {
-        return;
-      }
-
-      const newText = typeof obj['text'] === 'string' ? obj['text'] : null;
-      const oldText = 'text' in existing ? (existing as unknown as { text: string }).text : null;
-
-      if (newText !== null && oldText !== null && newText !== oldText) {
-        (existing as unknown as { text: string }).text = newText;
-        this.emit('messageEdit', {
-          message: existing,
-          thread,
-          oldText,
-          timestamp: new Date(),
-        });
-      }
+      this.users.set(author.id, author);
+    } else if (userDict?.username && !author.username) {
+      author.username = userDict.username;
     }
+
+    const message = createMessage({ raw, threadId, author, client: this });
+
+    const thread = this.threads.get(threadId);
+    if (thread) {
+      thread.messages.set(message.id, message);
+    }
+
+    this.emit('message', message);
   }
 
-  private handleReactionDelta(
-    op: string,
-    threadId: string,
-    itemId: string,
-    userId: string,
-    value: unknown,
+  private handleSlideDeleteMessage(mutation: Record<string, unknown>): void {
+    const threadId = typeof mutation['thread_fbid'] === 'string' ? mutation['thread_fbid'] : '';
+    const messageId = typeof mutation['message_id'] === 'string' ? mutation['message_id'] : '';
+
+    const thread = this.threads.get(threadId);
+    const message = thread?.messages.get(messageId) ?? null;
+    if (thread) {
+      thread.messages.delete(messageId);
+    }
+
+    this.emit('messageDelete', {
+      messageId,
+      message,
+      thread: thread ?? new Thread({ id: threadId, client: this }),
+      timestamp: new Date(),
+    });
+  }
+
+  private handleSlideReaction(
+    mutation: Record<string, unknown>,
+    event: 'reaction' | 'reactionRemove',
   ): void {
+    const threadId = typeof mutation['thread_fbid'] === 'string' ? mutation['thread_fbid'] : '';
+    const messageId = typeof mutation['message_id'] === 'string' ? mutation['message_id'] : '';
+
     const thread = this.threads.get(threadId);
     if (!thread) {
       return;
     }
 
-    const message = thread.messages.get(itemId) ?? null;
-    const participant = thread.participants.find((p) => p.user.id === userId) ?? {
-      user: this.users.get(userId) ?? new User({ id: userId, partial: true }),
-      isAdmin: false,
-      nickname: null,
-    };
-
-    const obj = parseDeltaValue(value);
-    const emoji = typeof obj?.['emoji'] === 'string' ? obj['emoji'] : '';
-
-    if (op === 'remove') {
-      this.emit('reactionRemove', {
-        message,
-        messageId: itemId,
-        thread,
-        participant,
-        emoji,
-        timestamp: new Date(),
-      });
-    } else {
-      this.emit('reaction', {
-        message,
-        messageId: itemId,
-        thread,
-        participant,
-        emoji,
-        timestamp: new Date(),
-      });
-    }
-  }
-
-  private handleTypingDelta(threadId: string, value: unknown): void {
-    const thread = this.threads.get(threadId);
-    if (!thread) {
-      return;
-    }
-
-    const obj = parseDeltaValue(value);
-    if (!obj) {
-      return;
-    }
-
-    const senderId = String(obj['sender_id'] ?? '');
-    const status = typeof obj['activity_status'] === 'number' ? obj['activity_status'] : 0;
-    const ttl = typeof obj['ttl'] === 'number' ? obj['ttl'] : TYPING_TTL;
+    const message = thread.messages.get(messageId) ?? null;
+    const reactionData = isRecord(mutation['reaction']) ? mutation['reaction'] : {};
+    const emoji = typeof reactionData['reaction'] === 'string' ? reactionData['reaction'] : '';
+    const senderId = typeof reactionData['sender_id'] === 'string'
+      ? reactionData['sender_id']
+      : typeof reactionData['actor_fbid'] === 'string'
+        ? reactionData['actor_fbid']
+        : '';
 
     const participant = thread.participants.find((p) => p.user.id === senderId) ?? {
       user: this.users.get(senderId) ?? new User({ id: senderId, partial: true }),
@@ -941,86 +905,65 @@ export class Client extends EventEmitter<ClientEventMap> {
       nickname: null,
     };
 
-    const timerKey = `${threadId}:${senderId}`;
-
-    if (status === 0) {
-      const existingTimer = this.typingTimers.get(timerKey);
-      if (existingTimer) {
-        clearTimeout(existingTimer);
-        this.typingTimers.delete(timerKey);
-      }
-      this.emit('typingStop', { thread, participant, timestamp: new Date() });
-    } else {
-      const existingTimer = this.typingTimers.get(timerKey);
-      if (existingTimer) {
-        clearTimeout(existingTimer);
-      }
-
-      this.emit('typingStart', { thread, participant, timestamp: new Date() });
-
-      const timer = setTimeout(() => {
-        this.typingTimers.delete(timerKey);
-        this.emit('typingStop', { thread, participant, timestamp: new Date() });
-      }, ttl);
-      this.typingTimers.set(timerKey, timer);
-    }
+    this.emit(event, {
+      message,
+      messageId,
+      thread,
+      participant,
+      emoji,
+      timestamp: new Date(),
+    });
   }
 
-  private handleReadReceiptDelta(
-    threadId: string,
-    userId: string,
-    value: unknown,
-  ): void {
+  private handleSlideReadReceipt(mutation: Record<string, unknown>): void {
+    const threadId = typeof mutation['thread_fbid'] === 'string' ? mutation['thread_fbid'] : '';
     const thread = this.threads.get(threadId);
     if (!thread) {
       return;
     }
 
-    const obj = parseDeltaValue(value);
+    const receipt = isRecord(mutation['read_receipt']) ? mutation['read_receipt'] : {};
+    const userId = typeof receipt['participant_fbid'] === 'string' ? receipt['participant_fbid'] : '';
+    const rawTimestamp = receipt['watermark_timestamp_ms'];
+    const timestamp = typeof rawTimestamp === 'string' ? new Date(Number(rawTimestamp)) : new Date();
 
     const participant = thread.participants.find((p) => p.user.id === userId) ?? {
       user: this.users.get(userId) ?? new User({ id: userId, partial: true }),
       isAdmin: false,
       nickname: null,
     };
-
-    const itemId = typeof obj?.['item_id'] === 'string' ? obj['item_id'] : '';
-    const rawTimestamp = obj?.['timestamp'];
-    const timestamp = typeof rawTimestamp === 'number' ? new Date(rawTimestamp) : new Date();
 
     this.emit('readReceipt', {
       thread,
       participant,
-      messageId: itemId,
+      messageId: '',
       timestamp,
     });
   }
 
-  private handleAdminDelta(
-    op: string,
-    threadId: string,
-    userId: string,
-  ): void {
+  private handleSlideThreadUpdate(mutation: Record<string, unknown>): void {
+    const threadId = typeof mutation['thread_fbid'] === 'string' ? mutation['thread_fbid'] : '';
     const thread = this.threads.get(threadId);
     if (!thread) {
       return;
     }
 
-    const participant = thread.participants.find((p) => p.user.id === userId) ?? {
-      user: this.users.get(userId) ?? new User({ id: userId, partial: true }),
-      isAdmin: false,
-      nickname: null,
-    };
+    const changes: ThreadUpdateEvent['changes'] = {};
 
-    const isAdmin = op === 'add';
-    participant.isAdmin = isAdmin;
+    if (typeof mutation['thread_name'] === 'string') {
+      changes.name = mutation['thread_name'];
+    }
+    if (typeof mutation['is_muted_now'] === 'boolean') {
+      changes.muted = mutation['is_muted_now'];
+    }
 
-    this.emit('threadUpdate', {
-      thread,
-      changes: {
-        adminChange: { participant, isAdmin },
-      },
-    });
+    this.emit('threadUpdate', { thread, changes });
+  }
+
+  private handleSlideDeleteThread(mutation: Record<string, unknown>): void {
+    const threadId = typeof mutation['thread_fbid'] === 'string' ? mutation['thread_fbid'] : '';
+    this.threads.delete(threadId);
+    this.emit('threadDelete', { threadId });
   }
 
   private attemptReconnect(): void {
@@ -1052,7 +995,7 @@ export class Client extends EventEmitter<ClientEventMap> {
       try {
         if (this.mqtt) {
           await this.mqtt.connect();
-          await this.mqtt.subscribe(['/ig_message_sync', '/ig_send_message_response', '/ig_sub_iris_response']);
+          await this.mqtt.subscribe(['/ig_message_sync', '/ig_sub_iris_response']);
           this.publishIrisSubscription();
           this.connected = true;
           this.reconnectStabilityTimer = setTimeout(() => {
@@ -1079,8 +1022,14 @@ export class Client extends EventEmitter<ClientEventMap> {
         snapshot_at_ms: Date.now(),
         snapshot_app_version: 'web',
         subscription_type: 'slide_gql',
+        graphql_config: JSON.stringify({
+          slide_doc_id: '26744961355092044',
+          variables: {
+            enable_off_msys_messages_list: true,
+            __relay_internal__pv__IGDEnableOffMsysPinnedMessagesQErelayprovider: false,
+          },
+        }),
       }),
-      1,
     );
   }
 
@@ -1115,31 +1064,7 @@ export class Client extends EventEmitter<ClientEventMap> {
 
   private async performResync(): Promise<void> {
     try {
-      const http = this.requireHttp();
-      const inboxData = await http.graphql<{
-        data?: { viewer?: { message_threads?: { nodes?: RawThread[] }; seq_id?: number } };
-      }>('IGDInboxTrayQuery', {});
-
-      const viewer = inboxData.data?.viewer;
-      if (viewer?.seq_id !== undefined) {
-        this.seqId = viewer.seq_id;
-        if (this.session) {
-          this.session.seqId = viewer.seq_id;
-        }
-      }
-
-      const threadNodes = viewer?.message_threads?.nodes ?? [];
-      for (const rawThread of threadNodes) {
-        const thread = Thread.from(rawThread, this);
-        this.threads.set(thread.id, thread);
-
-        for (const participant of thread.participants) {
-          if (!this.users.has(participant.user.id)) {
-            this.users.set(participant.user.id, participant.user);
-          }
-        }
-      }
-
+      await this.syncInbox();
       this.publishIrisSubscription();
       this.emit('resync');
     } catch (err) {

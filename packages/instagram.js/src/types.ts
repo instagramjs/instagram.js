@@ -38,15 +38,15 @@ export type SessionData = {
   deviceId: string;
   sessionId: string;
   igScopedId: string;
+  username: string | null;
   seqId: number;
 };
 
 
 export type RawDelta = {
-  op: 'add' | 'remove' | 'replace';
-  path: string;
-  value: unknown;
-  seqId: number;
+  __typename: string;
+  uq_seq_id: string;
+  [key: string]: unknown;
 };
 
 export type RawThread = {

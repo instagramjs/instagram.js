@@ -24,6 +24,7 @@ const session: SessionData = {
   deviceId: 'dev-uuid',
   sessionId: '9999',
   igScopedId: '178414',
+  username: 'testuser',
   seqId: 0,
 };
 
@@ -111,19 +112,21 @@ describe('MqttClient', () => {
   });
 
   describe('subscribe', () => {
-    it('subscribes to topics at QoS 1', async () => {
+    it('subscribes to each topic individually at QoS 0', async () => {
       const client = new MqttClient(session, { keepAlive: 10 });
       const connectPromise = client.connect();
       mockInternalClient.emit('connect');
       await connectPromise;
 
-      await client.subscribe(['/ig_message_sync', '/ig_send_message_response']);
+      await client.subscribe(['/ig_message_sync', '/ig_sub_iris_response']);
 
+      expect(mockInternalClient.subscribe).toHaveBeenCalledTimes(2);
       expect(mockInternalClient.subscribe).toHaveBeenCalledWith(
-        {
-          '/ig_message_sync': { qos: 1 },
-          '/ig_send_message_response': { qos: 1 },
-        },
+        { '/ig_message_sync': { qos: 0 } },
+        expect.any(Function),
+      );
+      expect(mockInternalClient.subscribe).toHaveBeenCalledWith(
+        { '/ig_sub_iris_response': { qos: 0 } },
         expect.any(Function),
       );
     });
