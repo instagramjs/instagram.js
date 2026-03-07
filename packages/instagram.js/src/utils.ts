@@ -12,7 +12,7 @@ export function binaryToDecimal(binary: string): string {
     let carry = 0;
     let quotient = '';
     for (let i = 0; i < remaining.length; i++) {
-      carry = 2 * carry + parseInt(remaining[i], 10);
+      carry = 2 * carry + parseInt(remaining[i]!, 10);
       if (carry >= 10) {
         quotient += '1';
         carry -= 10;
@@ -83,4 +83,14 @@ export function parseCookies(cookieString: string): Record<string, string> {
 /** Generate a unique mutation token using crypto.randomUUID(). */
 export function generateMutationToken(): string {
   return crypto.randomUUID();
+}
+
+/** Type guard: checks if a value is a non-null object (record). */
+export function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+/** Exhaustiveness check for discriminated unions. */
+export function assertNever(value: never): never {
+  throw new Error(`Unexpected value: ${JSON.stringify(value)}`);
 }

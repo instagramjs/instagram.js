@@ -11,18 +11,31 @@
       "import": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "tsc --noEmit",
     "test": "vitest run"
   },
-  "keywords": ["instagram", "bot", "chatbot", "dm", "api"],
+  "keywords": [
+    "instagram",
+    "bot",
+    "chatbot",
+    "dm",
+    "api"
+  ],
   "license": "MIT",
   "devDependencies": {
+    "@types/ws": "^8.18.1",
     "tsup": "^8.4.0",
     "typescript": "^5.7.3",
     "vitest": "^3.0.5"
+  },
+  "dependencies": {
+    "mqtt": "^5.15.0",
+    "ws": "^8.19.0"
   }
 }

@@ -1,9 +1,20 @@
 /**
  * Base error class for all instagram.js errors.
+ *
+ * @example
+ * ```ts
+ * try {
+ *   await client.login(cookies);
+ * } catch (err) {
+ *   if (err instanceof IgBotError) {
+ *     console.error(err.code, err.message);
+ *   }
+ * }
+ * ```
  */
 export class IgBotError extends Error {
   readonly code: string;
-  override readonly cause?: Error;
+  override readonly cause?: Error | undefined;
 
   constructor(message: string, code: string, cause?: Error) {
     super(message);

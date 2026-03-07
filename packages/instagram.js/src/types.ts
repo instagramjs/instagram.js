@@ -1,4 +1,3 @@
-import type { Collection } from './collection';
 import type { Message } from './models/message';
 import type { Thread } from './models/thread';
 import type { User } from './models/user';
@@ -380,3 +379,4 @@ export type DisconnectEvent = {
   reason: 'connection_lost' | 'auth_expired' | 'server_error' | 'destroyed';
   willReconnect: boolean;
 };
+

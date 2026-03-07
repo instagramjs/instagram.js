@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
+import type { Client } from '../client';
 import { Collection } from '../collection';
 import type { RawThread } from '../types';
 import { Thread } from './thread';
 
-const fakeClient = { fake: true };
+const fakeClient = { fake: true } as unknown as Client;
 
 describe('Thread', () => {
   it('constructs with defaults', () => {
@@ -82,9 +83,9 @@ describe('Thread.from', () => {
   it('populates participants', () => {
     const thread = Thread.from(rawThread, fakeClient);
     expect(thread.participants).toHaveLength(3);
-    expect(thread.participants[0].user.username).toBe('alice');
-    expect(thread.participants[0].isAdmin).toBe(true);
-    expect(thread.participants[1].isAdmin).toBe(false);
+    expect(thread.participants[0]!.user.username).toBe('alice');
+    expect(thread.participants[0]!.isAdmin).toBe(true);
+    expect(thread.participants[1]!.isAdmin).toBe(false);
   });
 
   it('populates messages', () => {
@@ -101,19 +102,14 @@ describe('Thread.from', () => {
   });
 });
 
-describe('Thread action stubs', () => {
-  it('throws when no client is attached', () => {
+describe('Thread actions', () => {
+  it('throws when no client is attached', async () => {
     const thread = new Thread({ id: 't1' });
-    expect(() => thread.send('hi')).toThrow('no client attached');
-    expect(() => thread.startTyping()).toThrow('no client attached');
-    expect(() => thread.stopTyping()).toThrow('no client attached');
-    expect(() => thread.markAsRead()).toThrow('no client attached');
-    expect(() => thread.delete()).toThrow('no client attached');
+    expect(() => thread.send('hi')).toThrow('No client attached');
+    expect(() => thread.startTyping()).toThrow('No client attached');
+    expect(() => thread.stopTyping()).toThrow('No client attached');
+    await expect(thread.markAsRead()).rejects.toThrow('No client attached');
+    await expect(thread.delete()).rejects.toThrow('No client attached');
   });
 
-  it('throws not implemented when client is attached', () => {
-    const thread = new Thread({ id: 't1', client: fakeClient });
-    expect(() => thread.send('hi')).toThrow('not implemented');
-    expect(() => thread.rename('new name')).toThrow('not implemented');
-  });
 });

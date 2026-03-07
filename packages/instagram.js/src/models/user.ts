@@ -1,13 +1,14 @@
+import type { Client } from '../client';
 import type { RawUser } from '../types';
 
 export class User {
-  id: string;
+  readonly id: string;
   username: string | null;
   fullName: string | null;
   profilePicUrl: string | null;
   isVerified: boolean | null;
   partial: boolean;
-  declare readonly client: unknown;
+  declare readonly client: Client;
 
   constructor(data: {
     id: string;
@@ -16,7 +17,7 @@ export class User {
     profilePicUrl?: string | null;
     isVerified?: boolean | null;
     partial?: boolean;
-    client?: unknown;
+    client?: Client;
   }) {
     this.id = data.id;
     this.username = data.username ?? null;
@@ -35,8 +36,16 @@ export class User {
     }
   }
 
-  /** Create a User from raw API data. */
-  static from(data: RawUser, client?: unknown): User {
+  /**
+   * Create a User from raw API data.
+   *
+   * @example
+   * ```ts
+   * const user = User.from({ pk: '123', username: 'alice', full_name: 'Alice' });
+   * user.username; // 'alice'
+   * ```
+   */
+  static from(data: RawUser, client?: Client): User {
     return new User({
       id: String(data.pk_id ?? data.pk),
       username: data.username ?? null,
@@ -44,7 +53,7 @@ export class User {
       profilePicUrl: data.profile_pic_url ?? null,
       isVerified: data.is_verified ?? null,
       partial: !data.username,
-      client,
+      ...(client !== undefined ? { client } : {}),
     });
   }
 
@@ -74,7 +83,7 @@ export class User {
 }
 
 export class ClientUser extends User {
-  igScopedId: string;
+  readonly igScopedId: string;
 
   constructor(data: {
     id: string;
@@ -83,7 +92,7 @@ export class ClientUser extends User {
     profilePicUrl?: string | null;
     isVerified?: boolean | null;
     igScopedId: string;
-    client?: unknown;
+    client?: Client;
   }) {
     super(data);
     this.igScopedId = data.igScopedId;

@@ -1,28 +1,29 @@
+import type { Client } from '../client';
 import { Collection } from '../collection';
-import type { RawThread, ThreadParticipant } from '../types';
+import type { RawThread, ThreadParticipant, MessageSearchResponse } from '../types';
 import type { Message } from './message';
 import { createMessage } from './message';
 import { User } from './user';
 
 export class Thread {
-  id: string;
+  readonly id: string;
   name: string | null;
-  participants: ThreadParticipant[];
-  messages: Collection<string, Message>;
-  isGroup: boolean;
+  readonly participants: readonly ThreadParticipant[];
+  readonly messages: Collection<string, Message>;
+  readonly isGroup: boolean;
   unreadCount: number;
   muted: boolean;
-  declare readonly client: unknown;
+  declare readonly client: Client;
 
   constructor(data: {
     id: string;
     name?: string | null;
-    participants?: ThreadParticipant[];
+    participants?: readonly ThreadParticipant[];
     messages?: Collection<string, Message>;
     isGroup?: boolean;
     unreadCount?: number;
     muted?: boolean;
-    client?: unknown;
+    client?: Client;
   }) {
     this.id = data.id;
     this.name = data.name ?? null;
@@ -42,8 +43,16 @@ export class Thread {
     }
   }
 
-  /** Create a Thread from raw API data. */
-  static from(data: RawThread, client?: unknown): Thread {
+  /**
+   * Create a Thread from raw API data.
+   *
+   * @example
+   * ```ts
+   * const thread = Thread.from(rawThreadData, client);
+   * thread.participants.forEach((p) => console.log(p.user.username));
+   * ```
+   */
+  static from(data: RawThread, client?: Client): Thread {
     const users = data.users.map((u) => User.from(u, client));
     const adminIds = new Set(data.admin_user_ids ?? []);
 
@@ -60,7 +69,7 @@ export class Thread {
       isGroup: data.is_group ?? participants.length > 2,
       unreadCount: data.read_state ?? 0,
       muted: data.muted ?? false,
-      client,
+      ...(client !== undefined ? { client } : {}),
     });
 
     if (data.items) {
@@ -68,7 +77,7 @@ export class Thread {
         const authorUser =
           users.find((u) => u.id === String(item.user_id)) ??
           new User({ id: String(item.user_id), partial: true });
-        const message = createMessage(item, data.thread_id, authorUser, client);
+        const message = createMessage({ raw: item, threadId: data.thread_id, author: authorUser, ...(client !== undefined ? { client } : {}) });
         thread.messages.set(message.id, message);
       }
     }
@@ -76,84 +85,81 @@ export class Thread {
     return thread;
   }
 
-
-  send(_content: string): Promise<Message> {
+  private requireClient(): Client {
     if (!this.client) {
-      throw new Error('Cannot send: no client attached');
+      throw new Error('No client attached');
     }
-    throw new Error('send is not implemented yet');
+    return this.client;
   }
 
-  startTyping(): Promise<void> {
-    if (!this.client) {
-      throw new Error('Cannot startTyping: no client attached');
-    }
-    throw new Error('startTyping is not implemented yet');
+  /**
+   * Send a text message to this thread.
+   *
+   * @example
+   * ```ts
+   * const thread = client.threads.first();
+   * thread.send('Hello!');
+   * ```
+   */
+  send(content: string): void {
+    this.requireClient().sendText(this.id, content);
   }
 
-  stopTyping(): Promise<void> {
-    if (!this.client) {
-      throw new Error('Cannot stopTyping: no client attached');
-    }
-    throw new Error('stopTyping is not implemented yet');
+  /** Send typing start indicator. */
+  startTyping(): void {
+    this.requireClient().sendTyping(this.id, 1);
   }
 
-  markAsRead(): Promise<void> {
-    if (!this.client) {
-      throw new Error('Cannot markAsRead: no client attached');
-    }
-    throw new Error('markAsRead is not implemented yet');
+  /** Send typing stop indicator. */
+  stopTyping(): void {
+    this.requireClient().sendTyping(this.id, 0);
   }
 
-  mute(): Promise<void> {
-    if (!this.client) {
-      throw new Error('Cannot mute: no client attached');
-    }
-    throw new Error('mute is not implemented yet');
+  /** Mark this thread as read. */
+  async markAsRead(): Promise<void> {
+    const lastMsg = this.messages.last();
+    const timestamp = lastMsg ? String(lastMsg.timestamp.getTime() * 1000) : '0';
+    await this.requireClient().markAsRead(this.id, timestamp);
   }
 
-  unmute(): Promise<void> {
-    if (!this.client) {
-      throw new Error('Cannot unmute: no client attached');
-    }
-    throw new Error('unmute is not implemented yet');
+  /** Mute this thread. */
+  async mute(): Promise<void> {
+    await this.requireClient().muteThread(this.id, true);
+    this.muted = true;
   }
 
-  rename(_name: string): Promise<void> {
-    if (!this.client) {
-      throw new Error('Cannot rename: no client attached');
-    }
-    throw new Error('rename is not implemented yet');
+  /** Unmute this thread. */
+  async unmute(): Promise<void> {
+    await this.requireClient().muteThread(this.id, false);
+    this.muted = false;
   }
 
-  setNickname(_userId: string, _nickname: string | null): Promise<void> {
-    if (!this.client) {
-      throw new Error('Cannot setNickname: no client attached');
-    }
-    throw new Error('setNickname is not implemented yet');
+  /** Rename this thread. */
+  async rename(name: string): Promise<void> {
+    await this.requireClient().editThreadName(this.id, name);
+    this.name = name;
   }
 
-  delete(): Promise<void> {
-    if (!this.client) {
-      throw new Error('Cannot delete: no client attached');
-    }
-    throw new Error('delete is not implemented yet');
+  /** Set a participant's nickname. */
+  async setNickname(userId: string, nickname: string | null): Promise<void> {
+    await this.requireClient().setNickname(this.id, userId, nickname);
   }
 
-  fetchMessages(_options?: { limit?: number; before?: string }): Promise<Message[]> {
-    if (!this.client) {
-      throw new Error('Cannot fetchMessages: no client attached');
-    }
-    throw new Error('fetchMessages is not implemented yet');
+  /** Delete this thread. */
+  async delete(): Promise<void> {
+    await this.requireClient().deleteThread(this.id);
   }
 
-  searchMessages(
-    _query: string,
-    _options?: { offset?: number },
-  ): Promise<{ results: unknown[]; hasMore: boolean; nextOffset: number | null }> {
-    if (!this.client) {
-      throw new Error('Cannot searchMessages: no client attached');
-    }
-    throw new Error('searchMessages is not implemented yet');
+  /** Fetch messages for this thread. */
+  async fetchMessages(options?: { limit?: number; before?: string }): Promise<Message[]> {
+    return this.requireClient().fetchMessages(this.id, options);
+  }
+
+  /** Search messages in this thread. */
+  async searchMessages(
+    query: string,
+    options?: { offset?: number },
+  ): Promise<MessageSearchResponse> {
+    return this.requireClient().searchInThread(this.id, query, options);
   }
 }

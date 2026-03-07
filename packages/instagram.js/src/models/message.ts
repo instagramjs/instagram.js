@@ -1,3 +1,4 @@
+import type { Client } from '../client';
 import { ITEM_TYPE_MAP } from '../constants';
 import type {
   MessageType,
@@ -8,145 +9,8 @@ import type {
   SharedReel,
   SharedStory,
 } from '../types';
+import { assertNever } from '../utils';
 import { User } from './user';
-
-
-type MessageBaseFields = {
-  id: string;
-  threadId: string;
-  author: User;
-  timestamp: Date;
-  reactions: Reaction[];
-  repliedTo: RepliedMessage | null;
-  rawType: string;
-};
-
-type ActionMethods = {
-  reply(content: string): Promise<Message>;
-  edit(text: string): Promise<void>;
-  react(emoji: string): Promise<void>;
-  unreact(): Promise<void>;
-  delete(): Promise<void>;
-};
-
-
-export type TextMessage = MessageBaseFields &
-  ActionMethods & {
-    type: 'text';
-    text: string;
-  };
-
-export type MediaMessage = MessageBaseFields &
-  ActionMethods & {
-    type: 'media';
-    mediaUrl: string;
-    mediaType: 'image' | 'video';
-    width: number;
-    height: number;
-  };
-
-export type LikeMessage = MessageBaseFields &
-  ActionMethods & {
-    type: 'like';
-  };
-
-export type LinkMessage = MessageBaseFields &
-  ActionMethods & {
-    type: 'link';
-    text: string | null;
-    url: string;
-    title: string | null;
-    summary: string | null;
-    thumbnailUrl: string | null;
-  };
-
-export type MediaShareMessage = MessageBaseFields &
-  ActionMethods & {
-    type: 'mediaShare';
-    text: string | null;
-    post: SharedPost;
-  };
-
-export type ReelShareMessage = MessageBaseFields &
-  ActionMethods & {
-    type: 'reelShare';
-    text: string | null;
-    reel: SharedReel;
-  };
-
-export type StoryShareMessage = MessageBaseFields &
-  ActionMethods & {
-    type: 'storyShare';
-    text: string | null;
-    story: SharedStory;
-  };
-
-export type VoiceMediaMessage = MessageBaseFields &
-  ActionMethods & {
-    type: 'voiceMedia';
-    audioUrl: string;
-    duration: number;
-  };
-
-export type AnimatedMediaMessage = MessageBaseFields &
-  ActionMethods & {
-    type: 'animatedMedia';
-    gifUrl: string;
-    width: number;
-    height: number;
-  };
-
-export type RavenMediaMessage = MessageBaseFields &
-  ActionMethods & {
-    type: 'ravenMedia';
-    mediaUrl: string | null;
-    mediaType: 'image' | 'video';
-    viewMode: 'once' | 'replayable' | 'permanent';
-    expiresAt: Date | null;
-    seen: boolean;
-  };
-
-export type ClipMessage = MessageBaseFields &
-  ActionMethods & {
-    type: 'clip';
-    text: string | null;
-    clip: SharedReel;
-  };
-
-export type ActionLogMessage = MessageBaseFields &
-  ActionMethods & {
-    type: 'actionLog';
-    actionText: string;
-  };
-
-export type PlaceholderMessage = MessageBaseFields &
-  ActionMethods & {
-    type: 'placeholder';
-    placeholderText: string;
-  };
-
-export type UnknownMessage = MessageBaseFields &
-  ActionMethods & {
-    type: 'unknown';
-    rawValue: unknown;
-  };
-
-export type Message =
-  | TextMessage
-  | MediaMessage
-  | LikeMessage
-  | LinkMessage
-  | MediaShareMessage
-  | ReelShareMessage
-  | StoryShareMessage
-  | VoiceMediaMessage
-  | AnimatedMediaMessage
-  | RavenMediaMessage
-  | ClipMessage
-  | ActionLogMessage
-  | PlaceholderMessage
-  | UnknownMessage;
-
 
 function parseReactions(raw: RawMessage['reactions']): Reaction[] {
   if (!raw?.likes) {
@@ -171,88 +35,340 @@ function parseRepliedTo(raw: RawMessage['replied_to_message']): RepliedMessage |
   };
 }
 
-function stubAction(name: string): () => Promise<never> {
-  return function (this: { client?: unknown }) {
-    if (!this.client) {
-      throw new Error(`Cannot ${name}: no client attached`);
+type BaseMessageData = {
+  readonly id: string;
+  readonly threadId: string;
+  readonly author: User;
+  readonly timestamp: Date;
+  readonly reactions: readonly Reaction[];
+  readonly repliedTo: RepliedMessage | null;
+  readonly rawType: string;
+  readonly client?: Client;
+};
+
+/** Base class for all message types. Holds shared fields and action methods. */
+export abstract class BaseMessage {
+  readonly id: string;
+  readonly threadId: string;
+  readonly author: User;
+  readonly timestamp: Date;
+  readonly reactions: readonly Reaction[];
+  readonly repliedTo: RepliedMessage | null;
+  readonly rawType: string;
+  abstract readonly type: MessageType;
+  declare readonly client: Client;
+
+  constructor(data: BaseMessageData) {
+    this.id = data.id;
+    this.threadId = data.threadId;
+    this.author = data.author;
+    this.timestamp = data.timestamp;
+    this.reactions = data.reactions;
+    this.repliedTo = data.repliedTo;
+    this.rawType = data.rawType;
+
+    if (data.client !== undefined) {
+      Object.defineProperty(this, 'client', {
+        value: data.client,
+        writable: true,
+        enumerable: false,
+        configurable: true,
+      });
     }
-    throw new Error(`${name} is not implemented yet`);
-  };
+  }
+
+  private requireClient(): Client {
+    if (!this.client) {
+      throw new Error('No client attached');
+    }
+    return this.client;
+  }
+
+  /**
+   * Reply to this message with text.
+   *
+   * @example
+   * ```ts
+   * client.on('message', (msg) => {
+   *   if (msg.type === 'text') {
+   *     msg.reply('Got it!');
+   *   }
+   * });
+   * ```
+   */
+  reply(content: string): void {
+    this.requireClient().sendText(this.threadId, content, this.id);
+  }
+
+  /** Edit this message's text. */
+  async edit(text: string): Promise<void> {
+    await this.requireClient().editMessage(this.threadId, this.id, text);
+  }
+
+  /** React to this message with an emoji. */
+  react(emoji: string): void {
+    this.requireClient().sendReaction(this.threadId, this.id, emoji);
+  }
+
+  /** Remove your reaction from this message. */
+  unreact(): void {
+    this.requireClient().removeReaction(this.threadId, this.id);
+  }
+
+  /** Unsend (delete) this message. */
+  async delete(): Promise<void> {
+    await this.requireClient().unsendMessage(this.threadId, this.id);
+  }
 }
 
-function buildMessage<T extends { type: MessageType }>(
-  baseFields: MessageBaseFields,
-  client: unknown,
-  variant: T,
-): MessageBaseFields & ActionMethods & T {
-  const msg = {
-    ...baseFields,
-    ...variant,
-    reply: stubAction('reply'),
-    edit: stubAction('edit'),
-    react: stubAction('react'),
-    unreact: stubAction('unreact'),
-    delete: stubAction('delete'),
-  };
-  Object.defineProperty(msg, 'client', {
-    value: client,
-    writable: true,
-    enumerable: false,
-    configurable: true,
-  });
-  return msg;
+export class TextMessage extends BaseMessage {
+  readonly type = 'text' satisfies MessageType;
+  readonly text: string;
+
+  constructor(data: BaseMessageData & { readonly text: string }) {
+    super(data);
+    this.text = data.text;
+  }
 }
+
+export class MediaMessage extends BaseMessage {
+  readonly type = 'media' satisfies MessageType;
+  readonly mediaUrl: string;
+  readonly mediaType: 'image' | 'video';
+  readonly width: number;
+  readonly height: number;
+
+  constructor(data: BaseMessageData & { readonly mediaUrl: string; readonly mediaType: 'image' | 'video'; readonly width: number; readonly height: number }) {
+    super(data);
+    this.mediaUrl = data.mediaUrl;
+    this.mediaType = data.mediaType;
+    this.width = data.width;
+    this.height = data.height;
+  }
+}
+
+export class LikeMessage extends BaseMessage {
+  readonly type = 'like' satisfies MessageType;
+}
+
+export class LinkMessage extends BaseMessage {
+  readonly type = 'link' satisfies MessageType;
+  readonly text: string | null;
+  readonly url: string;
+  readonly title: string | null;
+  readonly summary: string | null;
+  readonly thumbnailUrl: string | null;
+
+  constructor(data: BaseMessageData & { readonly text: string | null; readonly url: string; readonly title: string | null; readonly summary: string | null; readonly thumbnailUrl: string | null }) {
+    super(data);
+    this.text = data.text;
+    this.url = data.url;
+    this.title = data.title;
+    this.summary = data.summary;
+    this.thumbnailUrl = data.thumbnailUrl;
+  }
+}
+
+export class MediaShareMessage extends BaseMessage {
+  readonly type = 'mediaShare' satisfies MessageType;
+  readonly text: string | null;
+  readonly post: SharedPost;
+
+  constructor(data: BaseMessageData & { readonly text: string | null; readonly post: SharedPost }) {
+    super(data);
+    this.text = data.text;
+    this.post = data.post;
+  }
+}
+
+export class ReelShareMessage extends BaseMessage {
+  readonly type = 'reelShare' satisfies MessageType;
+  readonly text: string | null;
+  readonly reel: SharedReel;
+
+  constructor(data: BaseMessageData & { readonly text: string | null; readonly reel: SharedReel }) {
+    super(data);
+    this.text = data.text;
+    this.reel = data.reel;
+  }
+}
+
+export class StoryShareMessage extends BaseMessage {
+  readonly type = 'storyShare' satisfies MessageType;
+  readonly text: string | null;
+  readonly story: SharedStory;
+
+  constructor(data: BaseMessageData & { readonly text: string | null; readonly story: SharedStory }) {
+    super(data);
+    this.text = data.text;
+    this.story = data.story;
+  }
+}
+
+export class VoiceMediaMessage extends BaseMessage {
+  readonly type = 'voiceMedia' satisfies MessageType;
+  readonly audioUrl: string;
+  readonly duration: number;
+
+  constructor(data: BaseMessageData & { readonly audioUrl: string; readonly duration: number }) {
+    super(data);
+    this.audioUrl = data.audioUrl;
+    this.duration = data.duration;
+  }
+}
+
+export class AnimatedMediaMessage extends BaseMessage {
+  readonly type = 'animatedMedia' satisfies MessageType;
+  readonly gifUrl: string;
+  readonly width: number;
+  readonly height: number;
+
+  constructor(data: BaseMessageData & { readonly gifUrl: string; readonly width: number; readonly height: number }) {
+    super(data);
+    this.gifUrl = data.gifUrl;
+    this.width = data.width;
+    this.height = data.height;
+  }
+}
+
+export class RavenMediaMessage extends BaseMessage {
+  readonly type = 'ravenMedia' satisfies MessageType;
+  readonly mediaUrl: string | null;
+  readonly mediaType: 'image' | 'video';
+  readonly viewMode: 'once' | 'replayable' | 'permanent';
+  readonly expiresAt: Date | null;
+  readonly seen: boolean;
+
+  constructor(data: BaseMessageData & { readonly mediaUrl: string | null; readonly mediaType: 'image' | 'video'; readonly viewMode: 'once' | 'replayable' | 'permanent'; readonly expiresAt: Date | null; readonly seen: boolean }) {
+    super(data);
+    this.mediaUrl = data.mediaUrl;
+    this.mediaType = data.mediaType;
+    this.viewMode = data.viewMode;
+    this.expiresAt = data.expiresAt;
+    this.seen = data.seen;
+  }
+}
+
+export class ClipMessage extends BaseMessage {
+  readonly type = 'clip' satisfies MessageType;
+  readonly text: string | null;
+  readonly clip: SharedReel;
+
+  constructor(data: BaseMessageData & { readonly text: string | null; readonly clip: SharedReel }) {
+    super(data);
+    this.text = data.text;
+    this.clip = data.clip;
+  }
+}
+
+export class ActionLogMessage extends BaseMessage {
+  readonly type = 'actionLog' satisfies MessageType;
+  readonly actionText: string;
+
+  constructor(data: BaseMessageData & { readonly actionText: string }) {
+    super(data);
+    this.actionText = data.actionText;
+  }
+}
+
+export class PlaceholderMessage extends BaseMessage {
+  readonly type = 'placeholder' satisfies MessageType;
+  readonly placeholderText: string;
+
+  constructor(data: BaseMessageData & { readonly placeholderText: string }) {
+    super(data);
+    this.placeholderText = data.placeholderText;
+  }
+}
+
+export class UnknownMessage extends BaseMessage {
+  readonly type = 'unknown' satisfies MessageType;
+  readonly rawValue: unknown;
+
+  constructor(data: BaseMessageData & { readonly rawValue: unknown }) {
+    super(data);
+    this.rawValue = data.rawValue;
+  }
+}
+
+export type Message =
+  | TextMessage
+  | MediaMessage
+  | LikeMessage
+  | LinkMessage
+  | MediaShareMessage
+  | ReelShareMessage
+  | StoryShareMessage
+  | VoiceMediaMessage
+  | AnimatedMediaMessage
+  | RavenMediaMessage
+  | ClipMessage
+  | ActionLogMessage
+  | PlaceholderMessage
+  | UnknownMessage;
+
+type CreateMessageInput = {
+  raw: RawMessage;
+  threadId: string;
+  author: User;
+  client?: Client;
+};
 
 /**
  * Create a Message from raw API data.
- * Returns the correct variant based on item_type.
+ * Returns the correct subclass based on item_type.
+ *
+ * @example
+ * ```ts
+ * const msg = createMessage({
+ *   raw: rawApiData,
+ *   threadId: '12345',
+ *   author: user,
+ *   client,
+ * });
+ * if (msg.type === 'text') {
+ *   console.log(msg.text);
+ * }
+ * ```
  */
-export function createMessage(
-  data: RawMessage,
-  threadId: string,
-  author: User,
-  client: unknown,
-): Message {
-  const mappedType: MessageType = ITEM_TYPE_MAP[data.item_type] ?? 'unknown';
+export function createMessage(input: CreateMessageInput): Message {
+  const { raw, threadId, author, client } = input;
+  const mappedType: MessageType = ITEM_TYPE_MAP[raw.item_type] ?? 'unknown';
 
-  const baseFields: MessageBaseFields = {
-    id: data.item_id,
+  const base: BaseMessageData = {
+    id: raw.item_id,
     threadId,
     author,
-    timestamp: new Date(Number(data.timestamp) / 1000),
-    reactions: parseReactions(data.reactions),
-    repliedTo: parseRepliedTo(data.replied_to_message),
-    rawType: data.item_type,
+    timestamp: new Date(Number(raw.timestamp) / 1000),
+    reactions: parseReactions(raw.reactions),
+    repliedTo: parseRepliedTo(raw.replied_to_message),
+    rawType: raw.item_type,
+    ...(client !== undefined ? { client } : {}),
   };
 
   switch (mappedType) {
     case 'text':
-      return buildMessage(baseFields, client, {
-        type: 'text' satisfies typeof mappedType,
-        text: data.text ?? '',
-      });
+      return new TextMessage({ ...base, text: raw.text ?? '' });
 
     case 'media': {
-      const candidate = data.media?.image_versions2?.candidates?.[0];
-      return buildMessage(baseFields, client, {
-        type: 'media' satisfies typeof mappedType,
+      const candidate = raw.media?.image_versions2?.candidates?.[0];
+      return new MediaMessage({
+        ...base,
         mediaUrl: candidate?.url ?? '',
-        mediaType: data.media?.media_type === 2 ? 'video' : 'image',
+        mediaType: raw.media?.media_type === 2 ? 'video' : 'image',
         width: candidate?.width ?? 0,
         height: candidate?.height ?? 0,
       });
     }
 
     case 'like':
-      return buildMessage(baseFields, client, {
-        type: 'like' satisfies typeof mappedType,
-      });
+      return new LikeMessage(base);
 
     case 'link': {
-      const linkContext = data.link?.link_context;
-      return buildMessage(baseFields, client, {
-        type: 'link' satisfies typeof mappedType,
-        text: data.link?.text ?? data.text ?? null,
+      const linkContext = raw.link?.link_context;
+      return new LinkMessage({
+        ...base,
+        text: raw.link?.text ?? raw.text ?? null,
         url: linkContext?.link_url ?? '',
         title: linkContext?.link_title ?? null,
         summary: linkContext?.link_summary ?? null,
@@ -261,10 +377,10 @@ export function createMessage(
     }
 
     case 'mediaShare': {
-      const ms = data.media_share;
-      return buildMessage(baseFields, client, {
-        type: 'mediaShare' satisfies typeof mappedType,
-        text: data.text ?? null,
+      const ms = raw.media_share;
+      return new MediaShareMessage({
+        ...base,
+        text: raw.text ?? null,
         post: {
           id: String(ms?.id ?? ''),
           code: ms?.code ?? '',
@@ -277,41 +393,41 @@ export function createMessage(
     }
 
     case 'reelShare':
-      return buildMessage(baseFields, client, {
-        type: 'reelShare' satisfies typeof mappedType,
-        text: data.reel_share?.text ?? data.text ?? null,
+      return new ReelShareMessage({
+        ...base,
+        text: raw.reel_share?.text ?? raw.text ?? null,
         reel: {
-          id: String(data.reel_share?.media?.id ?? ''),
-          videoUrl: data.reel_share?.media?.video_versions?.[0]?.url ?? '',
-          thumbnailUrl: data.reel_share?.media?.image_versions2?.candidates?.[0]?.url ?? '',
+          id: String(raw.reel_share?.media?.id ?? ''),
+          videoUrl: raw.reel_share?.media?.video_versions?.[0]?.url ?? '',
+          thumbnailUrl: raw.reel_share?.media?.image_versions2?.candidates?.[0]?.url ?? '',
           owner: author,
         },
       });
 
     case 'storyShare':
-      return buildMessage(baseFields, client, {
-        type: 'storyShare' satisfies typeof mappedType,
-        text: data.text ?? null,
+      return new StoryShareMessage({
+        ...base,
+        text: raw.text ?? null,
         story: {
-          id: String(data.story_share?.media?.id ?? ''),
-          mediaUrl: data.story_share?.media?.image_versions2?.candidates?.[0]?.url ?? null,
-          thumbnailUrl: data.story_share?.media?.image_versions2?.candidates?.[0]?.url ?? null,
+          id: String(raw.story_share?.media?.id ?? ''),
+          mediaUrl: raw.story_share?.media?.image_versions2?.candidates?.[0]?.url ?? null,
+          thumbnailUrl: raw.story_share?.media?.image_versions2?.candidates?.[0]?.url ?? null,
           owner: author,
-          isExpired: data.story_share?.is_reel_persisted === false,
+          isExpired: raw.story_share?.is_reel_persisted === false,
         },
       });
 
     case 'voiceMedia':
-      return buildMessage(baseFields, client, {
-        type: 'voiceMedia' satisfies typeof mappedType,
-        audioUrl: data.voice_media?.media?.audio?.audio_src ?? '',
-        duration: data.voice_media?.media?.audio?.duration ?? 0,
+      return new VoiceMediaMessage({
+        ...base,
+        audioUrl: raw.voice_media?.media?.audio?.audio_src ?? '',
+        duration: raw.voice_media?.media?.audio?.duration ?? 0,
       });
 
     case 'animatedMedia': {
-      const fh = data.animated_media?.images?.fixed_height;
-      return buildMessage(baseFields, client, {
-        type: 'animatedMedia' satisfies typeof mappedType,
+      const fh = raw.animated_media?.images?.fixed_height;
+      return new AnimatedMediaMessage({
+        ...base,
         gifUrl: fh?.url ?? '',
         width: Number(fh?.width ?? 0),
         height: Number(fh?.height ?? 0),
@@ -319,43 +435,43 @@ export function createMessage(
     }
 
     case 'ravenMedia':
-      return buildMessage(baseFields, client, {
-        type: 'ravenMedia' satisfies typeof mappedType,
-        mediaUrl: data.visual_media?.media?.image_versions2?.candidates?.[0]?.url ?? null,
-        mediaType: data.visual_media?.media?.media_type === 2 ? 'video' : 'image',
+      return new RavenMediaMessage({
+        ...base,
+        mediaUrl: raw.visual_media?.media?.image_versions2?.candidates?.[0]?.url ?? null,
+        mediaType: raw.visual_media?.media?.media_type === 2 ? 'video' : 'image',
         viewMode: 'once',
         expiresAt: null,
         seen: false,
       });
 
     case 'clip':
-      return buildMessage(baseFields, client, {
-        type: 'clip' satisfies typeof mappedType,
-        text: data.text ?? null,
+      return new ClipMessage({
+        ...base,
+        text: raw.text ?? null,
         clip: {
-          id: String(data.clip?.clip?.id ?? ''),
-          videoUrl: data.clip?.clip?.video_versions?.[0]?.url ?? '',
-          thumbnailUrl: data.clip?.clip?.image_versions2?.candidates?.[0]?.url ?? '',
+          id: String(raw.clip?.clip?.id ?? ''),
+          videoUrl: raw.clip?.clip?.video_versions?.[0]?.url ?? '',
+          thumbnailUrl: raw.clip?.clip?.image_versions2?.candidates?.[0]?.url ?? '',
           owner: author,
         },
       });
 
     case 'actionLog':
-      return buildMessage(baseFields, client, {
-        type: 'actionLog' satisfies typeof mappedType,
-        actionText: data.action_log?.description ?? '',
+      return new ActionLogMessage({
+        ...base,
+        actionText: raw.action_log?.description ?? '',
       });
 
     case 'placeholder':
-      return buildMessage(baseFields, client, {
-        type: 'placeholder' satisfies typeof mappedType,
-        placeholderText: data.placeholder?.message ?? '',
+      return new PlaceholderMessage({
+        ...base,
+        placeholderText: raw.placeholder?.message ?? '',
       });
 
+    case 'unknown':
+      return new UnknownMessage({ ...base, rawValue: raw });
+
     default:
-      return buildMessage(baseFields, client, {
-        type: 'unknown' satisfies typeof mappedType,
-        rawValue: data,
-      });
+      assertNever(mappedType);
   }
 }

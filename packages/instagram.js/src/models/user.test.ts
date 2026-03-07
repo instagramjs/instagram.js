@@ -33,7 +33,7 @@ describe('User', () => {
   });
 
   it('makes client non-enumerable', () => {
-    const fakeClient = { test: true };
+    const fakeClient = { test: true } as unknown as import('../client').Client;
     const user = new User({ id: '1', client: fakeClient });
     expect(user.client).toBe(fakeClient);
     expect(Object.keys(user)).not.toContain('client');

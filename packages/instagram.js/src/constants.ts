@@ -1,4 +1,4 @@
-import type { MessageType } from './types';
+import type { ClientOptions, MessageType } from './types';
 
 export const APP_ID = '936619743392459';
 
@@ -63,15 +63,7 @@ export const ITEM_TYPE_MAP: Record<string, MessageType> = {
   placeholder: 'placeholder',
 };
 
-export const DEFAULT_CLIENT_OPTIONS: {
-  reconnect: boolean;
-  reconnectInterval: number;
-  reconnectMaxRetries: number;
-  syncOnConnect: boolean;
-  maxCachedThreads: number;
-  maxCachedMessages: number;
-  mqttKeepAlive: number;
-} = {
+export const DEFAULT_CLIENT_OPTIONS = {
   reconnect: true,
   reconnectInterval: 5000,
   reconnectMaxRetries: 10,
@@ -79,4 +71,4 @@ export const DEFAULT_CLIENT_OPTIONS: {
   maxCachedThreads: 50,
   maxCachedMessages: 100,
   mqttKeepAlive: DEFAULT_MQTT_KEEPALIVE,
-};
+} satisfies Required<Omit<ClientOptions, 'docIds'>>;
