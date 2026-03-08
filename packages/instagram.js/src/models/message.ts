@@ -43,6 +43,8 @@ type BaseMessageData = {
   readonly timestamp: Date;
   readonly reactions: readonly Reaction[];
   readonly repliedTo: RepliedMessage | null;
+  readonly isForwarded: boolean;
+  readonly snippet: string | null;
   readonly rawType: string;
   readonly client?: Client;
 };
@@ -55,6 +57,8 @@ export abstract class BaseMessage {
   readonly timestamp: Date;
   readonly reactions: readonly Reaction[];
   readonly repliedTo: RepliedMessage | null;
+  readonly isForwarded: boolean;
+  readonly snippet: string | null;
   readonly rawType: string;
   abstract readonly type: MessageType;
   declare readonly client: Client;
@@ -66,6 +70,8 @@ export abstract class BaseMessage {
     this.timestamp = data.timestamp;
     this.reactions = data.reactions;
     this.repliedTo = data.repliedTo;
+    this.isForwarded = data.isForwarded;
+    this.snippet = data.snippet;
     this.rawType = data.rawType;
 
     if (data.client !== undefined) {
@@ -143,13 +149,15 @@ export class MediaMessage extends BaseMessage {
   readonly mediaType: 'image' | 'video';
   readonly width: number;
   readonly height: number;
+  readonly previewUrl: string | null;
 
-  constructor(data: BaseMessageData & { readonly mediaUrl: string; readonly mediaType: 'image' | 'video'; readonly width: number; readonly height: number }) {
+  constructor(data: BaseMessageData & { readonly mediaUrl: string; readonly mediaType: 'image' | 'video'; readonly width: number; readonly height: number; readonly previewUrl: string | null }) {
     super(data);
     this.mediaUrl = data.mediaUrl;
     this.mediaType = data.mediaType;
     this.width = data.width;
     this.height = data.height;
+    this.previewUrl = data.previewUrl;
   }
 }
 
@@ -215,11 +223,13 @@ export class VoiceMediaMessage extends BaseMessage {
   readonly type = 'voiceMedia' satisfies MessageType;
   readonly audioUrl: string;
   readonly duration: number;
+  readonly waveformData: readonly number[];
 
-  constructor(data: BaseMessageData & { readonly audioUrl: string; readonly duration: number }) {
+  constructor(data: BaseMessageData & { readonly audioUrl: string; readonly duration: number; readonly waveformData: readonly number[] }) {
     super(data);
     this.audioUrl = data.audioUrl;
     this.duration = data.duration;
+    this.waveformData = data.waveformData;
   }
 }
 
@@ -228,12 +238,16 @@ export class AnimatedMediaMessage extends BaseMessage {
   readonly gifUrl: string;
   readonly width: number;
   readonly height: number;
+  readonly isSticker: boolean;
+  readonly mp4Url: string | null;
 
-  constructor(data: BaseMessageData & { readonly gifUrl: string; readonly width: number; readonly height: number }) {
+  constructor(data: BaseMessageData & { readonly gifUrl: string; readonly width: number; readonly height: number; readonly isSticker: boolean; readonly mp4Url: string | null }) {
     super(data);
     this.gifUrl = data.gifUrl;
     this.width = data.width;
     this.height = data.height;
+    this.isSticker = data.isSticker;
+    this.mp4Url = data.mp4Url;
   }
 }
 
@@ -348,6 +362,8 @@ export function createMessage(input: CreateMessageInput): Message {
     timestamp: new Date(Number(raw.timestamp) / 1000),
     reactions: parseReactions(raw.reactions),
     repliedTo: parseRepliedTo(raw.replied_to_message),
+    isForwarded: raw.is_forwarded === true,
+    snippet: typeof raw.snippet === 'string' ? raw.snippet : null,
     rawType: raw.item_type,
     ...(client !== undefined ? { client } : {}),
   };
@@ -364,6 +380,7 @@ export function createMessage(input: CreateMessageInput): Message {
         mediaType: raw.media?.media_type === 2 ? 'video' : 'image',
         width: candidate?.width ?? 0,
         height: candidate?.height ?? 0,
+        previewUrl: raw.media?.preview_url ?? null,
       });
     }
 
@@ -428,6 +445,7 @@ export function createMessage(input: CreateMessageInput): Message {
         ...base,
         audioUrl: raw.voice_media?.media?.audio?.audio_src ?? '',
         duration: raw.voice_media?.media?.audio?.duration ?? 0,
+        waveformData: raw.voice_media?.media?.audio?.waveform_data ?? [],
       });
 
     case 'animatedMedia': {
@@ -437,18 +455,27 @@ export function createMessage(input: CreateMessageInput): Message {
         gifUrl: fh?.url ?? '',
         width: Number(fh?.width ?? 0),
         height: Number(fh?.height ?? 0),
+        isSticker: raw.animated_media?.is_sticker === true,
+        mp4Url: raw.animated_media?.mp4_url ?? null,
       });
     }
 
-    case 'ravenMedia':
+    case 'ravenMedia': {
+      const viewModeRaw = raw.visual_media?.view_mode;
+      const viewModeMap: Record<string, 'once' | 'replayable' | 'permanent'> = {
+        '1': 'once', once: 'once',
+        '2': 'replayable', replayable: 'replayable',
+        '3': 'permanent', permanent: 'permanent',
+      };
       return new RavenMediaMessage({
         ...base,
         mediaUrl: raw.visual_media?.media?.image_versions2?.candidates?.[0]?.url ?? null,
         mediaType: raw.visual_media?.media?.media_type === 2 ? 'video' : 'image',
-        viewMode: 'once',
-        expiresAt: null,
-        seen: false,
+        viewMode: viewModeMap[String(viewModeRaw)] ?? 'once',
+        expiresAt: raw.visual_media?.expiring_at ? new Date(raw.visual_media.expiring_at * 1000) : null,
+        seen: (raw.visual_media?.seen_count ?? 0) > 0,
       });
+    }
 
     case 'clip':
       return new ClipMessage({

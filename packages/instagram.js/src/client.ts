@@ -54,18 +54,18 @@ type ClientEventMap = {
 const SLIDE_CONTENT_TYPE_MAP: Record<string, string> = {
   SlideMessageText: 'text',
   SlideMessageImageContent: 'media',
-  SlideMessageVideoContent: 'media',
-  SlideMessageAnimatedMedia: 'animated_media',
-  SlideMessageVoiceMedia: 'voice_media',
-  SlideMessageMediaShare: 'media_share',
-  SlideMessageReelShare: 'reel_share',
-  SlideMessageStoryShare: 'story_share',
+  SlideMessageVideosContent: 'media',
+  SlideMessageAnimatedMediaContent: 'animated_media',
+  SlideMessageAudiosContent: 'voice_media',
   SlideMessageClip: 'clip',
   SlideMessageAdminText: 'action_log',
   SlideMessageLink: 'link',
+  SlideMessageRavenImageContent: 'raven_media',
+  SlideMessageRavenVideoContent: 'raven_media',
 };
 
-function toRawMessage(slide: Record<string, unknown>): RawMessage | null {
+/** @internal */
+export function toRawMessage(slide: Record<string, unknown>): RawMessage | null {
   const msg = isRecord(slide['message']) ? slide['message'] : slide;
   const id = msg['id'] ?? msg['message_id'];
   const senderId = msg['sender_fbid'];
@@ -90,12 +90,164 @@ function toRawMessage(slide: Record<string, unknown>): RawMessage | null {
     raw.text = textBody;
   }
 
-  if (contentTypename === 'SlideMessageImageContent') {
-    raw.media = { media_type: 1, ...(isRecord(content) ? extractMedia(content) : {}) };
-  } else if (contentTypename === 'SlideMessageVideoContent') {
-    raw.media = { media_type: 2, ...(isRecord(content) ? extractMedia(content) : {}) };
-  } else if (contentTypename === 'SlideMessageAdminText') {
-    raw.action_log = { description: typeof textBody === 'string' ? textBody : '' };
+  if (msg['igd_is_forwarded'] === true) {
+    raw.is_forwarded = true;
+  }
+  const igdSnippet = msg['igd_snippet'];
+  if (typeof igdSnippet === 'string') {
+    raw.snippet = igdSnippet;
+  }
+
+  switch (contentTypename) {
+    case 'SlideMessageImageContent': {
+      const atts = Array.isArray(content!['attachments']) ? content!['attachments'] as Record<string, unknown>[] : [];
+      const att = isRecord(atts[0]) ? atts[0] : null;
+      if (att) {
+        const url = typeof att['attachment_cdn_url'] === 'string' ? att['attachment_cdn_url'] : '';
+        const previewUrl = typeof att['preview_cdn_url'] === 'string' ? att['preview_cdn_url'] : undefined;
+        const width = Number(att['preview_width']) || 0;
+        const height = Number(att['preview_height']) || 0;
+        raw.media = {
+          media_type: 1,
+          image_versions2: { candidates: [{ url, width, height }] },
+          ...(previewUrl ? { preview_url: previewUrl } : {}),
+        };
+      }
+      break;
+    }
+    case 'SlideMessageVideosContent': {
+      const vids = Array.isArray(content!['videos']) ? content!['videos'] as Record<string, unknown>[] : [];
+      const vid = isRecord(vids[0]) ? vids[0] : null;
+      if (vid) {
+        const url = typeof vid['attachment_cdn_url'] === 'string' ? vid['attachment_cdn_url'] : '';
+        const previewUrl = typeof vid['preview_cdn_url'] === 'string' ? vid['preview_cdn_url'] : undefined;
+        const width = Number(vid['preview_width']) || 0;
+        const height = Number(vid['preview_height']) || 0;
+        raw.media = {
+          media_type: 2,
+          image_versions2: { candidates: [{ url, width, height }] },
+          ...(previewUrl ? { preview_url: previewUrl } : {}),
+        };
+      }
+      break;
+    }
+    case 'SlideMessageXMAContent': {
+      const xma = isRecord(content!['xma']) ? content!['xma'] : null;
+      if (!xma) break;
+      const targetUrl = typeof xma['target_url'] === 'string' ? xma['target_url'] : '';
+      const targetId = typeof xma['target_id'] === 'string' || typeof xma['target_id'] === 'number' ? String(xma['target_id']) : '';
+      const previewImage = isRecord(xma['preview_image']) ? xma['preview_image'] : null;
+      const thumbnailUrl = typeof previewImage?.['url'] === 'string' ? previewImage['url'] : null;
+      const headerTitle = typeof xma['header_title_text'] === 'string' ? xma['header_title_text'] : null;
+      const eyebrowText = typeof xma['eyebrow_text'] === 'string' ? xma['eyebrow_text'] : null;
+      const xmaTextBody = typeof content!['xma_text_body'] === 'string' ? content!['xma_text_body'] : null;
+
+      if (targetUrl.includes('/reel/')) {
+        raw.item_type = 'reel_share';
+        raw.reel_share = {
+          ...(eyebrowText ? { text: eyebrowText } : {}),
+          media: {
+            id: targetId,
+            ...(thumbnailUrl ? { image_versions2: { candidates: [{ url: thumbnailUrl, width: 0, height: 0 }] } } : {}),
+            ...(headerTitle ? { user: { pk: '', username: headerTitle } } : {}),
+          },
+        };
+      } else if (targetUrl.includes('/stories/')) {
+        raw.item_type = 'story_share';
+        raw.story_share = {
+          media: {
+            id: targetId,
+            ...(thumbnailUrl ? { image_versions2: { candidates: [{ url: thumbnailUrl, width: 0, height: 0 }] } } : {}),
+            ...(headerTitle ? { user: { pk: '', username: headerTitle } } : {}),
+          },
+        };
+      } else if (targetUrl.includes('/p/')) {
+        raw.item_type = 'media_share';
+        const codeMatch = targetUrl.match(/\/p\/([^/?]+)/);
+        raw.media_share = {
+          id: targetId,
+          code: codeMatch?.[1] ?? '',
+          ...(thumbnailUrl ? { image_versions2: { candidates: [{ url: thumbnailUrl, width: 0, height: 0 }] } } : {}),
+          ...(headerTitle ? { user: { pk: '', username: headerTitle } } : {}),
+        };
+      } else {
+        raw.item_type = 'link';
+        raw.link = {
+          ...(xmaTextBody ? { text: xmaTextBody } : {}),
+          link_context: {
+            link_url: targetUrl,
+            ...(headerTitle ? { link_title: headerTitle } : {}),
+            ...(eyebrowText ? { link_summary: eyebrowText } : {}),
+            ...(thumbnailUrl ? { link_image_url: thumbnailUrl } : {}),
+          },
+        };
+      }
+      break;
+    }
+    case 'SlideMessageAudiosContent': {
+      const audioAtts = Array.isArray(content!['audio_attachments']) ? content!['audio_attachments'] as Record<string, unknown>[] : [];
+      const audioAtt = isRecord(audioAtts[0]) ? audioAtts[0] : null;
+      if (audioAtt) {
+        const audioUrl = typeof audioAtt['attachment_cdn_url'] === 'string' ? audioAtt['attachment_cdn_url'] : '';
+        const durationMs = Number(audioAtt['playable_duration_ms']) || 0;
+        const waveform = Array.isArray(audioAtt['waveform_data']) ? audioAtt['waveform_data'] as number[] : undefined;
+        raw.voice_media = {
+          media: {
+            audio: {
+              audio_src: audioUrl,
+              duration: durationMs,
+              ...(waveform ? { waveform_data: waveform } : {}),
+            },
+          },
+        };
+      }
+      break;
+    }
+    case 'SlideMessageAnimatedMediaContent': {
+      const anims = Array.isArray(content!['animated_media']) ? content!['animated_media'] as Record<string, unknown>[] : [];
+      const anim = isRecord(anims[0]) ? anims[0] : null;
+      if (anim) {
+        const gifUrl = typeof anim['attachment_webp_url'] === 'string' ? anim['attachment_webp_url'] : '';
+        const width = Number(anim['preview_width']) || 0;
+        const height = Number(anim['preview_height']) || 0;
+        const stickerFlag = anim['is_sticker'] === true;
+        const mp4Url = typeof anim['attachment_mp4_url'] === 'string' ? anim['attachment_mp4_url'] : undefined;
+        raw.animated_media = {
+          images: { fixed_height: { url: gifUrl, width, height } },
+          ...(stickerFlag ? { is_sticker: true } : {}),
+          ...(mp4Url ? { mp4_url: mp4Url } : {}),
+        };
+      }
+      break;
+    }
+    case 'SlideMessageAdminText': {
+      const fragments = Array.isArray(content!['text_fragments']) ? content!['text_fragments'] as Record<string, unknown>[] : [];
+      const description = fragments
+        .map((f) => (typeof f['plaintext'] === 'string' ? f['plaintext'] : ''))
+        .join('');
+      raw.action_log = { description };
+      break;
+    }
+    case 'SlideMessageRavenImageContent':
+    case 'SlideMessageRavenVideoContent': {
+      const viewMode = content!['view_mode'];
+      const viewModeStr = typeof viewMode === 'number' ? String(viewMode) : typeof viewMode === 'string' ? viewMode : null;
+      const visualMedia: RawMessage['visual_media'] = {
+        ...(viewModeStr ? { view_mode: viewModeStr } : {}),
+        media: {
+          media_type: contentTypename === 'SlideMessageRavenVideoContent' ? 2 : 1,
+        },
+      };
+      const attachment = isRecord(content!['attachment']) ? content!['attachment'] : null;
+      if (attachment) {
+        const url = typeof attachment['attachment_cdn_url'] === 'string' ? attachment['attachment_cdn_url'] : null;
+        if (url && visualMedia.media) {
+          visualMedia.media.image_versions2 = { candidates: [{ url, width: 0, height: 0 }] };
+        }
+      }
+      raw.visual_media = visualMedia;
+      break;
+    }
   }
 
   const reactions = msg['reactions'];
@@ -109,14 +261,6 @@ function toRawMessage(slide: Record<string, unknown>): RawMessage | null {
   }
 
   return raw;
-}
-
-function extractMedia(content: Record<string, unknown>): { image_versions2?: { candidates?: Array<{ url: string; width: number; height: number }> } } {
-  const url = typeof content['url'] === 'string' ? content['url'] : undefined;
-  if (!url) return {};
-  const width = Number(content['width']) || 0;
-  const height = Number(content['height']) || 0;
-  return { image_versions2: { candidates: [{ url, width, height }] } };
 }
 
 function extractUserDict(slide: Record<string, unknown>): RawUser | null {
@@ -803,6 +947,9 @@ export class Client extends EventEmitter<ClientEventMap> {
         this.handleSlideNewMessage(mutation);
         break;
       case 'SlideUQPPAdminTextMessage':
+        this.handleSlideNewMessage(mutation);
+        break;
+      case 'SlideUQPPNewRavenMessage':
         this.handleSlideNewMessage(mutation);
         break;
       case 'SlideUQPPDeleteMessage':

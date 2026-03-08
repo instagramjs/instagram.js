@@ -196,6 +196,8 @@ describe('createMessage', () => {
         item_type: 'text',
         text: 'test',
         item_id: 'msg_42',
+        is_forwarded: true,
+        snippet: 'user: test',
         reactions: {
           likes: [{ sender_id: '2', emoji: '❤️', timestamp: '1700000000000000' }],
         },
@@ -215,10 +217,23 @@ describe('createMessage', () => {
     expect(msg.author).toBe(author);
     expect(msg.timestamp).toBeInstanceOf(Date);
     expect(msg.rawType).toBe('text');
+    expect(msg.isForwarded).toBe(true);
+    expect(msg.snippet).toBe('user: test');
     expect(msg.reactions).toHaveLength(1);
     expect(msg.reactions[0]!.emoji).toBe('❤️');
     expect(msg.repliedTo).not.toBeNull();
     expect(msg.repliedTo!.id).toBe('msg_41');
+  });
+
+  it('defaults isForwarded to false and snippet to null', () => {
+    const msg = createMessage({
+      raw: makeRaw({ item_type: 'text', text: 'hi' }),
+      threadId,
+      author,
+      client: fakeClient,
+    });
+    expect(msg.isForwarded).toBe(false);
+    expect(msg.snippet).toBeNull();
   });
 
   it('makes client non-enumerable', () => {

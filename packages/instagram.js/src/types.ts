@@ -72,6 +72,7 @@ export type RawMediaCandidate = {
 export type RawMedia = {
   image_versions2?: { candidates?: RawMediaCandidate[] };
   media_type?: number;
+  preview_url?: string;
 };
 
 export type RawLink = {
@@ -118,6 +119,7 @@ export type RawVoiceMedia = {
     audio?: {
       audio_src?: string;
       duration?: number;
+      waveform_data?: number[];
     };
   };
 };
@@ -130,6 +132,8 @@ export type RawAnimatedMedia = {
       height?: string | number;
     };
   };
+  is_sticker?: boolean;
+  mp4_url?: string;
 };
 
 export type RawVisualMedia = {
@@ -176,6 +180,8 @@ export type RawMessage = {
   clip?: RawClip;
   action_log?: RawActionLog;
   placeholder?: RawPlaceholder;
+  is_forwarded?: boolean;
+  snippet?: string;
   reactions?: {
     likes?: Array<{
       sender_id: string | number;

@@ -1,5 +1,7 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
-import { Client } from './client';
+import { Client, toRawMessage } from './client';
 import { DEFAULT_CLIENT_OPTIONS } from './constants';
 import { ApiError, AuthError, TimeoutError } from './errors';
 import { Thread } from './models/thread';
@@ -476,8 +478,11 @@ describe('Client', () => {
           id: 'mid.admin-1',
           sender_fbid: '456',
           timestamp_ms: '1700000001000',
-          text_body: 'Group name changed',
-          content: { __typename: 'SlideMessageAdminText' },
+          text_body: null,
+          content: {
+            __typename: 'SlideMessageAdminText',
+            text_fragments: [{ plaintext: 'Group name changed' }],
+          },
         },
       }]));
 
@@ -1441,5 +1446,132 @@ describe('Client', () => {
 
       vi.useRealTimers();
     });
+  });
+});
+
+function loadFixture(filename: string): Record<string, unknown> {
+  const fixturePath = join(__dirname, '../../..', 'examples/message-type-logs', filename);
+  return JSON.parse(readFileSync(fixturePath, 'utf-8'));
+}
+
+describe('toRawMessage', () => {
+  it('parses text message', () => {
+    const slide = loadFixture('SlideUQPPNewMessage_3592682.json');
+    const raw = toRawMessage(slide);
+    expect(raw).not.toBeNull();
+    expect(raw!.item_type).toBe('text');
+    expect(raw!.text).toBe('Hi');
+    expect(raw!.user_id).toBe('17848424085136306');
+    expect(raw!.snippet).toBe('evilbaby445: Hi');
+    expect(raw!.is_forwarded).toBeUndefined();
+  });
+
+  it('parses image message with correct dimensions', () => {
+    const slide = loadFixture('SlideUQPPNewMessage_3592683.json');
+    const raw = toRawMessage(slide);
+    expect(raw).not.toBeNull();
+    expect(raw!.item_type).toBe('media');
+    expect(raw!.media).toBeDefined();
+    expect(raw!.media!.media_type).toBe(1);
+    const candidate = raw!.media!.image_versions2?.candidates?.[0];
+    expect(candidate).toBeDefined();
+    expect(candidate!.width).toBe(442);
+    expect(candidate!.height).toBe(960);
+    expect(candidate!.url).toContain('fbcdn.net');
+    expect(raw!.media!.preview_url).toContain('fbcdn.net');
+  });
+
+  it('parses video message (SlideMessageVideosContent)', () => {
+    const slide = loadFixture('SlideUQPPNewMessage_3592684.json');
+    const raw = toRawMessage(slide);
+    expect(raw).not.toBeNull();
+    expect(raw!.item_type).toBe('media');
+    expect(raw!.media).toBeDefined();
+    expect(raw!.media!.media_type).toBe(2);
+    const candidate = raw!.media!.image_versions2?.candidates?.[0];
+    expect(candidate).toBeDefined();
+    expect(candidate!.url).toContain('.mp4');
+    expect(candidate!.width).toBe(360);
+    expect(candidate!.height).toBe(360);
+  });
+
+  it('parses link via XMA StandardXMA', () => {
+    const slide = loadFixture('SlideUQPPNewMessage_3592690.json');
+    const raw = toRawMessage(slide);
+    expect(raw).not.toBeNull();
+    expect(raw!.item_type).toBe('link');
+    expect(raw!.link).toBeDefined();
+    expect(raw!.link!.link_context?.link_url).toBe('https://www.instagram.com/link');
+    expect(raw!.link!.link_context?.link_title).toBe('link');
+  });
+
+  it('parses reel share via XMA PortraitXMA with /reel/', () => {
+    const slide = loadFixture('SlideUQPPNewMessage_3592688.json');
+    const raw = toRawMessage(slide);
+    expect(raw).not.toBeNull();
+    expect(raw!.item_type).toBe('reel_share');
+    expect(raw!.reel_share).toBeDefined();
+    expect(raw!.reel_share!.media?.id).toBe('3834654736251454887');
+    expect(raw!.reel_share!.media?.user?.username).toBe('edgyjexxo');
+    expect(raw!.reel_share!.media?.image_versions2?.candidates?.[0]?.url).toContain('cdninstagram.com');
+  });
+
+  it('parses story share via XMA PortraitXMA with /stories/', () => {
+    const slide = loadFixture('SlideUQPPNewMessage_3592691.json');
+    const raw = toRawMessage(slide);
+    expect(raw).not.toBeNull();
+    expect(raw!.item_type).toBe('story_share');
+    expect(raw!.story_share).toBeDefined();
+    expect(raw!.story_share!.media?.user?.username).toBe('caden.001');
+    expect(raw!.story_share!.media?.image_versions2?.candidates?.[0]?.url).toContain('cdninstagram.com');
+  });
+
+  it('parses voice media (AudiosContent)', () => {
+    const slide = loadFixture('SlideUQPPNewMessage_3592692.json');
+    const raw = toRawMessage(slide);
+    expect(raw).not.toBeNull();
+    expect(raw!.item_type).toBe('voice_media');
+    expect(raw!.voice_media).toBeDefined();
+    expect(raw!.voice_media!.media?.audio?.audio_src).toContain('fbsbx.com');
+    expect(raw!.voice_media!.media?.audio?.duration).toBe(1407);
+  });
+
+  it('parses animated media (AnimatedMediaContent)', () => {
+    const slide = loadFixture('SlideUQPPNewMessage_3592694.json');
+    const raw = toRawMessage(slide);
+    expect(raw).not.toBeNull();
+    expect(raw!.item_type).toBe('animated_media');
+    expect(raw!.animated_media).toBeDefined();
+    expect(raw!.animated_media!.images?.fixed_height?.url).toContain('giphy.com');
+    expect(raw!.animated_media!.images?.fixed_height?.width).toBe(200);
+    expect(raw!.animated_media!.images?.fixed_height?.height).toBe(200);
+    expect(raw!.animated_media!.is_sticker).toBe(true);
+    expect(raw!.animated_media!.mp4_url).toContain('giphy.com');
+  });
+
+  it('parses raven media (SlideUQPPNewRavenMessage)', () => {
+    const slide = loadFixture('SlideUQPPNewRavenMessage_3592695.json');
+    const raw = toRawMessage(slide);
+    expect(raw).not.toBeNull();
+    expect(raw!.item_type).toBe('raven_media');
+    expect(raw!.visual_media).toBeDefined();
+    expect(raw!.visual_media!.view_mode).toBe('1');
+    expect(raw!.visual_media!.media?.media_type).toBe(1);
+    // attachment is null for view-once already viewed
+    expect(raw!.visual_media!.media?.image_versions2).toBeUndefined();
+  });
+
+  it('parses admin text with text_fragments', () => {
+    const slide = loadFixture('SlideUQPPAdminTextMessage_3592704.json');
+    const raw = toRawMessage(slide);
+    expect(raw).not.toBeNull();
+    expect(raw!.item_type).toBe('action_log');
+    expect(raw!.action_log).toBeDefined();
+    expect(raw!.action_log!.description).toBe('evilbaby445 set your nickname to F.');
+  });
+
+  it('returns null for invalid slide data', () => {
+    expect(toRawMessage({})).toBeNull();
+    expect(toRawMessage({ message: {} })).toBeNull();
   });
 });
