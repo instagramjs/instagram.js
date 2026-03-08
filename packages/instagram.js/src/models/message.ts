@@ -10,7 +10,7 @@ import type {
   SharedReel,
   SharedStory,
 } from '../types';
-import { assertNever } from '../utils';
+import { assertNever, defineHiddenProperty } from '../utils';
 import { User } from './user';
 
 function parseReactions(raw: RawMessage['reactions']): Reaction[] {
@@ -75,12 +75,7 @@ export abstract class BaseMessage {
     this.rawType = data.rawType;
 
     if (data.client !== undefined) {
-      Object.defineProperty(this, 'client', {
-        value: data.client,
-        writable: true,
-        enumerable: false,
-        configurable: true,
-      });
+      defineHiddenProperty(this, 'client', data.client);
     }
   }
 

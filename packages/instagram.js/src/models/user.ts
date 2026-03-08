@@ -1,5 +1,6 @@
 import type { Client } from '../client';
 import type { RawUser } from '../types';
+import { defineHiddenProperty } from '../utils';
 
 export class User {
   readonly id: string;
@@ -27,12 +28,7 @@ export class User {
     this.partial = data.partial ?? false;
 
     if (data.client !== undefined) {
-      Object.defineProperty(this, 'client', {
-        value: data.client,
-        writable: true,
-        enumerable: false,
-        configurable: true,
-      });
+      defineHiddenProperty(this, 'client', data.client);
     }
   }
 

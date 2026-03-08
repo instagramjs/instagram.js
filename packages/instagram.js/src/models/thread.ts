@@ -2,6 +2,7 @@ import type { Client } from '../client';
 import { Collection } from '../collection';
 import type { SendContent } from '../media';
 import type { RawThread, ThreadParticipant, MessageSearchResponse } from '../types';
+import { defineHiddenProperty } from '../utils';
 import type { Message } from './message';
 import { createMessage } from './message';
 import { User } from './user';
@@ -35,12 +36,7 @@ export class Thread {
     this.muted = data.muted ?? false;
 
     if (data.client !== undefined) {
-      Object.defineProperty(this, 'client', {
-        value: data.client,
-        writable: true,
-        enumerable: false,
-        configurable: true,
-      });
+      defineHiddenProperty(this, 'client', data.client);
     }
   }
 
