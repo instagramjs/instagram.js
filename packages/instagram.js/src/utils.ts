@@ -1,3 +1,5 @@
+import { ValidationError } from './errors';
+
 /**
  * Convert a binary string to its decimal string representation.
  * Uses iterative long division because the values exceed JavaScript's safe integer range.
@@ -93,4 +95,46 @@ export function isRecord(value: unknown): value is Record<string, unknown> {
 /** Exhaustiveness check for discriminated unions. */
 export function assertNever(value: never): never {
   throw new Error(`Unexpected value: ${JSON.stringify(value)}`);
+}
+
+/** Define a non-enumerable property on an object. */
+export function defineHiddenProperty<T>(obj: object, key: string, value: T): void {
+  Object.defineProperty(obj, key, {
+    value,
+    writable: true,
+    enumerable: false,
+    configurable: true,
+  });
+}
+
+/** Throw ValidationError if value is not a non-empty string. */
+export function requireNonEmpty(value: unknown, name: string): asserts value is string {
+  if (typeof value !== 'string' || value.length === 0) {
+    throw new ValidationError(`${name} must be a non-empty string`);
+  }
+}
+
+/** Throw ValidationError if value is not a non-empty array. */
+export function requireNonEmptyArray(value: unknown, name: string): asserts value is unknown[] {
+  if (!Array.isArray(value) || value.length === 0) {
+    throw new ValidationError(`${name} must be a non-empty array`);
+  }
+}
+
+/** Extract a string from a record, returning fallback if missing or wrong type. */
+export function getString(obj: Record<string, unknown>, key: string, fallback = ''): string {
+  const val = obj[key];
+  return typeof val === 'string' ? val : fallback;
+}
+
+/** Extract a number from a record, returning fallback if missing or wrong type. */
+export function getNumber(obj: Record<string, unknown>, key: string, fallback = 0): number {
+  const val = obj[key];
+  return typeof val === 'number' ? val : fallback;
+}
+
+/** Extract an array from a record, returning [] if missing or wrong type. */
+export function getArray<T>(obj: Record<string, unknown>, key: string): T[] {
+  const val = obj[key];
+  return Array.isArray(val) ? (val as T[]) : [];
 }
