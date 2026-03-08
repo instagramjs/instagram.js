@@ -10,6 +10,7 @@ import type {
   SharedReel,
   SharedStory,
 } from '../types';
+import { IgBotError } from '../errors';
 import { assertNever, defineHiddenProperty } from '../utils';
 import { User } from './user';
 
@@ -81,7 +82,7 @@ export abstract class BaseMessage {
 
   private requireClient(): Client {
     if (!this.client) {
-      throw new Error('No client attached');
+      throw new IgBotError('No client attached', 'NO_CLIENT');
     }
     return this.client;
   }

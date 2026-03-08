@@ -1,7 +1,7 @@
 import { EventEmitter } from 'node:events';
 import { Collection } from './collection';
 import { DEFAULT_CLIENT_OPTIONS } from './constants';
-import { ApiError, AuthError, TimeoutError } from './errors';
+import { ApiError, AuthError, IgBotError, TimeoutError } from './errors';
 import { HttpClient } from './http';
 import { LruCollection } from './lru-collection';
 import { createMessage } from './models/message';
@@ -441,7 +441,7 @@ export class Client extends EventEmitter<ClientEventMap> {
 
     for (const entry of this.pendingSends) {
       clearTimeout(entry.timer);
-      entry.reject(new Error('Client destroyed'));
+      entry.reject(new IgBotError('Client destroyed', 'CLIENT_DESTROYED'));
     }
     this.pendingSends.length = 0;
 
@@ -469,14 +469,14 @@ export class Client extends EventEmitter<ClientEventMap> {
 
   private requireHttp(): HttpClient {
     if (!this.http) {
-      throw new Error('Client not connected');
+      throw new IgBotError('Client not connected', 'NOT_CONNECTED');
     }
     return this.http;
   }
 
   private requireMqtt(): MqttClient {
     if (!this.mqtt) {
-      throw new Error('Client not connected');
+      throw new IgBotError('Client not connected', 'NOT_CONNECTED');
     }
     return this.mqtt;
   }
@@ -724,7 +724,7 @@ export class Client extends EventEmitter<ClientEventMap> {
 
     const raw = result.data?.thread;
     if (!raw) {
-      throw new Error(`Thread ${threadId} not found`);
+      throw new ApiError(`Thread ${threadId} not found`);
     }
 
     return Thread.from(raw, this);
@@ -866,7 +866,8 @@ export class Client extends EventEmitter<ClientEventMap> {
         return;
       }
       parsed = raw;
-    } catch {
+    } catch (err) {
+      this.emit('error', new ApiError('Failed to parse send response', err instanceof Error ? err : undefined));
       return;
     }
 
@@ -1191,7 +1192,8 @@ export class Client extends EventEmitter<ClientEventMap> {
         return;
       }
       parsed = raw;
-    } catch {
+    } catch (err) {
+      this.emit('error', new ApiError('Failed to parse Iris response', err instanceof Error ? err : undefined));
       return;
     }
 

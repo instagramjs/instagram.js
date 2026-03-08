@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { Client } from '../client';
+import { IgBotError } from '../errors';
 import type { RawMessage } from '../types';
 import { createMessage } from './message';
 import { User } from './user';
@@ -255,6 +256,7 @@ describe('createMessage', () => {
       threadId,
       author,
     });
+    expect(() => msg.reply('test')).toThrow(IgBotError);
     expect(() => msg.reply('test')).toThrow('No client attached');
   });
 
@@ -297,6 +299,7 @@ describe('createMessage', () => {
       threadId,
       author,
     });
+    expect(() => msg.reply({ gif: 'abc123' })).toThrow(IgBotError);
     expect(() => msg.reply({ gif: 'abc123' })).toThrow('No client attached');
   });
 });

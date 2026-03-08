@@ -2,6 +2,7 @@ import type { Client } from '../client';
 import { Collection } from '../collection';
 import type { SendContent } from '../media';
 import type { RawThread, ThreadParticipant, MessageSearchResponse } from '../types';
+import { IgBotError } from '../errors';
 import { defineHiddenProperty } from '../utils';
 import type { Message } from './message';
 import { createMessage } from './message';
@@ -84,7 +85,7 @@ export class Thread {
 
   private requireClient(): Client {
     if (!this.client) {
-      throw new Error('No client attached');
+      throw new IgBotError('No client attached', 'NO_CLIENT');
     }
     return this.client;
   }

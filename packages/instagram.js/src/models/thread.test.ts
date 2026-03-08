@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { Client } from '../client';
 import { Collection } from '../collection';
+import { IgBotError } from '../errors';
 import type { RawThread } from '../types';
 import { Thread } from './thread';
 
@@ -103,13 +104,14 @@ describe('Thread.from', () => {
 });
 
 describe('Thread actions', () => {
-  it('throws when no client is attached', async () => {
+  it('throws IgBotError when no client is attached', async () => {
     const thread = new Thread({ id: 't1' });
+    expect(() => thread.send('hi')).toThrow(IgBotError);
     expect(() => thread.send('hi')).toThrow('No client attached');
-    expect(() => thread.startTyping()).toThrow('No client attached');
-    expect(() => thread.stopTyping()).toThrow('No client attached');
-    await expect(thread.markAsRead()).rejects.toThrow('No client attached');
-    await expect(thread.delete()).rejects.toThrow('No client attached');
+    expect(() => thread.startTyping()).toThrow(IgBotError);
+    expect(() => thread.stopTyping()).toThrow(IgBotError);
+    await expect(thread.markAsRead()).rejects.toThrow(IgBotError);
+    await expect(thread.delete()).rejects.toThrow(IgBotError);
   });
 
   it('send with string calls sendText', () => {

@@ -1021,6 +1021,19 @@ describe('Client', () => {
       simulateSendResponse(handler);
     });
 
+    it('emits ApiError when send response is unparseable', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const handler = getMessageHandler(client);
+      const errorHandler = vi.fn();
+      client.on('error', errorHandler);
+
+      handler('/ig_send_message_response', Buffer.from('not json'));
+
+      expect(errorHandler).toHaveBeenCalledOnce();
+      expect(errorHandler.mock.calls[0]![0]).toBeInstanceOf(ApiError);
+    });
+
     it('client.send routes text to sendText', async () => {
       const client = new Client();
       await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
@@ -1445,6 +1458,19 @@ describe('Client', () => {
       expect(mockMqttInstance.publish).toHaveBeenCalledOnce();
 
       vi.useRealTimers();
+    });
+
+    it('emits ApiError when iris response is unparseable', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const handler = getMessageHandler(client);
+      const errorHandler = vi.fn();
+      client.on('error', errorHandler);
+
+      handler('/ig_sub_iris_response', Buffer.from('not json'));
+
+      expect(errorHandler).toHaveBeenCalledOnce();
+      expect(errorHandler.mock.calls[0]![0]).toBeInstanceOf(ApiError);
     });
   });
 });
