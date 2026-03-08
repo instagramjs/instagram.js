@@ -108,6 +108,28 @@ describe('MqttClient', () => {
       expect(opts['protocolVersion']).toBe(3);
       expect(opts['clientId']).toBe('mqttwsclient');
       expect(opts['keepalive']).toBe(10);
+      expect(opts['reconnectPeriod']).toBe(0);
+    });
+
+    it('cleans up old client before reconnecting', async () => {
+      const client = new MqttClient(session, { keepAlive: 10 });
+
+      const connectPromise = client.connect();
+      mockInternalClient.emit('connect');
+      await connectPromise;
+
+      const oldClient = mockInternalClient;
+      const newMockClient = new MockMqttClient();
+      const mqttModule = await import('mqtt');
+      vi.mocked(mqttModule.default.connect).mockReturnValue(
+        newMockClient as unknown as ReturnType<typeof mqttModule.default.connect>,
+      );
+
+      const reconnectPromise = client.connect();
+      newMockClient.emit('connect');
+      await reconnectPromise;
+
+      expect(oldClient.end).toHaveBeenCalledWith(true);
     });
   });
 

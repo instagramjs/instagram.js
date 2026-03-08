@@ -22,9 +22,11 @@ client.on('message', (message) => {
     case 'text':
       console.log(`[message] ${author}: ${message.text}`);
       break;
-    case 'media':
-      console.log(`[message] ${author} sent a ${message.mediaType} (${message.width}x${message.height})`);
+    case 'media': {
+      const dims = message.width && message.height ? ` (${message.width}x${message.height})` : '';
+      console.log(`[message] ${author} sent a ${message.mediaType}${dims}`);
       break;
+    }
     case 'like':
       console.log(`[message] ${author} sent a like`);
       break;

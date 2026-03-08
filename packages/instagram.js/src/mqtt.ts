@@ -31,6 +31,12 @@ export class MqttClient extends EventEmitter<MqttClientEvents> {
 
   /** Open WebSocket connection and send MQTT CONNECT. */
   async connect(): Promise<void> {
+    if (this.client) {
+      this.client.removeAllListeners();
+      this.client.end(true);
+      this.client = null;
+    }
+
     const sid = this.session.sessionId;
     const cid = this.session.deviceId;
     const url = `${MQTT_ENDPOINT}?sid=${sid}&cid=${cid}`;
@@ -49,6 +55,7 @@ export class MqttClient extends EventEmitter<MqttClientEvents> {
         username,
         keepalive: this.keepAlive,
         clean: true,
+        reconnectPeriod: 0,
         connectTimeout: 30_000,
         createWebsocket: (wsUrl) =>
           new WebSocket(wsUrl, {

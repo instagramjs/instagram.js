@@ -482,6 +482,9 @@ describe('Client', () => {
       }]));
 
       expect(messageHandler).toHaveBeenCalledOnce();
+      const msg = messageHandler.mock.calls[0]![0];
+      expect(msg.type).toBe('actionLog');
+      expect(msg.actionText).toBe('Group name changed');
     });
   });
 
@@ -1129,6 +1132,42 @@ describe('Client', () => {
       return disconnectCall![1] as () => void;
     }
 
+    function getMqttErrorHandler(): (err: Error) => void {
+      const errorCall = mockMqttInstance.on.mock.calls.find(
+        (c: unknown[]) => c[0] === 'error',
+      );
+      return errorCall![1] as (err: Error) => void;
+    }
+
+    it('suppresses error events when disconnected', async () => {
+      const client = new Client({ reconnect: true, reconnectInterval: 100 });
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const disconnectHandler = getMqttDisconnectHandler();
+      const errorHandler = getMqttErrorHandler();
+
+      const errors: Error[] = [];
+      client.on('error', (err) => errors.push(err));
+
+      disconnectHandler();
+      errorHandler(new Error('connection refused'));
+
+      expect(errors).toHaveLength(0);
+    });
+
+    it('emits error events when connected', async () => {
+      const client = new Client({ reconnect: true, reconnectInterval: 100 });
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const errorHandler = getMqttErrorHandler();
+
+      const errors: Error[] = [];
+      client.on('error', (err) => errors.push(err));
+
+      errorHandler(new Error('keepalive timeout'));
+
+      expect(errors).toHaveLength(1);
+      expect(errors[0]!.message).toBe('keepalive timeout');
+    });
+
     it('caps backoff delay at 300,000ms', async () => {
       vi.useFakeTimers();
 
@@ -1233,15 +1272,16 @@ describe('Client', () => {
 
       mockMqttInstance.connect.mockRejectedValueOnce(new Error('network error'));
 
-      const disconnectEvents: Array<{ reason: string }> = [];
+      const disconnectEvents: Array<{ reason: string; willReconnect: boolean }> = [];
       client.on('disconnect', (evt) => disconnectEvents.push(evt));
 
       disconnectHandler();
       await vi.advanceTimersByTimeAsync(100);
 
-      // Should have scheduled another reconnect (connection_lost with willReconnect: true)
-      const retryEvents = disconnectEvents.filter((e) => e.reason === 'connection_lost');
-      expect(retryEvents.length).toBeGreaterThanOrEqual(2);
+      // Initial disconnect emits once with willReconnect: true
+      expect(disconnectEvents[0]).toEqual({ reason: 'connection_lost', willReconnect: true });
+      // Failed retry schedules another attempt without emitting again
+      expect(disconnectEvents).toHaveLength(1);
 
       vi.useRealTimers();
     });

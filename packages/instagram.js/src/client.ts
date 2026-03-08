@@ -94,6 +94,8 @@ function toRawMessage(slide: Record<string, unknown>): RawMessage | null {
     raw.media = { media_type: 1, ...(isRecord(content) ? extractMedia(content) : {}) };
   } else if (contentTypename === 'SlideMessageVideoContent') {
     raw.media = { media_type: 2, ...(isRecord(content) ? extractMedia(content) : {}) };
+  } else if (contentTypename === 'SlideMessageAdminText') {
+    raw.action_log = { description: typeof textBody === 'string' ? textBody : '' };
   }
 
   const reactions = msg['reactions'];
@@ -112,8 +114,8 @@ function toRawMessage(slide: Record<string, unknown>): RawMessage | null {
 function extractMedia(content: Record<string, unknown>): { image_versions2?: { candidates?: Array<{ url: string; width: number; height: number }> } } {
   const url = typeof content['url'] === 'string' ? content['url'] : undefined;
   if (!url) return {};
-  const width = typeof content['width'] === 'number' ? content['width'] : 0;
-  const height = typeof content['height'] === 'number' ? content['height'] : 0;
+  const width = Number(content['width']) || 0;
+  const height = Number(content['height']) || 0;
   return { image_versions2: { candidates: [{ url, width, height }] } };
 }
 
@@ -241,6 +243,10 @@ export class Client extends EventEmitter<ClientEventMap> {
     this.mqtt.on('disconnect', () => {
       this.connected = false;
       if (this.options.reconnect) {
+        this.emit('disconnect', {
+          reason: 'connection_lost',
+          willReconnect: true,
+        });
         this.attemptReconnect();
       } else {
         this.emit('disconnect', {
@@ -251,7 +257,9 @@ export class Client extends EventEmitter<ClientEventMap> {
     });
 
     this.mqtt.on('error', (err) => {
-      this.emit('error', err);
+      if (this.connected) {
+        this.emit('error', err);
+      }
     });
 
     await this.mqtt.connect();
@@ -985,11 +993,6 @@ export class Client extends EventEmitter<ClientEventMap> {
       300_000,
     );
     this.reconnectAttempts++;
-
-    this.emit('disconnect', {
-      reason: 'connection_lost',
-      willReconnect: true,
-    });
 
     this.reconnectTimer = setTimeout(async () => {
       try {
