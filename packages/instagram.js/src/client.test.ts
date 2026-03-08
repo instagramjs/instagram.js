@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import { Client, toRawMessage } from './client';
 import { DEFAULT_CLIENT_OPTIONS } from './constants';
-import { ApiError, AuthError, TimeoutError } from './errors';
+import { ApiError, AuthError, IgBotError, TimeoutError, ValidationError } from './errors';
 import { Thread } from './models/thread';
 
 vi.mock('./session', async (importOriginal) => {
@@ -927,6 +927,66 @@ describe('Client', () => {
     it('throws when not connected', async () => {
       const client = new Client();
       await expect(client.sendMedia('thread-1', { photo: Buffer.from('x') })).rejects.toThrow('Client not connected');
+    });
+  });
+
+  describe('input validation', () => {
+    it('send rejects empty threadId', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      expect(() => client.send('', 'hello')).toThrow(ValidationError);
+    });
+
+    it('sendText rejects empty threadId or text', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      expect(() => client.sendText('', 'hello')).toThrow(ValidationError);
+      expect(() => client.sendText('t1', '')).toThrow(ValidationError);
+    });
+
+    it('sendReaction rejects empty args', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      expect(() => client.sendReaction('', 'item', '👍')).toThrow(ValidationError);
+      expect(() => client.sendReaction('t1', '', '👍')).toThrow(ValidationError);
+      expect(() => client.sendReaction('t1', 'item', '')).toThrow(ValidationError);
+    });
+
+    it('removeReaction rejects empty args', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      expect(() => client.removeReaction('', 'item')).toThrow(ValidationError);
+      expect(() => client.removeReaction('t1', '')).toThrow(ValidationError);
+    });
+
+    it('fetchThread rejects empty threadId', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      await expect(client.fetchThread('')).rejects.toThrow(ValidationError);
+    });
+
+    it('createGroupThread rejects empty userIds', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      await expect(client.createGroupThread([])).rejects.toThrow(ValidationError);
+    });
+
+    it('searchUsers rejects empty query', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      await expect(client.searchUsers('')).rejects.toThrow(ValidationError);
+    });
+
+    it('approveThreads rejects empty array', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      await expect(client.approveThreads([])).rejects.toThrow(ValidationError);
+    });
+
+    it('declineThreads rejects empty array', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      await expect(client.declineThreads([])).rejects.toThrow(ValidationError);
     });
   });
 

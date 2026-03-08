@@ -30,7 +30,7 @@ import type {
 import type { Message } from './models/message';
 import type { SendContent } from './media';
 import { sendGif, sendLink, sendPhoto, sendVideo, sendVoice } from './media';
-import { generateMutationToken, generateOfflineThreadingId, isRecord } from './utils';
+import { generateMutationToken, generateOfflineThreadingId, isRecord, requireNonEmpty, requireNonEmptyArray } from './utils';
 
 type ClientEventMap = {
   ready: [];
@@ -527,12 +527,15 @@ export class Client extends EventEmitter<ClientEventMap> {
   send(threadId: string, content: string): Promise<void>;
   send(threadId: string, content: SendContent): Promise<Message>;
   send(threadId: string, content: string | SendContent): Promise<void | Message> {
+    requireNonEmpty(threadId, 'threadId');
     if (typeof content === 'string') return this.sendText(threadId, content);
     return this.sendMedia(threadId, content);
   }
 
   /** Send a text message to a thread. */
   sendText(threadId: string, text: string, replyToId?: string): Promise<void> {
+    requireNonEmpty(threadId, 'threadId');
+    requireNonEmpty(text, 'text');
     const mqtt = this.requireMqtt();
 
     return new Promise<void>((resolve, reject) => {
@@ -565,6 +568,9 @@ export class Client extends EventEmitter<ClientEventMap> {
 
   /** Send a reaction to a message. */
   sendReaction(threadId: string, itemId: string, emoji: string): void {
+    requireNonEmpty(threadId, 'threadId');
+    requireNonEmpty(itemId, 'itemId');
+    requireNonEmpty(emoji, 'emoji');
     this.requireMqtt().publish(
       '/ig_send_message',
       JSON.stringify({
@@ -584,6 +590,8 @@ export class Client extends EventEmitter<ClientEventMap> {
 
   /** Remove a reaction from a message. */
   removeReaction(threadId: string, itemId: string): void {
+    requireNonEmpty(threadId, 'threadId');
+    requireNonEmpty(itemId, 'itemId');
     this.requireMqtt().publish(
       '/ig_send_message',
       JSON.stringify({
@@ -602,6 +610,7 @@ export class Client extends EventEmitter<ClientEventMap> {
 
   /** Send a typing indicator. */
   sendTyping(threadId: string, status: 0 | 1): void {
+    requireNonEmpty(threadId, 'threadId');
     this.requireMqtt().publish(
       '/ig_send_message',
       JSON.stringify({
@@ -659,6 +668,8 @@ export class Client extends EventEmitter<ClientEventMap> {
 
   /** Mark a thread as read. */
   async markAsRead(threadId: string, lastMessageTimestamp: string): Promise<void> {
+    requireNonEmpty(threadId, 'threadId');
+    requireNonEmpty(lastMessageTimestamp, 'lastMessageTimestamp');
     await this.requireHttp().graphql('useIGDMarkThreadAsReadMutation', {
       threadId,
       lastSeenMessageTimestamp: lastMessageTimestamp,
@@ -667,6 +678,9 @@ export class Client extends EventEmitter<ClientEventMap> {
 
   /** Edit a message's text. */
   async editMessage(threadId: string, itemId: string, newText: string): Promise<void> {
+    requireNonEmpty(threadId, 'threadId');
+    requireNonEmpty(itemId, 'itemId');
+    requireNonEmpty(newText, 'newText');
     await this.requireHttp().graphql('IGDirectEditMessageMutation', {
       thread_id: threadId,
       item_id: itemId,
@@ -676,6 +690,8 @@ export class Client extends EventEmitter<ClientEventMap> {
 
   /** Unsend (delete) a message. */
   async unsendMessage(threadId: string, itemId: string): Promise<void> {
+    requireNonEmpty(threadId, 'threadId');
+    requireNonEmpty(itemId, 'itemId');
     await this.requireHttp().graphql('IGDMessageUnsendDialogOffMsysMutation', {
       thread_id: threadId,
       item_id: itemId,
@@ -684,6 +700,7 @@ export class Client extends EventEmitter<ClientEventMap> {
 
   /** Edit a thread's name. */
   async editThreadName(threadId: string, name: string): Promise<void> {
+    requireNonEmpty(threadId, 'threadId');
     await this.requireHttp().graphql('IGDEditThreadNameDialogOffMsysMutation', {
       thread_id: threadId,
       name,
@@ -692,6 +709,7 @@ export class Client extends EventEmitter<ClientEventMap> {
 
   /** Delete a thread. */
   async deleteThread(threadId: string): Promise<void> {
+    requireNonEmpty(threadId, 'threadId');
     await this.requireHttp().graphql('IGDInboxInfoDeleteThreadDialogOffMsysMutation', {
       thread_id: threadId,
     });
@@ -699,6 +717,7 @@ export class Client extends EventEmitter<ClientEventMap> {
 
   /** Mute or unmute a thread. */
   async muteThread(threadId: string, muted: boolean): Promise<void> {
+    requireNonEmpty(threadId, 'threadId');
     await this.requireHttp().graphql('IGDInboxInfoMuteToggleOffMsysMutation', {
       thread_id: threadId,
       muted,
@@ -707,6 +726,8 @@ export class Client extends EventEmitter<ClientEventMap> {
 
   /** Set a participant's nickname. */
   async setNickname(threadId: string, userId: string, nickname: string | null): Promise<void> {
+    requireNonEmpty(threadId, 'threadId');
+    requireNonEmpty(userId, 'userId');
     await this.requireHttp().graphql('useIGDEditNicknameMutation', {
       thread_id: threadId,
       user_id: userId,
@@ -716,6 +737,7 @@ export class Client extends EventEmitter<ClientEventMap> {
 
   /** Fetch a thread by ID. */
   async fetchThread(threadId: string): Promise<Thread> {
+    requireNonEmpty(threadId, 'threadId');
     const result = await this.requireHttp().graphql<{
       data?: { thread?: RawThread };
     }>('IGDThreadDetailMainViewContainerQuery', {
@@ -763,6 +785,7 @@ export class Client extends EventEmitter<ClientEventMap> {
 
   /** Create a group thread. */
   async createGroupThread(userIds: string[], name?: string): Promise<Thread> {
+    requireNonEmptyArray(userIds, 'userIds');
     const body: Record<string, string> = {
       recipient_users: JSON.stringify(userIds),
     };
@@ -780,11 +803,13 @@ export class Client extends EventEmitter<ClientEventMap> {
 
   /** Create or retrieve a 1-1 thread. */
   async createThread(userId: string): Promise<Thread> {
+    requireNonEmpty(userId, 'userId');
     return this.createGroupThread([userId]);
   }
 
   /** Search users. */
   async searchUsers(query: string): Promise<RecipientSearchResult> {
+    requireNonEmpty(query, 'query');
     return this.requireHttp().rest<RecipientSearchResult>(
       '/api/v1/direct_v2/ranked_recipients/',
       {
@@ -837,6 +862,7 @@ export class Client extends EventEmitter<ClientEventMap> {
 
   /** Approve pending message requests. */
   async approveThreads(threadIds: string[]): Promise<void> {
+    requireNonEmptyArray(threadIds, 'threadIds');
     await this.requireHttp().rest('/api/v1/direct_v2/threads/approve_multiple/', {
       method: 'POST',
       body: { thread_ids: JSON.stringify(threadIds) },
@@ -845,6 +871,7 @@ export class Client extends EventEmitter<ClientEventMap> {
 
   /** Decline pending message requests. */
   async declineThreads(threadIds: string[]): Promise<void> {
+    requireNonEmptyArray(threadIds, 'threadIds');
     await this.requireHttp().rest('/api/v1/direct_v2/threads/decline_multiple/', {
       method: 'POST',
       body: { thread_ids: JSON.stringify(threadIds) },
