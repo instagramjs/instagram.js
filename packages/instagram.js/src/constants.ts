@@ -44,20 +44,19 @@ export const DEFAULT_DOC_IDS: Record<string, string> = {
   useIGDEditNicknameMutation: '25729722500051691',
   IGDNicknameSettingsPageMutation: '25822446054086836',
   LSPlatformGraphQLLightspeedRequestForIGDQuery: '9859601450795492',
-  IGDMqttIrisSubscriptionQuery: '9476575619127164',
 };
 
 export const ITEM_TYPE_MAP: Record<string, MessageType> = {
   text: 'text',
   media: 'media',
-  like: 'like',
+  like: 'text',
   link: 'link',
   media_share: 'mediaShare',
   reel_share: 'reelShare',
   story_share: 'storyShare',
   voice_media: 'voiceMedia',
   animated_media: 'animatedMedia',
-  raven_media: 'ravenMedia',
+  raven_media: 'placeholder',
   clip: 'clip',
   clip_share: 'clip',
   action_log: 'actionLog',

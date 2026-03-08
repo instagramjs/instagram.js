@@ -1,8 +1,19 @@
 import { EventEmitter } from 'node:events';
 import { Collection } from './collection';
 import { DEFAULT_CLIENT_OPTIONS } from './constants';
+import type { DeltaResult } from './delta-types';
 import { ApiError, AuthError, IgBotError, TimeoutError } from './errors';
 import { HttpClient } from './http';
+import {
+  decodeBytecode,
+  dispatchBatch,
+  buildSendMessageTask,
+  buildLsRequestEnvelope,
+  buildLsSyncEnvelope,
+  buildLsTypingEnvelope,
+  LS_TOPICS,
+} from './lightspeed';
+import type { LsResponse } from './lightspeed';
 import { LruCollection } from './lru-collection';
 import { createMessage } from './models/message';
 import { Thread } from './models/thread';
@@ -15,7 +26,6 @@ import type {
   MessageDeleteEvent,
   MessageEditEvent,
   MessageSearchResponse,
-  RawDelta,
   RawMessage,
   RawThread,
   RawUser,
@@ -30,7 +40,7 @@ import type {
 import type { Message } from './models/message';
 import type { SendContent } from './media';
 import { sendGif, sendLink, sendPhoto, sendVideo, sendVoice } from './media';
-import { generateMutationToken, generateOfflineThreadingId, getArray, getNumber, getString, isRecord, requireNonEmpty, requireNonEmptyArray } from './utils';
+import { generateOfflineThreadingId, isRecord, requireNonEmpty, requireNonEmptyArray } from './utils';
 
 type ClientEventMap = {
   ready: [];
@@ -46,241 +56,8 @@ type ClientEventMap = {
   threadDelete: [ThreadDeleteEvent];
   disconnect: [DisconnectEvent];
   reconnect: [];
-  resync: [];
   error: [Error];
-  rawDelta: [RawDelta];
 };
-
-const SLIDE_CONTENT_TYPE_MAP: Record<string, string> = {
-  SlideMessageText: 'text',
-  SlideMessageImageContent: 'media',
-  SlideMessageVideosContent: 'media',
-  SlideMessageAnimatedMediaContent: 'animated_media',
-  SlideMessageAudiosContent: 'voice_media',
-  SlideMessageClip: 'clip',
-  SlideMessageAdminText: 'action_log',
-  SlideMessageLink: 'link',
-  SlideMessageRavenImageContent: 'raven_media',
-  SlideMessageRavenVideoContent: 'raven_media',
-};
-
-/** @internal */
-export function toRawMessage(slide: Record<string, unknown>): RawMessage | null {
-  const msg = isRecord(slide['message']) ? slide['message'] : slide;
-  const id = msg['id'] ?? msg['message_id'];
-  const senderId = msg['sender_fbid'];
-  const timestampMs = msg['timestamp_ms'];
-  if (typeof id !== 'string' || senderId == null || timestampMs == null) {
-    return null;
-  }
-
-  const content = isRecord(msg['content']) ? msg['content'] : null;
-  const contentTypename = typeof content?.['__typename'] === 'string' ? content['__typename'] : '';
-  const itemType = SLIDE_CONTENT_TYPE_MAP[contentTypename] ?? 'text';
-
-  const raw: RawMessage = {
-    item_id: id,
-    user_id: String(senderId),
-    timestamp: String(Number(timestampMs) * 1000),
-    item_type: itemType,
-  };
-
-  const textBody = msg['text_body'];
-  if (typeof textBody === 'string') {
-    raw.text = textBody;
-  }
-
-  if (msg['igd_is_forwarded'] === true) {
-    raw.is_forwarded = true;
-  }
-  const igdSnippet = msg['igd_snippet'];
-  if (typeof igdSnippet === 'string') {
-    raw.snippet = igdSnippet;
-  }
-
-  switch (contentTypename) {
-    case 'SlideMessageImageContent': {
-      const atts = getArray<Record<string, unknown>>(content!, 'attachments');
-      const att = isRecord(atts[0]) ? atts[0] : null;
-      if (att) {
-        const url = getString(att, 'attachment_cdn_url');
-        const previewUrl = getString(att, 'preview_cdn_url') || undefined;
-        const width = getNumber(att, 'preview_width');
-        const height = getNumber(att, 'preview_height');
-        raw.media = {
-          media_type: 1,
-          image_versions2: { candidates: [{ url, width, height }] },
-          ...(previewUrl ? { preview_url: previewUrl } : {}),
-        };
-      }
-      break;
-    }
-    case 'SlideMessageVideosContent': {
-      const vids = getArray<Record<string, unknown>>(content!, 'videos');
-      const vid = isRecord(vids[0]) ? vids[0] : null;
-      if (vid) {
-        const url = getString(vid, 'attachment_cdn_url');
-        const previewUrl = getString(vid, 'preview_cdn_url') || undefined;
-        const width = getNumber(vid, 'preview_width');
-        const height = getNumber(vid, 'preview_height');
-        raw.media = {
-          media_type: 2,
-          image_versions2: { candidates: [{ url, width, height }] },
-          ...(previewUrl ? { preview_url: previewUrl } : {}),
-        };
-      }
-      break;
-    }
-    case 'SlideMessageXMAContent': {
-      const xma = isRecord(content!['xma']) ? content!['xma'] : null;
-      if (!xma) break;
-      const targetUrl = getString(xma, 'target_url');
-      const targetId = typeof xma['target_id'] === 'string' || typeof xma['target_id'] === 'number' ? String(xma['target_id']) : '';
-      const previewImage = isRecord(xma['preview_image']) ? xma['preview_image'] : null;
-      const thumbnailUrl = previewImage ? getString(previewImage, 'url') || null : null;
-      const headerTitle = getString(xma, 'header_title_text') || null;
-      const eyebrowText = getString(xma, 'eyebrow_text') || null;
-      const xmaTextBody = getString(content!, 'xma_text_body') || null;
-
-      if (targetUrl.includes('/reel/')) {
-        raw.item_type = 'reel_share';
-        raw.reel_share = {
-          ...(eyebrowText ? { text: eyebrowText } : {}),
-          media: {
-            id: targetId,
-            ...(thumbnailUrl ? { image_versions2: { candidates: [{ url: thumbnailUrl, width: 0, height: 0 }] } } : {}),
-            ...(headerTitle ? { user: { pk: '', username: headerTitle } } : {}),
-          },
-        };
-      } else if (targetUrl.includes('/stories/')) {
-        raw.item_type = 'story_share';
-        raw.story_share = {
-          media: {
-            id: targetId,
-            ...(thumbnailUrl ? { image_versions2: { candidates: [{ url: thumbnailUrl, width: 0, height: 0 }] } } : {}),
-            ...(headerTitle ? { user: { pk: '', username: headerTitle } } : {}),
-          },
-        };
-      } else if (targetUrl.includes('/p/')) {
-        raw.item_type = 'media_share';
-        const codeMatch = targetUrl.match(/\/p\/([^/?]+)/);
-        raw.media_share = {
-          id: targetId,
-          code: codeMatch?.[1] ?? '',
-          ...(thumbnailUrl ? { image_versions2: { candidates: [{ url: thumbnailUrl, width: 0, height: 0 }] } } : {}),
-          ...(headerTitle ? { user: { pk: '', username: headerTitle } } : {}),
-        };
-      } else {
-        raw.item_type = 'link';
-        raw.link = {
-          ...(xmaTextBody ? { text: xmaTextBody } : {}),
-          link_context: {
-            link_url: targetUrl,
-            ...(headerTitle ? { link_title: headerTitle } : {}),
-            ...(eyebrowText ? { link_summary: eyebrowText } : {}),
-            ...(thumbnailUrl ? { link_image_url: thumbnailUrl } : {}),
-          },
-        };
-      }
-      break;
-    }
-    case 'SlideMessageAudiosContent': {
-      const audioAtts = getArray<Record<string, unknown>>(content!, 'audio_attachments');
-      const audioAtt = isRecord(audioAtts[0]) ? audioAtts[0] : null;
-      if (audioAtt) {
-        const audioUrl = getString(audioAtt, 'attachment_cdn_url');
-        const durationMs = getNumber(audioAtt, 'playable_duration_ms');
-        const waveform = getArray<number>(audioAtt, 'waveform_data');
-        raw.voice_media = {
-          media: {
-            audio: {
-              audio_src: audioUrl,
-              duration: durationMs,
-              ...(waveform.length > 0 ? { waveform_data: waveform } : {}),
-            },
-          },
-        };
-      }
-      break;
-    }
-    case 'SlideMessageAnimatedMediaContent': {
-      const anims = getArray<Record<string, unknown>>(content!, 'animated_media');
-      const anim = isRecord(anims[0]) ? anims[0] : null;
-      if (anim) {
-        const gifUrl = getString(anim, 'attachment_webp_url');
-        const width = getNumber(anim, 'preview_width');
-        const height = getNumber(anim, 'preview_height');
-        const stickerFlag = anim['is_sticker'] === true;
-        const mp4Url = getString(anim, 'attachment_mp4_url') || undefined;
-        raw.animated_media = {
-          images: { fixed_height: { url: gifUrl, width, height } },
-          ...(stickerFlag ? { is_sticker: true } : {}),
-          ...(mp4Url ? { mp4_url: mp4Url } : {}),
-        };
-      }
-      break;
-    }
-    case 'SlideMessageAdminText': {
-      const fragments = getArray<Record<string, unknown>>(content!, 'text_fragments');
-      const description = fragments
-        .map((f) => (isRecord(f) ? getString(f, 'plaintext') : ''))
-        .join('');
-      raw.action_log = { description };
-      break;
-    }
-    case 'SlideMessageRavenImageContent':
-    case 'SlideMessageRavenVideoContent': {
-      const viewMode = content!['view_mode'];
-      const viewModeStr = typeof viewMode === 'number' ? String(viewMode) : typeof viewMode === 'string' ? viewMode : null;
-      const visualMedia: RawMessage['visual_media'] = {
-        ...(viewModeStr ? { view_mode: viewModeStr } : {}),
-        media: {
-          media_type: contentTypename === 'SlideMessageRavenVideoContent' ? 2 : 1,
-        },
-      };
-      const attachment = isRecord(content!['attachment']) ? content!['attachment'] : null;
-      if (attachment) {
-        const url = getString(attachment, 'attachment_cdn_url') || null;
-        if (url && visualMedia.media) {
-          visualMedia.media.image_versions2 = { candidates: [{ url, width: 0, height: 0 }] };
-        }
-      }
-      raw.visual_media = visualMedia;
-      break;
-    }
-    // Unknown content types are intentionally ignored; they are still
-    // surfaced through the rawDelta event for consumer inspection.
-    default:
-      break;
-  }
-
-  const reactions = msg['reactions'];
-  if (isRecord(reactions) && Array.isArray(reactions['likes'])) {
-    raw.reactions = { likes: reactions['likes'] as Array<{ sender_id: string | number; emoji: string; timestamp: string | number }> };
-  }
-
-  const repliedToId = msg['replied_to_message_id'];
-  if (typeof repliedToId === 'string') {
-    raw.replied_to_message = { item_id: repliedToId, user_id: '', timestamp: '0' };
-  }
-
-  return raw;
-}
-
-function extractUserDict(slide: Record<string, unknown>): RawUser | null {
-  const msg = isRecord(slide['message']) ? slide['message'] : slide;
-  const sender = isRecord(msg['sender']) ? msg['sender'] : null;
-  const userDict = isRecord(sender?.['user_dict']) ? sender!['user_dict'] : null;
-  if (!userDict) return null;
-  const pk = userDict['pk'] ?? userDict['id'] ?? msg['sender_fbid'];
-  if (pk == null) return null;
-  const result: RawUser = { pk: String(pk) };
-  if (typeof userDict['username'] === 'string') result.username = userDict['username'];
-  if (typeof userDict['full_name'] === 'string') result.full_name = userDict['full_name'];
-  if (typeof userDict['profile_pic_url'] === 'string') result.profile_pic_url = userDict['profile_pic_url'];
-  if (typeof userDict['is_verified'] === 'boolean') result.is_verified = userDict['is_verified'];
-  return result;
-}
 
 /**
  * The main client for connecting to Instagram's messaging system.
@@ -313,14 +90,16 @@ export class Client extends EventEmitter<ClientEventMap> {
   private readonly typingTimers = new Map<string, ReturnType<typeof setTimeout>>();
   private readonly maxCachedMessages: number;
   private readonly sendTimeout: number;
-  private readonly pendingSends: Array<{
+  private readonly pendingLsRequests = new Map<number, {
     resolve: () => void;
     reject: (err: Error) => void;
     timer: ReturnType<typeof setTimeout>;
-  }> = [];
+  }>();
   private session: SessionData | null = null;
-  private irisRetryAttempts = 0;
-  private irisRetryTimer: ReturnType<typeof setTimeout> | null = null;
+  private lsRequestId = 10;
+  private lsEpochId = '';
+  private lsSyncCursor: string | null = null;
+  private lsSyncDatabase = 1;
 
   constructor(options?: ClientOptions) {
     super();
@@ -376,15 +155,13 @@ export class Client extends EventEmitter<ClientEventMap> {
     });
     this.users.set(this.user.id, this.user);
 
+    this.lsEpochId = generateOfflineThreadingId();
+
     this.mqtt = new MqttClient(session, { keepAlive: this.options.mqttKeepAlive });
 
     this.mqtt.on('message', (topic, payload) => {
-      if (topic === '/ig_message_sync') {
-        this.handleDeltaMessage(payload);
-      } else if (topic === '/ig_send_message_response') {
-        this.handleSendResponse(payload);
-      } else if (topic === '/ig_sub_iris_response') {
-        this.handleIrisResponse(payload);
+      if (topic === LS_TOPICS.RESPONSE) {
+        this.handleLsResponse(payload);
       }
     });
 
@@ -411,9 +188,12 @@ export class Client extends EventEmitter<ClientEventMap> {
     });
 
     await this.mqtt.connect();
-    await this.mqtt.subscribe(['/ig_message_sync', '/ig_sub_iris_response']);
+    await this.mqtt.subscribe([
+      LS_TOPICS.RESPONSE,
+      LS_TOPICS.APP_SETTINGS,
+    ]);
 
-    this.publishIrisSubscription();
+    this.publishLsSync();
 
     this.connected = true;
     this.readyAt = new Date();
@@ -433,21 +213,16 @@ export class Client extends EventEmitter<ClientEventMap> {
       this.reconnectStabilityTimer = null;
     }
 
-    if (this.irisRetryTimer) {
-      clearTimeout(this.irisRetryTimer);
-      this.irisRetryTimer = null;
-    }
-
     for (const timer of this.typingTimers.values()) {
       clearTimeout(timer);
     }
     this.typingTimers.clear();
 
-    for (const entry of this.pendingSends) {
+    for (const entry of this.pendingLsRequests.values()) {
       clearTimeout(entry.timer);
       entry.reject(new IgBotError('Client destroyed', 'CLIENT_DESTROYED'));
     }
-    this.pendingSends.length = 0;
+    this.pendingLsRequests.clear();
 
     if (this.mqtt) {
       this.mqtt.disconnect();
@@ -536,38 +311,27 @@ export class Client extends EventEmitter<ClientEventMap> {
     return this.sendMedia(threadId, content);
   }
 
-  /** Send a text message to a thread. */
+  /** Send a text message to a thread via Lightspeed. */
   sendText(threadId: string, text: string, replyToId?: string): Promise<void> {
     requireNonEmpty(threadId, 'threadId');
     requireNonEmpty(text, 'text');
-    const mqtt = this.requireMqtt();
 
-    return new Promise<void>((resolve, reject) => {
-      const timer = setTimeout(() => {
-        const idx = this.pendingSends.findIndex((e) => e.resolve === resolve);
-        if (idx !== -1) {
-          this.pendingSends.splice(idx, 1);
-        }
-        reject(new TimeoutError('Send response timed out'));
-      }, this.sendTimeout);
-
-      this.pendingSends.push({ resolve, reject, timer });
-
-      mqtt.publish(
-        '/ig_send_message',
-        JSON.stringify({
-          action: 'send_item',
-          item_type: 'text',
-          text,
-          thread_id: threadId,
-          mutation_token: generateMutationToken(),
-          client_context: generateOfflineThreadingId(),
-          device_id: this.deviceId(),
-          replied_to_item_id: replyToId ?? null,
-          replied_to_client_context: null,
-        }),
-      );
+    const requestId = this.nextLsRequestId();
+    const otid = generateOfflineThreadingId();
+    const task = buildSendMessageTask({
+      threadId,
+      text,
+      otid,
+      replyToId,
+      markRead: true,
     });
+    const envelope = buildLsRequestEnvelope({
+      tasks: [task],
+      epochId: this.lsEpochId,
+      requestId,
+    });
+
+    return this.publishLsRequest(requestId, envelope);
   }
 
   /** Send a reaction to a message. */
@@ -575,54 +339,43 @@ export class Client extends EventEmitter<ClientEventMap> {
     requireNonEmpty(threadId, 'threadId');
     requireNonEmpty(itemId, 'itemId');
     requireNonEmpty(emoji, 'emoji');
-    this.requireMqtt().publish(
-      '/ig_send_message',
-      JSON.stringify({
-        action: 'send_item',
-        item_type: 'reaction',
-        reaction_status: 'created',
-        emoji,
-        item_id: itemId,
-        thread_id: threadId,
-        node_type: 'item',
-        mutation_token: generateMutationToken(),
-        client_context: generateOfflineThreadingId(),
-        device_id: this.deviceId(),
-      }),
-    );
+    this.requireHttp().graphql('IGDirectReactionSendMutation', {
+      thread_id: threadId,
+      item_id: itemId,
+      reaction_status: 'created',
+      emoji,
+    }).catch((err: unknown) => {
+      this.emit('error', err instanceof Error ? err : new Error(String(err)));
+    });
   }
 
   /** Remove a reaction from a message. */
   removeReaction(threadId: string, itemId: string): void {
     requireNonEmpty(threadId, 'threadId');
     requireNonEmpty(itemId, 'itemId');
-    this.requireMqtt().publish(
-      '/ig_send_message',
-      JSON.stringify({
-        action: 'send_item',
-        item_type: 'reaction',
-        reaction_status: 'deleted',
-        item_id: itemId,
-        thread_id: threadId,
-        node_type: 'item',
-        mutation_token: generateMutationToken(),
-        client_context: generateOfflineThreadingId(),
-        device_id: this.deviceId(),
-      }),
-    );
+    this.requireHttp().graphql('IGDirectReactionSendMutation', {
+      thread_id: threadId,
+      item_id: itemId,
+      reaction_status: 'deleted',
+    }).catch((err: unknown) => {
+      this.emit('error', err instanceof Error ? err : new Error(String(err)));
+    });
   }
 
-  /** Send a typing indicator. */
+  /** Send a typing indicator via Lightspeed. */
   sendTyping(threadId: string, status: 0 | 1): void {
     requireNonEmpty(threadId, 'threadId');
-    this.requireMqtt().publish(
-      '/ig_send_message',
-      JSON.stringify({
-        action: 'indicate_activity',
-        activity_status: status,
-        thread_id: threadId,
-      }),
+    const requestId = this.nextLsRequestId();
+    const thread = this.threads.get(threadId);
+    const envelope = buildLsTypingEnvelope(
+      {
+        threadKey: threadId,
+        isGroupThread: thread?.isGroup ?? false,
+        isTyping: status === 1,
+      },
+      requestId,
     );
+    this.requireMqtt().publish(LS_TOPICS.REQUEST, JSON.stringify(envelope));
   }
 
   // -- Media actions --
@@ -889,272 +642,231 @@ export class Client extends EventEmitter<ClientEventMap> {
     });
   }
 
-  private handleSendResponse(payload: Buffer): void {
-    let parsed: Record<string, unknown>;
-    try {
-      const raw: unknown = JSON.parse(payload.toString());
-      if (!isRecord(raw)) {
-        return;
-      }
-      parsed = raw;
-    } catch (err) {
-      this.emit('error', new ApiError('Failed to parse send response', err instanceof Error ? err : undefined));
-      return;
-    }
-
-    const inner = isRecord(parsed['payload']) ? parsed['payload'] : null;
-    if (inner && inner['activity_status'] != null) {
-      return;
-    }
-
-    const entry = this.pendingSends.shift();
-    if (!entry) {
-      return;
-    }
-    clearTimeout(entry.timer);
-
-    if (parsed['status'] === 'ok') {
-      entry.resolve();
-    } else {
-      entry.reject(
-        new ApiError(`Send failed: ${String(parsed['status'] ?? 'unknown')}`),
-      );
-    }
+  private nextLsRequestId(): number {
+    return this.lsRequestId++;
   }
 
-  // -- Delta processing --
+  private publishLsRequest(
+    requestId: number,
+    envelope: { app_id: string; payload: string; request_id: number; type: number },
+  ): Promise<void> {
+    const mqtt = this.requireMqtt();
 
-  private handleDeltaMessage(payload: Buffer): void {
-    let parsed: Record<string, unknown>;
+    return new Promise<void>((resolve, reject) => {
+      const timer = setTimeout(() => {
+        this.pendingLsRequests.delete(requestId);
+        reject(new TimeoutError('Send response timed out'));
+      }, this.sendTimeout);
+
+      this.pendingLsRequests.set(requestId, { resolve, reject, timer });
+      mqtt.publish(LS_TOPICS.REQUEST, JSON.stringify(envelope));
+    });
+  }
+
+  private publishLsSync(): void {
+    const requestId = this.nextLsRequestId();
+    const envelope = buildLsSyncEnvelope({
+      database: this.lsSyncDatabase,
+      epochId: this.lsEpochId,
+      requestId,
+      lastAppliedCursor: this.lsSyncCursor,
+    });
+    this.requireMqtt().publish(LS_TOPICS.REQUEST, JSON.stringify(envelope));
+  }
+
+  private handleLsResponse(payload: Buffer): void {
+    let parsed: LsResponse;
     try {
       const raw: unknown = JSON.parse(payload.toString());
-      const obj = Array.isArray(raw) ? raw[0] : raw;
-      if (!isRecord(obj)) {
-        this.emit('error', new Error('Delta message is not an object'));
-        return;
-      }
-      parsed = obj;
-    } catch {
-      this.emit('error', new Error('Failed to parse delta message'));
+      if (!isRecord(raw)) return;
+      // Decode the string-encoded payload field
+      const payloadStr = raw['payload'];
+      const decodedPayload = typeof payloadStr === 'string' ? JSON.parse(payloadStr) : payloadStr;
+      parsed = {
+        request_id: typeof raw['request_id'] === 'number' ? raw['request_id'] : null,
+        payload: decodedPayload as LsResponse['payload'],
+        sp: Array.isArray(raw['sp']) ? raw['sp'] as string[] : [],
+        target: typeof raw['target'] === 'number' ? raw['target'] : 0,
+      };
+    } catch (err) {
+      this.emit('error', new ApiError('Failed to parse Lightspeed response', err instanceof Error ? err : undefined));
       return;
     }
 
-    const data = isRecord(parsed['data']) ? parsed['data'] : null;
-    const mutations = Array.isArray(data?.['slide_delta_processor'])
-      ? (data!['slide_delta_processor'] as unknown[])
-      : null;
-    if (!mutations) {
-      return;
+    // Resolve pending request if this is a response to a task request
+    if (parsed.request_id != null) {
+      const entry = this.pendingLsRequests.get(parsed.request_id);
+      if (entry) {
+        this.pendingLsRequests.delete(parsed.request_id);
+        clearTimeout(entry.timer);
+        entry.resolve();
+      }
     }
 
-    for (const mutation of mutations) {
-      if (!isRecord(mutation)) {
-        continue;
-      }
-
-      const typename = mutation['__typename'];
-      const rawSeqId = mutation['uq_seq_id'];
-      if (typeof typename !== 'string' || typeof rawSeqId !== 'string') {
-        continue;
-      }
-
-      const seqId = Number(rawSeqId);
-      if (seqId > this.seqId) {
-        this.seqId = seqId;
-      }
-
-      this.emit('rawDelta', mutation as RawDelta);
-
+    // Decode bytecode and dispatch stored procedure calls as a batch
+    // so attachment SPs can be correlated with their parent message SPs
+    if (parsed.payload?.step) {
+      const calls = decodeBytecode(parsed.payload.step, parsed.sp);
       try {
-        this.processSlide(typename, mutation);
+        const deltas = dispatchBatch(calls);
+        for (const delta of deltas) {
+          try {
+            this.applyDelta(delta);
+          } catch (err) {
+            this.emit('error', err instanceof Error ? err : new Error(String(err)));
+          }
+        }
       } catch (err) {
         this.emit('error', err instanceof Error ? err : new Error(String(err)));
       }
     }
   }
 
-  private processSlide(typename: string, mutation: Record<string, unknown>): void {
-    switch (typename) {
-      case 'SlideUQPPNewMessage':
-        this.handleSlideNewMessage(mutation);
+  // -- Delta processing --
+
+  private applyDelta(delta: DeltaResult): void {
+    switch (delta.type) {
+      case 'newMessage': {
+        const userId = delta.raw.user_id;
+        if (this.user && String(userId) === this.user.id) return;
+
+        let author = this.users.get(String(userId));
+        if (!author) {
+          author = new User({
+            id: String(userId),
+            partial: !delta.userDict,
+            client: this,
+            ...(delta.userDict?.username ? { username: delta.userDict.username } : {}),
+            ...(delta.userDict?.profile_pic_url ? { profilePicUrl: delta.userDict.profile_pic_url } : {}),
+          });
+          this.users.set(author.id, author);
+        } else if (delta.userDict?.username && !author.username) {
+          author.username = delta.userDict.username;
+        }
+
+        const message = createMessage({ raw: delta.raw, threadId: delta.threadId, author, client: this });
+        const thread = this.threads.get(delta.threadId);
+        if (thread) {
+          thread.messages.set(message.id, message);
+        }
+        this.emit('message', message);
         break;
-      case 'SlideUQPPAdminTextMessage':
-        this.handleSlideNewMessage(mutation);
+      }
+      case 'deleteMessage': {
+        const thread = this.threads.get(delta.threadId);
+        const message = thread?.messages.get(delta.messageId) ?? null;
+        if (thread) {
+          thread.messages.delete(delta.messageId);
+        }
+        this.emit('messageDelete', {
+          messageId: delta.messageId,
+          message,
+          thread: thread ?? new Thread({ id: delta.threadId, client: this }),
+          timestamp: new Date(),
+        });
         break;
-      case 'SlideUQPPNewRavenMessage':
-        this.handleSlideNewMessage(mutation);
+      }
+      case 'reaction': {
+        const thread = this.threads.get(delta.threadId);
+        if (!thread) return;
+        const message = thread.messages.get(delta.messageId) ?? null;
+        const participant = thread.participants.find((p) => p.user.id === delta.senderId) ?? {
+          user: this.users.get(delta.senderId) ?? new User({ id: delta.senderId, partial: true }),
+          isAdmin: false,
+          nickname: null,
+        };
+        const event = delta.action === 'add' ? 'reaction' as const : 'reactionRemove' as const;
+        this.emit(event, {
+          message,
+          messageId: delta.messageId,
+          thread,
+          participant,
+          emoji: delta.emoji,
+          timestamp: new Date(),
+        });
         break;
-      case 'SlideUQPPDeleteMessage':
-        this.handleSlideDeleteMessage(mutation);
+      }
+      case 'readReceipt': {
+        const thread = this.threads.get(delta.threadId);
+        if (!thread) return;
+        const participant = thread.participants.find((p) => p.user.id === delta.userId) ?? {
+          user: this.users.get(delta.userId) ?? new User({ id: delta.userId, partial: true }),
+          isAdmin: false,
+          nickname: null,
+        };
+        this.emit('readReceipt', {
+          thread,
+          participant,
+          messageId: '',
+          timestamp: delta.timestamp,
+        });
         break;
-      case 'SlideUQPPCreateReaction':
-        this.handleSlideReaction(mutation, 'reaction');
+      }
+      case 'threadUpdate': {
+        const thread = this.threads.get(delta.threadId);
+        if (!thread) return;
+        const changes: ThreadUpdateEvent['changes'] = {};
+        if (delta.name !== undefined) changes.name = delta.name;
+        if (delta.muted !== undefined) changes.muted = delta.muted;
+        this.emit('threadUpdate', { thread, changes });
         break;
-      case 'SlideUQPPDeleteReaction':
-        this.handleSlideReaction(mutation, 'reactionRemove');
+      }
+      case 'threadDelete': {
+        this.threads.delete(delta.threadId);
+        this.emit('threadDelete', { threadId: delta.threadId });
         break;
-      case 'SlideUQPPReadReceipt':
-        this.handleSlideReadReceipt(mutation);
+      }
+      case 'typing': {
+        const thread = this.threads.get(delta.threadId);
+        if (!thread) return;
+        if (this.user && delta.senderId === this.user.id) return;
+
+        const participant = thread.participants.find((p) => p.user.id === delta.senderId) ?? {
+          user: this.users.get(delta.senderId) ?? new User({ id: delta.senderId, partial: true }),
+          isAdmin: false,
+          nickname: null,
+        };
+
+        const event = delta.isTyping ? 'typingStart' as const : 'typingStop' as const;
+        this.emit(event, {
+          thread,
+          participant,
+          timestamp: new Date(),
+        });
+
+        // Auto-clear typing after TTL
+        const timerKey = `${delta.threadId}:${delta.senderId}`;
+        const existingTimer = this.typingTimers.get(timerKey);
+        if (existingTimer) clearTimeout(existingTimer);
+
+        if (delta.isTyping) {
+          this.typingTimers.set(timerKey, setTimeout(() => {
+            this.typingTimers.delete(timerKey);
+            this.emit('typingStop', { thread, participant, timestamp: new Date() });
+          }, 22_000));
+        } else {
+          this.typingTimers.delete(timerKey);
+        }
         break;
-      case 'SlideUQPPChangeMuteSettings':
-        this.handleSlideThreadUpdate(mutation);
+      }
+      case 'editMessage': {
+        const thread = this.threads.get(delta.threadId);
+        if (!thread) return;
+        const message = thread.messages.get(delta.messageId);
+        if (!message) return;
+        const oldText = delta.oldText;
+        if ('text' in message && typeof delta.newText === 'string') {
+          (message as { text: string }).text = delta.newText;
+        }
+        this.emit('messageEdit', {
+          message,
+          thread,
+          oldText,
+          timestamp: new Date(),
+        });
         break;
-      case 'SlideUQPPThreadName':
-        this.handleSlideThreadUpdate(mutation);
-        break;
-      case 'SlideUQPPDeleteThread':
-        this.handleSlideDeleteThread(mutation);
-        break;
-      // Unknown slide types are intentionally ignored; they are still
-      // surfaced through the rawDelta event for consumer inspection.
-      default:
-        break;
+      }
     }
-  }
-
-  private handleSlideNewMessage(mutation: Record<string, unknown>): void {
-    const raw = toRawMessage(mutation);
-    if (!raw) {
-      return;
-    }
-
-    const msg = isRecord(mutation['message']) ? mutation['message'] : mutation;
-    const threadId = typeof msg['thread_fbid'] === 'string' ? msg['thread_fbid'] : '';
-    const userId = raw.user_id;
-
-    if (this.user && String(userId) === this.user.id) {
-      return;
-    }
-
-    const userDict = extractUserDict(mutation);
-    let author = this.users.get(String(userId));
-    if (!author) {
-      author = new User({
-        id: String(userId),
-        partial: !userDict,
-        client: this,
-        ...(userDict?.username ? { username: userDict.username } : {}),
-        ...(userDict?.profile_pic_url ? { profilePicUrl: userDict.profile_pic_url } : {}),
-      });
-      this.users.set(author.id, author);
-    } else if (userDict?.username && !author.username) {
-      author.username = userDict.username;
-    }
-
-    const message = createMessage({ raw, threadId, author, client: this });
-
-    const thread = this.threads.get(threadId);
-    if (thread) {
-      thread.messages.set(message.id, message);
-    }
-
-    this.emit('message', message);
-  }
-
-  private handleSlideDeleteMessage(mutation: Record<string, unknown>): void {
-    const threadId = typeof mutation['thread_fbid'] === 'string' ? mutation['thread_fbid'] : '';
-    const messageId = typeof mutation['message_id'] === 'string' ? mutation['message_id'] : '';
-
-    const thread = this.threads.get(threadId);
-    const message = thread?.messages.get(messageId) ?? null;
-    if (thread) {
-      thread.messages.delete(messageId);
-    }
-
-    this.emit('messageDelete', {
-      messageId,
-      message,
-      thread: thread ?? new Thread({ id: threadId, client: this }),
-      timestamp: new Date(),
-    });
-  }
-
-  private handleSlideReaction(
-    mutation: Record<string, unknown>,
-    event: 'reaction' | 'reactionRemove',
-  ): void {
-    const threadId = typeof mutation['thread_fbid'] === 'string' ? mutation['thread_fbid'] : '';
-    const messageId = typeof mutation['message_id'] === 'string' ? mutation['message_id'] : '';
-
-    const thread = this.threads.get(threadId);
-    if (!thread) {
-      return;
-    }
-
-    const message = thread.messages.get(messageId) ?? null;
-    const reactionData = isRecord(mutation['reaction']) ? mutation['reaction'] : {};
-    const emoji = typeof reactionData['reaction'] === 'string' ? reactionData['reaction'] : '';
-    const senderId = typeof reactionData['sender_id'] === 'string'
-      ? reactionData['sender_id']
-      : typeof reactionData['actor_fbid'] === 'string'
-        ? reactionData['actor_fbid']
-        : '';
-
-    const participant = thread.participants.find((p) => p.user.id === senderId) ?? {
-      user: this.users.get(senderId) ?? new User({ id: senderId, partial: true }),
-      isAdmin: false,
-      nickname: null,
-    };
-
-    this.emit(event, {
-      message,
-      messageId,
-      thread,
-      participant,
-      emoji,
-      timestamp: new Date(),
-    });
-  }
-
-  private handleSlideReadReceipt(mutation: Record<string, unknown>): void {
-    const threadId = typeof mutation['thread_fbid'] === 'string' ? mutation['thread_fbid'] : '';
-    const thread = this.threads.get(threadId);
-    if (!thread) {
-      return;
-    }
-
-    const receipt = isRecord(mutation['read_receipt']) ? mutation['read_receipt'] : {};
-    const userId = typeof receipt['participant_fbid'] === 'string' ? receipt['participant_fbid'] : '';
-    const rawTimestamp = receipt['watermark_timestamp_ms'];
-    const timestamp = typeof rawTimestamp === 'string' ? new Date(Number(rawTimestamp)) : new Date();
-
-    const participant = thread.participants.find((p) => p.user.id === userId) ?? {
-      user: this.users.get(userId) ?? new User({ id: userId, partial: true }),
-      isAdmin: false,
-      nickname: null,
-    };
-
-    this.emit('readReceipt', {
-      thread,
-      participant,
-      messageId: '',
-      timestamp,
-    });
-  }
-
-  private handleSlideThreadUpdate(mutation: Record<string, unknown>): void {
-    const threadId = typeof mutation['thread_fbid'] === 'string' ? mutation['thread_fbid'] : '';
-    const thread = this.threads.get(threadId);
-    if (!thread) {
-      return;
-    }
-
-    const changes: ThreadUpdateEvent['changes'] = {};
-
-    if (typeof mutation['thread_name'] === 'string') {
-      changes.name = mutation['thread_name'];
-    }
-    if (typeof mutation['is_muted_now'] === 'boolean') {
-      changes.muted = mutation['is_muted_now'];
-    }
-
-    this.emit('threadUpdate', { thread, changes });
-  }
-
-  private handleSlideDeleteThread(mutation: Record<string, unknown>): void {
-    const threadId = typeof mutation['thread_fbid'] === 'string' ? mutation['thread_fbid'] : '';
-    this.threads.delete(threadId);
-    this.emit('threadDelete', { threadId });
   }
 
   private attemptReconnect(): void {
@@ -1180,9 +892,13 @@ export class Client extends EventEmitter<ClientEventMap> {
     this.reconnectTimer = setTimeout(async () => {
       try {
         if (this.mqtt) {
+          this.lsEpochId = generateOfflineThreadingId();
           await this.mqtt.connect();
-          await this.mqtt.subscribe(['/ig_message_sync', '/ig_sub_iris_response']);
-          this.publishIrisSubscription();
+          await this.mqtt.subscribe([
+            LS_TOPICS.RESPONSE,
+            LS_TOPICS.APP_SETTINGS,
+          ]);
+          this.publishLsSync();
           this.connected = true;
           this.reconnectStabilityTimer = setTimeout(() => {
             this.reconnectAttempts = 0;
@@ -1200,62 +916,4 @@ export class Client extends EventEmitter<ClientEventMap> {
     }, delay);
   }
 
-  private publishIrisSubscription(): void {
-    this.requireMqtt().publish(
-      '/ig_sub_iris',
-      JSON.stringify({
-        seq_id: this.seqId,
-        snapshot_at_ms: Date.now(),
-        snapshot_app_version: 'web',
-        subscription_type: 'slide_gql',
-        graphql_config: JSON.stringify({
-          slide_doc_id: '26744961355092044',
-          variables: {
-            enable_off_msys_messages_list: true,
-            __relay_internal__pv__IGDEnableOffMsysPinnedMessagesQErelayprovider: false,
-          },
-        }),
-      }),
-    );
-  }
-
-  private handleIrisResponse(payload: Buffer): void {
-    let parsed: Record<string, unknown>;
-    try {
-      const raw: unknown = JSON.parse(payload.toString());
-      if (!isRecord(raw)) {
-        return;
-      }
-      parsed = raw;
-    } catch (err) {
-      this.emit('error', new ApiError('Failed to parse Iris response', err instanceof Error ? err : undefined));
-      return;
-    }
-
-    const errorType = parsed['error_type'];
-
-    if (errorType === 1) {
-      this.irisRetryAttempts = 0;
-      this.performResync();
-    } else if (errorType === 2) {
-      const delay = Math.min(Math.pow(2, this.irisRetryAttempts), 64) * 1000;
-      this.irisRetryAttempts++;
-      this.irisRetryTimer = setTimeout(() => {
-        this.irisRetryTimer = null;
-        this.publishIrisSubscription();
-      }, delay);
-    } else {
-      this.irisRetryAttempts = 0;
-    }
-  }
-
-  private async performResync(): Promise<void> {
-    try {
-      await this.syncInbox();
-      this.publishIrisSubscription();
-      this.emit('resync');
-    } catch (err) {
-      this.emit('error', err instanceof Error ? err : new Error(String(err)));
-    }
-  }
 }

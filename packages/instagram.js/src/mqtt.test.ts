@@ -140,15 +140,15 @@ describe('MqttClient', () => {
       mockInternalClient.emit('connect');
       await connectPromise;
 
-      await client.subscribe(['/ig_message_sync', '/ig_sub_iris_response']);
+      await client.subscribe(['/ls_resp', '/ls_app_settings']);
 
       expect(mockInternalClient.subscribe).toHaveBeenCalledTimes(2);
       expect(mockInternalClient.subscribe).toHaveBeenCalledWith(
-        { '/ig_message_sync': { qos: 0 } },
+        { '/ls_resp': { qos: 0 } },
         expect.any(Function),
       );
       expect(mockInternalClient.subscribe).toHaveBeenCalledWith(
-        { '/ig_sub_iris_response': { qos: 0 } },
+        { '/ls_app_settings': { qos: 0 } },
         expect.any(Function),
       );
     });
@@ -207,9 +207,9 @@ describe('MqttClient', () => {
       await connectPromise;
 
       const payload = Buffer.from('{"event":"patch"}');
-      mockInternalClient.emit('message', '/ig_message_sync', payload);
+      mockInternalClient.emit('message', '/ls_resp', payload);
 
-      expect(messageHandler).toHaveBeenCalledWith('/ig_message_sync', payload);
+      expect(messageHandler).toHaveBeenCalledWith('/ls_resp', payload);
     });
   });
 
