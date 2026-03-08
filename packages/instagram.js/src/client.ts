@@ -30,7 +30,7 @@ import type {
 import type { Message } from './models/message';
 import type { SendContent } from './media';
 import { sendGif, sendLink, sendPhoto, sendVideo, sendVoice } from './media';
-import { generateMutationToken, generateOfflineThreadingId, isRecord, requireNonEmpty, requireNonEmptyArray } from './utils';
+import { generateMutationToken, generateOfflineThreadingId, getArray, getNumber, getString, isRecord, requireNonEmpty, requireNonEmptyArray } from './utils';
 
 type ClientEventMap = {
   ready: [];
@@ -100,13 +100,13 @@ export function toRawMessage(slide: Record<string, unknown>): RawMessage | null 
 
   switch (contentTypename) {
     case 'SlideMessageImageContent': {
-      const atts = Array.isArray(content!['attachments']) ? content!['attachments'] as Record<string, unknown>[] : [];
+      const atts = getArray<Record<string, unknown>>(content!, 'attachments');
       const att = isRecord(atts[0]) ? atts[0] : null;
       if (att) {
-        const url = typeof att['attachment_cdn_url'] === 'string' ? att['attachment_cdn_url'] : '';
-        const previewUrl = typeof att['preview_cdn_url'] === 'string' ? att['preview_cdn_url'] : undefined;
-        const width = Number(att['preview_width']) || 0;
-        const height = Number(att['preview_height']) || 0;
+        const url = getString(att, 'attachment_cdn_url');
+        const previewUrl = getString(att, 'preview_cdn_url') || undefined;
+        const width = getNumber(att, 'preview_width');
+        const height = getNumber(att, 'preview_height');
         raw.media = {
           media_type: 1,
           image_versions2: { candidates: [{ url, width, height }] },
@@ -116,13 +116,13 @@ export function toRawMessage(slide: Record<string, unknown>): RawMessage | null 
       break;
     }
     case 'SlideMessageVideosContent': {
-      const vids = Array.isArray(content!['videos']) ? content!['videos'] as Record<string, unknown>[] : [];
+      const vids = getArray<Record<string, unknown>>(content!, 'videos');
       const vid = isRecord(vids[0]) ? vids[0] : null;
       if (vid) {
-        const url = typeof vid['attachment_cdn_url'] === 'string' ? vid['attachment_cdn_url'] : '';
-        const previewUrl = typeof vid['preview_cdn_url'] === 'string' ? vid['preview_cdn_url'] : undefined;
-        const width = Number(vid['preview_width']) || 0;
-        const height = Number(vid['preview_height']) || 0;
+        const url = getString(vid, 'attachment_cdn_url');
+        const previewUrl = getString(vid, 'preview_cdn_url') || undefined;
+        const width = getNumber(vid, 'preview_width');
+        const height = getNumber(vid, 'preview_height');
         raw.media = {
           media_type: 2,
           image_versions2: { candidates: [{ url, width, height }] },
@@ -134,13 +134,13 @@ export function toRawMessage(slide: Record<string, unknown>): RawMessage | null 
     case 'SlideMessageXMAContent': {
       const xma = isRecord(content!['xma']) ? content!['xma'] : null;
       if (!xma) break;
-      const targetUrl = typeof xma['target_url'] === 'string' ? xma['target_url'] : '';
+      const targetUrl = getString(xma, 'target_url');
       const targetId = typeof xma['target_id'] === 'string' || typeof xma['target_id'] === 'number' ? String(xma['target_id']) : '';
       const previewImage = isRecord(xma['preview_image']) ? xma['preview_image'] : null;
-      const thumbnailUrl = typeof previewImage?.['url'] === 'string' ? previewImage['url'] : null;
-      const headerTitle = typeof xma['header_title_text'] === 'string' ? xma['header_title_text'] : null;
-      const eyebrowText = typeof xma['eyebrow_text'] === 'string' ? xma['eyebrow_text'] : null;
-      const xmaTextBody = typeof content!['xma_text_body'] === 'string' ? content!['xma_text_body'] : null;
+      const thumbnailUrl = previewImage ? getString(previewImage, 'url') || null : null;
+      const headerTitle = getString(xma, 'header_title_text') || null;
+      const eyebrowText = getString(xma, 'eyebrow_text') || null;
+      const xmaTextBody = getString(content!, 'xma_text_body') || null;
 
       if (targetUrl.includes('/reel/')) {
         raw.item_type = 'reel_share';
@@ -185,18 +185,18 @@ export function toRawMessage(slide: Record<string, unknown>): RawMessage | null 
       break;
     }
     case 'SlideMessageAudiosContent': {
-      const audioAtts = Array.isArray(content!['audio_attachments']) ? content!['audio_attachments'] as Record<string, unknown>[] : [];
+      const audioAtts = getArray<Record<string, unknown>>(content!, 'audio_attachments');
       const audioAtt = isRecord(audioAtts[0]) ? audioAtts[0] : null;
       if (audioAtt) {
-        const audioUrl = typeof audioAtt['attachment_cdn_url'] === 'string' ? audioAtt['attachment_cdn_url'] : '';
-        const durationMs = Number(audioAtt['playable_duration_ms']) || 0;
-        const waveform = Array.isArray(audioAtt['waveform_data']) ? audioAtt['waveform_data'] as number[] : undefined;
+        const audioUrl = getString(audioAtt, 'attachment_cdn_url');
+        const durationMs = getNumber(audioAtt, 'playable_duration_ms');
+        const waveform = getArray<number>(audioAtt, 'waveform_data');
         raw.voice_media = {
           media: {
             audio: {
               audio_src: audioUrl,
               duration: durationMs,
-              ...(waveform ? { waveform_data: waveform } : {}),
+              ...(waveform.length > 0 ? { waveform_data: waveform } : {}),
             },
           },
         };
@@ -204,14 +204,14 @@ export function toRawMessage(slide: Record<string, unknown>): RawMessage | null 
       break;
     }
     case 'SlideMessageAnimatedMediaContent': {
-      const anims = Array.isArray(content!['animated_media']) ? content!['animated_media'] as Record<string, unknown>[] : [];
+      const anims = getArray<Record<string, unknown>>(content!, 'animated_media');
       const anim = isRecord(anims[0]) ? anims[0] : null;
       if (anim) {
-        const gifUrl = typeof anim['attachment_webp_url'] === 'string' ? anim['attachment_webp_url'] : '';
-        const width = Number(anim['preview_width']) || 0;
-        const height = Number(anim['preview_height']) || 0;
+        const gifUrl = getString(anim, 'attachment_webp_url');
+        const width = getNumber(anim, 'preview_width');
+        const height = getNumber(anim, 'preview_height');
         const stickerFlag = anim['is_sticker'] === true;
-        const mp4Url = typeof anim['attachment_mp4_url'] === 'string' ? anim['attachment_mp4_url'] : undefined;
+        const mp4Url = getString(anim, 'attachment_mp4_url') || undefined;
         raw.animated_media = {
           images: { fixed_height: { url: gifUrl, width, height } },
           ...(stickerFlag ? { is_sticker: true } : {}),
@@ -221,9 +221,9 @@ export function toRawMessage(slide: Record<string, unknown>): RawMessage | null 
       break;
     }
     case 'SlideMessageAdminText': {
-      const fragments = Array.isArray(content!['text_fragments']) ? content!['text_fragments'] as Record<string, unknown>[] : [];
+      const fragments = getArray<Record<string, unknown>>(content!, 'text_fragments');
       const description = fragments
-        .map((f) => (typeof f['plaintext'] === 'string' ? f['plaintext'] : ''))
+        .map((f) => (isRecord(f) ? getString(f, 'plaintext') : ''))
         .join('');
       raw.action_log = { description };
       break;
@@ -240,7 +240,7 @@ export function toRawMessage(slide: Record<string, unknown>): RawMessage | null 
       };
       const attachment = isRecord(content!['attachment']) ? content!['attachment'] : null;
       if (attachment) {
-        const url = typeof attachment['attachment_cdn_url'] === 'string' ? attachment['attachment_cdn_url'] : null;
+        const url = getString(attachment, 'attachment_cdn_url') || null;
         if (url && visualMedia.media) {
           visualMedia.media.image_versions2 = { candidates: [{ url, width: 0, height: 0 }] };
         }
@@ -248,6 +248,10 @@ export function toRawMessage(slide: Record<string, unknown>): RawMessage | null 
       raw.visual_media = visualMedia;
       break;
     }
+    // Unknown content types are intentionally ignored; they are still
+    // surfaced through the rawDelta event for consumer inspection.
+    default:
+      break;
   }
 
   const reactions = msg['reactions'];
@@ -1000,6 +1004,10 @@ export class Client extends EventEmitter<ClientEventMap> {
         break;
       case 'SlideUQPPDeleteThread':
         this.handleSlideDeleteThread(mutation);
+        break;
+      // Unknown slide types are intentionally ignored; they are still
+      // surfaced through the rawDelta event for consumer inspection.
+      default:
         break;
     }
   }

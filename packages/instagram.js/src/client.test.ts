@@ -283,6 +283,21 @@ describe('Client', () => {
       expect(rawHandler.mock.calls[0]![0].__typename).toBe('SlideUQPPNotYetImplementedMutation');
     });
 
+    it('does not throw for unknown slide types', async () => {
+      const client = new Client();
+      await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
+      const handler = getMessageHandler(client);
+      const errorHandler = vi.fn();
+      client.on('error', errorHandler);
+
+      handler('/ig_message_sync', slideDelta([{
+        __typename: 'SlideUQPPSomeFutureType',
+        uq_seq_id: '106',
+      }]));
+
+      expect(errorHandler).not.toHaveBeenCalled();
+    });
+
     it('updates seqId from uq_seq_id', async () => {
       const client = new Client();
       await client.login('sessionid=abc; csrftoken=csrf; ds_user_id=123');
