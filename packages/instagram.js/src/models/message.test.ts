@@ -32,9 +32,9 @@ describe('createMessage', () => {
     }
   });
 
-  it('maps "like" item_type to text', () => {
+  it('creates a LikeMessage for item_type "like"', () => {
     const msg = createMessage({ raw: makeRaw({ item_type: 'like' }), threadId, author, client: fakeClient });
-    expect(msg.type).toBe('text');
+    expect(msg.type).toBe('like');
   });
 
   it('creates a MediaMessage for item_type "media"', () => {
@@ -122,14 +122,14 @@ describe('createMessage', () => {
     expect(msg.type).toBe('animatedMedia');
   });
 
-  it('maps "raven_media" item_type to placeholder', () => {
+  it('creates a RavenMediaMessage for item_type "raven_media"', () => {
     const msg = createMessage({
-      raw: makeRaw({ item_type: 'raven_media', placeholder: { message: 'Use the mobile app to view.' } }),
+      raw: makeRaw({ item_type: 'raven_media', visual_media: {} }),
       threadId,
       author,
       client: fakeClient,
     });
-    expect(msg.type).toBe('placeholder');
+    expect(msg.type).toBe('ravenMedia');
   });
 
   it('creates a ClipMessage for item_type "clip"', () => {

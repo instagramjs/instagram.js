@@ -11,6 +11,7 @@ import type {
   ThreadUpdateEvent,
   TypingEvent,
 } from './types';
+import type { RawDelta } from './types';
 
 describe('Client.send() return types', () => {
   it('send with text returns Promise<void>', () => {
@@ -93,6 +94,13 @@ describe('Client event emitter types', () => {
     const client = new Client();
     client.on('disconnect', (evt) => {
       expectTypeOf(evt).toEqualTypeOf<DisconnectEvent>();
+    });
+  });
+
+  it('rawDelta event provides RawDelta', () => {
+    const client = new Client();
+    client.on('rawDelta', (delta) => {
+      expectTypeOf(delta).toEqualTypeOf<RawDelta>();
     });
   });
 

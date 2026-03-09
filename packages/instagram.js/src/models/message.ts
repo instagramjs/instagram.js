@@ -157,6 +157,10 @@ export class MediaMessage extends BaseMessage {
   }
 }
 
+export class LikeMessage extends BaseMessage {
+  readonly type = 'like' satisfies MessageType;
+}
+
 export class LinkMessage extends BaseMessage {
   readonly type = 'link' satisfies MessageType;
   readonly text: string | null;
@@ -243,6 +247,24 @@ export class AnimatedMediaMessage extends BaseMessage {
   }
 }
 
+export class RavenMediaMessage extends BaseMessage {
+  readonly type = 'ravenMedia' satisfies MessageType;
+  readonly mediaUrl: string | null;
+  readonly mediaType: 'image' | 'video';
+  readonly viewMode: 'once' | 'replayable' | 'permanent';
+  readonly expiresAt: Date | null;
+  readonly seen: boolean;
+
+  constructor(data: BaseMessageData & { readonly mediaUrl: string | null; readonly mediaType: 'image' | 'video'; readonly viewMode: 'once' | 'replayable' | 'permanent'; readonly expiresAt: Date | null; readonly seen: boolean }) {
+    super(data);
+    this.mediaUrl = data.mediaUrl;
+    this.mediaType = data.mediaType;
+    this.viewMode = data.viewMode;
+    this.expiresAt = data.expiresAt;
+    this.seen = data.seen;
+  }
+}
+
 export class ClipMessage extends BaseMessage {
   readonly type = 'clip' satisfies MessageType;
   readonly text: string | null;
@@ -288,12 +310,14 @@ export class UnknownMessage extends BaseMessage {
 export type Message =
   | TextMessage
   | MediaMessage
+  | LikeMessage
   | LinkMessage
   | MediaShareMessage
   | ReelShareMessage
   | StoryShareMessage
   | VoiceMediaMessage
   | AnimatedMediaMessage
+  | RavenMediaMessage
   | ClipMessage
   | ActionLogMessage
   | PlaceholderMessage
@@ -355,6 +379,9 @@ export function createMessage(input: CreateMessageInput): Message {
         previewUrl: raw.media?.preview_url ?? null,
       });
     }
+
+    case 'like':
+      return new LikeMessage(base);
 
     case 'link': {
       const linkContext = raw.link?.link_context;
@@ -426,6 +453,23 @@ export function createMessage(input: CreateMessageInput): Message {
         height: Number(fh?.height ?? 0),
         isSticker: raw.animated_media?.is_sticker === true,
         mp4Url: raw.animated_media?.mp4_url ?? null,
+      });
+    }
+
+    case 'ravenMedia': {
+      const viewModeRaw = raw.visual_media?.view_mode;
+      const viewModeMap: Record<string, 'once' | 'replayable' | 'permanent'> = {
+        '1': 'once', once: 'once',
+        '2': 'replayable', replayable: 'replayable',
+        '3': 'permanent', permanent: 'permanent',
+      };
+      return new RavenMediaMessage({
+        ...base,
+        mediaUrl: raw.visual_media?.media?.image_versions2?.candidates?.[0]?.url ?? null,
+        mediaType: raw.visual_media?.media?.media_type === 2 ? 'video' : 'image',
+        viewMode: viewModeMap[String(viewModeRaw)] ?? 'once',
+        expiresAt: raw.visual_media?.expiring_at ? new Date(raw.visual_media.expiring_at * 1000) : null,
+        seen: (raw.visual_media?.seen_count ?? 0) > 0,
       });
     }
 

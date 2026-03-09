@@ -3,6 +3,7 @@ import type { Message } from './message';
 import {
   TextMessage,
   MediaMessage,
+  LikeMessage,
   LinkMessage,
   ActionLogMessage,
   UnknownMessage,
@@ -23,6 +24,13 @@ describe('Message discriminated union', () => {
       expectTypeOf(msg).toEqualTypeOf<MediaMessage>();
       expectTypeOf(msg.mediaUrl).toEqualTypeOf<string>();
       expectTypeOf(msg.mediaType).toEqualTypeOf<'image' | 'video'>();
+    }
+  });
+
+  it('narrows to LikeMessage via type field', () => {
+    const msg = {} as Message;
+    if (msg.type === 'like') {
+      expectTypeOf(msg).toEqualTypeOf<LikeMessage>();
     }
   });
 

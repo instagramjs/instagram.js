@@ -43,6 +43,12 @@ export type SessionData = {
 };
 
 
+export type RawDelta = {
+  __typename: string;
+  uq_seq_id: string;
+  [key: string]: unknown;
+};
+
 export type RawThread = {
   thread_id: string;
   thread_title: string | null;
@@ -130,6 +136,16 @@ export type RawAnimatedMedia = {
   mp4_url?: string;
 };
 
+export type RawVisualMedia = {
+  media?: {
+    media_type?: number;
+    image_versions2?: { candidates?: RawMediaCandidate[] };
+  };
+  view_mode?: string;
+  expiring_at?: number;
+  seen_count?: number;
+};
+
 export type RawClip = {
   clip?: {
     id?: string | number;
@@ -160,6 +176,7 @@ export type RawMessage = {
   story_share?: RawStoryShare;
   voice_media?: RawVoiceMedia;
   animated_media?: RawAnimatedMedia;
+  visual_media?: RawVisualMedia;
   clip?: RawClip;
   action_log?: RawActionLog;
   placeholder?: RawPlaceholder;
@@ -195,12 +212,14 @@ export type RawUser = {
 export type MessageType =
   | 'text'
   | 'media'
+  | 'like'
   | 'link'
   | 'mediaShare'
   | 'reelShare'
   | 'storyShare'
   | 'voiceMedia'
   | 'animatedMedia'
+  | 'ravenMedia'
   | 'clip'
   | 'actionLog'
   | 'placeholder'
